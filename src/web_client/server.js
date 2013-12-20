@@ -22,7 +22,7 @@ debugOnly(function() {
 app.set('port', process.env.PORT || 3000);
 
 // Static files
-var staticFilesDir = path.join(__dirname, '..', 'public');
+var staticFilesDir = path.join(__dirname, 'public');
 app.use(express.static(staticFilesDir));
 
 // Favicon
@@ -31,8 +31,8 @@ app.use(express.static(staticFilesDir));
 
 // Other configuration options
 app.use(express.logger('dev'));
-//app.use(express.methodOverride());
-//app.use(app.router);
+app.use(express.methodOverride());
+app.use(app.router);
 
 // Start server
 var http = require('http'),
