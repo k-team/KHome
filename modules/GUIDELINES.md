@@ -6,8 +6,8 @@ Guidelines
 These should be put under the [modules][] directory, and can be managed using
 the [manage.py][] script available in that same directory.
 
-[modules]: ../../blob/modular-system/modules
-[manage.py]: ../../blob/modular-system/manage.py
+[modules]: ../../../blob/modular-system/modules
+[manage.py]: ../../../blob/modular-system/modules/manage.py
 
 ### Directory structure
 
