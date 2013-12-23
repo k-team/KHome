@@ -5,9 +5,6 @@
 Script for managing modules listed in this directory. Modules should follow the
 specifications written in the GUIDELINES.md file in this directory.
 
-Todo:
-- "start" command dependencies
-
 Usage:
     manage.py start [--no-daemon] [<module>...]
     manage.py stop [<module>...]
@@ -23,6 +20,50 @@ import docopt
 import signal
 from functools import wraps
 import shlex, subprocess as sp
+
+def get_module_info(module):
+    with open(os.path.join(module, 'module.json'), 'r') as fp:
+        return json.load(fp)
+
+def get_pid_file(module):
+    return os.path.join(module, 'module.pid')
+
+def order_modules_by_dependencies(modules):
+    """
+    Dependency resolution algorithm, ordering the given modules by their
+    dependencies. These ordered modules should be resolved in the returned
+    order.
+    """
+
+    # build dependency mapping
+    module_dependencies = {}
+    for mod in modules:
+        dependencies = get_module_info(mod).get('dependencies', [])
+        for dep in dependencies:
+            if dep not in modules:
+                raise RuntimeError('Unknown dependency "%s"' % dep)
+        module_dependencies[mod] = dependencies
+
+    # dependency resolution
+    ordered_modules = []
+    resolved = set()
+    resolving = set()
+    def resolve_dependencies(module):
+        if module in resolved:
+            return
+        resolving.add(module)
+        for dep in module_dependencies[module]:
+            if dep in resolving:
+                raise RuntimeError('Circular dependency detected')
+            resolve_dependencies(dep)
+        resolved.add(module)
+        ordered_modules.append(module)
+        resolving.remove(module)
+
+    # run dependency resolution
+    for mod in module_dependencies.iterkeys():
+        resolve_dependencies(mod)
+    return ordered_modules
 
 def needs_modules(f):
     """
@@ -40,15 +81,9 @@ def needs_modules(f):
             for mod in modules:
                 if mod not in possible_modules:
                     raise RuntimeError('Unknown module "%s"' % mod)
+        modules = order_modules_by_dependencies(modules)
         return f(modules, *args, **kwargs)
     return inner
-
-def get_module_info(module):
-    with open(os.path.join(module, 'module.json'), 'r') as fp:
-        return json.load(fp)
-
-def get_pid_file(module):
-    return os.path.join(module, 'module.pid')
 
 @needs_modules
 def start(modules, detach=False):
@@ -99,7 +134,7 @@ def start(modules, detach=False):
 @needs_modules
 def stop(modules):
     # check that the modules have already been started
-    for mod in modules:
+    for mod in reversed(modules):
         print 'Stopping module "%s" ...' % mod,
         mod_pid_file = get_pid_file(mod)
         if not os.path.exists(mod_pid_file):
