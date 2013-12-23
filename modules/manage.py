@@ -3,7 +3,12 @@
 
 """
 Script for managing modules listed in this directory. Modules should follow the
-specifications written in the GUIDELINES.md file at the project's root.
+specifications written in the GUIDELINES.md file in this directory.
+
+Todo:
+- "install" command
+- daemon (and no daemon) modes
+- pid files
 
 Usage:
     manage.py start [<module>...]
