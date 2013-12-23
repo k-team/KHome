@@ -6,15 +6,11 @@ Script for managing modules listed in this directory. Modules should follow the
 specifications written in the GUIDELINES.md file in this directory.
 
 Todo:
-- "install" command
 - "start" command dependencies
-- daemon (and no daemon) modes
-- pid files
 
 Usage:
     manage.py start [--no-daemon] [<module>...]
     manage.py stop [<module>...]
-    manage.py install [<module>...]
 
 Options:
     -h, --help  Show this screen and exit.
@@ -120,11 +116,6 @@ def stop(modules):
                 os.remove(mod_pid_file)
         print 'done'
 
-@needs_modules
-def install(modules):
-    # TODO
-    pass
-
 if __name__ == '__main__':
     args = docopt.docopt(__doc__)
 
@@ -140,8 +131,6 @@ if __name__ == '__main__':
             start(modules, detach)
         elif args['stop']:
             stop(modules)
-        elif args['install']:
-            install(modules)
     except RuntimeError as e:
         print 'Error: %s' % e
         sys.exit(1)
