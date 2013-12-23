@@ -1,4 +1,0 @@
-{
-  "start": "python __main__.py",
-  "dependencies": ["c"]
-}
