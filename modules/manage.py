@@ -96,7 +96,8 @@ def start(modules, detach=False):
             raise RuntimeError('Module "%s"\'s pid file already exists' % mod)
 
     # start all modules
-    this_dir = os.getcwd()
+    this_dir = os.path.dirname(os.path.realpath(__file__))
+    sys.path.append(os.path.dirname(os.path.join(this_dir, 'core')))
     module_procs = []
     for mod in modules:
         # get module start command
