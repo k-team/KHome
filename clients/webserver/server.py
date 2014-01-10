@@ -15,4 +15,5 @@ factory = Site(resource)
 reactor.listenTCP(port, factory)
 
 # run
+print 'Webserver running on port %s' % port
 reactor.run()
