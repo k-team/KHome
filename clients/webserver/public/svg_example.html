@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>SVG Example</title>
+  </head>
+  <body>
+    <svg id="map-svg-container"></svg>
+    <script type="text/javascript">
+      "use strict";
+
+      // Data used (load by http)
+      var data = [
+          {
+              "name": "Salle à manger",
+              "module": "motion_captor1",
+              "polygon": [
+                  { "x": 10, "y": 15 },
+                  { "x": 61, "y": 32 },
+                  { "x": 42, "y": 12 },
+                  { "x": 13, "y": 50 },
+                  { "x": 50, "y": 54 }
+              ]
+          }
+      ];
+
+      // Globals: change with angularjs module
+      var mapElement = document.getElementById('map-svg-container');
+      for (var i = 0; i < data.length; i++) {
+        var polygon = data[i].polygon, pointsAttr = '';
+        for (var j = 0; j < polygon.length; j++) {
+          pointsAttr += polygon[j].x + ',' + polygon[j].y
+          if (j < polygon.length - 1) {
+            pointsAttr += ' ';
+          }
+        }
+
+        var polygonElement = document.createElement('polygon');
+        polygonElement.setAttribute('points', pointsAttr);
+        mapElement.appendChild(polygonElement);
+      }
+      // <polygon points="200,10 250,190 160,210" />
+    </script>
+  </body>
+</html>
