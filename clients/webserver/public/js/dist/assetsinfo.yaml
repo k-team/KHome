@@ -3,12 +3,13 @@ javascript:
     files:
     - main.js
     - controllers/house-map.js
+    - services/house-map.js
     fingerprint: ''
     output:
       gz: main.min.js.gz
       min: main.min.js
       raw: main.js
     size:
-      gz: 528
-      min: 1294
-      raw: 2052
+      gz: 616
+      min: 1575
+      raw: 2861
