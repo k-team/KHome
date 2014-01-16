@@ -1,19 +1,21 @@
+import sys
 import json
-from twisted.web.server import Site
-from twisted.web.static import File
-from twisted.internet import reactor
+from flask import Flask, send_file
 
 # configuration
 with open('client.json', 'r') as fp:
     conf = json.load(fp)
-static_dir = conf.get('static_directory', 'static')
-port = int(conf.get('port', 8888))
 
-# static file server
-resource = File(static_dir)
-factory = Site(resource)
-reactor.listenTCP(port, factory)
+# flask app
+app = Flask(__name__,
+        static_folder=conf.get('static_directory', 'static'),
+        static_url_path='')
 
-# run
-print 'Webserver running on port %s' % port
-reactor.run()
+# fix for index page
+@app.route('/')
+def index():
+    return app.send_static_file('index.html')
+
+if __name__ == '__main__':
+    app.run(debug='--debug' in sys.argv or conf.get('debug', False),
+            port=int(conf.get('port', 8888)))
