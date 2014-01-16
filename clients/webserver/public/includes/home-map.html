@@ -1,9 +1,9 @@
 <style type="text/css">
-  #house-map {
+  .house-map {
     margin-top: 15px;
   }
 
-  #house-map svg {
+  .house-map svg {
     margin-top: 10px;
     display: block;
     margin: 0 auto;
@@ -15,11 +15,15 @@
     background-color: #fdfdfd;
   }
 
-  #house-map svg polygon {
+  .house-map .room {
+    fill: #cfcfcf;
+    stroke: #acacac;
+    stroke-linecap: square;
+    stroke-width: 1px;
   }
 </style>
-<div id="house-map" ng-controller="HouseMapCtrl">
-  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveAspectRatio="xMidYMid meet" ng-attr-viewbox="{{minX}} {{minY}} {{maxX}} {{maxY}}">
-    <polygon ng-repeat="room in rooms" ng-attr-points="{{polygonPoints(room.polygon)}}" />
+<div class="house-map" ng-controller="HouseMapCtrl">
+  <svg preserveAspectRatio="xMidYMid meet" ng-attr-viewbox="{{ minX }} {{ minY }} {{ maxX }} {{ maxY }}">
+    <polygon ng-repeat="room in rooms" class="room" ng-attr-points="{{polygonPoints(room.polygon)}}">
   </svg>
 </div>

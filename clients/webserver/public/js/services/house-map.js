@@ -30,8 +30,7 @@ angular.module('GHome').factory('HouseMapService', function($q, $timeout) {
             ]
         }
       ]);
-    }, 1000);
-    console.log(deferred.promise);
+    }, 100);
     return deferred.promise;
   };
   return service;
