@@ -3,7 +3,7 @@
 
 """
 Script for managing modules listed in this directory. Modules should follow the
-specifications written in the GUIDELINES.md file in this directory.
+specifications written in the GUIDELINES.md file in the modules directory.
 
 Usage:
     manage.py start [--no-daemon] [<module>...]
