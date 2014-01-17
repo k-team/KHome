@@ -1,5 +1,6 @@
 import sys
 import json
+from modules.communication import get_socket
 from flask import Flask, send_file, jsonify
 
 # configuration
@@ -19,6 +20,10 @@ def index():
 @app.route('/api/rooms')
 def rooms():
     return send_file('rooms.json')
+
+@app.route('/api/modules')
+def modules():
+    return
 
 if __name__ == '__main__':
     app.run(debug='--debug' in sys.argv or conf.get('debug', False),
