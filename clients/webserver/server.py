@@ -1,6 +1,6 @@
 import sys
 import json
-from flask import Flask, send_file
+from flask import Flask, send_file, jsonify
 
 # configuration
 with open('client.json', 'r') as fp:
@@ -15,6 +15,10 @@ app = Flask(__name__,
 @app.route('/')
 def index():
     return app.send_static_file('index.html')
+
+@app.route('/api/rooms')
+def rooms():
+    return send_file('rooms.json')
 
 if __name__ == '__main__':
     app.run(debug='--debug' in sys.argv or conf.get('debug', False),
