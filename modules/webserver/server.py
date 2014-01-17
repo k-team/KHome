@@ -3,7 +3,7 @@ import json
 from flask import Flask, send_file, jsonify
 
 # configuration
-with open('client.json', 'r') as fp:
+with open('module.json', 'r') as fp:
     conf = json.load(fp)
 
 # flask app
