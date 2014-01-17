@@ -1,0 +1,17 @@
+javascript:
+  main:
+    files:
+    - main.js
+    - controllers/graph.js
+    - controllers/house-map.js
+    - directives/graph.js
+    - services/house-map.js
+    fingerprint: ''
+    output:
+      gz: main.min.js.gz
+      min: main.min.js
+      raw: main.js
+    size:
+      gz: 717
+      min: 1680
+      raw: 2866
