@@ -10,7 +10,3 @@ class Module:
 
     def __setattribute__(self, name, value):
         pass
-
-    def run(self):
-        pass
-
