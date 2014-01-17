@@ -32,6 +32,26 @@ def get_client_info(client):
 def get_pid_file(client):
     return os.path.join(client, 'client.pid')
 
+def needs_clients(f):
+    """
+    Decorator wrapping the query for clients for a function call, ensuring that
+    a function needing them can access them with verifications made and
+    defaulting to all the available clients. Uses the clients under the current
+    directory.
+    """
+    @wraps(f)
+    def inner(clients, *args, **kwargs):
+        possible_clients = filter(os.path.isdir, os.listdir('.'))
+        if len(clients) == 0 or clients is None:
+            clients = possible_clients
+        else:
+            for mod in clients:
+                if mod not in possible_clients:
+                    raise RuntimeError('Unknown module "%s"' % mod)
+        return f(clients, *args, **kwargs)
+    return inner
+
+@needs_clients
 def start(clients, detach=False):
     """
     Start the clients given or all those under the client directory.
@@ -78,6 +98,7 @@ def start(clients, detach=False):
         print 'Clients started: enter Ctrl-C to terminate all clients'
         signal.pause()
 
+@needs_clients
 def stop(clients):
     # check that the clients have already been started
     for client in clients:
@@ -104,7 +125,7 @@ if __name__ == '__main__':
     os.chdir(clients_dir)
 
     # handle arguments
-    clients = args['<clients>']
+    clients = args['<client>']
     try:
         if args['start']:
             detach = not args['--no-daemon']
