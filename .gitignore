@@ -37,3 +37,7 @@ nosetests.xml
 
 # Database
 *.db
+
+# Java
+*.java
+*.javac
