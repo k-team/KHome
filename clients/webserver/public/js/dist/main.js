@@ -18,7 +18,15 @@
       ;
     });
 })();
-;function HouseMapCtrl($scope, HouseMapService) {
+;function GraphCtrl($scope, $timeout) {
+	$scope.data = [];
+	var delay = 500;
+	$timeout(function pushData() {
+		console.log($scope.data.length);
+		$scope.data.push([$scope.data.length, $scope.data.length*$scope.data.length]);
+		$timeout(pushData, delay);
+	}, delay);
+};function HouseMapCtrl($scope, HouseMapService) {
   // Minimal bbox used for svg display
   $scope.minX = 0;
   $scope.minY = 0;
@@ -48,7 +56,25 @@
     return pointsRepr;
   };
 }
-;angular.module('GHome').factory('HouseMapService', function($q, $timeout, $http) {
+;angular.module('GHome').directive('graph', function() {
+	return {
+		restrict: 'EA',
+		link: function($scope, elem, attrs) {
+			var chart = null, opts = {};
+			$scope.$watch(attrs.graphModel, function(v) {
+				console.log('data changed', v);
+				if (!chart) {
+					chart = $.plot(elem, [v], opts);
+					elem.css('display', 'block');
+				} else {
+					chart.setData([v]);
+					chart.setupGrid();
+					chart.draw();
+				}
+			}, true);
+		}
+	};
+});;angular.module('GHome').factory('HouseMapService', function($q, $timeout, $http) {
   var service = {};
 
   // Replace with an AJAX call
