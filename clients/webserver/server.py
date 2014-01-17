@@ -1,10 +1,17 @@
+import os
 import sys
+
+# remove this and do in module launcher
+this_dir = os.path.dirname(os.path.realpath(__file__))
+core_dir = os.path.join(os.path.dirname(os.path.dirname(this_dir)), 'core')
+sys.path.insert(1, core_dir)
+
 import json
-from modules.communication import get_socket
+from modules import get_socket
 from flask import Flask, send_file, jsonify
 
 # configuration
-with open('module.json', 'r') as fp:
+with open('client.json', 'r') as fp:
     conf = json.load(fp)
 
 # flask app
