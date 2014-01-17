@@ -6,9 +6,13 @@ this_dir = os.path.dirname(os.path.realpath(__file__))
 core_dir = os.path.join(os.path.dirname(os.path.dirname(this_dir)), 'core')
 sys.path.insert(1, core_dir)
 
+# used for bootstrapping
+import random
+
 import json
-from modules import get_socket
-from flask import Flask, send_file, jsonify
+from modules import (get_socket as get_module_socket,
+        get_all as get_all_modules)
+from flask import Flask, send_file, jsonify, Response
 
 # configuration
 with open('client.json', 'r') as fp:
@@ -26,11 +30,17 @@ def index():
 
 @app.route('/api/rooms')
 def rooms():
-    return send_file('rooms.json')
+    return app.send_static_file('rooms.json')
 
 @app.route('/api/modules')
 def modules():
-    return
+    return Response(json.dumps(get_all_modules()),  mimetype='application/json')
+
+@app.route('/api/modules/<module_instance>/status')
+def module_status(module_instance):
+    if module_instance == 't_module_1':
+        temp_status = { 'temperature': random.random()*40 }
+        return jsonify(temp_status)
 
 if __name__ == '__main__':
     app.run(debug='--debug' in sys.argv or conf.get('debug', False),

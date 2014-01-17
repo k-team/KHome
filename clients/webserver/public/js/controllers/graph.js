@@ -1,9 +1,13 @@
-function GraphCtrl($scope, $timeout) {
-	$scope.data = [];
-	var delay = 500;
-	$timeout(function pushData() {
-		console.log($scope.data.length);
-		$scope.data.push([$scope.data.length, $scope.data.length*$scope.data.length]);
-		$timeout(pushData, delay);
-	}, delay);
+function GraphCtrl($scope, ModulePolling) {
+  $scope.data = [];
+
+  var poll = ModulePolling.poll('t_module_1', function(promise) {
+    promise.success(function(data) {
+      $scope.data.push([$scope.data.length, data.temperature]);
+    });
+  });
+
+  $scope.$on('$destroy', function() {
+    poll.cancel();
+  });
 }

@@ -19,11 +19,22 @@ class DoesNotExist(Exception):
     def __str__(self):
         return 'Module "%s" does not exist' % self.module_name
 
+def get_all():
+    """
+    Get all the modules available.
+    """
+    return [x for x in os.listdir(_modules_path) \
+            if os.path.isdir(get_directory(x)) \
+            and os.path.exists(get_config_file(x))]
+
 def get_directory(module_name):
     """
     Get the absolute path to the directory for the given module.
     """
     return os.path.join(_modules_path, module_name)
+
+def get_config_file(module_name):
+    return os.path.join(get_directory(module_name), CONFIG_FILE)
 
 def get_config(module_name):
     """
@@ -31,7 +42,7 @@ def get_config(module_name):
     module doesn't exist.
     """
     try:
-        with open(os.path.join(get_directory(module_name), CONFIG_FILE)) as fp:
+        with open(get_config_file(module_name)) as fp:
             return json.load(fp)
     except IOError:
         raise DoesNotExist(module_name)
