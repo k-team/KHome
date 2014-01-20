@@ -23,7 +23,7 @@
 
   var poll = ModulePolling.poll('t_module_1', function(promise) {
     promise.success(function(data) {
-      $scope.data.push([$scope.data.length, data.temperature]);
+      $scope.data.push([data.time, data.temperature]);
     });
   });
 

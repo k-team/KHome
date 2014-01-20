@@ -1,5 +1,6 @@
 import os
 import sys
+import time
 
 # remove this and do in module launcher
 this_dir = os.path.dirname(os.path.realpath(__file__))
@@ -10,8 +11,7 @@ sys.path.insert(1, core_dir)
 import random
 
 import json
-from modules import (get_socket as get_module_socket,
-        get_all as get_all_modules)
+from modules import get_all as get_all_modules
 from flask import (Flask, Response, send_file, jsonify as _jsonify)
 
 def jsonify(obj):
@@ -47,7 +47,7 @@ def modules():
 @app.route('/api/modules/<module_instance>/status')
 def module_status(module_instance):
     if module_instance == 't_module_1':
-        temp_status = { 'temperature': random.random()*40 }
+        temp_status = { 'time': time.time(), 'temperature': random.random()*40 }
         return jsonify(temp_status)
 
 if __name__ == '__main__':
