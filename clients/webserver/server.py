@@ -12,7 +12,15 @@ import random
 import json
 from modules import (get_socket as get_module_socket,
         get_all as get_all_modules)
-from flask import Flask, send_file, jsonify, Response
+from flask import (Flask, Response, send_file, jsonify as _jsonify)
+
+def jsonify(obj):
+    """
+    Updated jsonify, adding list support.
+    """
+    if isinstance(obj, list):
+        return Response(obj, mimetype='application/json')
+    return _jsonify(obj)
 
 # configuration
 with open('client.json', 'r') as fp:
@@ -34,7 +42,7 @@ def rooms():
 
 @app.route('/api/modules')
 def modules():
-    return Response(json.dumps(get_all_modules()),  mimetype='application/json')
+    return jsonify(json.dumps(get_all_modules()))
 
 @app.route('/api/modules/<module_instance>/status')
 def module_status(module_instance):

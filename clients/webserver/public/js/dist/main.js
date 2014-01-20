@@ -18,15 +18,20 @@
       ;
     });
 })();
-;function GraphCtrl($scope, $timeout) {
-	$scope.data = [];
-	var delay = 500;
-	$timeout(function pushData() {
-		console.log($scope.data.length);
-		$scope.data.push([$scope.data.length, $scope.data.length*$scope.data.length]);
-		$timeout(pushData, delay);
-	}, delay);
-};function HouseMapCtrl($scope, HouseMapService) {
+;function GraphCtrl($scope, ModulePolling) {
+  $scope.data = [];
+
+  var poll = ModulePolling.poll('t_module_1', function(promise) {
+    promise.success(function(data) {
+      $scope.data.push([$scope.data.length, data.temperature]);
+    });
+  });
+
+  $scope.$on('$destroy', function() {
+    poll.cancel();
+  });
+}
+;function HouseMapCtrl($scope, HouseMapService) {
   // Minimal bbox used for svg display
   $scope.minX = 0;
   $scope.minY = 0;
@@ -57,24 +62,25 @@
   };
 }
 ;angular.module('GHome').directive('graph', function() {
-	return {
-		restrict: 'EA',
-		link: function($scope, elem, attrs) {
-			var chart = null, opts = {};
-			$scope.$watch(attrs.graphModel, function(v) {
-				console.log('data changed', v);
-				if (!chart) {
-					chart = $.plot(elem, [v], opts);
-					elem.css('display', 'block');
-				} else {
-					chart.setData([v]);
-					chart.setupGrid();
-					chart.draw();
-				}
-			}, true);
-		}
-	};
-});;angular.module('GHome').factory('HouseMapService', function($q, $timeout, $http) {
+  return {
+    restrict: 'EA',
+    link: function($scope, elem, attrs) {
+      var chart = null, opts = {};
+      $scope.$watch(attrs.graphModel, function(v) {
+        console.log('graph data changed', v);
+        if (!chart) {
+          chart = $.plot(elem, [v], opts);
+          elem.css('display', 'block');
+        } else {
+          chart.setData([v]);
+          chart.setupGrid();
+          chart.draw();
+        }
+      }, true);
+    }
+  };
+  });
+;angular.module('GHome').factory('HouseMapService', function($q, $timeout, $http) {
   var service = {};
 
   // Replace with an AJAX call
@@ -86,4 +92,22 @@
     return deferred.promise;
   };
   return service;
+});
+;angular.module('GHome').factory('ModulePolling', function($http, $timeout) {
+  return {
+    poll: function(name, callback, delay) {
+      if (delay === undefined) { delay = 500; }
+
+      var timeout = $timeout(function pollFn() {
+        callback($http.get('/api/modules/' + name + '/status'));
+        timeout = $timeout(pollFn, delay);
+      }, delay);
+
+      return {
+        cancel: function() {
+          $timeout.cancel(timeout);
+        }
+      };
+    }
+  };
 });
