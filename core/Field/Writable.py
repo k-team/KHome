@@ -1,3 +1,5 @@
+import time
+
 class Writable(object):
-    def set_value(self, value):
-        pass
+    def write(self, value):
+        self.set_value(time.time(), value)
