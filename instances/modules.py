@@ -2,12 +2,13 @@
 # encoding: utf-8
 
 """
-Script for managing modules listed in this directory. Modules should follow the
-specifications written in the GUIDELINES.md file in the modules directory.
+Script for managing module instances listed in this directory. Modules should
+follow the specifications written in the GUIDELINES.md file in the modules
+directory.
 
 Usage:
-    manage.py start [--no-daemon] [<module>...]
-    manage.py stop [<module>...]
+    modules.py start [--no-daemon] [<module>...]
+    modules.py stop [<module>...]
 
 Options:
     -h, --help  Show this screen and exit.
@@ -20,6 +21,11 @@ import docopt
 import signal
 from functools import wraps
 import shlex, subprocess as sp
+
+this_dir = os.path.dirname(os.path.realpath(__file__))
+root_dir = os.path.dirname(this_dir)
+modules_dir = os.path.join(root_dir, 'modules')
+core_dir = os.path.join(root_dir, 'core')
 
 def get_module_info(module):
     with open(os.path.join(module, 'module.json'), 'r') as fp:
@@ -96,8 +102,7 @@ def start(modules, detach=False):
             raise RuntimeError('Module "%s"\'s pid file already exists' % mod)
 
     # start all modules
-    this_dir = os.path.dirname(os.path.realpath(__file__))
-    sys.path.append(os.path.dirname(os.path.join(this_dir, 'core')))
+    env = { 'PYTHONPATH': core_dir }
     module_procs = []
     for mod in modules:
         # get module start command
@@ -110,9 +115,10 @@ def start(modules, detach=False):
         # create module process
         print 'Starting module "%s" ...' % mod,
         os.chdir(mod)
-        proc = sp.Popen(shlex.split(command), stdout=sp.PIPE, stderr=sp.PIPE)
+        proc = sp.Popen(shlex.split(command), env=env,
+                stdout=sp.PIPE, stderr=sp.PIPE)
         module_procs.append((mod, proc))
-        os.chdir(this_dir)
+        os.chdir(modules_dir)
         print 'done, pid:', proc.pid
 
     # handle exit
@@ -155,9 +161,8 @@ def stop(modules):
 if __name__ == '__main__':
     args = docopt.docopt(__doc__)
 
-    # change to this directory (easier programming solution)
-    this_dir = os.path.dirname(os.path.realpath(__file__))
-    os.chdir(this_dir)
+    # change to module directory (easier programming solution)
+    os.chdir(modules_dir)
 
     # handle arguments
     modules = args['<module>']
