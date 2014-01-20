@@ -1,6 +1,6 @@
 class Readable(object):
-    def get_value(self):
-        return None
+    def read(self):
+        return self.get_value()
 
-    def get_old_value(self, time):
-        return None
+    def read_old(self, t):
+        return self.get_value(t)
