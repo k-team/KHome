@@ -11,8 +11,10 @@ sys.path.insert(1, core_dir)
 import random
 
 import json
-from modules import get_all as get_all_modules
-from flask import (Flask, Response, send_file, jsonify as _jsonify)
+#from modules import get_all as get_all_modules
+from flask import (Flask, Response, send_file, request,
+        redirect, url_for, jsonify as _jsonify)
+from werkzeug import secure_filename
 
 def jsonify(obj):
     """
@@ -31,6 +33,13 @@ app = Flask(__name__,
         static_folder=conf.get('static_directory', 'static'),
         static_url_path='')
 
+ALLOWED_EXTENSIONS = set(['zip'])
+app.config['UPLOAD_FOLDER'] = '/tmp'
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+
 # fix for index page
 @app.route('/')
 def index():
@@ -43,6 +52,15 @@ def rooms():
 @app.route('/api/modules')
 def modules():
     return jsonify(json.dumps(get_all_modules()))
+
+@app.route('/api/modules/install', methods=['POST'])
+def upload_file():
+    file_ = request.files['file']
+    if file_ and allowed_file(file_.filename):
+        filename = secure_filename(file_.filename)
+        file_.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        return jsonify({ 'success': True })
+    return jsonify({ 'success': False })
 
 @app.route('/api/modules/<module_instance>/status')
 def module_status(module_instance):

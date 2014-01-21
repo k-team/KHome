@@ -1,0 +1,15 @@
+<div class="header">
+  <h1>Modules</h1>
+</div>
+<div class="content">
+  <div ng-controller="CatalogCtrl">
+    <h2>Available modules :</h2>
+    TODO
+    <h2>Manual installation (zip) :</h2>
+    <form ng-submit="upload()">
+      <label for="fileToUpload"></label>
+      <input id="fileToUpload" type="file" ng-file-select="upload($files[0])" >
+    </form>
+    <h4 ng-show="uploading">Upload progress: {{ uploadProgress }}</h4>
+  </div>
+</div>

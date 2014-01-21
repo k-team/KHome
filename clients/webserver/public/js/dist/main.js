@@ -1,7 +1,7 @@
 "use strict";
 
 (function() {
-  angular.module('GHome', ['ngRoute'])
+  angular.module('GHome', ['ngRoute', 'angularFileUpload'])
     .config(function($routeProvider, $locationProvider) {
       $routeProvider
         .when('/home', { templateUrl: 'partials/home.html' })
@@ -12,12 +12,31 @@
         .when('/camera', { templateUrl: 'partials/camera.html' })
         .when('/power', { templateUrl: 'partials/power.html' })
         .when('/music', { templateUrl: 'partials/music.html' })
-        .when('/module-config', { templateUrl: 'partials/module-config.html' })
+        .when('/modules', { templateUrl: 'partials/modules.html' })
         .when('/ai-config', { templateUrl: 'partials/ai-config.html' })
         .otherwise({ redirectTo: '/home' })
       ;
     });
 })();
+;function CatalogCtrl($scope, $upload) {
+  $scope.uploading = false
+  $scope.upload = function(file) {
+    $scope.uploading = true;
+    $scope.upload = $upload.upload({
+      url: '/api/modules/install',
+      method: 'POST',
+      file: file,
+    }).progress(function(evt) {
+      $scope.uploadProgress = parseInt(100.0 * evt.loaded / evt.total);
+    }).success(function() {
+      $scope.uploading = false;
+      console.log('upload successful');
+    }).error(function() {
+      $scope.uploading = false;
+      console.error('upload failed');
+    });
+  };
+}
 ;function GraphCtrl($scope, ModulePolling) {
   $scope.data = [];
 
