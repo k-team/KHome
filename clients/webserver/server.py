@@ -21,7 +21,7 @@ def jsonify(obj):
     Updated jsonify, adding list support.
     """
     if isinstance(obj, list):
-        return Response(obj, mimetype='application/json')
+        return Response(json.dumps(obj), mimetype='application/json')
     return _jsonify(obj)
 
 # configuration
@@ -51,7 +51,9 @@ def rooms():
 
 @app.route('/api/modules')
 def modules():
-    return jsonify(json.dumps(get_all_modules()))
+    print ['apple', 'pie', 'is', 'awesome']
+    return jsonify([42, 'apple', 'pie', 'is', 'awesome'])
+    #return jsonify(json.dumps(get_all_modules()))
 
 @app.route('/api/modules/install', methods=['POST'])
 def upload_file():

@@ -7,13 +7,13 @@ javascript:
     - controllers/house-map.js
     - directives/graph.js
     - services/house-map.js
-    - services/module-polling.js
+    - services/modules.js
     fingerprint: ''
     output:
       gz: main.min.js.gz
       min: main.min.js
       raw: main.js
     size:
-      gz: 964
-      min: 2321
-      raw: 4009
+      gz: 1012
+      min: 2539
+      raw: 4528

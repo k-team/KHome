@@ -1,7 +1,7 @@
-function GraphCtrl($scope, ModulePolling) {
+function GraphCtrl($scope, ModuleService) {
   $scope.data = [];
 
-  var poll = ModulePolling.poll('t_module_1', function(promise) {
+  var poll = ModuleService.pollStatus('t_module_1', function(promise) {
     promise.success(function(data) {
       $scope.data.push([data.time, data.temperature]);
     });

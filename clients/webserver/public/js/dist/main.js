@@ -18,29 +18,39 @@
       ;
     });
 })();
-;function CatalogCtrl($scope, $upload) {
+;function CatalogCtrl($scope, ModuleService) {
+  // All modules
+  $scope.modules = [];
+
+  // Explicitly reload modules
+  $scope.reloadModules = function() {
+    ModuleService.all(function(modules) {
+      console.log(modules);
+      $scope.modules = modules;
+    });
+  };
+  //...and call immediately
+  $scope.reloadModules();
+
+  // Uploading system
   $scope.uploading = false
   $scope.upload = function(file) {
     $scope.uploading = true;
-    $scope.upload = $upload.upload({
-      url: '/api/modules/install',
-      method: 'POST',
-      file: file,
-    }).progress(function(evt) {
+    $scope.upload = ModuleService.install(file).progress(function(evt) {
       $scope.uploadProgress = parseInt(100.0 * evt.loaded / evt.total);
     }).success(function() {
       $scope.uploading = false;
-      console.log('upload successful');
+      $scope.reloadModules();
     }).error(function() {
       $scope.uploading = false;
       console.error('upload failed');
     });
   };
 }
-;function GraphCtrl($scope, ModulePolling) {
+;function GraphCtrl($scope, ModuleService) {
   $scope.data = [];
 
-  var poll = ModulePolling.poll('t_module_1', function(promise) {
+  var poll = ModuleService.pollStatus('t_module_1', function(promise) {
     promise.success(function(data) {
       $scope.data.push([data.time, data.temperature]);
     });
@@ -112,10 +122,14 @@
   };
   return service;
 });
-;angular.module('GHome').factory('ModulePolling', function($http, $timeout) {
+;angular.module('GHome').factory('ModuleService', function($http, $timeout, $upload) {
   return {
-    poll: function(name, callback, delay) {
-      if (delay === undefined) { delay = 500; }
+    all: function(callback) {
+      $http.get('/api/modules').success(function(data) {
+        callback(data);
+      });
+    }, pollStatus: function(name, callback, delay) {
+      if (delay === undefined) { delay = 1000; }
 
       var timeout = $timeout(function pollFn() {
         callback($http.get('/api/modules/' + name + '/status'));
@@ -127,6 +141,11 @@
           $timeout.cancel(timeout);
         }
       };
+    }, install: function(file) {
+      return $upload.upload({
+        url: '/api/modules/install',
+        method: 'POST', file: file,
+      });
     }
   };
 });

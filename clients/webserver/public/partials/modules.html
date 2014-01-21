@@ -4,7 +4,9 @@
 <div class="content">
   <div ng-controller="CatalogCtrl">
     <h2>Available modules :</h2>
-    TODO
+    <ul ng-show="modules">
+      <li ng-repeat="module in modules">{{ module }}</li>
+    </ul>
     <h2>Manual installation (zip) :</h2>
     <form ng-submit="upload()">
       <label for="fileToUpload"></label>
