@@ -23,7 +23,7 @@
   }
 </style>
 <div class="house-map">
-  <svg preserveAspectRatio="xMidYMid meet" ng-attr-viewbox="{{ map.minX }} {{ map.minY }} {{ map.maxX }} {{ map.maxY }}">
+  <svg svg-vbox="map.box">
     <polygon ng-repeat="room in rooms" class="room" ng-attr-points="{{ map.points(room) }}">
   </svg>
 </div>

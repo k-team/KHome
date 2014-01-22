@@ -75,17 +75,13 @@
 
   // House map namespace
   $scope.map = {};
+  // Minimal bbox af all rooms
+  $scope.map.box = { minX: 0, minY: 0, maxX: 0, maxY: 0 };
   // Comma-separated representation for points (x1,y1 x2,y2 x3,y3 etc...), used
   // for svg rendering.
   $scope.map.points = function(room) {
     var pointsRepr = '';
     angular.forEach(room.polygon, function(point, i) {
-      // Update min/max coordinates
-      if (point.x < $scope.minX) { $scope.minX = point.x; }
-      else if (point.x > $scope.maxX) { $scope.maxX = point.x; }
-      if (point.y < $scope.minY) { $scope.minY = point.y; }
-      else if (point.y > $scope.maxY) { $scope.maxY = point.y; }
-
       // Update the points representation
       pointsRepr += point.x + ',' + point.y;
       if (i < room.polygon.length - 1) {
@@ -94,11 +90,19 @@
     });
     return pointsRepr;
   };
-  // ...minimal bbox
-  $scope.map.minX = 0;
-  $scope.map.minY = 0;
-  $scope.map.maxX = 0;
-  $scope.map.maxY = 0;
+
+  // Watch expression on rooms in order to update the bbox accordingly
+  $scope.$watch('rooms', function() {
+    // Compute new bbox
+    angular.forEach($scope.rooms, function(room) {
+      angular.forEach(room.polygon, function(point) {
+        if (point.x < $scope.map.box.minX)      { $scope.map.box.minX = point.x; }
+        else if (point.x > $scope.map.box.maxX) { $scope.map.box.maxX = point.x; }
+        if (point.y < $scope.map.box.minY)      { $scope.map.box.minY = point.y; }
+        else if (point.y > $scope.map.box.maxY) { $scope.map.box.maxY = point.y; }
+      });
+    });
+  });
 }
 ;function ModulesCtrl($scope, ModuleService) {
   // All modules
@@ -134,7 +138,6 @@
     link: function($scope, elem, attrs) {
       var chart = null, opts = {};
       $scope.$watch(attrs.graphModel, function(v) {
-        console.log(v);
         if (!chart) {
           chart = $.plot(elem, v, opts);
           elem.css('display', 'block');
@@ -147,6 +150,21 @@
     }
   };
   });
+;angular.module('GHome').directive('svgVbox', function() {
+  return {
+    link: function($scope, elem, attrs) {
+      $scope.$watch(attrs.svgVbox, function(vbox) {
+        console.log('svgVbox value changed');
+        elem[0].setAttribute('viewBox',
+          vbox.minX + ' ' +
+          vbox.minY + ' ' +
+          (vbox.maxX - vbox.minX) + ' ' +
+          (vbox.maxY - vbox.minY) + ' '
+         );
+      });
+    }
+  };
+});
 ;angular.module('GHome').factory('HouseMapService', function($q, $timeout, $http) {
   var service = {};
 

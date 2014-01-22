@@ -5,6 +5,7 @@ javascript:
     - controllers/main.js
     - controllers/modules.js
     - directives/graph.js
+    - directives/svg.js
     - services/house-map.js
     - services/modules.js
     fingerprint: ''
@@ -13,6 +14,6 @@ javascript:
       min: main.min.js
       raw: main.js
     size:
-      gz: 1143
-      min: 3184
-      raw: 6669
+      gz: 1259
+      min: 3584
+      raw: 7355
