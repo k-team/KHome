@@ -60,15 +60,28 @@ def upload_file():
     file_ = request.files['file']
     if file_ and allowed_file(file_.filename):
         filename = secure_filename(file_.filename)
-        file_.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        #file_.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         return jsonify({ 'success': True })
     return jsonify({ 'success': False })
 
-@app.route('/api/modules/<module_instance>/status')
-def module_status(module_instance):
-    if module_instance == 't_module_1':
-        temp_status = { 'time': time.time(), 'temperature': random.random()*40 }
-        return jsonify(temp_status)
+def brightness_statuses():
+    r = lambda: int(random.random()*10)
+    return [ { 'name': 'b1', 'data': { 'time': time.time(), 'value': r() } },
+            { 'name': 'b2', 'data': { 'time': time.time(), 'value': r() } },
+            { 'name': 'b3', 'data': { 'time': time.time(), 'value': r() } }, ]
+
+def temperature_statuses():
+    r = lambda: int(random.random()*40)
+    return [ { 'name': 't1', 'data': { 'time': time.time(), 'value': r() } },
+            { 'name': 't2', 'data': { 'time': time.time(), 'value': r() } },
+            { 'name': 't3', 'data': { 'time': time.time(), 'value': r() } }, ]
+
+@app.route('/api/modules/<module_name>/instances/status')
+def module_instances_statuses(module_name):
+    if module_name == 'temperature':
+        return jsonify(temperature_statuses())
+    elif module_name == 'brightness':
+        return jsonify(brightness_statuses())
 
 if __name__ == '__main__':
     app.run(debug='--debug' in sys.argv or conf.get('debug', False),

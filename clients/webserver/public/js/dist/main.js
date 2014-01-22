@@ -9,23 +9,104 @@
         .when('/surveillance', { templateUrl: 'partials/surveillance.html' })
         .when('/temperature', { templateUrl: 'partials/temperature.html' })
         .when('/brightness', { templateUrl: 'partials/brightness.html' })
-        .when('/camera', { templateUrl: 'partials/camera.html' })
         .when('/power', { templateUrl: 'partials/power.html' })
-        .when('/music', { templateUrl: 'partials/music.html' })
         .when('/modules', { templateUrl: 'partials/modules.html' })
         .when('/ai-config', { templateUrl: 'partials/ai-config.html' })
         .otherwise({ redirectTo: '/home' })
       ;
     });
 })();
-;function CatalogCtrl($scope, ModuleService) {
+;function MainCtrl($scope, ModuleService, HouseMapService) {
+  // Module supervision (history)
+  $scope.supervision = {};
+  $scope.supervision.module = '';
+  $scope.supervision.data = {};
+  $scope.supervision.graphData = [];
+  $scope.supervision.poll = null;
+
+  $scope.$watch('supervision.module', function() {
+    // Cancel the previous poll
+    if ($scope.supervision.poll) {
+      $scope.supervision.poll.cancel();
+      $scope.supervision.data = {};
+    }
+
+    // Do nothing if the module isn't set
+    if (!$scope.supervision.module) { return; }
+
+    // Poll the current supervised module for its status, 
+    $scope.supervision.poll = ModuleService.pollInstances($scope.supervision.module, function(promise) {
+      promise.success(function(data) {
+        angular.forEach(data, function(instance) {
+          // Empty data case
+          var instanceName = instance.name;
+          if (!$scope.supervision.data[instanceName]) {
+            $scope.supervision.data[instanceName] = [];
+          }
+
+          // Push new data
+          var data = instance.data;
+          $scope.supervision.data[instanceName].push([data.time, data.value]);
+        });
+
+        // Update graph-specific data
+        $scope.supervision.graphData = [];
+        angular.forEach($scope.supervision.data, function(data) {
+          $scope.supervision.graphData.push(data);
+        });
+      }).error(function() {
+        // TODO
+      });
+    });
+
+    // Stop polling when location is changed
+    $scope.$on('$routeChangeSuccess', function () {
+      $scope.supervision.poll.cancel();
+      $scope.supervision.module = '';
+      $scope.supervision.data = {};
+      $scope.supervision.graphData = [];
+    });
+  });
+
+  // Get the rooms (asynchronous)
+  HouseMapService.getRooms().then(function(rooms) {
+    $scope.rooms = rooms;
+  });
+
+  // House map namespace
+  $scope.map = {};
+  // Comma-separated representation for points (x1,y1 x2,y2 x3,y3 etc...), used
+  // for svg rendering.
+  $scope.map.points = function(room) {
+    var pointsRepr = '';
+    angular.forEach(room.polygon, function(point, i) {
+      // Update min/max coordinates
+      if (point.x < $scope.minX) { $scope.minX = point.x; }
+      else if (point.x > $scope.maxX) { $scope.maxX = point.x; }
+      if (point.y < $scope.minY) { $scope.minY = point.y; }
+      else if (point.y > $scope.maxY) { $scope.maxY = point.y; }
+
+      // Update the points representation
+      pointsRepr += point.x + ',' + point.y;
+      if (i < room.polygon.length - 1) {
+        pointsRepr += ' ';
+      }
+    });
+    return pointsRepr;
+  };
+  // ...minimal bbox
+  $scope.map.minX = 0;
+  $scope.map.minY = 0;
+  $scope.map.maxX = 0;
+  $scope.map.maxY = 0;
+}
+;function ModulesCtrl($scope, ModuleService) {
   // All modules
   $scope.modules = [];
 
   // Explicitly reload modules
   $scope.reloadModules = function() {
-    ModuleService.all(function(modules) {
-      console.log(modules);
+    ModuleService.all().success(function(modules) {
       $scope.modules = modules;
     });
   };
@@ -43,51 +124,8 @@
       $scope.reloadModules();
     }).error(function() {
       $scope.uploading = false;
-      console.error('upload failed');
+      // TODO handle errors better
     });
-  };
-}
-;function GraphCtrl($scope, ModuleService) {
-  $scope.data = [];
-
-  var poll = ModuleService.pollStatus('t_module_1', function(promise) {
-    promise.success(function(data) {
-      $scope.data.push([data.time, data.temperature]);
-    });
-  });
-
-  $scope.$on('$destroy', function() {
-    poll.cancel();
-  });
-}
-;function HouseMapCtrl($scope, HouseMapService) {
-  // Minimal bbox used for svg display
-  $scope.minX = 0;
-  $scope.minY = 0;
-  $scope.maxX = 0;
-  $scope.maxY = 0;
-
-  // Get the rooms (asynchronous)
-  HouseMapService.getRooms().then(function(rooms) {
-    $scope.rooms = rooms;
-  });
-
-  $scope.polygonPoints = function(polygon) {
-    var pointsRepr = '';
-    angular.forEach(polygon, function(point, i) {
-      // Update min/max coordinates
-      if (point.x < $scope.minX) { $scope.minX = point.x; }
-      else if (point.x > $scope.maxX) { $scope.maxX = point.x; }
-      if (point.y < $scope.minY) { $scope.minY = point.y; }
-      else if (point.y > $scope.maxY) { $scope.maxY = point.y; }
-
-      // Update the points representation
-      pointsRepr += point.x + ',' + point.y;
-      if (i < polygon.length - 1) {
-        pointsRepr += ' ';
-      }
-    });
-    return pointsRepr;
   };
 }
 ;angular.module('GHome').directive('graph', function() {
@@ -96,12 +134,12 @@
     link: function($scope, elem, attrs) {
       var chart = null, opts = {};
       $scope.$watch(attrs.graphModel, function(v) {
-        console.log('graph data changed', v);
+        console.log(v);
         if (!chart) {
-          chart = $.plot(elem, [v], opts);
+          chart = $.plot(elem, v, opts);
           elem.css('display', 'block');
         } else {
-          chart.setData([v]);
+          chart.setData(v);
           chart.setupGrid();
           chart.draw();
         }
@@ -122,30 +160,56 @@
   };
   return service;
 });
-;angular.module('GHome').factory('ModuleService', function($http, $timeout, $upload) {
-  return {
-    all: function(callback) {
-      $http.get('/api/modules').success(function(data) {
-        callback(data);
-      });
-    }, pollStatus: function(name, callback, delay) {
-      if (delay === undefined) { delay = 1000; }
-
-      var timeout = $timeout(function pollFn() {
-        callback($http.get('/api/modules/' + name + '/status'));
-        timeout = $timeout(pollFn, delay);
-      }, delay);
-
-      return {
-        cancel: function() {
-          $timeout.cancel(timeout);
-        }
-      };
-    }, install: function(file) {
-      return $upload.upload({
-        url: '/api/modules/install',
-        method: 'POST', file: file,
-      });
-    }
+;angular.module('GHome').factory('ModuleService', function($q, $http, $timeout, $upload) {
+  var service = {
+    defaultPollingDelay: 1000
   };
+
+  service.modules = [];
+
+  // Get the list of available modules, optionally passing if this should force
+  // a reload of this list
+  service.all = function(forceReload) {
+    var deferred = $q.defer();
+    if (!forceReload) {
+      $http.get('/api/modules').success(function(data) {
+        service.modules = data;
+        deferred.resolve(data);
+      }); // TODO handle errors
+    } else {
+      deferred.resolve(this.modules);
+    }
+    return deferred.promise;
+  };
+
+  // Poll all module instances for their statuses, passing in the module's name
+  // and a callback which should be applied on a $http promise object.
+  // Optionally, pass in the delay to override the service's default polling
+  // delay.
+  // FIXME
+  service.pollInstances = function(name, callback, delay) {
+    if (delay === undefined) { delay = service.defaultPollingDelay; }
+
+    var timeout = $timeout(function pollFn() {
+      callback($http.get('/api/modules/' + name + '/instances/status'));
+      timeout = $timeout(pollFn, delay);
+    }, delay);
+
+    return {
+      cancel: function() {
+        $timeout.cancel(timeout);
+      }
+    };
+  };
+
+  // Install a module, passing in the uploaded file object (see $upload for
+  // details). Return a promise object for the given upload http call.
+  service.install = function(file) {
+    return $upload.upload({
+      url: '/api/modules/install',
+      method: 'POST', file: file,
+    });
+  }
+
+  return service;
 });

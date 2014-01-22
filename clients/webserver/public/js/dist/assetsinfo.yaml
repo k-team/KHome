@@ -2,9 +2,8 @@ javascript:
   main:
     files:
     - main.js
-    - controllers/catalog.js
-    - controllers/graph.js
-    - controllers/house-map.js
+    - controllers/main.js
+    - controllers/modules.js
     - directives/graph.js
     - services/house-map.js
     - services/modules.js
@@ -14,6 +13,6 @@ javascript:
       min: main.min.js
       raw: main.js
     size:
-      gz: 1012
-      min: 2539
-      raw: 4528
+      gz: 1143
+      min: 3184
+      raw: 6669

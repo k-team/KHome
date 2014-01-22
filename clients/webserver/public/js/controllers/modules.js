@@ -1,11 +1,10 @@
-function CatalogCtrl($scope, ModuleService) {
+function ModulesCtrl($scope, ModuleService) {
   // All modules
   $scope.modules = [];
 
   // Explicitly reload modules
   $scope.reloadModules = function() {
-    ModuleService.all(function(modules) {
-      console.log(modules);
+    ModuleService.all().success(function(modules) {
       $scope.modules = modules;
     });
   };
@@ -23,7 +22,7 @@ function CatalogCtrl($scope, ModuleService) {
       $scope.reloadModules();
     }).error(function() {
       $scope.uploading = false;
-      console.error('upload failed');
+      // TODO handle errors better
     });
   };
 }

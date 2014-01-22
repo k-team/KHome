@@ -4,12 +4,11 @@ angular.module('GHome').directive('graph', function() {
     link: function($scope, elem, attrs) {
       var chart = null, opts = {};
       $scope.$watch(attrs.graphModel, function(v) {
-        console.log('graph data changed', v);
         if (!chart) {
-          chart = $.plot(elem, [v], opts);
+          chart = $.plot(elem, v, opts);
           elem.css('display', 'block');
         } else {
-          chart.setData([v]);
+          chart.setData(v);
           chart.setupGrid();
           chart.draw();
         }
