@@ -57,8 +57,10 @@ function MainCtrl($scope, ModuleService, HouseMapService) {
 
   // House map namespace
   $scope.map = {};
+
   // Minimal bbox af all rooms
-  $scope.map.box = { minX: 0, minY: 0, maxX: 0, maxY: 0 };
+  $scope.map.box = {};
+
   // Comma-separated representation for points (x1,y1 x2,y2 x3,y3 etc...), used
   // for svg rendering.
   $scope.map.points = function(room) {
@@ -73,15 +75,23 @@ function MainCtrl($scope, ModuleService, HouseMapService) {
     return pointsRepr;
   };
 
+  // Compute map padding (relative to bbox)
+  $scope.map.padding = function() {
+    return $scope.map.paddingRatio*Math.max(
+        $scope.map.box.maxX - $scope.map.box.minX,
+        $scope.map.box.maxY - $scope.map.box.minY);
+  };
+  // padding = ratio*max(width, height)
+  $scope.map.paddingRatio = 0.05;
+
   // Watch expression on rooms in order to update the bbox accordingly
   $scope.$watch('rooms', function() {
-    // Compute new bbox
     angular.forEach($scope.rooms, function(room) {
       angular.forEach(room.polygon, function(point) {
-        if (point.x < $scope.map.box.minX)      { $scope.map.box.minX = point.x; }
-        else if (point.x > $scope.map.box.maxX) { $scope.map.box.maxX = point.x; }
-        if (point.y < $scope.map.box.minY)      { $scope.map.box.minY = point.y; }
-        else if (point.y > $scope.map.box.maxY) { $scope.map.box.maxY = point.y; }
+        if      ($scope.map.box.minX === undefined || point.x < $scope.map.box.minX) { $scope.map.box.minX = point.x; }
+        else if ($scope.map.box.maxX === undefined || point.x > $scope.map.box.maxX) { $scope.map.box.maxX = point.x; }
+        if      ($scope.map.box.minY === undefined || point.y < $scope.map.box.minY) { $scope.map.box.minY = point.y; }
+        else if ($scope.map.box.maxY === undefined || point.y > $scope.map.box.maxY) { $scope.map.box.maxY = point.y; }
       });
     });
   });
