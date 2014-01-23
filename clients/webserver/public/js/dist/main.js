@@ -21,8 +21,6 @@
   $scope.supervision = {};
   $scope.supervision.module = '';
   $scope.supervision.data = {};
-  $scope.supervision.graphData = [];
-  $scope.supervision.graphMaxValues = 100;
   $scope.supervision.poll = null;
 
   $scope.$watch('supervision.module', function() {
@@ -46,18 +44,7 @@
           }
 
           // Push new data
-          var data = instance.data;
-          $scope.supervision.data[instanceName].push([data.time, data.value]);
-        });
-
-        // Update graph-specific data
-        $scope.supervision.graphData = [];
-        angular.forEach($scope.supervision.data, function(instanceData, instanceName) {
-          var pushedData = instanceData;
-          if (instanceData.length > $scope.supervision.graphMaxValues) {
-            pushedData = instanceData.slice(-$scope.supervision.graphMaxValues);
-          }
-          $scope.supervision.graphData.push(pushedData);
+          $scope.supervision.data[instanceName].push([instance.data.time, instance.data.value]);
         });
       }).error(function() {
         // TODO
@@ -151,13 +138,37 @@
   return {
     restrict: 'EA',
     link: function($scope, elem, attrs) {
-      var chart = null, opts = {};
-      $scope.$watch(attrs.graphModel, function(v) {
+      var chart = null, opts = {
+        xaxis: {
+          tickLength: 0
+        }, yaxis: {
+          tickLength: 0
+        }, grid: {
+          borderWidth: 0,
+          aboveData: true,
+          markings: [ { yaxis: { from: 0, to: 0 }, color: '#888' },
+                      { xaxis: { from: 0, to: 0 }, color: '#888' }]
+        }, series: {
+          shadowSize: 0
+        }
+      };
+
+      // Actual plotting based on the graph data model
+      $scope.$watch(attrs.graphModel, function(data) {
+        var plottedData = [];
+        if (data instanceof Array) {
+          plottedData = data;
+        } else {
+          angular.forEach(data, function(rawData, label) {
+            plottedData.push({ label: label, data: rawData });
+          });
+        }
+
         if (!chart) {
-          chart = $.plot(elem, v, opts);
+          chart = $.plot(elem, plottedData, opts);
           elem.css('display', 'block');
         } else {
-          chart.setData(v);
+          chart.setData(plottedData);
           chart.setupGrid();
           chart.draw();
         }
@@ -189,8 +200,6 @@
           y = vbox.minY - padding,
           w = (vbox.maxX - vbox.minX) + 2*padding,
           h = (vbox.maxY - vbox.minY) + 2*padding;
-      console.log('vbox', vbox);
-      console.log('padding', padding);
 
         // Update svg element
         // TODO check compatibility (jQuery/DOM)

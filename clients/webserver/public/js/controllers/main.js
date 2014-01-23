@@ -3,8 +3,6 @@ function MainCtrl($scope, ModuleService, HouseMapService) {
   $scope.supervision = {};
   $scope.supervision.module = '';
   $scope.supervision.data = {};
-  $scope.supervision.graphData = [];
-  $scope.supervision.graphMaxValues = 100;
   $scope.supervision.poll = null;
 
   $scope.$watch('supervision.module', function() {
@@ -17,7 +15,7 @@ function MainCtrl($scope, ModuleService, HouseMapService) {
     // Do nothing if the module isn't set
     if (!$scope.supervision.module) { return; }
 
-    // Poll the current supervised module for its status, 
+    // Poll the current supervised module for its status
     $scope.supervision.poll = ModuleService.pollInstances($scope.supervision.module, function(promise) {
       promise.success(function(data) {
         angular.forEach(data, function(instance) {
@@ -28,18 +26,7 @@ function MainCtrl($scope, ModuleService, HouseMapService) {
           }
 
           // Push new data
-          var data = instance.data;
-          $scope.supervision.data[instanceName].push([data.time, data.value]);
-        });
-
-        // Update graph-specific data
-        $scope.supervision.graphData = [];
-        angular.forEach($scope.supervision.data, function(instanceData, instanceName) {
-          var pushedData = instanceData;
-          if (instanceData.length > $scope.supervision.graphMaxValues) {
-            pushedData = instanceData.slice(-$scope.supervision.graphMaxValues);
-          }
-          $scope.supervision.graphData.push(pushedData);
+          $scope.supervision.data[instanceName].push([instance.data.time, instance.data.value]);
         });
       }).error(function() {
         // TODO
