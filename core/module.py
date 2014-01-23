@@ -1,6 +1,20 @@
 import threading
 import fields, fields.io, fields.persistant, time
 
+def prop_field(field):
+    def _prop_field(*args, **kwargs):
+        if len(args) == 1 and not kwargs:
+            return field.write(*args)
+        elif not args:
+            if not kwargs:
+                return field.read()
+            if len(kwargs) == 1 and 't' in kwargs:
+                return field.read(**kwargs)
+            if len(kwargs) == 2 and 'fr' in kwargs and 'to' in kwargs:
+                return field.read(**kwargs)
+        raise Exception
+    return _prop_field
+
 def read_field(field):
     def _read_field(**kwargs):
         return field.read(**kwargs)
@@ -22,13 +36,14 @@ class ModuleMeta(type):
         cls = type(obj)
 
 # Gestion du nom du module
-        if not hasattr(cls, 'module_name'):
-            setattr(obj, 'module_name', cls.__name__)
-        else:
-            setattr(obj, 'module_name', cls.module_name)
+        if not hasattr(obj, 'module_name'):
+            if not hasattr(cls, 'module_name'):
+                setattr(obj, 'module_name', cls.__name__)
+            else:
+                setattr(obj, 'module_name', cls.module_name)
 
         if obj.module_name in type(self).ls_name:
-            raise AttributeError
+            raise NameError('Module with same name already exist')
         type(self).ls_name.add(obj.module_name)
 
 # Gestion des fields du module
@@ -37,12 +52,7 @@ class ModuleMeta(type):
             f_cls = getattr(cls, f_cls)
             if isinstance(f_cls, type) and issubclass(f_cls, fields.Base):
                 field = f_cls()
-                get_name = 'get_' + field.field_name
-                set_name = 'set_' + field.field_name
-                if hasattr(obj, get_name) or hasattr(obj, set_name):
-                    raise AttributeError
-                setattr(obj, get_name, read_field(field))
-                setattr(obj, set_name, write_field(field))
+                setattr(obj, field.field_name, prop_field(field))
                 ls_fields += [field]
         setattr(obj, 'module_fields', ls_fields)
 
@@ -53,16 +63,13 @@ class Base(threading.Thread):
 
     # module_name = 'Module'
 
-    def __init__(self):
+    def __init__(self, **kwargs):
         super(Base, self).__init__()
         self.running = False
+
+        if 'name' in kwargs:
+            self.module_name = kwargs['name']
         # module_fields = []
-
-    # def __getattribute__(self, name):
-    #     return None
-
-    # def __setattribute__(self, name, value):
-    #     pass
 
     def start(self):
         self.running = True
@@ -88,15 +95,28 @@ if __name__ == '__main__':
                 fields.Base):
             field_name = 'mon_nom'
 
+        class F1(fields.io.Readable,
+                fields.io.Writable,
+                fields.persistant.Volatile,
+                fields.Base):
+            pass
+
+    a = M1(name='M0')
     b = M1()
-    print b.__dict__
-    print b.get_mon_nom()
-    print b.set_mon_nom(10)
-    print b.get_mon_nom()
-    print b.get_mon_nom(t=time.time())
-    print b.get_mon_nom(fr=time.time() - 5, to=time.time())
+    print b.mon_nom()
+    print b.mon_nom(10)
+    print b.mon_nom()
+    print b.mon_nom(t=time.time())
+    print b.mon_nom(fr=time.time() - 5, to=time.time())
     for i in xrange(10):
-        b.set_mon_nom(i)
+        b.mon_nom(i)
         time.sleep(0.1)
 
-    print b.get_mon_nom(fr=time.time() - 0.5, to=time.time())
+    print b.mon_nom(fr=time.time() - 0.5, to=time.time())
+    print b.mon_nom()
+    print b.mon_nom(fr=time.time() - 0.5, to=time.time())
+
+    print b.F1(10)
+    print b.F1()
+
+    print a.mon_nom(fr=0, to=time.time())

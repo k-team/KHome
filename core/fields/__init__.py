@@ -2,8 +2,6 @@ import threading
 import time
 
 class FieldMeta(type):
-    ls_name = set()
-
     def __new__(cls, name, parents, attrs):
         return super(FieldMeta, cls).__new__(cls, name, parents, attrs)
 
@@ -15,10 +13,6 @@ class FieldMeta(type):
             setattr(obj, 'field_name', cls.__name__)
         else:
             setattr(obj, 'field_name', cls.field_name)
-
-        if obj.field_name in type(self).ls_name:
-            raise AttributeError
-        type(self).ls_name.add(obj.field_name)
 
         return obj
 
