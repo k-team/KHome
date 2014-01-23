@@ -20,8 +20,8 @@ angular.module('GHome').directive('svgVbox', function() {
         var
           x = vbox.minX - padding,
           y = vbox.minY - padding,
-          w = (vbox.maxX - vbox.minX) + padding,
-          h = (vbox.maxY - vbox.minY) + padding;
+          w = (vbox.maxX - vbox.minX) + 2*padding,
+          h = (vbox.maxY - vbox.minY) + 2*padding;
 
         // Update svg element
         // TODO check compatibility (jQuery/DOM)
