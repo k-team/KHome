@@ -95,6 +95,9 @@ if __name__ == '__main__':
                 fields.Base):
             field_name = 'mon_nom'
 
+            def _acquire_value(self):
+                return (int(time.time()) % 10) ** 2
+
         class F1(fields.io.Readable,
                 fields.io.Writable,
                 fields.persistant.Volatile,
@@ -120,3 +123,12 @@ if __name__ == '__main__':
     print b.F1()
 
     print a.mon_nom(fr=0, to=time.time())
+
+    b.start()
+    try:
+        while True:
+            print b.mon_nom()
+            time.sleep(0.4)
+    except KeyboardInterrupt:
+        b.stop()
+        b.join(1)
