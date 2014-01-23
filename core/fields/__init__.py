@@ -33,7 +33,7 @@ class Base(threading.Thread):
     __metaclass__ = FieldMeta
 
     # field_name = 'Field'
-    update_rate = 0
+    update_rate = 1
 
     def __init__(self):
         super(Base, self).__init__()
