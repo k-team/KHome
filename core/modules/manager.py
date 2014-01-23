@@ -1,21 +1,30 @@
-import threading
-from .instances import Instance
+import json
+import socket
+import multiprocessing as mp
 
-def start_instance(instance_name, module_name, instance_kwargs={}, thread_kwargs={}):
+def start_instance(module_name, process_kwargs={}):
     """
-    Start a new instance of the module labeled as *module_name*, as an instance
-    named by *instance_name*, passing *instance_kwargs* options. Returns a pair
-    containing the instance launched and a Thread object (see threading.Thread
-    for more details) corresponding to the launched instance. The thread is
-    launched using *thread_kwargs* as kwargs.
+    Start a new instance of the module named by *module_name*, raising a
+    DoesNotExist if the module couldn't be found. Pass the process kwargs to
+    the newly started process (see multiprocessing.Process for more details).
+    Return the instance's id (handled here).
+    Note that the module can be in configuration mode after this call, if any
+    of its attributes aren't configured properly. See configure_instance for
+    details on how to configure a module instance.
     """
-    instance = Instance(instance_name, module_name, **instance_kwargs)
-    instance_thread = None # TODO
-    return instance, instance_thread
+    pass
 
-def stop_instance(instance_name):
+def stop_instance(instance_id):
     """
-    Stop the instance *instance_name*, raising a Instance.NotStarted if the
-    instance isn't started.
+    Stop the module instance identified by *instance_id*.
+    """
+    pass
+
+def configure_instance(instance_id, **kwargs):
+    """
+    Configure the module instance identified by *instance_id* with the
+    configuration given by this function's kwargs. A call to this function will
+    be a blocking call, since a socket connection must me made in order to
+    dialog correctly with the started module.
     """
     pass
