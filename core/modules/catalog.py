@@ -6,18 +6,33 @@ the module database at the same time.
 
 import os
 import zipfile
-#from . import get_directory, get_config
+from . import (DIRECTORY, get_config_file, load_config)
+
+def is_installed(module_name, directory=None):
+    """
+    Return if the named module exists in the given directory (defaults to
+    module installation directory).
+    """
+    if directory is None:
+        directory = DIRECTORY
+    module_directory = os.path.join(directory, module_name)
+    return os.path.isdir(module_directory) \
+            and os.path.exists(get_config_file(module_name, module_directory))
 
 def get_installed_modules():
-    return [x for x in os.listdir(DIRECTORY) \
-            if os.path.isdir(get_directory(x)) \
-            and os.path.exists(os.path.join(get_directory(x), CONFIG_FILE))]
+    """
+    Return a list of all installed modules in the installation directory.
+    """
+    return [x for x in os.listdir(DIRECTORY) if is_installed(x)]
 
-def install_from_zip(filename):
+def install_from_zip(file_):
     """
-    Execute all the setup steps for a module installation.
+    Execute all the setup steps for a module installation. Takes either a
+    filename or a file-like object (which should already be opened).
     """
-    pass
+    if isinstance(file_, str):
+        file_ = open(file_, 'r')
+    print load_config(file_.open(CONFIG_FILE, 'r'))
 
 def unzip(source_filename, dest_dir):
     """
