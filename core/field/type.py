@@ -1,22 +1,18 @@
-class Type(object):
-    def acquire_value(self, value):
-        return None
-
-class Numeric(Type):
+class Numeric(object):
     def acquire_value(self):
         try:
             return float(super(Type, self).acquire_value(value))
         except ValueError:
             return None
 
-class Boolean(Type):
+class Boolean(object):
     def acquire_value(self):
         try:
             return bool(super(Type, self).acquire_value(value))
         except ValueError:
             return None
 
-class String(Type):
+class String(object):
     def acquire_value(self):
         try:
             return str(super(Type, self).acquire_value(value))
