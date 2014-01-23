@@ -18,9 +18,9 @@ class FieldMeta(type):
             setattr(obj, 'field_name', cls.field_name)
 
         base_name = obj.field_name
-        new_name = base_name + '-' + str(type(self).ls_name[base_name] + 1)
+        new_name = base_name + '_' + str(type(self).ls_name[base_name] + 1)
         while new_name in type(self).ls_name:
-            new_name = base_name + '-' + str(type(self).ls_name[base_name] + 1)
+            new_name = base_name + '_' + str(type(self).ls_name[base_name] + 1)
             if new_name in type(self).ls_name:
                 base_name = new_name
 
