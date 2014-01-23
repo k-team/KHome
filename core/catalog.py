@@ -64,30 +64,24 @@ def install_from_zip(file_):
     Raises an IOError if the zip file reading failed, and a ValueError if the
     module is already installed.
     """
-    def p(s): print '[install_from_zip]', s
     with zipfile.ZipFile(file_) as zf:
         toplevel_directories = [n for n in zf.namelist() \
                 if n.endswith('/') and n.count('/') == 1]
-        p('toplevel_directories = %s' % toplevel_directories)
 
         # validate zip format
-        p('validating zip format')
         if len(toplevel_directories) != 1:
             msg = 'Archive should only have one directory at its root'
             raise IOError(msg)
 
         # validate against already installed modules
-        p('validating against installed modules')
         if is_installed(toplevel_directories[0][:-1]):
             raise ValueError('Module already installed')
 
         # extract zip file
-        p('extracting')
         for zi in zf.infolist():
             # Path traversal defense copied from
             # http://hg.python.org/cpython/file/tip/Lib/http/server.py#l789
             words = zi.filename.split('/')[1:]
-            p('words = %s' % words)
             path = DIRECTORY
             for word in words[:-1]:
                 drive, word = os.path.splitdrive(word)
@@ -95,8 +89,6 @@ def install_from_zip(file_):
                 if word in (os.curdir, os.pardir, ''):
                     continue
                 path = os.path.join(path, word)
-            p('extracting %s to %s' % (zi.filename, path))
             zf.extract(zi, path)
 
         # TODO start module ?
-    p('done')
