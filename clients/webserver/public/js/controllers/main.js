@@ -4,6 +4,7 @@ function MainCtrl($scope, ModuleService, HouseMapService) {
   $scope.supervision.module = '';
   $scope.supervision.data = {};
   $scope.supervision.graphData = [];
+  $scope.supervision.graphMaxValues = 100;
   $scope.supervision.poll = null;
 
   $scope.$watch('supervision.module', function() {
@@ -33,8 +34,12 @@ function MainCtrl($scope, ModuleService, HouseMapService) {
 
         // Update graph-specific data
         $scope.supervision.graphData = [];
-        angular.forEach($scope.supervision.data, function(data) {
-          $scope.supervision.graphData.push(data);
+        angular.forEach($scope.supervision.data, function(instanceData, instanceName) {
+          var pushedData = instanceData;
+          if (instanceData.length > $scope.supervision.graphMaxValues) {
+            pushedData = instanceData.slice(-$scope.supervision.graphMaxValues);
+          }
+          $scope.supervision.graphData.push(pushedData);
         });
       }).error(function() {
         // TODO
