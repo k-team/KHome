@@ -9,7 +9,7 @@ import json
 import zipfile
 
 _file = os.path.realpath(__file__)
-_root = os.path.dirname(os.path.dirname(os.path.dirname(_file)))
+_root = os.path.dirname(os.path.dirname(_file))
 
 DIRECTORY = os.path.join(_root, 'modules')
 CONFIG_FILE = 'module.json'
