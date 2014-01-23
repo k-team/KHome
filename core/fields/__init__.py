@@ -8,7 +8,6 @@ class Base(threading.Thread):
     def __init__(self):
         super(Base, self).__init__()
         self.old_time = 0
-        self.update_rate = Base.update_rate
         self.running = False
 
     def _acquire_value(self):
@@ -28,22 +27,16 @@ class Base(threading.Thread):
         The integrity of the value is done by the type mixins.
         Return True if the add is done. Else False.
         '''
-        return True
+        return False
 
     def _get_value(self):
-        raise NotImplementedError
+        return None
 
-    def _get_old_value(self, t):
-        raise NotImplementedError
+    def _get_value_at(self, t):
+        return None
 
-    def read(self):
-        raise NotImplementedError
-
-    def read_old(self, t):
-        raise NotImplementedError
-
-    def write(self, value):
-        raise NotImplementedError
+    def _get_value_from_to(self, fr, to):
+        return []
 
     def _close(self):
         '''
@@ -51,6 +44,18 @@ class Base(threading.Thread):
         Let the mixins override this to garantee a good shutting of the field.
         '''
         pass
+
+    def read(self):
+        raise NotImplementedError
+
+    def read_at(self, t):
+        raise NotImplementedError
+
+    def read_from_to(self, fr, to):
+        raise NotImplementedError
+
+    def write(self, value):
+        raise NotImplementedError
 
     def start(self):
         '''
@@ -73,7 +78,7 @@ class Base(threading.Thread):
         add this one.
         '''
         while self.running:
-            if time.time() - self.old_time >= self.update_rate:
+            if time.time() - self.old_time >= type(self).update_rate:
                 self.old_time = time.time()
                 self._set_value(time.time(), self._acquire_value())
             time.sleep(0.1)
