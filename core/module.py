@@ -1,5 +1,8 @@
+import time
 import threading
-import fields, fields.io, fields.persistant, time
+import fields
+import fields.io
+import fields.persistant
 
 def prop_field(field):
     def _prop_field(*args, **kwargs):
@@ -35,7 +38,7 @@ class ModuleMeta(type):
         obj = super(ModuleMeta, self).__call__(*args, **kwargs)
         cls = type(obj)
 
-# Gestion du nom du module
+        # Handle module name
         if not hasattr(obj, 'module_name'):
             if not hasattr(cls, 'module_name'):
                 setattr(obj, 'module_name', cls.__name__)
@@ -46,7 +49,7 @@ class ModuleMeta(type):
             raise NameError('Module with same name already exist')
         type(self).ls_name.add(obj.module_name)
 
-# Gestion des fields du module
+        # Handle module fields
         ls_fields = []
         for f_cls in cls.__dict__.keys():
             f_cls = getattr(cls, f_cls)
@@ -61,15 +64,13 @@ class ModuleMeta(type):
 class Base(threading.Thread):
     __metaclass__ = ModuleMeta
 
-    # module_name = 'Module'
-
     def __init__(self, **kwargs):
         super(Base, self).__init__()
         self.running = False
 
         if 'name' in kwargs:
             self.module_name = kwargs['name']
-        # module_fields = []
+        #module_fields = []
 
     def start(self):
         self.running = True
@@ -123,7 +124,6 @@ if __name__ == '__main__':
     print b.F1()
 
     print a.mon_nom(fr=0, to=time.time())
-
     b.start()
     try:
         while True:
