@@ -61,26 +61,34 @@ def install_from_zip(file_):
     """
     Execute all the setup steps for a module installation. Takes either a
     filename or a file-like object (which should already be opened).
+    Raises an IOError if the zip file reading failed, and a ValueError if the
+    module is already installed.
     """
-    if isinstance(file_, str):
-        file_ = open(file_, 'r')
-    print load_config(file_.open(CONFIG_FILE, 'r'))
+    with zipfile.ZipFile(file_) as zf:
+        toplevel_directories = [n for n in zf.namelist() \
+                if n.endswith('/') and n.count('/') == 1]
 
-def unzip(source_filename, dest_dir):
-    """
-    Secure unzip method, copied from
-    http://stackoverflow.com/a/12886818
-    """
-    with zipfile.ZipFile(source_filename) as zf:
-        for member in zf.infolist():
+        # validate zip format
+        if len(toplevel_directories) != 1:
+            msg = 'Archive should only have one directory at its root'
+            raise IOError(msg)
+
+        # validate against alreadt installed modules
+        if is_installed(toplevel_directories[0][:-1]):
+            raise ValueError('Module already installed')
+
+        # extract zip file
+        for zi in zf.infolist():
             # Path traversal defense copied from
             # http://hg.python.org/cpython/file/tip/Lib/http/server.py#l789
-            words = member.filename.split('/')
-            path = dest_dir
+            words = zi.filename.split('/')
+            path = DIRECTORY
             for word in words[:-1]:
                 drive, word = os.path.splitdrive(word)
                 head, word = os.path.split(word)
                 if word in (os.curdir, os.pardir, ''):
                     continue
                 path = os.path.join(path, word)
-            zf.extract(member, path)
+            zf.extract(zi, path)
+
+        # TODO start module ?
