@@ -11,7 +11,7 @@ sys.path.insert(1, core_dir)
 import random
 
 import json
-#from modules import get_all as get_all_modules
+from catalog import install_from_zip
 from flask import (Flask, Response, send_file, request,
         redirect, url_for, jsonify as _jsonify)
 from werkzeug import secure_filename
@@ -56,11 +56,12 @@ def modules():
     #return jsonify(json.dumps(get_all_modules()))
 
 @app.route('/api/modules/install', methods=['POST'])
-def upload_file():
+def upload_module():
     file_ = request.files['file']
     if file_ and allowed_file(file_.filename):
-        filename = secure_filename(file_.filename)
-        #file_.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        filename = os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(file_.filename))
+        file_.save(filename)
+        install_from_zip(filename)
         return jsonify({ 'success': True })
     return jsonify({ 'success': False })
 
