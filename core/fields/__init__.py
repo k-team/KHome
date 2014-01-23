@@ -45,13 +45,7 @@ class Base(threading.Thread):
         '''
         pass
 
-    def read(self):
-        raise NotImplementedError
-
-    def read_at(self, t):
-        raise NotImplementedError
-
-    def read_from_to(self, fr, to):
+    def read(self, **kwargs):
         raise NotImplementedError
 
     def write(self, value):
