@@ -1,14 +1,4 @@
-class Persistant(object):
-    def get_value(self):
-        raise NotImplementedError
-
-    def get_old_value(self, t):
-        raise NotImplementedError
-
-    def set_value(self, t, value):
-        raise NotImplementedError
-
-class DBPersistant(Persistant):
+class DBPersistant(object):
     def get_value(self):
         return None
 
@@ -18,7 +8,7 @@ class DBPersistant(Persistant):
     def set_value(self, t, value):
         pass
 
-class VolatilePersistant(Persistant):
+class VolatilePersistant(object):
     nb_persisted_volatile_values = 100
 
     def __init__(self):
