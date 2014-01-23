@@ -1,20 +1,29 @@
 class Numeric(object):
-    def acquire_value(self):
+    def set_value(self, t, value):
+        if value is None:
+            return False
         try:
-            return float(super(Type, self).acquire_value(value))
+            value = float(value)
         except ValueError:
-            return None
+            return False
+        return super(Type, self).set_value(t, value)
 
 class Boolean(object):
-    def acquire_value(self):
+    def set_value(self, t, value):
+        if value is None:
+            return False
         try:
-            return bool(super(Type, self).acquire_value(value))
+            value = bool(value)
         except ValueError:
-            return None
+            return False
+        return super(Type, self).set_value(t, value)
 
 class String(object):
-    def acquire_value(self):
+    def set_value(self, t, value):
+        if value is None:
+            return False
         try:
-            return str(super(Type, self).acquire_value(value))
+            value = str(value)
         except ValueError:
-            return None
+            return False
+        return super(Type, self).set_value(t, value)
