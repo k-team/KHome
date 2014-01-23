@@ -34,7 +34,11 @@ class Volatile(object):
         return super(Volatile, self)._get_value_at(t)
 
     def _get_value_from_to(self, fr, to):
-        return []
+        res = filter(lambda x: fr <= x[0] <= to,
+                self._persisted_volatile_values)
+        if res:
+            return res
+        return super(Volatile, self)._get_value_from_to(fr, to)
 
     def _set_value(self, t, value):
         self._persisted_volatile_values += [(t, value)]
