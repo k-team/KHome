@@ -53,15 +53,9 @@ class Base(threading.Thread):
 
     # module_name = 'Module'
 
-    class Field(fields.io.Readable, fields.io.Writable, fields.persistant.Volatile, fields.Base):
-        field_name = 'mon_nom'
-        pass
-
     def __init__(self):
         super(Base, self).__init__()
         self.running = False
-        # print self.module_fields
-        print self.__dict__
         # module_fields = []
 
     # def __getattribute__(self, name):
@@ -87,7 +81,14 @@ class Base(threading.Thread):
         self.running = False
 
 if __name__ == '__main__':
-    b = Base()
+    class M1(Base):
+        class Field(fields.io.Readable,
+                fields.io.Writable,
+                fields.persistant.Volatile,
+                fields.Base):
+            field_name = 'mon_nom'
+
+    b = M1()
     print b.__dict__
     print b.get_mon_nom()
     print b.set_mon_nom(10)
