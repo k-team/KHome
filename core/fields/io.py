@@ -5,11 +5,9 @@ class Writable(object):
         return self._set_value(time.time(), value)
 
 class Readable(object):
-    def read(self):
+    def read(self, **kwargs):
+        if 't' in kwargs:
+            return self._get_value_at(kwargs['t'])
+        if 'fr' in kwargs and 'to' in kwargs:
+            return self._get_value_from_to(kwargs['fr'], kwargs['to'])
         return self._get_value()
-
-    def read_at(self, t):
-        return self._get_value_at(t)
-
-    def read_from_to(self, fr, to):
-        return self._get_value_from_to(fr, to)
