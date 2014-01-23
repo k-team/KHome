@@ -120,7 +120,7 @@
 
   // Explicitly reload modules
   $scope.reloadModules = function() {
-    ModuleService.all().success(function(modules) {
+    ModuleService.all().then(function(modules) {
       $scope.modules = modules;
     });
   };
@@ -177,7 +177,6 @@
         if (vbox.maxX === undefined) { vbox.maxX = 0; }
         if (vbox.minY === undefined) { vbox.minY = 0; }
         if (vbox.maxY === undefined) { vbox.maxY = 0; }
-
 
         // Actual (x, y, w, h) values
         var

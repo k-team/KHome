@@ -4,7 +4,7 @@ function ModulesCtrl($scope, ModuleService) {
 
   // Explicitly reload modules
   $scope.reloadModules = function() {
-    ModuleService.all().success(function(modules) {
+    ModuleService.all().then(function(modules) {
       $scope.modules = modules;
     });
   };

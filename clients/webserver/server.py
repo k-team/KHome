@@ -1,20 +1,16 @@
 import os
 import sys
+import json
 import time
+import tempfile
+from flask import (Flask, Response, send_file, request, jsonify as _jsonify)
 
-# remove this and do in module launcher
+# remove this and do in client launcher
 this_dir = os.path.dirname(os.path.realpath(__file__))
 core_dir = os.path.join(os.path.dirname(os.path.dirname(this_dir)), 'core')
 sys.path.insert(1, core_dir)
-
-# used for bootstrapping
-import random
-
-import json
-from catalog import install_from_zip
-from flask import (Flask, Response, send_file, request,
-        redirect, url_for, jsonify as _jsonify)
-from werkzeug import secure_filename
+# leave this though
+from catalog import (install_from_zip, get_installed_modules)
 
 def jsonify(obj):
     """
@@ -33,12 +29,8 @@ app = Flask(__name__,
         static_folder=conf.get('static_directory', 'static'),
         static_url_path='')
 
-ALLOWED_EXTENSIONS = set(['zip'])
-app.config['UPLOAD_FOLDER'] = '/tmp'
-
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+def allowed_file(filename, exts):
+    return '.' in filename and filename.rsplit('.', 1)[1] in exts
 
 # fix for index page
 @app.route('/')
@@ -51,19 +43,32 @@ def rooms():
 
 @app.route('/api/modules')
 def modules():
-    print ['apple', 'pie', 'is', 'awesome']
-    return jsonify([42, 'apple', 'pie', 'is', 'awesome'])
-    #return jsonify(json.dumps(get_all_modules()))
+    return jsonify(get_installed_modules())
 
 @app.route('/api/modules/install', methods=['POST'])
 def upload_module():
+    return_data = { 'success': False }
     file_ = request.files['file']
-    if file_ and allowed_file(file_.filename):
-        filename = os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(file_.filename))
-        file_.save(filename)
-        install_from_zip(filename)
-        return jsonify({ 'success': True })
-    return jsonify({ 'success': False })
+    if file_:
+        if not allowed_file(file_.filename, ['zip']):
+            return_data['message'] = 'File format not allowed'
+        else:
+            _, filename = tempfile.mkstemp()
+            file_.save(filename)
+            try:
+                install_from_zip(filename)
+            except (IOError, ValueError) as e:
+                return_data['message'] = str(e)
+            else:
+                return_data['success'] = True
+            finally:
+                os.remove(filename)
+    else:
+        return_data['message'] = 'No file uploaded'
+    return jsonify(return_data)
+
+# used for samples
+import random
 
 def brightness_statuses():
     r = lambda: int(random.random()*10)
