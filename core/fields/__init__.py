@@ -1,8 +1,38 @@
 import threading
 import time
+from collections import Counter
+
+class FieldMeta(type):
+    ls_name = Counter()
+
+    def __new__(cls, name, parents, attrs):
+        return super(FieldMeta, cls).__new__(cls, name, parents, attrs)
+
+    def __call__(self, *args, **kwargs):
+        obj = super(FieldMeta, self).__call__(*args, **kwargs)
+        cls = type(obj)
+
+        if not hasattr(cls, 'field_name'):
+            setattr(obj, 'field_name', cls.__name__)
+        else:
+            setattr(obj, 'field_name', cls.field_name)
+
+        base_name = obj.field_name
+        new_name = base_name + '-' + str(type(self).ls_name[base_name] + 1)
+        while new_name in type(self).ls_name:
+            new_name = base_name + '-' + str(type(self).ls_name[base_name] + 1)
+            if new_name in type(self).ls_name:
+                base_name = new_name
+
+        type(self).ls_name[base_name] += 1
+        obj.field_name = new_name
+
+        return obj
 
 class Base(threading.Thread):
-    name = ''
+    __metaclass__ = FieldMeta
+
+    # field_name = 'Field'
     update_rate = 0
 
     def __init__(self):
