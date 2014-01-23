@@ -2,11 +2,11 @@ import time
 
 class Writable(object):
     def write(self, value):
-        self.set_value(time.time(), value)
+        self._set_value(time.time(), value)
 
 class Readable(object):
     def read(self):
-        return self.get_value()
+        return self._get_value()
 
     def read_old(self, t):
-        return self.get_value(t)
+        return self._get_value(t)
