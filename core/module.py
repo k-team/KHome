@@ -1,6 +1,5 @@
 import threading
 import fields, fields.io, fields.persistant, time
-from collections import Counter
 
 def read_field(field):
     def _read_field(**kwargs):
@@ -13,7 +12,7 @@ def write_field(field):
     return _write_field
 
 class ModuleMeta(type):
-    ls_name = Counter()
+    ls_name = set()
 
     def __new__(cls, name, parents, attrs):
         return super(ModuleMeta, cls).__new__(cls, name, parents, attrs)
@@ -28,14 +27,9 @@ class ModuleMeta(type):
         else:
             setattr(obj, 'module_name', cls.module_name)
 
-        base_name = obj.module_name
-        new_name = base_name + '_' + str(type(self).ls_name[base_name] + 1)
-        while new_name in type(self).ls_name:
-            new_name = base_name + '_' + str(type(self).ls_name[base_name] + 1)
-            if new_name in type(self).ls_name:
-                base_name = new_name
-        type(self).ls_name[base_name] += 1
-        obj.module_name = new_name
+        if obj.module_name in type(self).ls_name:
+            raise AttributeError
+        type(self).ls_name.add(obj.module_name)
 
 # Gestion des fields du module
         ls_fields = []
@@ -51,10 +45,6 @@ class ModuleMeta(type):
                 setattr(obj, set_name, write_field(field))
                 ls_fields += [field]
         setattr(obj, 'module_fields', ls_fields)
-        print 'coucou'
-        print obj
-        print obj.__dict__
-        print
 
         return obj
 
@@ -99,13 +89,13 @@ class Base(threading.Thread):
 if __name__ == '__main__':
     b = Base()
     print b.__dict__
-    print b.get_mon_nom_1()
-    print b.set_mon_nom_1(10)
-    print b.get_mon_nom_1()
-    print b.get_mon_nom_1(t=time.time())
-    print b.get_mon_nom_1(fr=time.time() - 5, to=time.time())
+    print b.get_mon_nom()
+    print b.set_mon_nom(10)
+    print b.get_mon_nom()
+    print b.get_mon_nom(t=time.time())
+    print b.get_mon_nom(fr=time.time() - 5, to=time.time())
     for i in xrange(10):
-        b.set_mon_nom_1(i)
+        b.set_mon_nom(i)
         time.sleep(0.1)
 
-    print b.get_mon_nom_1(fr=time.time() - 0.5, to=time.time())
+    print b.get_mon_nom(fr=time.time() - 0.5, to=time.time())

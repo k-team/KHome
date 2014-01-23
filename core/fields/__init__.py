@@ -1,9 +1,8 @@
 import threading
 import time
-from collections import Counter
 
 class FieldMeta(type):
-    ls_name = Counter()
+    ls_name = set()
 
     def __new__(cls, name, parents, attrs):
         return super(FieldMeta, cls).__new__(cls, name, parents, attrs)
@@ -17,15 +16,9 @@ class FieldMeta(type):
         else:
             setattr(obj, 'field_name', cls.field_name)
 
-        base_name = obj.field_name
-        new_name = base_name + '_' + str(type(self).ls_name[base_name] + 1)
-        while new_name in type(self).ls_name:
-            new_name = base_name + '_' + str(type(self).ls_name[base_name] + 1)
-            if new_name in type(self).ls_name:
-                base_name = new_name
-
-        type(self).ls_name[base_name] += 1
-        obj.field_name = new_name
+        if obj.field_name in type(self).ls_name:
+            raise AttributeError
+        type(self).ls_name.add(obj.field_name)
 
         return obj
 
