@@ -1,5 +1,8 @@
 import threading
-import fields, fields.io, fields.persistant, time
+import json
+import socket
+import fields
+import fields.io, fields.persistant, time
 
 # def prop_netfield():
 #     dict = creerjson(args)
@@ -22,7 +25,16 @@ def prop_field(field):
         raise Exception
     return _prop_field
 
-def get_network_fields(module):
+def get_module_conn(module_name):
+    sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+    # sock.connect(module_name + '.sock')
+    return sock
+
+def get_network_fields(module_conn):
+    request = {}
+    # module_conn.send(json.dumps(request))
+    # data = json.loads(module_conn.recv())
+    # parse data
     return ['F2']
 
 def prop_network_field(field):
@@ -116,8 +128,12 @@ class NetworkMeta(type):
             else:
                 setattr(obj, 'module_name', cls.module_name)
 
+# Gestion de la connection au module
+        conn = get_module_conn(obj.module_name)
+        setattr(obj, 'module_conn', conn)
+
 # Gestion des fields du module
-        ls_field = get_network_fields(obj.module_name)
+        ls_field = get_network_fields(obj.module_conn)
         for field in ls_field:
             setattr(obj, field, prop_network_field(field))
 
@@ -136,6 +152,8 @@ def use_module(module_name):
     return Network(name=module_name)
 
 if __name__ == '__main__':
+    M2 = use_module('M2')
+
     class M1(Base):
         class Field(fields.io.Readable,
                 fields.io.Writable,
