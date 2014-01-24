@@ -11,6 +11,7 @@
         .when('/brightness', { templateUrl: 'partials/brightness.html' })
         .when('/power', { templateUrl: 'partials/power.html' })
         .when('/modules', { templateUrl: 'partials/modules.html' })
+        .when('/settings', { templateUrl: 'partials/settings.html' })
         .when('/ai-config', { templateUrl: 'partials/ai-config.html' })
         .otherwise({ redirectTo: '/home' })
       ;
@@ -38,19 +39,21 @@
     $scope.supervision.poll = ModuleService.pollInstances($scope.supervision.module, function(promise) {
       promise.success(function(data) {
         angular.forEach(data, function(instance) {
-          // Empty data case
           var instanceName = instance.name;
-          if (!$scope.supervision.data[instanceName]) {
-            $scope.supervision.data[instanceName] = [];
-          }
+          angular.forEach(instance.attrs, function(data, attr) {
+            var attrName = instanceName + '.' + attr
+            // Empty data case
+            if (!$scope.supervision.data[attrName]) {
+              $scope.supervision.data[attrName] = [];
+            }
 
-          // Push new data
-          $scope.supervision.data[instanceName].push([instance.data.time, instance.data.value]);
-          if ($scope.supervision.maxData < $scope.supervision.data[instanceName].length) {
-            var endIndex = $scope.supervision.data[instanceName].length - $scope.supervision.maxData;
-            console.log(endIndex);
-            $scope.supervision.data[instanceName].splice(0, endIndex);
-          }
+            // Push new data
+            var attrData = $scope.supervision.data[attrName];
+            attrData.push([instance.time, data]);
+            if ($scope.supervision.maxData < attrData.length) {
+              attrData.splice(0, attrData.length - $scope.supervision.maxData);
+            }
+          });
         });
       }).error(function() {
         // TODO

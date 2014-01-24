@@ -72,15 +72,15 @@ import random
 
 def brightness_statuses():
     r = lambda: int(random.random()*10)
-    return [ { 'name': 'b1', 'data': { 'time': time.time(), 'value': r() } },
-            { 'name': 'b2', 'data': { 'time': time.time(), 'value': r() } },
-            { 'name': 'b3', 'data': { 'time': time.time(), 'value': r() } }, ]
+    return [ { 'name': 'b1', 'time': time.time(), 'attrs': { 'brightness': r() } },
+             { 'name': 'b2', 'time': time.time(), 'attrs': { 'brightness': r() } },
+             { 'name': 'b3', 'time': time.time(), 'attrs': { 'brightness': r() } }, ]
 
 def temperature_statuses():
     r = lambda: int(random.random()*40)
-    return [ { 'name': 't1', 'data': { 'time': time.time(), 'value': r() } },
-            { 'name': 't2', 'data': { 'time': time.time(), 'value': r() } },
-            { 'name': 't3', 'data': { 'time': time.time(), 'value': r() } }, ]
+    return [ { 'name': 't1', 'time': time.time(), 'attrs': { 'temperature': r() } },
+             { 'name': 't2', 'time': time.time(), 'attrs': { 'temperature': r() } },
+             { 'name': 't3', 'time': time.time(), 'attrs': { 'temperature': r() } }, ]
 
 @app.route('/api/modules/<module_name>/instances/status')
 def module_instances_statuses(module_name):
