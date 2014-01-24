@@ -26,6 +26,10 @@ class Base(threading.Thread):
         self.old_time = 0
         self.running = False
 
+    def emit_value(self, value):
+        if value is not None:
+            self._set_value((time.time(), value))
+
     def acquire_value(self):
         """
         Function called during a data acquisition.
@@ -90,6 +94,6 @@ class Base(threading.Thread):
         while self.running:
             if time.time() - self.old_time >= type(self).update_rate:
                 self.old_time = time.time()
-                self._set_value(time.time(), self.acquire_value())
+                self.emit_value(self.acquire_value())
             time.sleep(0.1)
         self.close()

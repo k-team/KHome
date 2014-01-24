@@ -3,7 +3,7 @@ import threading
 import json
 import socket
 import fields
-import fields.io, fields.persistant, time
+import fields.io, fields.persistant, fields.sensor, time
 
 def prop_field(field):
     def _prop_field(*args, **kwargs):
@@ -160,6 +160,7 @@ if __name__ == '__main__':
         class F1(fields.io.Readable,
                 fields.io.Writable,
                 fields.persistant.Volatile,
+                fields.sensor.Sensor,
                 fields.Base):
             pass
 
