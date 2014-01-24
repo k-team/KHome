@@ -1,18 +1,14 @@
 import json
-from twisted.internet.protocol import Factory, Protocol
+from twisted.internet import Factory, Protocol
 
-class ModuleConnectionFactory(Factory):
-    def __init__(self, module):
-        self.module = module
-
-    def buildProtocol(self, addr):
-        return ModuleConnection(self.module)
-
-class ModuleConnection(Protocol):
+class Protocol(protocol.Protocol):
     def __init__(self, module):
         self.module = module
 
     def dataReceived(self, data):
+        if not self.module.running:
+            return
+
         try:
             json_data = json.loads(data)
         except ValueError:
@@ -115,3 +111,10 @@ class ModuleConnection(Protocol):
         res['success'] = True
         res['objs'] = ls_attr
         self.transport.write(json.dumps(res))
+
+class Factory(protocol.Factory):
+    def __init__(self, module):
+        self.module = module
+
+    def buildProtocol(self, addr):
+        return Protocol(self.module)

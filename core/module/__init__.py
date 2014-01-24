@@ -1,4 +1,5 @@
 import threading
+<<<<<<< HEAD:core/module.py
 import json
 import socket
 import fields
@@ -10,6 +11,12 @@ import fields.io, fields.persistant, fields.sensor, time
 #     data_received = self.socket.recv()
 #     data_json = json.loads(data_received)
 #     comprendrejson
+=======
+from twisted.internet import reactor
+from twisted.internet.endpoints import UNIXServerEndpoint as ServerEndpoint
+import core.fields
+import core.fields.io, core.fields.persistant, time
+>>>>>>> Restructuration des fichiers et essaie d'intégration de la com intermodule coté server:core/module/__init__.py
 
 def prop_field(field):
     def _prop_field(*args, **kwargs):
@@ -93,6 +100,9 @@ class Base(threading.Thread):
         super(Base, self).__init__()
         self.running = False
 
+        self.endpoint = ServerEndpoint(reactor, module.socket_filename)
+        self.endpoint.listen(ModuleConnectionFactory(self))
+
         if 'name' in kwargs:
             self.module_name = kwargs['name']
         # module_fields = []
@@ -150,61 +160,3 @@ class Network(object):
 
 def use_module(module_name):
     return Network(name=module_name)
-
-if __name__ == '__main__':
-    M2 = use_module('M2')
-
-    class M1(Base):
-        class Field(fields.io.Readable,
-                fields.io.Writable,
-                fields.persistant.Volatile,
-                fields.Base):
-            field_name = 'mon_nom'
-
-            def acquire_value(self):
-                return M2.F2()
-                return (int(time.time()) % 10) ** 2
-
-        class F1(fields.io.Readable,
-                fields.io.Writable,
-                fields.persistant.Volatile,
-                fields.sensor.Sensor,
-                fields.Base):
-            pass
-
-    a = M1(name='M0')
-    b = M1()
-    print b.mon_nom()
-    print b.mon_nom(10)
-    print b.mon_nom()
-    print b.mon_nom(t=time.time())
-    print b.mon_nom(fr=time.time() - 5, to=time.time())
-    for i in xrange(10):
-        b.mon_nom(i)
-        # time.sleep(0.1)
-
-    print b.mon_nom(fr=time.time() - 0.5, to=time.time())
-    print b.mon_nom()
-    print b.mon_nom(fr=time.time() - 0.5, to=time.time())
-
-    print b.F1(10)
-    print b.F1()
-
-    print a.mon_nom(fr=0, to=time.time())
-
-    # b.start()
-    # try:
-    #     while True:
-    #         print b.mon_nom()
-    #         time.sleep(0.4)
-    # except KeyboardInterrupt:
-    #     b.stop()
-    #     b.join(1)
-
-    class M2(Network):
-        pass
-
-    M2 = use_module('M2')
-    print M2.module_name
-    print M2.__dict__
-    print M2.F2()
