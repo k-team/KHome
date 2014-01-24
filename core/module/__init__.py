@@ -1,22 +1,11 @@
 import threading
-<<<<<<< HEAD:core/module.py
 import json
 import socket
 import fields
-import fields.io, fields.persistant, fields.sensor, time
-
-# def prop_netfield():
-#     dict = creerjson(args)
-#     self.socket.write(json.dumps(dict))
-#     data_received = self.socket.recv()
-#     data_json = json.loads(data_received)
-#     comprendrejson
-=======
 from twisted.internet import reactor
 from twisted.internet.endpoints import UNIXServerEndpoint as ServerEndpoint
 import core.fields
-import core.fields.io, core.fields.persistant, time
->>>>>>> Restructuration des fichiers et essaie d'intégration de la com intermodule coté server:core/module/__init__.py
+import connection
 
 def prop_field(field):
     def _prop_field(*args, **kwargs):
@@ -44,6 +33,7 @@ def get_network_fields(module_conn):
     # parse data
     return ['F2']
 
+<<<<<<< HEAD
 def prop_network_field(field):
     def _prop_network_field(*args, **kwargs):
         if len(args) == 1 and not kwargs:
@@ -59,6 +49,13 @@ def prop_network_field(field):
     return _prop_network_field
 
 class BaseMeta(type):
+=======
+def get_module_socket(module_name):
+# TODO rearrange this
+    return module_name + '.sock'
+
+class ModuleMeta(type):
+>>>>>>> quelques corrections
     ls_name = set()
 
     def __new__(cls, name, parents, attrs):
@@ -79,11 +76,14 @@ class BaseMeta(type):
             raise NameError('Module with same name already exist')
         type(self).ls_name.add(obj.module_name)
 
+# Gestion du nom du socket du module
+        setattr(obj, 'module_socket', get_module_socket(obj.module_name))
+
 # Gestion des fields du module
         ls_fields = []
         for f_cls in cls.__dict__.keys():
             f_cls = getattr(cls, f_cls)
-            if isinstance(f_cls, type) and issubclass(f_cls, fields.Base):
+            if isinstance(f_cls, type) and issubclass(f_cls, core.fields.Base):
                 field = f_cls()
                 setattr(obj, field.field_name, prop_field(field))
                 ls_fields += [field]
@@ -99,15 +99,16 @@ class Base(threading.Thread):
     def __init__(self, **kwargs):
         super(Base, self).__init__()
         self.running = False
-
-        self.endpoint = ServerEndpoint(reactor, module.socket_filename)
-        self.endpoint.listen(ModuleConnectionFactory(self))
+        self.endpoint = None
 
         if 'name' in kwargs:
             self.module_name = kwargs['name']
         # module_fields = []
 
     def start(self):
+        self.endpoint = ServerEndpoint(reactor, self.module_socket)
+        self.endpoint.listen(connection.Factory(self))
+
         self.running = True
         for f in self.module_fields:
             f.start()
