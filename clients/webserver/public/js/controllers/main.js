@@ -3,7 +3,7 @@ function MainCtrl($scope, ModuleService, HouseMapService) {
   $scope.supervision = {};
   $scope.supervision.module = '';
   $scope.supervision.data = {};
-  $scope.supervision.graphData = [];
+  $scope.supervision.maxData = 10;
   $scope.supervision.poll = null;
 
   $scope.$watch('supervision.module', function() {
@@ -16,25 +16,25 @@ function MainCtrl($scope, ModuleService, HouseMapService) {
     // Do nothing if the module isn't set
     if (!$scope.supervision.module) { return; }
 
-    // Poll the current supervised module for its status, 
+    // Poll the current supervised module for its status
     $scope.supervision.poll = ModuleService.pollInstances($scope.supervision.module, function(promise) {
       promise.success(function(data) {
         angular.forEach(data, function(instance) {
-          // Empty data case
           var instanceName = instance.name;
-          if (!$scope.supervision.data[instanceName]) {
-            $scope.supervision.data[instanceName] = [];
-          }
+          angular.forEach(instance.attrs, function(data, attr) {
+            var attrName = instanceName + '.' + attr
+            // Empty data case
+            if (!$scope.supervision.data[attrName]) {
+              $scope.supervision.data[attrName] = [];
+            }
 
-          // Push new data
-          var data = instance.data;
-          $scope.supervision.data[instanceName].push([data.time, data.value]);
-        });
-
-        // Update graph-specific data
-        $scope.supervision.graphData = [];
-        angular.forEach($scope.supervision.data, function(data) {
-          $scope.supervision.graphData.push(data);
+            // Push new data
+            var attrData = $scope.supervision.data[attrName];
+            attrData.push([instance.time, data]);
+            if ($scope.supervision.maxData < attrData.length) {
+              attrData.splice(0, attrData.length - $scope.supervision.maxData);
+            }
+          });
         });
       }).error(function() {
         // TODO

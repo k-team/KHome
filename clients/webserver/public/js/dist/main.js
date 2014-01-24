@@ -11,6 +11,7 @@
         .when('/brightness', { templateUrl: 'partials/brightness.html' })
         .when('/power', { templateUrl: 'partials/power.html' })
         .when('/modules', { templateUrl: 'partials/modules.html' })
+        .when('/settings', { templateUrl: 'partials/settings.html' })
         .when('/ai-config', { templateUrl: 'partials/ai-config.html' })
         .otherwise({ redirectTo: '/home' })
       ;
@@ -21,7 +22,7 @@
   $scope.supervision = {};
   $scope.supervision.module = '';
   $scope.supervision.data = {};
-  $scope.supervision.graphData = [];
+  $scope.supervision.maxData = 10;
   $scope.supervision.poll = null;
 
   $scope.$watch('supervision.module', function() {
@@ -34,25 +35,25 @@
     // Do nothing if the module isn't set
     if (!$scope.supervision.module) { return; }
 
-    // Poll the current supervised module for its status, 
+    // Poll the current supervised module for its status
     $scope.supervision.poll = ModuleService.pollInstances($scope.supervision.module, function(promise) {
       promise.success(function(data) {
         angular.forEach(data, function(instance) {
-          // Empty data case
           var instanceName = instance.name;
-          if (!$scope.supervision.data[instanceName]) {
-            $scope.supervision.data[instanceName] = [];
-          }
+          angular.forEach(instance.attrs, function(data, attr) {
+            var attrName = instanceName + '.' + attr
+            // Empty data case
+            if (!$scope.supervision.data[attrName]) {
+              $scope.supervision.data[attrName] = [];
+            }
 
-          // Push new data
-          var data = instance.data;
-          $scope.supervision.data[instanceName].push([data.time, data.value]);
-        });
-
-        // Update graph-specific data
-        $scope.supervision.graphData = [];
-        angular.forEach($scope.supervision.data, function(data) {
-          $scope.supervision.graphData.push(data);
+            // Push new data
+            var attrData = $scope.supervision.data[attrName];
+            attrData.push([instance.time, data]);
+            if ($scope.supervision.maxData < attrData.length) {
+              attrData.splice(0, attrData.length - $scope.supervision.maxData);
+            }
+          });
         });
       }).error(function() {
         // TODO
@@ -120,7 +121,7 @@
 
   // Explicitly reload modules
   $scope.reloadModules = function() {
-    ModuleService.all().success(function(modules) {
+    ModuleService.all().then(function(modules) {
       $scope.modules = modules;
     });
   };
@@ -146,13 +147,42 @@
   return {
     restrict: 'EA',
     link: function($scope, elem, attrs) {
-      var chart = null, opts = {};
-      $scope.$watch(attrs.graphModel, function(v) {
+      var chart = null, opts = {
+        xaxis: {
+          tickLength: 0
+        }, yaxis: {
+          tickLength: 0
+        }, grid: {
+          borderWidth: 0,
+          aboveData: true,
+          markings: [ { yaxis: { from: 0, to: 0 }, color: '#888' },
+                      { xaxis: { from: 0, to: 0 }, color: '#888' }]
+        }, series: {
+          shadowSize: 0,
+          points: {
+            show: true
+          }, lines: {
+            show: true
+          }
+        }
+      };
+
+      // Actual plotting based on the graph data model
+      $scope.$watch(attrs.graphModel, function(data) {
+        var plottedData = [];
+        if (data instanceof Array) {
+          plottedData = data;
+        } else {
+          angular.forEach(data, function(rawData, label) {
+            plottedData.push({ label: label, data: rawData });
+          });
+        }
+
         if (!chart) {
-          chart = $.plot(elem, v, opts);
+          chart = $.plot(elem, plottedData, opts);
           elem.css('display', 'block');
         } else {
-          chart.setData(v);
+          chart.setData(plottedData);
           chart.setupGrid();
           chart.draw();
         }
@@ -178,13 +208,12 @@
         if (vbox.minY === undefined) { vbox.minY = 0; }
         if (vbox.maxY === undefined) { vbox.maxY = 0; }
 
-
         // Actual (x, y, w, h) values
         var
           x = vbox.minX - padding,
           y = vbox.minY - padding,
-          w = (vbox.maxX - vbox.minX) + padding,
-          h = (vbox.maxY - vbox.minY) + padding;
+          w = (vbox.maxX - vbox.minX) + 2*padding,
+          h = (vbox.maxY - vbox.minY) + 2*padding;
 
         // Update svg element
         // TODO check compatibility (jQuery/DOM)
