@@ -1,5 +1,5 @@
 import json
-from twisted.internet import Factory, Protocol
+from twisted.internet import protocol
 
 class Protocol(protocol.Protocol):
     def __init__(self, module):
@@ -26,8 +26,8 @@ class Protocol(protocol.Protocol):
             self.get_at(json_data)
         elif code == 'get_from_to':
             self.get_from_to(json_data)
-        elif code == 'answer':
-            self.load_answer(json_data
+        elif code == 'answer': # TODO
+            self.load_answer(json_data)
         else:
             self.err_code_not_found()
 

@@ -2,7 +2,7 @@ import threading
 from twisted.internet import reactor
 from twisted.internet.endpoints import UNIXServerEndpoint as ServerEndpoint
 import core.fields
-import core.fields.io, core.fields.persistant, time
+import connection
 
 def prop_field(field):
     def _prop_field(*args, **kwargs):
@@ -28,6 +28,10 @@ def write_field(field):
         return field.write(value)
     return _write_field
 
+def get_module_socket(module_name):
+# TODO rearrange this
+    return module_name + '.sock'
+
 class ModuleMeta(type):
     ls_name = set()
 
@@ -49,11 +53,14 @@ class ModuleMeta(type):
             raise NameError('Module with same name already exist')
         type(self).ls_name.add(obj.module_name)
 
+# Gestion du nom du socket du module
+        setattr(obj, 'module_socket', get_module_socket(obj.module_name))
+
 # Gestion des fields du module
         ls_fields = []
         for f_cls in cls.__dict__.keys():
             f_cls = getattr(cls, f_cls)
-            if isinstance(f_cls, type) and issubclass(f_cls, fields.Base):
+            if isinstance(f_cls, type) and issubclass(f_cls, core.fields.Base):
                 field = f_cls()
                 setattr(obj, field.field_name, prop_field(field))
                 ls_fields += [field]
@@ -69,15 +76,16 @@ class Base(threading.Thread):
     def __init__(self, **kwargs):
         super(Base, self).__init__()
         self.running = False
-
-        self.endpoint = ServerEndpoint(reactor, module.socket_filename)
-        self.endpoint.listen(ModuleConnectionFactory(self))
+        self.endpoint = None
 
         if 'name' in kwargs:
             self.module_name = kwargs['name']
         # module_fields = []
 
     def start(self):
+        self.endpoint = ServerEndpoint(reactor, self.module_socket)
+        self.endpoint.listen(connection.Factory(self))
+
         self.running = True
         for f in self.module_fields:
             f.start()
