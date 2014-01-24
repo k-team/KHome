@@ -27,7 +27,7 @@ class Base(threading.Thread):
         self.old_time = 0
         self.running = False
 
-    def _acquire_value(self):
+    def acquire_value(self):
         '''
         Function called during a data acquisition.
         This method is automatically called at every loop's turns of the
@@ -55,7 +55,7 @@ class Base(threading.Thread):
     def _get_value_from_to(self, fr, to):
         return []
 
-    def _close(self):
+    def close(self):
         '''
         Method close when the thread is finishing.
         Let the mixins override this to garantee a good shutting of the field.
@@ -91,6 +91,6 @@ class Base(threading.Thread):
         while self.running:
             if time.time() - self.old_time >= type(self).update_rate:
                 self.old_time = time.time()
-                self._set_value(time.time(), self._acquire_value())
+                self._set_value(time.time(), self.acquire_value())
             time.sleep(0.1)
-        self._close()
+        self.close()

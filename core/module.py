@@ -143,7 +143,7 @@ if __name__ == '__main__':
                 fields.Base):
             field_name = 'mon_nom'
 
-            def _acquire_value(self):
+            def acquire_value(self):
                 return M2.F2()
                 return (int(time.time()) % 10) ** 2
 
