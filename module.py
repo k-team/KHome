@@ -1,7 +1,12 @@
 import json
-from twisted.internet import reactor
 from twisted.internet.protocol import Factory, Protocol
-from twisted.internet.endpoints import UNIXServerEndpoint as ServerEndpoint
+
+class ModuleConnectionFactory(Factory):
+    def __init__(self, module):
+        self.module = module
+
+    def buildProtocol(self, addr):
+        return ModuleConnection(self.module)
 
 class ModuleConnection(Protocol):
     def __init__(self, module):
@@ -110,16 +115,3 @@ class ModuleConnection(Protocol):
         res['success'] = True
         res['objs'] = ls_attr
         self.transport.write(json.dumps(res))
-
-class ModuleConnectionFactory(Factory):
-    def __init__(self, module):
-        self.module = module
-
-    def buildProtocol(self, addr):
-        return ModuleConnection(self.module)
-
-if __name__ == '__main__':
-    module = None
-    endpoint = ServerEndpoint(reactor, module.socket_filename)
-    endpoint.listen(ModuleConnectionFactory(module))
-    reactor.run()
