@@ -13,7 +13,12 @@ angular.module('GHome').directive('graph', function() {
           markings: [ { yaxis: { from: 0, to: 0 }, color: '#888' },
                       { xaxis: { from: 0, to: 0 }, color: '#888' }]
         }, series: {
-          shadowSize: 0
+          shadowSize: 0,
+          points: {
+            show: true
+          }, lines: {
+            show: true
+          }
         }
       };
 

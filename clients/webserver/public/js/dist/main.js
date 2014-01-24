@@ -21,6 +21,7 @@
   $scope.supervision = {};
   $scope.supervision.module = '';
   $scope.supervision.data = {};
+  $scope.supervision.maxData = 10;
   $scope.supervision.poll = null;
 
   $scope.$watch('supervision.module', function() {
@@ -45,6 +46,11 @@
 
           // Push new data
           $scope.supervision.data[instanceName].push([instance.data.time, instance.data.value]);
+          if ($scope.supervision.maxData < $scope.supervision.data[instanceName].length) {
+            var endIndex = $scope.supervision.data[instanceName].length - $scope.supervision.maxData;
+            console.log(endIndex);
+            $scope.supervision.data[instanceName].splice(0, endIndex);
+          }
         });
       }).error(function() {
         // TODO
@@ -149,7 +155,12 @@
           markings: [ { yaxis: { from: 0, to: 0 }, color: '#888' },
                       { xaxis: { from: 0, to: 0 }, color: '#888' }]
         }, series: {
-          shadowSize: 0
+          shadowSize: 0,
+          points: {
+            show: true
+          }, lines: {
+            show: true
+          }
         }
       };
 

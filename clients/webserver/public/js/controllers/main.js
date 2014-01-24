@@ -3,6 +3,7 @@ function MainCtrl($scope, ModuleService, HouseMapService) {
   $scope.supervision = {};
   $scope.supervision.module = '';
   $scope.supervision.data = {};
+  $scope.supervision.maxData = 10;
   $scope.supervision.poll = null;
 
   $scope.$watch('supervision.module', function() {
@@ -27,6 +28,11 @@ function MainCtrl($scope, ModuleService, HouseMapService) {
 
           // Push new data
           $scope.supervision.data[instanceName].push([instance.data.time, instance.data.value]);
+          if ($scope.supervision.maxData < $scope.supervision.data[instanceName].length) {
+            var endIndex = $scope.supervision.data[instanceName].length - $scope.supervision.maxData;
+            console.log(endIndex);
+            $scope.supervision.data[instanceName].splice(0, endIndex);
+          }
         });
       }).error(function() {
         // TODO
