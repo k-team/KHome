@@ -33,7 +33,7 @@
     // Do nothing if the module isn't set
     if (!$scope.supervision.module) { return; }
 
-    // Poll the current supervised module for its status, 
+    // Poll the current supervised module for its status
     $scope.supervision.poll = ModuleService.pollInstances($scope.supervision.module, function(promise) {
       promise.success(function(data) {
         angular.forEach(data, function(instance) {
