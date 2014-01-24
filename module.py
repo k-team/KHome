@@ -1,8 +1,4 @@
-#!/usr/bin/env python2.7
-
-import sqlite3 as lite
 import json
-from time import time
 from twisted.internet import reactor
 from twisted.internet.protocol import Factory, Protocol
 from twisted.internet.endpoints import UNIXServerEndpoint as ServerEndpoint
