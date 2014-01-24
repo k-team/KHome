@@ -1,5 +1,8 @@
 import threading
-import fields, fields.io, fields.persistant, time
+from twisted.internet import reactor
+from twisted.internet.endpoints import UNIXServerEndpoint as ServerEndpoint
+import core.fields
+import core.fields.io, core.fields.persistant, time
 
 def prop_field(field):
     def _prop_field(*args, **kwargs):
@@ -67,6 +70,9 @@ class Base(threading.Thread):
         super(Base, self).__init__()
         self.running = False
 
+        self.endpoint = ServerEndpoint(reactor, module.socket_filename)
+        self.endpoint.listen(ModuleConnectionFactory(self))
+
         if 'name' in kwargs:
             self.module_name = kwargs['name']
         # module_fields = []
@@ -123,6 +129,8 @@ if __name__ == '__main__':
     print b.F1()
 
     print a.mon_nom(fr=0, to=time.time())
+
+    reactor.run()
 
     b.start()
     try:
