@@ -1,5 +1,6 @@
 {
   "start": "python2.7 server.py",
   "port": 8888,
-  "static_directory": "public"
+  "static_directory": "public",
+  "debug": true
 }

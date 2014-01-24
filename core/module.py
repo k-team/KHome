@@ -1,15 +1,9 @@
+import time
 import threading
 import json
 import socket
 import fields
 import fields.io, fields.persistant, time
-
-# def prop_netfield():
-#     dict = creerjson(args)
-#     self.socket.write(json.dumps(dict))
-#     data_received = self.socket.recv()
-#     data_json = json.loads(data_received)
-#     comprendrejson
 
 def prop_field(field):
     def _prop_field(*args, **kwargs):
@@ -61,7 +55,7 @@ class BaseMeta(type):
         obj = super(BaseMeta, self).__call__(*args, **kwargs)
         cls = type(obj)
 
-# Gestion du nom du module
+        # Handle module name
         if not hasattr(obj, 'module_name'):
             if not hasattr(cls, 'module_name'):
                 setattr(obj, 'module_name', cls.__name__)
@@ -72,7 +66,7 @@ class BaseMeta(type):
             raise NameError('Module with same name already exist')
         type(self).ls_name.add(obj.module_name)
 
-# Gestion des fields du module
+        # Handle module fields
         ls_fields = []
         for f_cls in cls.__dict__.keys():
             f_cls = getattr(cls, f_cls)
@@ -87,15 +81,13 @@ class BaseMeta(type):
 class Base(threading.Thread):
     __metaclass__ = BaseMeta
 
-    # module_name = 'Module'
-
     def __init__(self, **kwargs):
         super(Base, self).__init__()
         self.running = False
 
         if 'name' in kwargs:
             self.module_name = kwargs['name']
-        # module_fields = []
+        #module_fields = []
 
     def start(self):
         self.running = True

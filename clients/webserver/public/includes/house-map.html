@@ -1,0 +1,29 @@
+<style type="text/css">
+  .house-map {
+    margin-top: 15px;
+  }
+
+  .house-map svg {
+    margin-top: 10px;
+    display: block;
+    margin: 0 auto;
+
+    width: 95%;
+    max-height: 500px;
+
+    border: 1px solid #ddd;
+    background-color: #fdfdfd;
+  }
+
+  .house-map .room {
+    fill: #cfcfcf;
+    stroke: #acacac;
+    stroke-linecap: square;
+    stroke-width: 1px;
+  }
+</style>
+<div class="house-map">
+  <svg preserveAspectRatio="xMidYMid meet" svg-vbox="map.box" svg-vbox-padding="map.padding()">
+    <polygon ng-repeat="room in rooms" class="room" ng-attr-points="{{ map.points(room) }}">
+  </svg>
+</div>

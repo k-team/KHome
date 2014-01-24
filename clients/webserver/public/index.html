@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="GHome">
+<html ng-app="GHome">
   <head>
     <meta charset="utf-8">
     <title>G Home &ndash; KTeam</title>
@@ -8,37 +8,39 @@
     <link rel="stylesheet" href="/css/layouts/side-menu.css">
   </head>
   <body>
-    <div id="layout">
-      <a href="#menu" id="menuLink" class="menu-link">
+    <div id="layout" ng-class="{ active: menuActive }">
+      <a ng-click="menuActive = 1 - menuActive" ng-class="{ active: menuActive }" class="menu-link">
         <span></span>
       </a>
-      <div id="menu">
+      <div id="menu" ng-class="{ active: menuActive }">
         <div class="pure-menu pure-menu-open">
-          <a class="pure-menu-heading" href="#">G Home</a>
+          <a class="pure-menu-heading" href="#/home">GHome</a>
           <ul>
             <li><a href="#/weather">Weather</a></li>
             <li><a href="#/surveillance">Surveillance</a></li>
             <li><a href="#/temperature">Temperature</a></li>
             <li><a href="#/brightness">Brightness</a></li>
-            <li><a href="#/camera">Camera</a></li>
             <li><a href="#/power">Power</a></li>
-            <li><a href="#/music">Music</a></li>
             <li class="menu-item-divided">
-              <a href="#/module-config">Modules</a>
+              <a href="#/ai-config">Auto-regulation</a>
+              <a href="#/modules">Modules</a>
+              <a href="#/settings">Settings</a>
             </li>
-            <li><a href="#/ai-config">Auto-regulation</a></li>
           </ul>
         </div>
       </div>
-      <div id="main">
-        <div class="content">
-          <div ng-view></div>
-        </div>
+      <div id="main" ng-controller="MainCtrl">
+        <div ng-view></div>
       </div>
     </div>
-    <script type="text/javascript" src="/js/ui.js"></script>
-    <script type="text/javascript" src="/js/angular.min.js"></script>
-    <script type="text/javascript" src="/js/angular-route.min.js"></script>
-    <script type="text/javascript" src="/js/main.js"></script>
+    <script type="text/javascript" src="/js/vendor/angular-file-upload-shim.min.js"></script>
+    <script type="text/javascript" src="/js/vendor/angular.min.js"></script>
+    <script type="text/javascript" src="/js/vendor/angular-file-upload.min.js"></script>
+    <script type="text/javascript" src="/js/vendor/angular-route.min.js"></script>
+    <script type="text/javascript" src="/js/vendor/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/vendor/jquery.flot.min.js"></script>
+    <script type="text/javascript" src="/js/vendor/jquery.flot.time.min.js"></script>
+    <script type="text/javascript" src="/js/vendor/jquery.flot.resize.js"></script>
+    <script type="text/javascript" src="/js/dist/main.js"></script>
   </body>
 </html>
