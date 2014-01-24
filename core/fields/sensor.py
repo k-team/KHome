@@ -1,11 +1,12 @@
 from twisted.internet import reactor
-from twisted.internet.protocol import ClientFactory, Protocol
-from twisted.internet.endpoints import TCP4ServerEndpoint as ServerEndpoint
+from twisted.internet.protocol import ClientCreator
+from twisted.internet.protocol import ClientFactory
+from twisted.internet.protocol import Protocol
 
 class SensorConnection(Protocol):
-    def __init__(self, sensor, id_filter):
+    def __init__(self, sensor, filter_id):
         self.sensor = sensor
-        self.id_filter = id_filter
+        self.filter_id = filter_id
 
     def dataReceived(self, data):
         print "Server said:", data
@@ -13,15 +14,16 @@ class SensorConnection(Protocol):
 # Analyse
         org = data[6:8]
         value = data[8:16]
-        id_sensor = data[16:24]
+        sensor_id = data[16:24]
         status = data[24:26]
 
-        if id_sensor == self.id_filter:
+        if sensor_id == self.filter_id:
             self.sensor.emit_value(value)
 
 class SensorConnectionFactory(ClientFactory):
-    def __init__(self, sensor):
+    def __init__(self, sensor, filter_id):
         self.sensor = sensor
+        self.filter_id = filter_id
 
     def clientConnectionFailed(self, connector, reason):
         print "Connection failed - goodbye!"
@@ -32,22 +34,25 @@ class SensorConnectionFactory(ClientFactory):
 # Do something ?
 
     def buildProtocol(self, addr):
-        return SensorConnection(self.sensor)
+        return SensorConnection(self.sensor, self.filter_id)
 
 class Sensor(object):
-    sensor_address = '134.214.106.23'
+    sensor_host = '134.214.106.23'
     sensor_port = 5000
+    sensor_id = 0
 
     def __init__(self):
-        self.reactor = reactor # do something
-        self.endpoint = ServerEndpoint(self.reactor,
-                type(self).sensor_address, type(self).sensor_port)
-        self.endpoint.listen(SensorConnectionFactory(self))
+        super(Sensor, self).__init__()
+        reactor.connectTCP(type(self).sensor_host,
+                type(self).sensor_port,
+                SensorConnectionFactory(self,
+                    type(self).sensor_id))
 
     def start(self):
-        self.reactor.run()
         super(Sensor, self).start()
 
     def close(self):
-        self.reactor.close()
         super(Sensor, self).close()
+
+if __name__ == '__main__':
+    reactor.run()
