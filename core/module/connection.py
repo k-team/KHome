@@ -6,7 +6,6 @@ class Protocol(protocol.Protocol):
         self.module = module
 
     def dataReceived(self, data):
-        print 'Reception des donnees :', data
         if not self.module.running:
             return
 
@@ -16,21 +15,19 @@ class Protocol(protocol.Protocol):
             self.err_decode_data()
             return
 
-        print 'json :', json_data
         if not 'code' in json_data:
             self.err_code_not_found()
             return
 
         code = str(json_data['code'])
-        print 'code :', code
         if code == 'get_cur':
             self.get_cur(json_data)
         elif code == 'get_at':
             self.get_at(json_data)
         elif code == 'get_from_to':
             self.get_from_to(json_data)
-        elif code == 'answer': # TODO
-            self.load_answer(json_data)
+        elif code == 'set':
+            self.set_value(json_data)
         else:
             self.err_code_not_found()
 
@@ -49,14 +46,31 @@ class Protocol(protocol.Protocol):
     def err_field_error(self):
         self.error('Field not found')
 
+    def set_value(self, data):
+        try:
+            field_name = data['field_name']
+            field_value = data['field_value']
+        except (TypeError, KeyError):
+            self.err_decode_data()
+            return
+
+        try:
+            f_set = getattr(self.module, field_name)
+            re = f_set(field_value)
+        except (AttributeError, IOError):
+            self.err_field_error()
+            return
+
+        res = {}
+        res['success'] = re
+        self.transport.write(json.dumps(res))
+
     def get_cur(self, data):
-        print 'get_cur'
         try:
             entry_objs = data['objs']
         except (TypeError, KeyError):
             self.err_decode_data()
             return
-        print 'field :', entry_objs
 
         ls_attr = {}
         for attr in entry_objs:
@@ -70,7 +84,6 @@ class Protocol(protocol.Protocol):
         res = {}
         res['success'] = True
         res['objs'] = ls_attr
-        print 'res :', res
         self.transport.write(json.dumps(res))
 
     def get_at(self, data):
