@@ -1,18 +1,9 @@
-<<<<<<< HEAD:core/module.py
-import time
-import threading
-import json
-import socket
-import fields
-import fields.io, fields.persistant, fields.sensor, time
-=======
 import os
 import threading
 from twisted.internet import reactor
 from twisted.internet.endpoints import UNIXServerEndpoint as ServerEndpoint
 import core.fields
 import connection
->>>>>>> module-communication:core/module/__init__.py
 
 def prop_field(field):
     def _prop_field(*args, **kwargs):
@@ -40,7 +31,6 @@ def get_network_fields(module_conn):
     # parse data
     return ['F2']
 
-<<<<<<< HEAD:core/module.py
 def prop_network_field(field):
     def _prop_network_field(*args, **kwargs):
         if len(args) == 1 and not kwargs:
@@ -55,14 +45,11 @@ def prop_network_field(field):
         raise Exception
     return _prop_network_field
 
-class BaseMeta(type):
-=======
 def get_module_socket(module_name):
 # TODO rearrange this
     return module_name + '.sock'
 
-class ModuleMeta(type):
->>>>>>> module-communication:core/module/__init__.py
+class BaseMeta(type):
     ls_name = set()
 
     def __new__(cls, name, parents, attrs):
@@ -83,10 +70,7 @@ class ModuleMeta(type):
             raise NameError('Module with same name already exist')
         type(self).ls_name.add(obj.module_name)
 
-<<<<<<< HEAD:core/module.py
-        # Handle module fields
-=======
-# Gestion du socket du module
+        # Handle module socket (server side)
         setattr(obj, 'module_socket', get_module_socket(obj.module_name))
         try:
           os.remove(obj.module_socket)
@@ -96,8 +80,7 @@ class ModuleMeta(type):
         endpoint = ServerEndpoint(reactor, obj.module_socket)
         endpoint.listen(connection.Factory(obj))
 
-# Gestion des fields du module
->>>>>>> module-communication:core/module/__init__.py
+        # Handle module fields
         ls_fields = []
         for f_cls in cls.__dict__.keys():
             f_cls = getattr(cls, f_cls)
@@ -174,74 +157,3 @@ class Network(object):
 
 def use_module(module_name):
     return Network(name=module_name)
-
-if __name__ == '__main__':
-    M2 = use_module('M2')
-
-    class M1(Base):
-        class Field(fields.io.Readable,
-                fields.io.Writable,
-                fields.persistant.Volatile,
-                fields.Base):
-            field_name = 'mon_nom'
-
-            def acquire_value(self):
-                return M2.F2()
-                return (int(time.time()) % 10) ** 2
-
-        class F1(fields.io.Readable,
-                fields.io.Writable,
-                fields.persistant.Volatile,
-                fields.sensor.Sensor,
-                fields.Base):
-            pass
-
-    a = M1(name='M0')
-    b = M1()
-    print b.mon_nom()
-    print b.mon_nom(10)
-    print b.mon_nom()
-    print b.mon_nom(t=time.time())
-    print b.mon_nom(fr=time.time() - 5, to=time.time())
-    for i in xrange(10):
-        b.mon_nom(i)
-        # time.sleep(0.1)
-
-    print b.mon_nom(fr=time.time() - 0.5, to=time.time())
-    print b.mon_nom()
-    print b.mon_nom(fr=time.time() - 0.5, to=time.time())
-
-    print b.F1(10)
-    print b.F1()
-
-    print a.mon_nom(fr=0, to=time.time())
-
-<<<<<<< HEAD:core/module.py
-    # b.start()
-    # try:
-    #     while True:
-    #         print b.mon_nom()
-    #         time.sleep(0.4)
-    # except KeyboardInterrupt:
-    #     b.stop()
-    #     b.join(1)
-
-    class M2(Network):
-        pass
-
-    M2 = use_module('M2')
-    print M2.module_name
-    print M2.__dict__
-    print M2.F2()
-=======
-    reactor.run()
-
-    b.start()
-    try:
-        while True:
-            print b.mon_nom()
-            time.sleep(0.4)
-    except KeyboardInterrupt:
-        b.stop()
-        b.join(1)
->>>>>>> module-communication:core/module/__init__.py
