@@ -88,16 +88,9 @@ class Base(threading.Thread):
 
         if 'name' in kwargs:
             self.module_name = kwargs['name']
-        # self.module_fields = []
-
-    @property
-    def socket_filename(self):
-        return self.module_name + '.sock'
+        # module_fields = []
 
     def start(self):
-        endpoint = ServerEndpoint(reactor, self.socket_filename)
-        endpoint.listen(ModuleConnectionFactory(self))
-
         self.running = True
         for f in self.module_fields:
             f.start()
