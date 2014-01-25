@@ -1,3 +1,4 @@
+import os
 import threading
 from twisted.internet import reactor
 from twisted.internet.endpoints import UNIXServerEndpoint as ServerEndpoint
@@ -53,8 +54,15 @@ class ModuleMeta(type):
             raise NameError('Module with same name already exist')
         type(self).ls_name.add(obj.module_name)
 
-# Gestion du nom du socket du module
+# Gestion du socket du module
         setattr(obj, 'module_socket', get_module_socket(obj.module_name))
+        try:
+          os.remove(obj.module_socket)
+        except OSError:
+          print 'Petite erreur en voulant supprimer', obj.module_socket
+          pass
+        endpoint = ServerEndpoint(reactor, obj.module_socket)
+        endpoint.listen(connection.Factory(obj))
 
 # Gestion des fields du module
         ls_fields = []
@@ -83,9 +91,6 @@ class Base(threading.Thread):
         # module_fields = []
 
     def start(self):
-        self.endpoint = ServerEndpoint(reactor, self.module_socket)
-        self.endpoint.listen(connection.Factory(self))
-
         self.running = True
         for f in self.module_fields:
             f.start()
