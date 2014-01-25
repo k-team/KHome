@@ -34,7 +34,6 @@ def get_network_fields(module_conn):
     # parse data
     return ['F2']
 
-<<<<<<< HEAD
 def prop_network_field(field):
     def _prop_network_field(*args, **kwargs):
         if len(args) == 1 and not kwargs:
@@ -49,14 +48,11 @@ def prop_network_field(field):
         raise Exception
     return _prop_network_field
 
-class BaseMeta(type):
-=======
 def get_module_socket(module_name):
 # TODO rearrange this
     return module_name + '.sock'
 
-class ModuleMeta(type):
->>>>>>> quelques corrections
+class BaseMeta(type):
     ls_name = set()
 
     def __new__(cls, name, parents, attrs):
@@ -77,7 +73,7 @@ class ModuleMeta(type):
             raise NameError('Module with same name already exist')
         type(self).ls_name.add(obj.module_name)
 
-# Gestion du socket du module
+        # Handle module socket (server side)
         setattr(obj, 'module_socket', get_module_socket(obj.module_name))
         try:
           os.remove(obj.module_socket)
@@ -87,7 +83,7 @@ class ModuleMeta(type):
         endpoint = ServerEndpoint(reactor, obj.module_socket)
         endpoint.listen(connection.Factory(obj))
 
-# Gestion des fields du module
+        # Handle module fields
         ls_fields = []
         for f_cls in cls.__dict__.keys():
             f_cls = getattr(cls, f_cls)
