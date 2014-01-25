@@ -88,9 +88,16 @@ class Base(threading.Thread):
 
         if 'name' in kwargs:
             self.module_name = kwargs['name']
-        # module_fields = []
+        # self.module_fields = []
+
+    @property
+    def socket_filename(self):
+        return self.module_name + '.sock'
 
     def start(self):
+        endpoint = ServerEndpoint(reactor, self.socket_filename)
+        endpoint.listen(ModuleConnectionFactory(self))
+
         self.running = True
         for f in self.module_fields:
             f.start()
@@ -105,51 +112,3 @@ class Base(threading.Thread):
             f.stop()
             f.join(1)
         self.running = False
-
-if __name__ == '__main__':
-    class M1(Base):
-        class Field(fields.io.Readable,
-                fields.io.Writable,
-                fields.persistant.Volatile,
-                fields.Base):
-            field_name = 'mon_nom'
-
-            def _acquire_value(self):
-                return (int(time.time()) % 10) ** 2
-
-        class F1(fields.io.Readable,
-                fields.io.Writable,
-                fields.persistant.Volatile,
-                fields.Base):
-            pass
-
-    a = M1(name='M0')
-    b = M1()
-    print b.mon_nom()
-    print b.mon_nom(10)
-    print b.mon_nom()
-    print b.mon_nom(t=time.time())
-    print b.mon_nom(fr=time.time() - 5, to=time.time())
-    for i in xrange(10):
-        b.mon_nom(i)
-        time.sleep(0.1)
-
-    print b.mon_nom(fr=time.time() - 0.5, to=time.time())
-    print b.mon_nom()
-    print b.mon_nom(fr=time.time() - 0.5, to=time.time())
-
-    print b.F1(10)
-    print b.F1()
-
-    print a.mon_nom(fr=0, to=time.time())
-
-    reactor.run()
-
-    b.start()
-    try:
-        while True:
-            print b.mon_nom()
-            time.sleep(0.4)
-    except KeyboardInterrupt:
-        b.stop()
-        b.join(1)
