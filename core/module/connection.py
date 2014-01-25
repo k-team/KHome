@@ -20,8 +20,8 @@ class Protocol(protocol.Protocol):
             return
 
         code = str(json_data['code'])
-        if code == 'get_cur':
-            self.get_cur(json_data)
+        if code == 'get':
+            self.get_value(json_data)
         elif code == 'get_at':
             self.get_at(json_data)
         elif code == 'get_from_to':
@@ -65,70 +65,70 @@ class Protocol(protocol.Protocol):
         res['success'] = re
         self.transport.write(json.dumps(res))
 
-    def get_cur(self, data):
+    def get_value(self, data):
         try:
-            entry_objs = data['objs']
+            fields_name = data['fields']
         except (TypeError, KeyError):
             self.err_decode_data()
             return
 
-        ls_attr = {}
-        for attr in entry_objs:
+        fields_value = {}
+        for field in fields_name:
             try:
-                get = getattr(self.module, attr)
-                ls_attr[attr] = get()
+                get = getattr(self.module, field)
+                fields_values[field] = get()
             except (AttributeError, IOError):
                 self.err_field_error()
                 return
 
         res = {}
         res['success'] = True
-        res['objs'] = ls_attr
+        res['objs'] = fields_values
         self.transport.write(json.dumps(res))
 
     def get_at(self, data):
         try:
-            entry_objs = data['objs']
-            t = float(data['time'])
+            fields_name = data['fields']
+            time_at = float(data['time'])
         except (TypeError, KeyError):
             self.err_decode_data()
             return
 
-        ls_attr = {}
-        for attr in entry_objs:
+        fields_value = {}
+        for field in fields_name:
             try:
-                get = getattr(self.module, attr)
-                ls_attr[attr] = get(t=t)
+                get = getattr(self.module, field)
+                fields_value[field] = get(t=time_at)
             except (AttributeError, IOError):
                 self.err_field_error()
                 return
 
         res = {}
         res['success'] = True
-        res['objs'] = ls_attr
+        res['objs'] = fields_value
         self.transport.write(json.dumps(res))
 
     def get_from_to(self, data):
         try:
-            entry_objs = data['objs']
-            fr = float(data['time_begin'])
-            to = float(data['time_end'])
+            fields_name = data['fields']
+            time_from = float(data['time_from'])
+            time_to = float(data['time_to'])
         except (TypeError, KeyError):
             self.err_decode_data()
             return
 
-        ls_attr = {}
-        for attr in entry_objs:
+        fields_value = {}
+        for field in fields_value:
             try:
-                get = getattr(self.module, attr)
-                ls_attr[attr] = get(fr=fr, to=to)
+                get = getattr(self.module, field)
+                fields_value[field] = get(fr=time_from, to=time_to)
             except (AttributeError, IOError):
                 self.err_field_error()
                 return
 
         res = {}
         res['success'] = True
-        res['objs'] = ls_attr
+        res['objs'] = fields_value
         self.transport.write(json.dumps(res))
 
 class Factory(protocol.Factory):
