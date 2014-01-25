@@ -1,9 +1,18 @@
+<<<<<<< HEAD:core/module.py
 import time
 import threading
 import json
 import socket
 import fields
 import fields.io, fields.persistant, fields.sensor, time
+=======
+import os
+import threading
+from twisted.internet import reactor
+from twisted.internet.endpoints import UNIXServerEndpoint as ServerEndpoint
+import core.fields
+import connection
+>>>>>>> module-communication:core/module/__init__.py
 
 def prop_field(field):
     def _prop_field(*args, **kwargs):
@@ -31,6 +40,7 @@ def get_network_fields(module_conn):
     # parse data
     return ['F2']
 
+<<<<<<< HEAD:core/module.py
 def prop_network_field(field):
     def _prop_network_field(*args, **kwargs):
         if len(args) == 1 and not kwargs:
@@ -46,6 +56,13 @@ def prop_network_field(field):
     return _prop_network_field
 
 class BaseMeta(type):
+=======
+def get_module_socket(module_name):
+# TODO rearrange this
+    return module_name + '.sock'
+
+class ModuleMeta(type):
+>>>>>>> module-communication:core/module/__init__.py
     ls_name = set()
 
     def __new__(cls, name, parents, attrs):
@@ -66,11 +83,25 @@ class BaseMeta(type):
             raise NameError('Module with same name already exist')
         type(self).ls_name.add(obj.module_name)
 
+<<<<<<< HEAD:core/module.py
         # Handle module fields
+=======
+# Gestion du socket du module
+        setattr(obj, 'module_socket', get_module_socket(obj.module_name))
+        try:
+          os.remove(obj.module_socket)
+        except OSError:
+          print 'Petite erreur en voulant supprimer', obj.module_socket
+          pass
+        endpoint = ServerEndpoint(reactor, obj.module_socket)
+        endpoint.listen(connection.Factory(obj))
+
+# Gestion des fields du module
+>>>>>>> module-communication:core/module/__init__.py
         ls_fields = []
         for f_cls in cls.__dict__.keys():
             f_cls = getattr(cls, f_cls)
-            if isinstance(f_cls, type) and issubclass(f_cls, fields.Base):
+            if isinstance(f_cls, type) and issubclass(f_cls, core.fields.Base):
                 field = f_cls()
                 setattr(obj, field.field_name, prop_field(field))
                 ls_fields += [field]
@@ -84,6 +115,7 @@ class Base(threading.Thread):
     def __init__(self, **kwargs):
         super(Base, self).__init__()
         self.running = False
+        self.endpoint = None
 
         if 'name' in kwargs:
             self.module_name = kwargs['name']
@@ -184,6 +216,7 @@ if __name__ == '__main__':
 
     print a.mon_nom(fr=0, to=time.time())
 
+<<<<<<< HEAD:core/module.py
     # b.start()
     # try:
     #     while True:
@@ -200,3 +233,15 @@ if __name__ == '__main__':
     print M2.module_name
     print M2.__dict__
     print M2.F2()
+=======
+    reactor.run()
+
+    b.start()
+    try:
+        while True:
+            print b.mon_nom()
+            time.sleep(0.4)
+    except KeyboardInterrupt:
+        b.stop()
+        b.join(1)
+>>>>>>> module-communication:core/module/__init__.py
