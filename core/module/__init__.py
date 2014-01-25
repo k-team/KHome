@@ -107,9 +107,16 @@ class Base(threading.Thread):
 
         if 'name' in kwargs:
             self.module_name = kwargs['name']
-        # module_fields = []
+        # self.module_fields = []
+
+    @property
+    def socket_filename(self):
+        return self.module_name + '.sock'
 
     def start(self):
+        endpoint = ServerEndpoint(reactor, self.socket_filename)
+        endpoint.listen(ModuleConnectionFactory(self))
+
         self.running = True
         for f in self.module_fields:
             f.start()
@@ -124,6 +131,7 @@ class Base(threading.Thread):
             f.stop()
             f.join(1)
         self.running = False
+<<<<<<< HEAD
 
 class NetworkMeta(type):
     def __new__(cls, name, parents, attrs):
