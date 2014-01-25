@@ -118,7 +118,7 @@ class Protocol(protocol.Protocol):
             return
 
         fields_value = {}
-        for field in fields_value:
+        for field in fields_name:
             try:
                 get = getattr(self.module, field)
                 fields_value[field] = get(fr=time_from, to=time_to)
