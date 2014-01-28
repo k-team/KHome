@@ -14,6 +14,12 @@ _root = os.path.dirname(os.path.dirname(_file))
 DIRECTORY = os.path.join(_root, 'modules')
 CONFIG_FILE = 'module.json'
 
+def get_directory(module_name):
+    """
+    Shortcut to get the directory for a module (absolute path).
+    """
+    return os.path.join(DIRECTORY, module_name)
+
 def get_config_file(module_name, directory=None):
     """
     Get the absolute path to the configuration file for the named module,
@@ -21,7 +27,7 @@ def get_config_file(module_name, directory=None):
     accessible.
     """
     if directory is None:
-        directory = os.path.join(DIRECTORY, module_name)
+        directory = get_directory(module_name)
     return os.path.join(directory, CONFIG_FILE)
 
 def load_config(file_):
@@ -29,7 +35,7 @@ def load_config(file_):
     Load the configuration for the named module, passing in either the absolute
     path to the config file or directly the file-like object.
     """
-    if isinstance(file_, str):
+    if isinstance(file_, (str, unicode)):
         file_ = open(file_, 'r')
     return json.load(file_)
 
@@ -51,11 +57,22 @@ def is_installed(module_name, directory=None):
     return os.path.isdir(module_directory) \
             and os.path.exists(get_config_file(module_name, module_directory))
 
-def get_installed_modules():
+def get_installed_modules(detailed=False):
     """
     Return a list of all installed modules in the installation directory.
+    Detailed information can be given (eg. module configuration) by setting the
+    "detailed" argument to true.
     """
-    return [x for x in os.listdir(DIRECTORY) if is_installed(x)]
+    module_list = []
+    for module in os.listdir(DIRECTORY):
+        if not is_installed(module):
+            continue
+        if detailed:
+            module_config = get_config(module)
+            module = { 'id': module }
+            module.update(module_config)
+        module_list.append(module)
+    return module_list
 
 def install_from_zip(file_):
     """

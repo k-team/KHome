@@ -4,9 +4,17 @@
 <div class="content">
   <div ng-controller="ModulesCtrl">
     <h2>Available modules :</h2>
-    <ul ng-show="modules">
-      <li ng-repeat="module in modules">{{ module }}</li>
-    </ul>
+    <div ng-show="modules" class="pure-g">
+      <div ng-repeat="module in modules" class="{{ (module == expandedModule) ? 'pure-u-4-4' : 'pure-u-1-4' }}">
+        <a ng-click="toggleActiveModule(module)" class="pure-button">
+          <img ng-src="/api/modules/{{ module.id }}/icon" alt="Image for module {{ module.id }}" title="{{ module.name }}">
+        </a>
+        <div ng-show="module == expandedModule">
+          <h4>{{ (module.name) ? module.name : module.id }}</h4>
+          <p>{{ module.description }}</p>
+        </div>
+      </div>
+    </div>
     <h2>Manual installation (zip) :</h2>
     <form enctype="multipart/form-data" ng-submit="upload()">
       <label for="fileToUpload"></label>
