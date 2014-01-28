@@ -25,4 +25,14 @@ function ModulesCtrl($scope, ModuleService) {
       // TODO handle errors better
     });
   };
+
+  // Toggle module visibilité/activity
+  $scope.expandedModule = null;
+  $scope.toggleActiveModule = function(module) {
+    if ($scope.expandedModule == module) {
+      $scope.expandedModule = null;
+    } else {
+      $scope.expandedModule = module;
+    }
+  };
 }

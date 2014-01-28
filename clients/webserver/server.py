@@ -3,14 +3,15 @@ import sys
 import json
 import time
 import tempfile
-from flask import (Flask, Response, send_file, request, jsonify as _jsonify)
+from flask import (Flask, Response, send_file, request, abort,
+        jsonify as _jsonify)
 
 # remove this and do in client launcher
 this_dir = os.path.dirname(os.path.realpath(__file__))
 core_dir = os.path.join(os.path.dirname(os.path.dirname(this_dir)), 'core')
 sys.path.insert(1, core_dir)
 # leave this though
-from catalog import (install_from_zip, get_installed_modules)
+import catalog
 
 def jsonify(obj):
     """
@@ -31,6 +32,7 @@ app = Flask(__name__,
 
 def allowed_file(filename, exts):
     return '.' in filename and filename.rsplit('.', 1)[1] in exts
+IMAGE_EXTS = ['png', 'jpg', 'jpeg', 'gif', 'bmp']
 
 # fix for index page
 @app.route('/')
@@ -38,15 +40,15 @@ def index():
     return app.send_static_file('index.html')
 
 @app.route('/api/rooms')
-def rooms():
+def api_rooms():
     return app.send_static_file('rooms.json')
 
 @app.route('/api/modules')
-def modules():
-    return jsonify(get_installed_modules())
+def api_modules():
+    return jsonify(catalog.get_installed_modules(detailed=True))
 
 @app.route('/api/modules/install', methods=['POST'])
-def upload_module():
+def api_upload_module():
     return_data = { 'success': False }
     file_ = request.files['file']
     if file_:
@@ -67,6 +69,28 @@ def upload_module():
         return_data['message'] = 'No file uploaded'
     return jsonify(return_data)
 
+@app.route('/api/modules/<module_name>/icon')
+def api_module_icon(module_name):
+    icon_path = catalog.get_config(module_name).get('icon')
+
+    # default module icon
+    if icon_path is None:
+        return app.send_static_file('img/module.png')
+
+    # specified icon: either relative to module directory (eg. starting with
+    # "."), or given by an absolute path
+    if icon_path.startswith('.'):
+        module_directory = catalog.get_directory(module_name)
+        full_icon_path = os.path.join(module_directory, icon_path)
+    else:
+        full_icon_path = icon_path
+
+    # final return
+    if os.path.exists(full_icon_path):
+        return send_file(full_icon_path)
+    else:
+        abort(404)
+
 # used for samples
 import random
 
@@ -83,7 +107,7 @@ def temperature_statuses():
              { 'name': 't3', 'time': time.time(), 'attrs': { 'temperature': r() } }, ]
 
 @app.route('/api/modules/<module_name>/instances/status')
-def module_instances_statuses(module_name):
+def api_module_instances_statuses(module_name):
     if module_name == 'temperature':
         return jsonify(temperature_statuses())
     elif module_name == 'brightness':
