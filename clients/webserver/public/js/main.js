@@ -10,7 +10,7 @@
         .when('/temperature', { templateUrl: 'partials/temperature.html' })
         .when('/brightness', { templateUrl: 'partials/brightness.html' })
         .when('/power', { templateUrl: 'partials/power.html' })
-        .when('/modules', { templateUrl: 'partials/modules.html' })
+        .when('/store', { templateUrl: 'partials/store.html' })
         .when('/settings', { templateUrl: 'partials/settings.html' })
         .when('/ai-config', { templateUrl: 'partials/ai-config.html' })
         .otherwise({ redirectTo: '/home' })
