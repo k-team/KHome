@@ -1,22 +1,20 @@
 "use strict";
 
-(function() {
-  angular.module('GHome', ['ngRoute', 'angularFileUpload'])
-    .config(function($routeProvider, $locationProvider) {
-      $routeProvider
-        .when('/home', { templateUrl: 'partials/home.html' })
-        .when('/weather', { templateUrl: 'partials/weather.html' })
-        .when('/surveillance', { templateUrl: 'partials/surveillance.html' })
-        .when('/temperature', { templateUrl: 'partials/temperature.html' })
-        .when('/brightness', { templateUrl: 'partials/brightness.html' })
-        .when('/power', { templateUrl: 'partials/power.html' })
-        .when('/store', { templateUrl: 'partials/store.html' })
-        .when('/settings', { templateUrl: 'partials/settings.html' })
-        .when('/ai-config', { templateUrl: 'partials/ai-config.html' })
-        .otherwise({ redirectTo: '/home' })
-      ;
-    });
-})();
+angular.module('GHome', ['ngRoute', 'angularFileUpload'])
+  .config(function($routeProvider, $locationProvider) {
+    $routeProvider
+      .when('/home', { templateUrl: 'partials/home.html' })
+      .when('/weather', { templateUrl: 'partials/weather.html' })
+      .when('/surveillance', { templateUrl: 'partials/surveillance.html' })
+      .when('/temperature', { templateUrl: 'partials/temperature.html' })
+      .when('/brightness', { templateUrl: 'partials/brightness.html' })
+      .when('/power', { templateUrl: 'partials/power.html' })
+      .when('/store', { templateUrl: 'partials/store.html' })
+      .when('/settings', { templateUrl: 'partials/settings.html' })
+      .when('/ai-config', { templateUrl: 'partials/ai-config.html' })
+      .otherwise({ redirectTo: '/home' })
+    ;
+  });
 ;function MainCtrl($scope, ModuleService, HouseMapService) {
   // Module supervision (history)
   $scope.supervision = {};
@@ -298,4 +296,24 @@
   }
 
   return service;
+});
+;angular.module('GHome').filter('truncate', function () {
+  return function (text, length, end){
+    if (text === undefined) {
+      return;
+    }
+
+    // Default value for length
+    if (isNaN(length)) { length = 10; }
+
+    // Default value for end
+    if (end === undefined) { end = '...'; }
+
+    // Actual filter
+    if (text.length <= length || text.length - end.length <= length) {
+      return text;
+    } else {
+      return String(text).substring(0, length - end.length) + end;
+    }
+  };
 });

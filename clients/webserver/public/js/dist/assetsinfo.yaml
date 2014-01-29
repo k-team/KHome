@@ -8,12 +8,13 @@ javascript:
     - directives/svg.js
     - services/house-map.js
     - services/modules.js
+    - filters/truncate.js
     fingerprint: ''
     output:
       gz: main.min.js.gz
       min: main.min.js
       raw: main.js
     size:
-      gz: 1592
-      min: 4538
-      raw: 9609
+      gz: 1672
+      min: 4763
+      raw: 10060
