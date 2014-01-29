@@ -4,21 +4,15 @@
 <div class="content">
   <div data-ng-controller="ModulesCtrl">
     <h2>Available modules :</h2>
-    <ul data-ng-show="modules" class="small-block-grid-2 medium-block-grid-3 large-block-grid-4">
-      <li data-ng-repeat="module in modules">
-        <a data-ng-click="toggleActiveModule(module)" class="th" data-dropdown="dropdown-{{ module.id }}">
+    <div class="row" data-ng-show="modules">
+      <div data-ng-repeat="module in modules" class="large-4 small-2 columns">
+        <a class="th">
           <img data-ng-src="/api/modules/{{ module.id }}/icon" alt="Image for module {{ module.id }}" title="{{ module.name }}">
         </a>
-        <div id="dropdown-{{ module.id }}" class="f-dropdown content" data-dropdown-content>
-          <h4>{{ (module.name) ? module.name : module.id }}</h4>
-          <p>{{ module.description }}</p>
-          <p>
-            Some text that people will think is awesome! Some text that people
-            will think is awesome! Some text that people will think is awesome!
-          </p>
-        </div>
-      </li>
-    </ul>
+        <h4>{{ (module.name) ? module.name : module.id }}</h4>
+        <p>{{ module.description }}</p>
+      </div>
+    </div>
     <h2>Manual installation (zip) :</h2>
     <form enctype="multipart/form-data" data-ng-submit="upload()">
       <label for="fileToUpload"></label>
