@@ -58,7 +58,7 @@ def api_upload_module():
             _, filename = tempfile.mkstemp()
             file_.save(filename)
             try:
-                install_from_zip(filename)
+                catalog.install_from_zip(filename)
             except (IOError, ValueError) as e:
                 return_data['message'] = str(e)
             else:
