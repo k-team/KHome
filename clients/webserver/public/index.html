@@ -8,6 +8,7 @@
     <script src="/js/vendor/modernizr.min.js"></script>
   </head>
   <body>
+    <!--Navigation bar-->
     <nav class="top-bar" data-topbar>
       <ul class="title-area">
         <li class="name">
@@ -32,25 +33,28 @@
         </ul>
       </section>
     </nav>
+
+    <!--Main view-->
     <div class="row" data-ng-controller="MainCtrl">
       <div data-ng-view></div>
     </div>
+
+    <!--JQuery and Foundation-->
+    <script src="/js/vendor/jquery.min.js"></script>
+    <script src="/js/vendor/foundation.min.js"></script>
+    <script src="/js/foundation-bs.js"></script>
+
+    <!--AngularJS file uploads-->
     <script src="/js/vendor/angular-file-upload-shim.min.js"></script>
     <script src="/js/vendor/angular.min.js"></script>
     <script src="/js/vendor/angular-file-upload.min.js"></script>
     <script src="/js/vendor/angular-route.min.js"></script>
-    <script src="/js/vendor/jquery.min.js"></script>
-    <script src="/js/vendor/foundation.min.js"></script>
-    <script>
-      (function($) {
-        $(function() {
-          $(document).foundation();
-        });
-      }) (jQuery);
-    </script>
+
+    <!--Flot-->
     <script src="/js/vendor/jquery.flot.min.js"></script>
     <script src="/js/vendor/jquery.flot.time.min.js"></script>
     <script src="/js/vendor/jquery.flot.resize.js"></script>
+
     <script src="/js/dist/main.js"></script>
   </body>
 </html>
