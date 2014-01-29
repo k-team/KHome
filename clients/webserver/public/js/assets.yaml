@@ -6,5 +6,6 @@ javascript:
     - controllers/*.js
     - directives/*.js
     - services/*.js
+    - filters/*.js
 
 # vim: ft=yaml et sw=2 sts=2

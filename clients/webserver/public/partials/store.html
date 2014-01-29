@@ -10,8 +10,8 @@
           <img data-ng-src="/api/modules/{{ module.id }}/icon" alt="Image for module {{ module.id }}" title="{{ module.name }}">
           <div class="caption">
             <h3>{{ (module.name) ? module.name : module.id }}</h3>
-            <p>{{ module.description }}</p>
-            <p><a href="#" class="btn btn-primary" role="button">Installer</a></p>
+            <p>{{ module.description | truncate:100 }}</p>
+            <p><a href="#" class="btn btn-primary" role="button">Install</a></p>
           </div>
         </div>
       </div>
