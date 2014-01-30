@@ -10,4 +10,9 @@ function ModulesCtrl($scope, ModuleService) {
   };
   //...and call immediately
   $scope.reloadModules();
+
+  // Uninstall a module
+  $scope.uninstall = function(module) {
+    console.log('uninstalling', module);
+  };
 }
