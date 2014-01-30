@@ -115,13 +115,28 @@ angular.module('GHome', ['ngRoute', 'angularFileUpload'])
     });
   });
 }
+;function ModuleInjectorCtrl($scope) {
+}
 ;function ModulesCtrl($scope, ModuleService) {
   // All modules
   $scope.modules = [];
 
   // Explicitly reload modules
   $scope.reloadModules = function() {
-    ModuleService.all().then(function(modules) {
+    ModuleService.installed().then(function(modules) {
+      $scope.modules = modules;
+    });
+  };
+  //...and call immediately
+  $scope.reloadModules();
+}
+;function StoreCtrl($scope, ModuleService) {
+  // All modules
+  $scope.modules = [];
+
+  // Explicitly reload modules
+  $scope.reloadModules = function() {
+    ModuleService.available().then(function(modules) {
       $scope.modules = modules;
     });
   };
@@ -141,16 +156,6 @@ angular.module('GHome', ['ngRoute', 'angularFileUpload'])
       $scope.uploading = false;
       // TODO handle errors better
     });
-  };
-
-  // Toggle module visibilité/activity
-  $scope.expandedModule = null;
-  $scope.toggleActiveModule = function(module) {
-    if ($scope.expandedModule == module) {
-      $scope.expandedModule = null;
-    } else {
-      $scope.expandedModule = module;
-    }
   };
 }
 ;angular.module('GHome').directive('graph', function() {
@@ -247,25 +252,33 @@ angular.module('GHome', ['ngRoute', 'angularFileUpload'])
   return service;
 });
 ;angular.module('GHome').factory('ModuleService', function($q, $http, $timeout, $upload) {
-  var service = {
-    defaultPollingDelay: 1000
-  };
+  var service = { defaultPollingDelay: 1000 };
 
-  service.modules = [];
-
-  // Get the list of available modules, optionally passing if this should force
-  // a reload of this list
-  service.all = function(forceReload) {
+  var getModules = function(url, cachedModules, forceReload) {
     var deferred = $q.defer();
     if (!forceReload) {
-      $http.get('/api/modules').success(function(data) {
-        service.modules = data;
+      $http.get(url).success(function(data) {
+        cachedModules = data;
         deferred.resolve(data);
       }); // TODO handle errors
     } else {
-      deferred.resolve(this.modules);
+      deferred.resolve(cachedModules);
     }
     return deferred.promise;
+  };
+
+  // Get the list of available modules, optionally passing if this should force
+  // a reload of this list
+  service.availableModules = [];
+  service.available = function(forceReload) {
+    return getModules('/api/available_modules', this.availableModules, forceReload);
+  };
+
+  // Get the list of installed modules, optionally passing if this should force
+  // a reload of this list
+  service.installedModules = [];
+  service.installed = function(forceReload) {
+    return getModules('/api/modules', this.installedModules, forceReload);
   };
 
   // Poll all module instances for their statuses, passing in the module's name
