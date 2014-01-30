@@ -75,25 +75,17 @@ def api_upload_module():
         return_data['message'] = 'No file uploaded'
     return jsonify(return_data)
 
-@app.route('/api/modules/<module_name>/icon')
-def api_module_icon(module_name):
-    icon_path = catalog.get_config(module_name).get('icon')
+@app.route('/api/modules/<module_name>/public/<rest>')
+def api_module_public(module_name, rest):
+    rest = rest.lstrip('.') # for security reasons
+    module_config = catalog.get_config(module_name)
+    module_public_dir = module_config.get('public_directory', 'public')
 
-    # default module icon
-    if icon_path is None:
-        return app.send_static_file('img/module.png')
-
-    # specified icon: either relative to module directory (eg. starting with
-    # "."), or given by an absolute path
-    if icon_path.startswith('.'):
-        module_directory = catalog.get_directory(module_name)
-        full_icon_path = os.path.join(module_directory, icon_path)
-    else:
-        full_icon_path = icon_path
-
-    # final return
-    if os.path.exists(full_icon_path):
-        return send_file(full_icon_path)
+    # send the requested file
+    module_dir = catalog.get_directory(module_name)
+    requested_file = os.path.join(module_dir, module_public_dir, rest)
+    if os.path.exists(requested_file):
+        return send_file(requested_file)
     else:
         abort(404)
 
