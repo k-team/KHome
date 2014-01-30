@@ -11,6 +11,11 @@ function StoreCtrl($scope, ModuleService) {
   //...and call immediately
   $scope.reloadModules();
 
+  // Install a module
+  $scope.install = function(module) {
+    console.log('installing module', module);
+  };
+
   // Uploading system
   $scope.uploading = false
   $scope.upload = function(file) {

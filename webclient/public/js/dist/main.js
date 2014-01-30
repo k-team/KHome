@@ -1,7 +1,7 @@
 "use strict";
 
 angular.module('GHome', ['ngRoute', 'angularFileUpload'])
-  .config(function($routeProvider, $locationProvider) {
+  .config(function($routeProvider, $locationProvider, $httpProvider) {
     $routeProvider.when('/home', {
       templateUrl: '/partials/home.html'
     }).when('/store', {
@@ -15,6 +15,23 @@ angular.module('GHome', ['ngRoute', 'angularFileUpload'])
       templateUrl: '/partials/blank_module.html'
     }).otherwise({
       redirectTo: '/home'
+    });
+
+    // Refresh LESS when changing views
+    $httpProvider.interceptors.push(function($timeout) {
+      return {
+        response: function(response) {
+          less.sheets = [];
+          var links = document.getElementsByTagName('link');
+          angular.forEach(links, function(link) {
+            if (link.rel == 'stylesheet/less') {
+              less.sheets.push(link);
+            }
+          });
+          less.refresh();
+          return response;
+        }
+      };
     });
   });
 ;function MainCtrl($scope, ModuleService, HouseMapService) {
@@ -129,6 +146,11 @@ angular.module('GHome', ['ngRoute', 'angularFileUpload'])
   };
   //...and call immediately
   $scope.reloadModules();
+
+  // Uninstall a module
+  $scope.uninstall = function(module) {
+    console.log('uninstalling', module);
+  };
 }
 ;function StoreCtrl($scope, ModuleService) {
   // All modules
@@ -142,6 +164,11 @@ angular.module('GHome', ['ngRoute', 'angularFileUpload'])
   };
   //...and call immediately
   $scope.reloadModules();
+
+  // Install a module
+  $scope.install = function(module) {
+    console.log('installing module', module);
+  };
 
   // Uploading system
   $scope.uploading = false
