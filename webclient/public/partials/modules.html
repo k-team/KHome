@@ -2,4 +2,17 @@
   <h1>Modules</h1>
 </div>
 <div class="content">
+  <div data-ng-controller="ModulesCtrl">
+    <div data-ng-show="modules" class="row">
+      <div data-ng-repeat="module in modules" class="col-md-2">
+        <div class="thumbnail">
+          <a href="#/modules/{{ module.id }}">
+            <img alt="Icon for module {{ module.id }}" title="{{ module.name }}"
+              data-ng-src="/api/modules/{{ module.id }}/public/icon.png"
+              onerror="this.onerror = null; this.src = '/img/module.png'">
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

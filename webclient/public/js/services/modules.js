@@ -1,23 +1,31 @@
 angular.module('GHome').factory('ModuleService', function($q, $http, $timeout, $upload) {
-  var service = {
-    defaultPollingDelay: 1000
-  };
+  var service = { defaultPollingDelay: 1000 };
 
-  service.modules = [];
-
-  // Get the list of available modules, optionally passing if this should force
-  // a reload of this list
-  service.all = function(forceReload) {
+  var getModules = function(url, cachedModules, forceReload) {
     var deferred = $q.defer();
     if (!forceReload) {
-      $http.get('/api/modules').success(function(data) {
-        service.modules = data;
+      $http.get(url).success(function(data) {
+        cachedModules = data;
         deferred.resolve(data);
       }); // TODO handle errors
     } else {
-      deferred.resolve(this.modules);
+      deferred.resolve(cachedModules);
     }
     return deferred.promise;
+  };
+
+  // Get the list of available modules, optionally passing if this should force
+  // a reload of this list
+  service.availableModules = [];
+  service.available = function(forceReload) {
+    return getModules('/api/available_modules', this.availableModules, forceReload);
+  };
+
+  // Get the list of installed modules, optionally passing if this should force
+  // a reload of this list
+  service.installedModules = [];
+  service.installed = function(forceReload) {
+    return getModules('/api/modules', this.installedModules, forceReload);
   };
 
   // Poll all module instances for their statuses, passing in the module's name
