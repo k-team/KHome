@@ -2,13 +2,14 @@ import os
 import sys
 import json
 import time
+import zipfile
 import tempfile
 from flask import (Flask, Response, send_file, request, abort,
         jsonify as _jsonify)
 
 # remove this and do in client launcher
 this_dir = os.path.dirname(os.path.realpath(__file__))
-core_dir = os.path.join(os.path.dirname(os.path.dirname(this_dir)), 'core')
+core_dir = os.path.join(os.path.dirname(this_dir), 'core')
 sys.path.insert(1, core_dir)
 # leave this though
 import catalog
@@ -39,6 +40,7 @@ IMAGE_EXTS = ['png', 'jpg', 'jpeg', 'gif', 'bmp']
 def index():
     return app.send_static_file('index.html')
 
+# move in module ?
 @app.route('/api/rooms')
 def api_rooms():
     return app.send_static_file('rooms.json')
@@ -46,6 +48,10 @@ def api_rooms():
 @app.route('/api/modules')
 def api_modules():
     return jsonify(catalog.get_installed_modules(detailed=True))
+
+@app.route('/api/available_modules')
+def api_available_modules():
+    return jsonify(catalog.get_available_modules(detailed=True))
 
 @app.route('/api/modules/install', methods=['POST'])
 def api_upload_module():
