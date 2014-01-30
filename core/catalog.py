@@ -11,6 +11,7 @@ import zipfile
 _file = os.path.realpath(__file__)
 _root = os.path.dirname(os.path.dirname(_file))
 
+AVAILABLE_DIRECTORY = os.path.join(_root, 'available_modules')
 DIRECTORY = os.path.join(_root, 'modules')
 CONFIG_FILE = 'module.json'
 
@@ -72,6 +73,27 @@ def get_installed_modules(detailed=False):
             module = { 'id': module }
             module.update(module_config)
         module_list.append(module)
+    return module_list
+
+def get_available_modules(detailed=False):
+    """
+    Return a list of all available modules. Detailed information can be given
+    (eg. module configuration) by setting the "detailed" argument to true.
+    """
+    module_list = []
+    dir_ = AVAILABLE_DIRECTORY
+    for module in os.listdir(dir_):
+        mod_full_dir = os.path.join(dir_, module)
+        if not module.lower().endswith('.zip'):
+            continue
+        with zipfile.ZipFile(mod_full_dir) as zf:
+            module_dir = os.path.splitext(module)[0] + '/'
+            if module_dir not in zf.namelist():
+                continue
+            module_config_file = get_config_file(module, directory=module_dir)
+            with zf.open(module_config_file) as module_config_fp:
+                conf = load_config(module_config_fp)
+                module_list.append(conf)
     return module_list
 
 def install_from_zip(file_):
