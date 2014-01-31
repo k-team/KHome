@@ -14,9 +14,4 @@ if __name__ == '__main__':
         Recognised = fields.proxy.mix('Recognised',
             'CapteurCamera','Image')
 
-    b = M1()
-
-    b.start()
-    reactor.run()
-    b.stop()
-    b.join(1)
+    #code du main a remettre lais il était chelou donc pr le moment je l'ai vire...
