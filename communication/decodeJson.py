@@ -71,7 +71,7 @@ def decodejson(askedJson):
             '''print(objdata)'''
         '''print(obj_data)'''
     else:
-        print('Error')
+        obj_data=None
     return obj_data
   
 
