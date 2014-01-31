@@ -1,5 +1,6 @@
 import os
 import threading
+import socket
 from twisted.internet import reactor
 from twisted.internet.endpoints import UNIXServerEndpoint as ServerEndpoint
 import core.fields
@@ -7,6 +8,21 @@ import connection
 
 def prop_field(field):
     def _prop_field(*args, **kwargs):
+        """
+        Access to the value of the field which name is *field*. The access is
+        done in write or read mode in function of the parameters.
+
+        Without parameters : return the last value saved
+
+        With named parameter *t* : return the value which the saved time is the
+        nearest of *t*.
+
+        With named parameters *fr* and *to* : return all the values saved
+        between the times [fr ; to]
+
+        With non-named parameter : add a new value at the current time and
+        return if it's was successfully done.
+        """
         if len(args) == 1 and not kwargs:
             return field.write(*args)
         elif not args:
@@ -19,20 +35,51 @@ def prop_field(field):
         raise Exception
     return _prop_field
 
+def get_module_socket(module_name):
+    """
+    Return the filename of the socket of the module named *module_name*
+    """
+# TODO rearrange this
+    return module_name + '.sock'
+
 def get_module_conn(module_name):
+    """
+    Return a socket connected to the module named *module_name*
+    """
     sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-    # sock.connect(module_name + '.sock')
+    sock.connect(get_module_socket(module_name))
     return sock
 
 def get_network_fields(module_conn):
+    """
+    Return the list of the fields of a module connected by the *module_conn*
+    socket.
+    """
+# TODO
     request = {}
     # module_conn.send(json.dumps(request))
     # data = json.loads(module_conn.recv())
     # parse data
-    return ['F2']
+    return ['Field']
 
-def prop_network_field(field):
+def prop_network_field(module_conn, field):
     def _prop_network_field(*args, **kwargs):
+        """
+        Access to the value of the field which name is *field* inside a extern
+        module connected by the *module_conn* socket. The access is done in
+        write or read mode in function of the parameters.
+
+        Without parameters : return the last value saved
+
+        With named parameter *t* : return the value which the saved time is the
+        nearest of *t*.
+
+        With named parameters *fr* and *to* : return all the values saved
+        between the times [fr ; to]
+
+        With non-named parameter : add a new value at the current time and
+        return if it's was successfully done.
+        """
         if len(args) == 1 and not kwargs:
             return False # write
         elif not args:
@@ -44,10 +91,6 @@ def prop_network_field(field):
                 return None # read(fr=.., to=..)
         raise Exception
     return _prop_network_field
-
-def get_module_socket(module_name):
-# TODO rearrange this
-    return module_name + '.sock'
 
 class BaseMeta(type):
     ls_name = set()
@@ -142,7 +185,7 @@ class NetworkMeta(type):
 # Gestion des fields du module
         ls_field = get_network_fields(obj.module_conn)
         for field in ls_field:
-            setattr(obj, field, prop_network_field(field))
+            setattr(obj, field, prop_network_field(conn, field))
 
         return obj
 
