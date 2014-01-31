@@ -1,4 +1,4 @@
-function ModulesCtrl($scope, ModuleService) {
+function ModulesCtrl($scope, $location, ModuleService) {
   // All modules
   $scope.modules = [];
 
@@ -14,5 +14,10 @@ function ModulesCtrl($scope, ModuleService) {
   // Uninstall a module
   $scope.uninstall = function(module) {
     console.log('uninstalling', module);
+  };
+
+  // Navigate to module view, either its specific view or configuration
+  $scope.navigate = function(module) {
+    $location.path(module.has_view ? '/modules/' + module.id : '/settings');
   };
 }
