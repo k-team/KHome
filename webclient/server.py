@@ -53,6 +53,34 @@ def api_modules():
 def api_available_modules():
     return jsonify(catalog.get_available_modules(detailed=True))
 
+@app.route('/api/available_modules/<module_name>/icon')
+def api_available_module_icon(module_name):
+    module_name = module_name.lstrip('.') # for security reasons
+    dir_ = catalog.AVAILABLE_DIRECTORY
+    module_zipfile = os.path.join(dir_, module_name + '.zip')
+    with zipfile.ZipFile(module_zipfile) as zf:
+        try:
+            module_conf_filename = os.path.join(module_name, 'module.json')
+            with zf.open(module_conf_filename) as module_conf_zf:
+                module_conf = json.load(module_conf_zf)
+            public_dir = module_conf.get('public_dir', 'public')
+            icon_file = os.path.join(module_name, public_dir, 'icon.png')
+            with zf.open(icon_file) as icon_zf:
+                try:
+                    res = None
+                    _, icon_filename = tempfile.mkstemp()
+                    with open(icon_filename, 'w') as fp:
+                        fp.write(icon_zf.read())
+                    res = send_file(icon_filename)
+                finally:
+                    os.remove(icon_filename)
+                    if res:
+                        return res
+                    else:
+                        abort(404)
+        except (KeyError, IOError):
+            abort(404)
+
 @app.route('/api/modules/install', methods=['POST'])
 def api_upload_module():
     return_data = { 'success': False }
