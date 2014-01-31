@@ -26,11 +26,6 @@ if __name__ == '__main__':
         fenetreCapteur = use_module('FenetreCapteur')
         fenetreActionneur = use_module('FenetreActionneur')
 
-        Fenetre = fields.proxy.mix('FenetreCapteur', 'Fenetre', 'FenetreActionneur', 'Fenetre')
-
-        class Field(core.fields.proxy, core.fields.Base):
-            proxy_module_name = "FenetreCapteur"
-            proxy_field_name = "Fenetre"
-
+        Fenetre = fields.proxy.mix('Fenetre', 'FenetreCapteur', 'Fenetre', 'FenetreActionneur', 'Fenetre')
         pass
 

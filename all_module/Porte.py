@@ -26,11 +26,6 @@ if __name__ == '__main__':
         porteCapteur = use_module('PorteCapteur')
         porteActionneur = use_module('PorteActionneur')
 
-        Porte = fields.proxy.mix('PorteCapteur', 'Porte', 'PorteActionneur', 'Porte')
-
-        class Field(core.fields.proxy, core.fields.Base):
-            proxy_module_name = "PorteCapteur"
-            proxy_field_name = "Porte"
-
+        Porte = fields.proxy.mix('Porte','PorteCapteur', 'Porte', 'PorteActionneur', 'Porte')
         pass
 
