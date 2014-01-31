@@ -76,14 +76,14 @@ class Protocol(protocol.Protocol):
         for field in fields_name:
             try:
                 get = getattr(self.module, field)
-                fields_values[field] = get()
+                fields_value[field] = get()
             except (AttributeError, IOError):
                 self.err_field_error()
                 return
 
         res = {}
         res['success'] = True
-        res['objs'] = fields_values
+        res['objs'] = fields_value
         self.transport.write(json.dumps(res))
 
     def get_at(self, data):
