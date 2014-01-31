@@ -4,13 +4,13 @@ import core.fields
 import core.fields.io
 import core.fields.persistant
 import time
-import all_modules.shutter
+import all_modules.lightButton
 
 if __name__ == '__main__':
 
         
-    class ShutterController(core.module.Base)
-        shutter= use_module('Shutter')
+    class LightController(core.module.Base)
+        light= use_module('Shutter')
         
         def always(self):
             #here do action
