@@ -7,10 +7,9 @@ import time
 
 if __name__ == '__main__':
 
-    class ChasseEau(core.module.Base):
+    class WaterFlush(core.module.Base):
         update_rate = 10
-        actionneurPiston = use_module('ActionneurPiston')
-        presencePersonne = use_module('PresencePersonne')
+        actionneurPiston = use_module('ActuatorPiston')
+        presencePersonne = use_module('PersonnePresence')
 
-        Chasse = fields.proxy.mix('Chasse','ActionneurPiston', 'Piston', 'PresencePersonne', 'Presence')
-        pass
+        Flush = fields.proxy.mix('Flush','ActuatorPiston', 'Piston', 'PersonnePresence', 'Presence')

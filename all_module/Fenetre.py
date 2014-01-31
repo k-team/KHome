@@ -6,26 +6,25 @@ import core.fields.persistant
 import time
 
 if __name__ == '__main__':
-    class FenetreCapteur(core.module.Base):
+    class WindowSensor(core.module.Base):
         update_rate = 10
-        class Fenetre(
-            core.fields.sensor.Fenetre
+        class Window(
+            core.fields.sensor.Window
             core.fields.io.Readable,
             core.fields.Base):
         pass
 
-    class FenetreActionneur(core.module.Base):
-        class Fenetre(
-            core.fields.actuator.Fenetre
+    class WindowActuator(core.module.Base):
+        class Window(
+            core.fields.actuator.Window
             core.fields.io.Writable,
             core.fields.Base):
         pass
 
-    class FenetreAcces(core.module.Base):
+    class WindowAcces(core.module.Base):
         update_rate = 10
-        fenetreCapteur = use_module('FenetreCapteur')
-        fenetreActionneur = use_module('FenetreActionneur')
+        windowSensor = use_module('WindowSensor')
+        windowActuator = use_module('WindowActuator')
 
-        Fenetre = fields.proxy.mix('Fenetre', 'FenetreCapteur', 'Fenetre', 'FenetreActionneur', 'Fenetre')
-        pass
+        Window = fields.proxy.mix('Window', 'WindowSensor', 'Window', 'WindowActuator', 'Window')
 

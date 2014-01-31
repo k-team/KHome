@@ -6,20 +6,19 @@ import core.fields.persistant
 import time
 
 if __name__ == '__main__':
-    class SonCapteur(core.module.Base):
+    class SoundSensor(core.module.Base):
         update_rate = 10
-        class Son(
-            core.fields.sensor.Son
+        class Sound(
+            core.fields.sensor.Sound
             core.fields.io.Readable,
             core.fields.Base):
         pass
 
-    class SurveilleBebe(core.module.Base):
+    class BabyMonitoring(core.module.Base):
         update_rate = 10
-        sonCapteur = use_module('SonCapteur')
-        reconnaissance = use_module('Reconnaissance')
-        actionneurAlarme = use_module('ActionneurAlarme')
+        sonCapteur = use_module('SoundSensor')
+        recognition = use_module('Recognition')
+        alarmActuator = use_module('AlarmActuator')
 
-        Bebe = fields.proxy.mix('Bebe','SonCapteur', 'Son', 'Reconnaissance', 'Reconnu', 'ActionneurAlarme', 'Alarme')
-        pass
+        Baby = fields.proxy.mix('Baby','SoundSensor', 'Sound', 'Recognition', 'Recognize', 'AlarmActuator', 'Alarm')
 

@@ -6,26 +6,25 @@ import core.fields.persistant
 import time
 
 if __name__ == '__main__':
-    class PorteCapteur(core.module.Base):
+    class DoorSensor(core.module.Base):
         update_rate = 10
-        class Porte(
-            core.fields.sensor.Porte
+        class Door(
+            core.fields.sensor.Door
             core.fields.io.Readable,
             core.fields.Base):
         pass
 
-    class PorteActionneur(core.module.Base):
-        class Porte(
-            core.fields.actuator.Porte
+    class DoorActuator(core.module.Base):
+        class Door(
+            core.fields.actuator.Door
             core.fields.io.Writable,
             core.fields.Base):
         pass
 
-    class PorteAcces(core.module.Base):
+    class DoorAccess(core.module.Base):
         update_rate = 10
-        porteCapteur = use_module('PorteCapteur')
-        porteActionneur = use_module('PorteActionneur')
+        doorSensor = use_module('DoorSensor')
+        doorActuator = use_module('DoorActuator')
 
-        Porte = fields.proxy.mix('Porte','PorteCapteur', 'Porte', 'PorteActionneur', 'Porte')
-        pass
+        Door = fields.proxy.mix('Door','DoorSensor', 'Door', 'DoorActuator', 'Door')
 

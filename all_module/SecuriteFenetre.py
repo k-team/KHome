@@ -7,11 +7,10 @@ import time
 
 if __name__ == '__main__':
 
-    class SecuriteFenetre(core.module.Base):
+    class SecuriteWindow(core.module.Base):
         update_rate = 10
-        porteAcces = use_module('FenetreAcces')
-        reconnaissance = use_module('Reconnaissance')
-        actionneurAlarme = use_module('ActionneurAlarme')
+        windowAcces = use_module('WindowAccess')
+        recognition = use_module('Recognition')
+        alarmActuator = use_module('AlarmActuator')
 
-        Securite = fields.proxy.mix('Securite','FenetreAcces', 'Fenetre','Reconnaissance', 'Reconnu', 'ActionneurAlarme', 'Alarme')
-        pass
+        Security = fields.proxy.mix('Security','WindowAccess', 'Window','Recognition', 'Recognize', 'AlarmActuator', 'Alarm')
