@@ -14,4 +14,3 @@ if __name__ == '__main__':
 
         Chasse = fields.proxy.mix('Chasse','ActionneurPiston', 'Piston', 'PresencePersonne', 'Presence')
         pass
-
