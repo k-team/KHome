@@ -50,6 +50,7 @@ if __name__ == '__main__':
 
         class Field(core.fields.io.Readable,
                 core.fields.io.Writable,
+                core.fields.persistant.Volatile,
                 core.fields.Base):
             def acquire_value(self):
                 return time.time() % 10
