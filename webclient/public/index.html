@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html data-ng-app="GHome" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>GHome &ndash; KTeam</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!--Themes-->
+    <!--<link rel="stylesheet" href="/css/bootstrap-amelia.min.css" />-->
+    <!--<link rel="stylesheet" href="/css/bootstrap-cerulean.min.css" />-->
+    <!--<link rel="stylesheet" href="/css/bootstrap-cosmo.min.css" />-->
+    <!--<link rel="stylesheet" href="/css/bootstrap-cyborg.min.css" />-->
+    <!--<link rel="stylesheet" href="/css/bootstrap-default.min.css" />-->
+    <link rel="stylesheet" href="/css/bootstrap-flatly.min.css" />
+    <!--<link rel="stylesheet" href="/css/bootstrap-journal.min.css" />-->
+    <!--<link rel="stylesheet" href="/css/bootstrap-readable.min.css" />-->
+    <!--<link rel="stylesheet" href="/css/bootstrap-simplex.min.css" />-->
+    <!--<link rel="stylesheet" href="/css/bootstrap-slate.min.css" />-->
+    <!--<link rel="stylesheet" href="/css/bootstrap-spacelab.min.css" />-->
+    <!--<link rel="stylesheet" href="/css/bootstrap-united.min.css" />-->
+    <!--<link rel="stylesheet" href="/css/bootstrap-yeti.min.css" />-->
+
+    <!--App CSS-->
+    <link rel="stylesheet/less" href="/less/main.less" />
+    <script src="/js/vendor/less.min.js"></script>
+    <script src="/js/vendor/modernizr.min.js"></script>
+  </head>
+  <body>
+    <!--Navigation bar-->
+    <nav class="navbar navbar-inverse" role="navigation">
+      <!--Navigation header-->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse.collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#/home">GHome</a>
+      </div>
+
+      <!--Collapsible navigation bar-->
+      <div class="collapse navbar-collapse">
+        <ul class="nav navbar-nav">
+          <li><a href="#/modules">Modules</a></li>
+          <li><a href="#/store">Store</a></li>
+          <li><a href="#/settings">Settings</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <!--Main view-->
+    <div class="container" data-ng-controller="MainCtrl">
+      <div data-ng-view></div>
+    </div>
+
+    <!--JQuery and Bootstrap-->
+    <script src="/js/vendor/jquery.min.js"></script>
+    <script src="/js/vendor/bootstrap.min.js"></script>
+
+    <!--AngularJS file uploads-->
+    <script src="/js/vendor/angular-file-upload-shim.min.js"></script>
+    <script src="/js/vendor/angular.min.js"></script>
+    <script src="/js/vendor/angular-file-upload.min.js"></script>
+    <script src="/js/vendor/angular-route.min.js"></script>
+
+    <!--Flot-->
+    <script src="/js/vendor/jquery.flot.min.js"></script>
+    <script src="/js/vendor/jquery.flot.time.min.js"></script>
+    <script src="/js/vendor/jquery.flot.resize.js"></script>
+
+    <!--App-->
+    <script src="/js/dist/main.js"></script>
+  </body>
+</html>

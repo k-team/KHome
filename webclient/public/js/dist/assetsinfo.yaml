@@ -1,0 +1,22 @@
+javascript:
+  main:
+    files:
+    - main.js
+    - controllers/main.js
+    - controllers/module_injector.js
+    - controllers/modules.js
+    - controllers/store.js
+    - directives/graph.js
+    - directives/svg.js
+    - services/house-map.js
+    - services/modules.js
+    - filters/truncate.js
+    fingerprint: ''
+    output:
+      gz: main.min.js.gz
+      min: main.min.js
+      raw: main.js
+    size:
+      gz: 1811
+      min: 5129
+      raw: 11084

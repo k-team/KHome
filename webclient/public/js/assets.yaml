@@ -1,0 +1,11 @@
+output: dist
+
+javascript:
+  main:
+    - main.js
+    - controllers/*.js
+    - directives/*.js
+    - services/*.js
+    - filters/*.js
+
+# vim: ft=yaml et sw=2 sts=2

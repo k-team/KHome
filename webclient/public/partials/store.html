@@ -1,0 +1,28 @@
+<div class="header">
+  <h1>Modules</h1>
+</div>
+<div class="content">
+  <div data-ng-controller="StoreCtrl">
+    <h2>Available modules :</h2>
+    <div data-ng-show="modules" class="row">
+      <div data-ng-repeat="module in modules" class="col-md-3">
+        <div class="thumbnail">
+          <img alt="Icon for module {{ module.id }}" title="{{ module.name }}"
+            data-ng-src="/api/modules/{{ module.id }}/public/icon.png"
+            onerror="this.onerror = null; this.src = '/img/module.png'">
+          <div class="caption">
+            <h3>{{ (module.name) ? module.name : module.id }}</h3>
+            <p>{{ module.description | truncate:100 }}</p>
+            <p><a data-ng-click="install(module)" class="btn btn-primary" role="button">Install</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <h2>Manual installation (zip) :</h2>
+    <form enctype="multipart/form-data" data-ng-submit="upload()">
+      <label for="fileToUpload"></label>
+      <input id="fileToUpload" type="file" data-ng-file-select="upload($files[0])" >
+    </form>
+    <h4 data-ng-show="uploading">Upload progress: {{ uploadProgress }}</h4>
+  </div>
+</div>
