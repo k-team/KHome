@@ -13,5 +13,5 @@ if __name__ == '__main__':
         reconnaissance = use_module('Reconnaissance')
         actionneurAlarme = use_module('ActionneurAlarme')
 
-        Securite = fields.proxy.mix('Securite','FenetreAcces', 'Fenetre', 'ActionneurAlarme', 'Alarme')
+        Securite = fields.proxy.mix('Securite','FenetreAcces', 'Fenetre','Reconnaissance', 'Reconnu', 'ActionneurAlarme', 'Alarme')
         pass
