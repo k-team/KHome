@@ -1,0 +1,22 @@
+from twisted.internet import reactor
+import core.module
+import core.fields
+import core.fields.io
+import core.fields.persistant
+import time
+
+if __name__ == '__main__':
+		class SmokeSensor(core.module.Base):
+        update_rate = 10
+        class Smoke(
+            core.fields.sensor.Smoke
+            core.fields.io.Readable,
+            core.fields.Base):
+        pass
+    class SmokeSecurity(core.module.Base):
+        update_rate = 10
+        alarmActuator = use_module('AlarmActuator')
+
+        Security = fields.proxy.mix('Security',
+        														'SmokeSensor','Smoke',
+        														'AlarmActuator', 'Alarm')
