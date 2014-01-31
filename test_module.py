@@ -1,5 +1,6 @@
 from twisted.internet import reactor
 import core.module
+from core.module import use_module
 import core.fields
 import core.fields.io
 import core.fields.persistant
@@ -10,13 +11,13 @@ if __name__ == '__main__':
         update_rate = 10
 
         class kelvin(
-                core.fields.sensor.Temperature
+                # core.fields.sensor.Temperature,
                 core.fields.io.Readable,
                 core.fields.persistant.Volatile,
                 core.fields.Base):
             pass
 
-    class TempsKelvinFiltered(
+    class TempsKelvinFiltered(core.module.Base):
             class kelvin(
                 core.fields.io.Readable,
                 core.fields.persistant.Volatile,
@@ -44,7 +45,7 @@ if __name__ == '__main__':
                 core.fields.Base):
             pass
 
-    b = M1()
+    b = TempCelcius()
 
     b.start()
     reactor.run()
