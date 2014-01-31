@@ -28,7 +28,7 @@ class Base(threading.Thread):
 
     def emit_value(self, value):
         if value is not None:
-            self._set_value((time.time(), value))
+            self._set_value(time.time(), value)
 
     def acquire_value(self):
         """
