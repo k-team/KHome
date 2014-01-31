@@ -1,4 +1,4 @@
-function StoreCtrl($scope, ModuleService) {
+function StoreCtrl($scope, $modal, ModuleService) {
   // All modules
   $scope.modules = [];
 
@@ -30,12 +30,29 @@ function StoreCtrl($scope, ModuleService) {
       // TODO handle errors better
     });
   };
-}
 
-function StoreModalCtrl($scope, $modal, $log) {
-  $scope.instance = null;
+  $scope.modalInstances = {};
+  $scope.openModal = function(module) {
+    var modalScope = $scope.$new(true);
 
-  $scope.open = function () {
-    $scope.instance = $modal.open({ templateUrl: 'modal.html' });
+    // Dismiss the modal
+    modalScope.dismiss = function() {
+      $scope.modalInstances[module.id].dismiss();
+    };
+
+    // Install the module
+    modalScope.install = function() {
+      $scope.install(module);
+      modalScope.dismiss();
+    };
+
+    // Access the modal's module
+    modalScope.module = module;
+
+    // Open the modal
+    $scope.modalInstances[module.id] = $modal.open({
+      templateUrl: 'modal.html',
+      scope: modalScope
+    });
   };
 }
