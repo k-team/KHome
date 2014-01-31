@@ -31,3 +31,11 @@ function StoreCtrl($scope, ModuleService) {
     });
   };
 }
+
+function StoreModalCtrl($scope, $modal, $log) {
+  $scope.instance = null;
+
+  $scope.open = function () {
+    $scope.instance = $modal.open({ templateUrl: 'modal.html' });
+  };
+}

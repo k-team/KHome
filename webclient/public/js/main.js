@@ -1,6 +1,6 @@
 "use strict";
 
-angular.module('GHome', ['ngRoute', 'angularFileUpload'])
+angular.module('GHome', ['ngRoute', 'ui.bootstrap', 'angularFileUpload'])
   .config(function($routeProvider, $locationProvider, $httpProvider) {
     $routeProvider.when('/home', {
       templateUrl: '/partials/home.html'

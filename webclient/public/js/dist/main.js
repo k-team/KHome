@@ -1,6 +1,6 @@
 "use strict";
 
-angular.module('GHome', ['ngRoute', 'angularFileUpload'])
+angular.module('GHome', ['ngRoute', 'ui.bootstrap', 'angularFileUpload'])
   .config(function($routeProvider, $locationProvider, $httpProvider) {
     $routeProvider.when('/home', {
       templateUrl: '/partials/home.html'
@@ -196,6 +196,14 @@ angular.module('GHome', ['ngRoute', 'angularFileUpload'])
       $scope.uploading = false;
       // TODO handle errors better
     });
+  };
+}
+
+function StoreModalCtrl($scope, $modal, $log) {
+  $scope.instance = null;
+
+  $scope.open = function () {
+    $scope.instance = $modal.open({ templateUrl: 'modal.html' });
   };
 }
 ;angular.module('GHome').directive('graph', function() {
