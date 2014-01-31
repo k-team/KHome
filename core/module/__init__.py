@@ -61,7 +61,7 @@ def get_network_fields(module_conn):
     # module_conn.send(json.dumps(request))
     # data = json.loads(module_conn.recv())
     # parse data
-    return ['F2']
+    return ['Field']
 
 def prop_network_field(module_conn, field):
     def _prop_network_field(*args, **kwargs):
