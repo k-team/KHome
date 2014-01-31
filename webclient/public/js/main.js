@@ -10,9 +10,9 @@ angular.module('GHome', ['ngRoute', 'angularFileUpload'])
       templateUrl: '/partials/settings.html'
     }).when('/modules', {
       templateUrl: '/partials/modules.html'
-    }).when('/modules/:module_name', {
+    }).when('/modules/:moduleName', {
       controller: 'ModuleInjectorCtrl',
-      templateUrl: '/partials/blank_module.html'
+      templateUrl: '/partials/module_inject.html'
     }).otherwise({
       redirectTo: '/home'
     });

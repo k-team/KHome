@@ -10,9 +10,9 @@ angular.module('GHome', ['ngRoute', 'angularFileUpload'])
       templateUrl: '/partials/settings.html'
     }).when('/modules', {
       templateUrl: '/partials/modules.html'
-    }).when('/modules/:module_name', {
+    }).when('/modules/:moduleName', {
       controller: 'ModuleInjectorCtrl',
-      templateUrl: '/partials/blank_module.html'
+      templateUrl: '/partials/module_inject.html'
     }).otherwise({
       redirectTo: '/home'
     });
@@ -132,9 +132,17 @@ angular.module('GHome', ['ngRoute', 'angularFileUpload'])
     });
   });
 }
-;function ModuleInjectorCtrl($scope) {
+;function ModuleInjectorCtrl($scope, $route, $routeParams, $http, $compile) {
+  $route.current.templateUrl = '/api/modules/'
+    + $routeParams.moduleName
+    + '/public/partial.html';
+
+  // Note: this is a hack, but it works
+  $.get($route.current.templateUrl, function(data) {
+    $('#inject').html($compile(data)($scope));
+  });
 }
-;function ModulesCtrl($scope, ModuleService) {
+;function ModulesCtrl($scope, $location, ModuleService) {
   // All modules
   $scope.modules = [];
 
@@ -150,6 +158,11 @@ angular.module('GHome', ['ngRoute', 'angularFileUpload'])
   // Uninstall a module
   $scope.uninstall = function(module) {
     console.log('uninstalling', module);
+  };
+
+  // Navigate to module view, either its specific view or configuration
+  $scope.navigate = function(module) {
+    $location.path(module.has_view ? '/modules/' + module.id : '/settings');
   };
 }
 ;function StoreCtrl($scope, ModuleService) {
