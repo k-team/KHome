@@ -2,7 +2,7 @@ import os
 import threading
 import json
 import socket
-import json
+import time
 from twisted.internet import reactor
 from twisted.internet.endpoints import UNIXServerEndpoint as ServerEndpoint
 import core.fields
@@ -46,11 +46,13 @@ def get_module_socket(module_name):
 
 def get_module_conn(module_name):
     """
-    Return a socket connected to the module named *module_name*
+    Return a socket connected to the module named *module_name*.
+    The socket is transformed by the makefile function and has to be use as a
+    file object.
     """
     sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
     sock.connect(get_module_socket(module_name))
-    return sock
+    return sock.makefile('rw')
 
 def get_network_fields(module_conn):
     """
@@ -64,7 +66,9 @@ def get_network_fields(module_conn):
     # parse data
     return [{'name': 'Field'}]
 
-def prop_network_field(module_conn, field_name):
+def prop_network_field(module_conn, field_info):
+    field_name = field_info['name']
+
     def _prop_network_field(*args, **kwargs):
         """
         Access to the value of the field which name is *field* inside a extern
@@ -87,8 +91,8 @@ def prop_network_field(module_conn, field_name):
             request['code'] = 'set'
             request['field_name'] = field_name
             request['field_value'] = field_value
-            module_conn.send(json.dumps(request))
-            ans = json.loads(module_conn.recv(1024))
+            module_conn.write(json.dumps(request))
+            ans = json.loads(module_conn.readline())
 
             if not 'success' in ans or not ans['success']:
                 return False
@@ -98,44 +102,28 @@ def prop_network_field(module_conn, field_name):
                 request = {}
                 request['code'] = 'get'
                 request['fields'] = [field_name]
-                module_conn.send(json.dumps(request))
-                ans = json.loads(module_conn.recv(1024))
-
-                if not 'success' in ans or not ans['success']:
-                    return None
-                try:
-                    return ans['fields'][field_name]
-                except KeyError:
-                    return None
             if len(kwargs) == 1 and 't' in kwargs:
                 request = {}
                 request['code'] = 'get_at'
-                request['time'] = kwargs['t']
+                request['time'] = time.time() + kwargs['t']
                 request['fields'] = [field_name]
-                module_conn.send(json.dumps(request))
-                ans = json.loads(module_conn.recv(1024))
-
-                if not 'success' in ans or not ans['success']:
-                    return None
-                try:
-                    return ans['fields'][field_name]
-                except KeyError:
-                    return None
             if len(kwargs) == 2 and 'fr' in kwargs and 'to' in kwargs:
                 request = {}
                 request['code'] = 'get_from_to'
-                request['time_from'] = kwargs['fr']
-                request['time_to'] = kwargs['to']
+                request['time_from'] = time.time() + kwargs['fr']
+                request['time_to'] = time.time() + kwargs['to']
                 request['fields'] = [field_name]
-                module_conn.send(json.dumps(request))
-                ans = json.loads(module_conn.recv(1024))
 
-                if not 'success' in ans or not ans['success']:
-                    return None
-                try:
-                    return ans['fields'][field_name]
-                except KeyError:
-                    return None
+            module_conn.write(json.dumps(request) + '\n')
+            module_conn.flush()
+            ans = json.loads(module_conn.readline())
+
+            if not 'success' in ans or not ans['success']:
+                return None
+            try:
+                return ans['fields'][field_name]
+            except KeyError:
+                return None
         raise Exception
     return _prop_network_field
 
@@ -211,7 +199,6 @@ class Base(threading.Thread):
             f.stop()
             f.join(1)
         self.running = False
-<<<<<<< HEAD
 
 class NetworkMeta(type):
     def __new__(cls, name, parents, attrs):
@@ -235,7 +222,7 @@ class NetworkMeta(type):
 # Gestion des fields du module
         ls_field = get_network_fields(obj.module_conn)
         for field in ls_field:
-            setattr(obj, field, prop_network_field(conn, field))
+            setattr(obj, field['name'], prop_network_field(conn, field))
 
         return obj
 
