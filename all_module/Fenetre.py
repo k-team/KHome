@@ -8,14 +8,14 @@ import time
 if __name__ == '__main__':
     class FenetreCapteur(core.module.Base):
         update_rate = 10
-        class fenetre(
+        class Fenetre(
             core.fields.sensor.Fenetre
             core.fields.io.Readable,
             core.fields.Base):
         pass
 
     class FenetreActionneur(core.module.Base):
-        class fenetre(
+        class Fenetre(
             core.fields.actuator.Fenetre
             core.fields.io.Writable,
             core.fields.Base):
@@ -26,11 +26,11 @@ if __name__ == '__main__':
         fenetreCapteur = use_module('FenetreCapteur')
         fenetreActionneur = use_module('FenetreActionneur')
 
-        fenetre = fields.proxy.mix('FenetreCapteur', 'fenetre', 'FenetreActionneur', 'fenetre')
+        Fenetre = fields.proxy.mix('FenetreCapteur', 'Fenetre', 'FenetreActionneur', 'Fenetre')
 
         class Field(core.fields.proxy, core.fields.Base):
             proxy_module_name = "FenetreCapteur"
-            proxy_field_name = "fenetre"
+            proxy_field_name = "Fenetre"
 
         pass
 

@@ -8,14 +8,14 @@ import time
 if __name__ == '__main__':
     class PorteCapteur(core.module.Base):
         update_rate = 10
-        class porte(
+        class Porte(
             core.fields.sensor.Porte
             core.fields.io.Readable,
             core.fields.Base):
         pass
 
     class PorteActionneur(core.module.Base):
-        class porte(
+        class Porte(
             core.fields.actuator.Porte
             core.fields.io.Writable,
             core.fields.Base):
@@ -26,11 +26,11 @@ if __name__ == '__main__':
         porteCapteur = use_module('PorteCapteur')
         porteActionneur = use_module('PorteActionneur')
 
-        porte = fields.proxy.mix('PorteCapteur', 'porte', 'PorteActionneur', 'porte')
+        Porte = fields.proxy.mix('PorteCapteur', 'Porte', 'PorteActionneur', 'Porte')
 
         class Field(core.fields.proxy, core.fields.Base):
             proxy_module_name = "PorteCapteur"
-            proxy_field_name = "porte"
+            proxy_field_name = "Porte"
 
         pass
 
