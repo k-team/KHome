@@ -83,7 +83,7 @@ class Protocol(protocol.Protocol):
 
         res = {}
         res['success'] = True
-        res['objs'] = fields_value
+        res['fields'] = fields_value
         self.transport.write(json.dumps(res))
 
     def get_at(self, data):
@@ -105,7 +105,7 @@ class Protocol(protocol.Protocol):
 
         res = {}
         res['success'] = True
-        res['objs'] = fields_value
+        res['fields'] = fields_value
         self.transport.write(json.dumps(res))
 
     def get_from_to(self, data):
@@ -128,7 +128,7 @@ class Protocol(protocol.Protocol):
 
         res = {}
         res['success'] = True
-        res['objs'] = fields_value
+        res['fields'] = fields_value
         self.transport.write(json.dumps(res))
 
 class Factory(protocol.Factory):

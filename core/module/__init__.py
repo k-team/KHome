@@ -1,6 +1,8 @@
 import os
 import threading
+import json
 import socket
+import json
 from twisted.internet import reactor
 from twisted.internet.endpoints import UNIXServerEndpoint as ServerEndpoint
 import core.fields
@@ -60,9 +62,9 @@ def get_network_fields(module_conn):
     # module_conn.send(json.dumps(request))
     # data = json.loads(module_conn.recv())
     # parse data
-    return ['Field']
+    return [{'name': 'Field'}]
 
-def prop_network_field(module_conn, field):
+def prop_network_field(module_conn, field_name):
     def _prop_network_field(*args, **kwargs):
         """
         Access to the value of the field which name is *field* inside a extern
@@ -81,14 +83,59 @@ def prop_network_field(module_conn, field):
         return if it's was successfully done.
         """
         if len(args) == 1 and not kwargs:
-            return False # write
+            request = {}
+            request['code'] = 'set'
+            request['field_name'] = field_name
+            request['field_value'] = field_value
+            module_conn.send(json.dumps(request))
+            ans = json.loads(module_conn.recv(1024))
+
+            if not 'success' in ans or not ans['success']:
+                return False
+            return True
         elif not args:
             if not kwargs:
-                return None # read()
+                request = {}
+                request['code'] = 'get'
+                request['fields'] = [field_name]
+                module_conn.send(json.dumps(request))
+                ans = json.loads(module_conn.recv(1024))
+
+                if not 'success' in ans or not ans['success']:
+                    return None
+                try:
+                    return ans['fields'][field_name]
+                except KeyError:
+                    return None
             if len(kwargs) == 1 and 't' in kwargs:
-                return None # read(t=..)
+                request = {}
+                request['code'] = 'get_at'
+                request['time'] = kwargs['t']
+                request['fields'] = [field_name]
+                module_conn.send(json.dumps(request))
+                ans = json.loads(module_conn.recv(1024))
+
+                if not 'success' in ans or not ans['success']:
+                    return None
+                try:
+                    return ans['fields'][field_name]
+                except KeyError:
+                    return None
             if len(kwargs) == 2 and 'fr' in kwargs and 'to' in kwargs:
-                return None # read(fr=.., to=..)
+                request = {}
+                request['code'] = 'get_from_to'
+                request['time_from'] = kwargs['fr']
+                request['time_to'] = kwargs['to']
+                request['fields'] = [field_name]
+                module_conn.send(json.dumps(request))
+                ans = json.loads(module_conn.recv(1024))
+
+                if not 'success' in ans or not ans['success']:
+                    return None
+                try:
+                    return ans['fields'][field_name]
+                except KeyError:
+                    return None
         raise Exception
     return _prop_network_field
 
@@ -102,7 +149,7 @@ class BaseMeta(type):
         obj = super(BaseMeta, self).__call__(*args, **kwargs)
         cls = type(obj)
 
-        # Handle module name
+# Gestion du nom du module
         if not hasattr(obj, 'module_name'):
             if not hasattr(cls, 'module_name'):
                 setattr(obj, 'module_name', cls.__name__)
@@ -138,6 +185,8 @@ class BaseMeta(type):
 class Base(threading.Thread):
     __metaclass__ = BaseMeta
 
+    # module_name = 'Module'
+
     def __init__(self, **kwargs):
         super(Base, self).__init__()
         self.running = False
@@ -145,7 +194,7 @@ class Base(threading.Thread):
 
         if 'name' in kwargs:
             self.module_name = kwargs['name']
-        #module_fields = []
+        # module_fields = []
 
     def start(self):
         self.running = True
@@ -162,6 +211,7 @@ class Base(threading.Thread):
             f.stop()
             f.join(1)
         self.running = False
+<<<<<<< HEAD
 
 class NetworkMeta(type):
     def __new__(cls, name, parents, attrs):
