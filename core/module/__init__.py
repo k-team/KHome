@@ -2,7 +2,6 @@ import os
 import threading
 import json
 import socket
-import fields
 from twisted.internet import reactor
 from twisted.internet.endpoints import UNIXServerEndpoint as ServerEndpoint
 import core.fields
