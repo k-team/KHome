@@ -63,7 +63,7 @@ class Protocol(protocol.Protocol):
 
         res = {}
         res['success'] = re
-        self.transport.write(json.dumps(res))
+        self.transport.write(json.dumps(res) + '\n')
 
     def get_value(self, data):
         try:
@@ -83,8 +83,8 @@ class Protocol(protocol.Protocol):
 
         res = {}
         res['success'] = True
-        res['objs'] = fields_value
-        self.transport.write(json.dumps(res))
+        res['fields'] = fields_value
+        self.transport.write(json.dumps(res) + '\n')
 
     def get_at(self, data):
         try:
@@ -105,8 +105,8 @@ class Protocol(protocol.Protocol):
 
         res = {}
         res['success'] = True
-        res['objs'] = fields_value
-        self.transport.write(json.dumps(res))
+        res['fields'] = fields_value
+        self.transport.write(json.dumps(res) + '\n')
 
     def get_from_to(self, data):
         try:
@@ -128,8 +128,8 @@ class Protocol(protocol.Protocol):
 
         res = {}
         res['success'] = True
-        res['objs'] = fields_value
-        self.transport.write(json.dumps(res))
+        res['fields'] = fields_value
+        self.transport.write(json.dumps(res) + '\n')
 
 class Factory(protocol.Factory):
     def __init__(self, module):
