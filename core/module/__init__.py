@@ -58,7 +58,7 @@ def prop_field(field):
                 return field.read(**kwargs)
             if len(kwargs) == 2 and 'fr' in kwargs and 'to' in kwargs:
                 return field.read(**kwargs)
-        raise TypeError("Field isn't specified correctly")
+        raise ValueError("Field isn't specified correctly")
     return _prop_field
 
 def get_network_fields(module_sock):
@@ -117,7 +117,7 @@ def prop_network_field(module_conn, field_info):
                 return ans['fields'][field_name]
             except KeyError:
                 return None
-        raise TypeError("Field isn't specified correctly")
+        raise ValueError("Field isn't specified correctly")
     return _prop_network_field
 
 class BaseMeta(type):
@@ -157,7 +157,7 @@ class BaseMeta(type):
         ls_fields = []
         for f_cls in cls.__dict__.keys():
             f_cls = getattr(cls, f_cls)
-            if isinstance(f_cls, type) and issubclass(f_cls, core.fields.Base):
+            if isinstance(f_cls, type) and issubclass(f_cls, fields.Base):
                 field = f_cls()
                 setattr(obj, field.field_name, prop_field(field))
                 ls_fields += [field]
@@ -201,16 +201,11 @@ class Base(threading.Thread):
     """
     __metaclass__ = BaseMeta
 
-    #module_name = 'Module'
-
     def __init__(self, **kwargs):
         super(Base, self).__init__()
+        _setup_module(self, **kwargs)
         self.running = False
         self.endpoint = None
-
-        if 'name' in kwargs:
-            self.module_name = kwargs['name']
-        #module_fields = []
 
     def start(self):
         self.running = True
@@ -237,9 +232,17 @@ class Network(object):
 
     def __init__(self, **kwargs):
         super(Network, self).__init__()
+        _setup_module(self, **kwargs)
 
-        if 'name' in kwargs:
-            self.module_name = kwargs['name']
+def _setup_module(obj, **kwargs):
+    """
+    Refactoring for initializing operations for module classes.
+    """
+    if 'name' in kwargs:
+        obj.module_name = kwargs['name']
+
+    if not hasattr(obj, 'module_name') or not obj.module_name:
+        raise AttributeError('Module name must be given')
 
 def use_module(module_name):
     """
