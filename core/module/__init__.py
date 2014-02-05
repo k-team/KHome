@@ -61,10 +61,10 @@ def prop_field(field):
         raise TypeError("Field isn't specified correctly")
     return _prop_field
 
-def get_network_fields(module_conn):
+def get_network_fields(module_sock):
     """
-    Return the list of the fields of a module connected by the *module_conn*
-    socket.
+    Return the list of the fields of a module connected through the
+    *module_sock* socket.
     """
     # TODO
     request = {}
@@ -74,25 +74,14 @@ def get_network_fields(module_conn):
     return [{'name': 'Field'}]
 
 def prop_network_field(module_conn, field_info):
+    """
+    Access the value of the field named as *field* inside a external module
+    connected through the *module_sock* socket. The access is done either in
+    read or write mode depending on the parameters (same as prop_field, but
+    through socket connection).
+    """
     field_name = field_info['name']
-
     def _prop_network_field(*args, **kwargs):
-        """
-        Access to the value of the field which name is *field* inside a extern
-        module connected by the *module_conn* socket. The access is done in
-        write or read mode in function of the parameters.
-
-        Without parameters : return the last value saved
-
-        With named parameter *t* : return the value which the saved time is the
-        nearest of *t*.
-
-        With named parameters *fr* and *to* : return all the values saved
-        between the times [fr ; to]
-
-        With non-named parameter : add a new value at the current time and
-        return if it's was successfully done.
-        """
         if len(args) == 1 and not kwargs:
             request = {}
             request['code'] = 'set'
@@ -100,10 +89,7 @@ def prop_network_field(module_conn, field_info):
             request['field_value'] = field_value
             module_conn.write(json.dumps(request))
             ans = json.loads(module_conn.readline())
-
-            if not 'success' in ans or not ans['success']:
-                return False
-            return True
+            return ans.get('success', False)
         elif not args:
             if not kwargs:
                 request = {}
@@ -125,16 +111,19 @@ def prop_network_field(module_conn, field_info):
             module_conn.flush()
             ans = json.loads(module_conn.readline())
 
-            if not 'success' in ans or not ans['success']:
+            if not ans.get('success', False):
                 return None
             try:
                 return ans['fields'][field_name]
             except KeyError:
                 return None
-        raise Exception
+        raise TypeError("Field isn't specified correctly")
     return _prop_network_field
 
 class BaseMeta(type):
+    """
+    Metaclass for building a module based on a module-like class.
+    """
     ls_name = set()
 
     def __new__(cls, name, parents, attrs):
@@ -144,7 +133,7 @@ class BaseMeta(type):
         obj = super(BaseMeta, self).__call__(*args, **kwargs)
         cls = type(obj)
 
-        # Gestion du nom du module
+        # Handle module name
         if not hasattr(obj, 'module_name'):
             if not hasattr(cls, 'module_name'):
                 setattr(obj, 'module_name', cls.__name__)
@@ -160,8 +149,7 @@ class BaseMeta(type):
         try:
           os.remove(obj.module_socket)
         except OSError:
-          print 'Petite erreur en voulant supprimer', obj.module_socket
-          pass
+            pass # TODO logging ?
         endpoint = ServerEndpoint(reactor, obj.module_socket)
         endpoint.listen(connection.Factory(obj))
 
@@ -177,37 +165,11 @@ class BaseMeta(type):
 
         return obj
 
-class Base(threading.Thread):
-    __metaclass__ = BaseMeta
-
-    # module_name = 'Module'
-
-    def __init__(self, **kwargs):
-        super(Base, self).__init__()
-        self.running = False
-        self.endpoint = None
-
-        if 'name' in kwargs:
-            self.module_name = kwargs['name']
-        # module_fields = []
-
-    def start(self):
-        self.running = True
-        for f in self.module_fields:
-            f.start()
-        super(Base, self).start()
-
-    def run(self):
-        while self.running:
-            pass
-
-    def stop(self):
-        for f in self.module_fields:
-            f.stop()
-            f.join(1)
-        self.running = False
-
 class NetworkMeta(type):
+    """
+    Metaclass for building network-interfaced modules, the same way BaseMeta
+    builds modules.
+    """
     def __new__(cls, name, parents, attrs):
         return super(NetworkMeta, cls).__new__(cls, name, parents, attrs)
 
@@ -233,7 +195,44 @@ class NetworkMeta(type):
 
         return obj
 
+class Base(threading.Thread):
+    """
+    Base module, subclass this if only core module functionalities are needed.
+    """
+    __metaclass__ = BaseMeta
+
+    #module_name = 'Module'
+
+    def __init__(self, **kwargs):
+        super(Base, self).__init__()
+        self.running = False
+        self.endpoint = None
+
+        if 'name' in kwargs:
+            self.module_name = kwargs['name']
+        #module_fields = []
+
+    def start(self):
+        self.running = True
+        for f in self.module_fields:
+            f.start()
+        super(Base, self).start()
+
+    def run(self):
+        while self.running:
+            pass
+
+    def stop(self):
+        for f in self.module_fields:
+            f.stop()
+            f.join(1)
+        self.running = False
+
 class Network(object):
+    """
+    Network module base, built just like Base module, but with network
+    interfacing.
+    """
     __metaclass__ = NetworkMeta
 
     def __init__(self, **kwargs):
@@ -243,4 +242,7 @@ class Network(object):
             self.module_name = kwargs['name']
 
 def use_module(module_name):
+    """
+    Shortcut for referencing a module through network, given its module name.
+    """
     return Network(name=module_name)

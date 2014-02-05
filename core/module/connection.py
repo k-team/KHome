@@ -2,6 +2,10 @@ import json
 from twisted.internet import protocol
 
 class Protocol(protocol.Protocol):
+    """
+    Module specific protocol.
+    TODO write guidelines for protocol.
+    """
     def __init__(self, module):
         self.module = module
 
@@ -9,6 +13,7 @@ class Protocol(protocol.Protocol):
         if not self.module.running:
             return
 
+        # decode json data
         try:
             json_data = json.loads(data)
         except ValueError:
@@ -19,6 +24,7 @@ class Protocol(protocol.Protocol):
             self.err_code_not_found()
             return
 
+        # interpret protocol message
         code = str(json_data['code'])
         if code == 'get':
             self.get_value(json_data)
@@ -31,46 +37,58 @@ class Protocol(protocol.Protocol):
         else:
             self.err_code_not_found()
 
-    def error(self, msg):
-# TODO log errors
-        print msg
-        re = {'success': False}
-        self.transport.write(json.dumps(re))
+    def err(self, msg):
+        """
+        Main error handler, logging and outputting return status to transport.
+        """
+        print msg # TODO log errors *correctly*
+        json.dump({ 'success': False }, self.transport)
 
     def err_decode_data(self):
-        self.error('Impossible to decode the received data')
+        """
+        Error handler called when received data couldn't be decoded.
+        """
+        self.err('Impossible to decode the received data')
 
     def err_code_not_found(self):
-        self.error('Code not found in the query')
+        """
+        Error handler called when the query code wasn't found.
+        """
+        self.err('Code not found in the query')
 
     def err_field_error(self):
-        self.error('Field not found')
+        """
+        Error handler called when the queried field couldn't be found.
+        """
+        self.err('Field not found')
 
     def set_value(self, data):
+        """
+        Handler called to set a named field's value.
+        """
+
+        # decode the field caracteristics
         try:
             field_name = data['field_name']
             field_value = data['field_value']
         except (TypeError, KeyError):
-            self.err_decode_data()
-            return
+            return self.err_decode_data()
 
+        # set the field's value
         try:
-            f_set = getattr(self.module, field_name)
-            re = f_set(field_value)
+            value = getattr(self.module, field_name)(field_value)
         except (AttributeError, IOError):
-            self.err_field_error()
-            return
-
-        res = {}
-        res['success'] = re
-        self.transport.write(json.dumps(res) + '\n')
+            return self.err_field_error()
+        json.dump({ 'success': value }, self.transport)
 
     def get_value(self, data):
+        """
+        Handler for getting one or many fields' value(s).
+        """
         try:
             fields_name = data['fields']
         except (TypeError, KeyError):
-            self.err_decode_data()
-            return
+            return self.err_decode_data()
 
         fields_value = {}
         for field in fields_name:
@@ -78,44 +96,38 @@ class Protocol(protocol.Protocol):
                 get = getattr(self.module, field)
                 fields_value[field] = get()
             except (AttributeError, IOError):
-                self.err_field_error()
-                return
+                return self.err_field_error()
 
-        res = {}
-        res['success'] = True
-        res['fields'] = fields_value
-        self.transport.write(json.dumps(res) + '\n')
+        json.dump({ 'success': True, 'fields': fields_value }, self.transport)
 
     def get_at(self, data):
+        """
+        Handler for getting one or many fields' value(s) at a given time.
+        """
         try:
             fields_name = data['fields']
             time_at = float(data['time'])
         except (TypeError, KeyError):
-            self.err_decode_data()
-            return
+            return self.err_decode_data()
 
         fields_value = {}
         for field in fields_name:
             try:
-                get = getattr(self.module, field)
-                fields_value[field] = get(t=time_at)
+                fields_value[field] = getattr(self.module, field)(t=time_at)
             except (AttributeError, IOError):
-                self.err_field_error()
-                return
-
-        res = {}
-        res['success'] = True
-        res['fields'] = fields_value
-        self.transport.write(json.dumps(res) + '\n')
+                return self.err_field_error()
+        json.dump({ 'success': True, 'fields': fields_value }, self.transport)
 
     def get_from_to(self, data):
+        """
+        Handler for getting one or many fields' value(s) in a certain interval.
+        """
         try:
             fields_name = data['fields']
             time_from = float(data['time_from'])
             time_to = float(data['time_to'])
         except (TypeError, KeyError):
-            self.err_decode_data()
-            return
+            return self.err_decode_data()
 
         fields_value = {}
         for field in fields_name:
@@ -123,15 +135,13 @@ class Protocol(protocol.Protocol):
                 get = getattr(self.module, field)
                 fields_value[field] = get(fr=time_from, to=time_to)
             except (AttributeError, IOError):
-                self.err_field_error()
-                return
-
-        res = {}
-        res['success'] = True
-        res['fields'] = fields_value
-        self.transport.write(json.dumps(res) + '\n')
+                return self.err_field_error()
+        json.dump({ 'success': True, 'fields': fields_value }, self.transport)
 
 class Factory(protocol.Factory):
+    """
+    Factory for the module protocol.
+    """
     def __init__(self, module):
         self.module = module
 
