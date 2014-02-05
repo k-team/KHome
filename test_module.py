@@ -1,57 +1,60 @@
-from twisted.internet import reactor
-import core.module
-from core.module import use_module
-import core.fields
-import core.fields.io
-import core.fields.persistant
+import os
+import sys
 import time
+from twisted.internet import reactor
+
+sys.path.append('core')
+import fields
+import fields.io
+import fields.persistant
+from module import Base, use_module
 
 if __name__ == '__main__':
-    # class TempKelvin(core.module.Base):
+    # class TempKelvin(Base):
     #     update_rate = 10
 
     #     class kelvin(
-    #             # core.fields.sensor.Temperature,
-    #             core.fields.io.Readable,
-    #             core.fields.persistant.Volatile,
-    #             core.fields.Base):
+    #             # fields.sensor.Temperature,
+    #             fields.io.Readable,
+    #             fields.persistant.Volatile,
+    #             fields.Base):
     #         pass
 
-    # class TempsKelvinFiltered(core.module.Base):
+    # class TempsKelvinFiltered(Base):
     #         class kelvin(
-    #             core.fields.io.Readable,
-    #             core.fields.persistant.Volatile,
-    #             core.fields.Base):
+    #             fields.io.Readable,
+    #             fields.persistant.Volatile,
+    #             fields.Base):
     #             T = use_module('TempKelvin')
 
     #             def _acquire_value(self):
     #                 return T.kelvin() * 0.5 + T.kelvin(t=-1) * 0.5
 
-    # class TempCelcius(core.module.Base):
+    # class TempCelcius(Base):
     #     update_rate = 10
     #     T = use_module('TempKelvinFiltered')
 
-    #     class celcius(core.fields.io.Readable,
-    #             # core.fields.io.Writable,
-    #             core.fields.persistant.Volatile,
-    #             core.fields.Base):
+    #     class celcius(fields.io.Readable,
+    #             # fields.io.Writable,
+    #             fields.persistant.Volatile,
+    #             fields.Base):
 
     #         def _acquire_value(self):
     #             return T.kelvin() + 273.15
 
-    #     class Field1(core.fields.io.Readable,
-    #             core.fields.io.Writable,
-    #             core.fields.persistant.Volatile,
-    #             core.fields.Base):
+    #     class Field1(fields.io.Readable,
+    #             fields.io.Writable,
+    #             fields.persistant.Volatile,
+    #             fields.Base):
     #         pass
 
-    class Module(core.module.Base):
+    class Module(Base):
         update_rate = 5
 
-        class Field(core.fields.io.Readable,
-                core.fields.io.Writable,
-                core.fields.persistant.Volatile,
-                core.fields.Base):
+        class Field(fields.io.Readable,
+                fields.io.Writable,
+                fields.persistant.Volatile,
+                fields.Base):
             def acquire_value(self):
                 return time.time() % 10
 

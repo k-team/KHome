@@ -241,9 +241,6 @@ def _setup_module(obj, **kwargs):
     if 'name' in kwargs:
         obj.module_name = kwargs['name']
 
-    if not hasattr(obj, 'module_name') or not obj.module_name:
-        raise AttributeError('Module name must be given')
-
 def use_module(module_name):
     """
     Shortcut for referencing a module through network, given its module name.
