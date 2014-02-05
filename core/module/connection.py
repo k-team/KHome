@@ -37,12 +37,20 @@ class Protocol(protocol.Protocol):
         else:
             self.err_code_not_found()
 
+    def send_json(self, obj):
+        """
+        Send a json object through the transport.
+        """
+        #json.dump(obj, self.transport) # doesn't work
+        self.transport.write(json.dumps(obj) + '\n')
+        self.transport.flush()
+
     def err(self, msg):
         """
         Main error handler, logging and outputting return status to transport.
         """
         print msg # TODO log errors *correctly*
-        json.dump({ 'success': False }, self.transport)
+        self.send_json({ 'success': False })
 
     def err_decode_data(self):
         """
@@ -79,7 +87,7 @@ class Protocol(protocol.Protocol):
             value = getattr(self.module, field_name)(field_value)
         except (AttributeError, IOError):
             return self.err_field_error()
-        json.dump({ 'success': value }, self.transport)
+        self.send_json({ 'success': value })
 
     def get_value(self, data):
         """
@@ -98,7 +106,7 @@ class Protocol(protocol.Protocol):
             except (AttributeError, IOError):
                 return self.err_field_error()
 
-        json.dump({ 'success': True, 'fields': fields_value }, self.transport)
+        self.send_json({ 'success': True, 'fields': fields_value })
 
     def get_at(self, data):
         """
@@ -116,7 +124,7 @@ class Protocol(protocol.Protocol):
                 fields_value[field] = getattr(self.module, field)(t=time_at)
             except (AttributeError, IOError):
                 return self.err_field_error()
-        json.dump({ 'success': True, 'fields': fields_value }, self.transport)
+        self.send_json({ 'success': True, 'fields': fields_value })
 
     def get_from_to(self, data):
         """
@@ -136,7 +144,7 @@ class Protocol(protocol.Protocol):
                 fields_value[field] = get(fr=time_from, to=time_to)
             except (AttributeError, IOError):
                 return self.err_field_error()
-        json.dump({ 'success': True, 'fields': fields_value }, self.transport)
+        self.send_json({ 'success': True, 'fields': fields_value })
 
 class Factory(protocol.Factory):
     """
