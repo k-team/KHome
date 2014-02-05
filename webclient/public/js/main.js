@@ -1,6 +1,6 @@
 "use strict";
 
-angular.module('GHome', ['ngRoute', 'angularFileUpload'])
+angular.module('GHome', ['ngRoute', 'ui.bootstrap', 'angularFileUpload'])
   .config(function($routeProvider, $locationProvider, $httpProvider) {
     $routeProvider.when('/home', {
       templateUrl: '/partials/home.html'
@@ -17,18 +17,30 @@ angular.module('GHome', ['ngRoute', 'angularFileUpload'])
       redirectTo: '/home'
     });
 
-    // Refresh LESS when changing views
+    // LESS configuration
+    less.logLevel = 1;
+
+    // Refresh LESS when changing views (but not on first load)
+    var isFirstLoad = true;
     $httpProvider.interceptors.push(function($timeout) {
       return {
         response: function(response) {
-          less.sheets = [];
-          var links = document.getElementsByTagName('link');
-          angular.forEach(links, function(link) {
-            if (link.rel == 'stylesheet/less') {
-              less.sheets.push(link);
+          if (isFirstLoad) { // First load, do nothing
+            isFirstLoad = false;
+          } else { // Refresh all LESS stylesheets
+            var sheets = [], links = document.getElementsByTagName('link');
+            angular.forEach(links, function(link) {
+              if (link.rel == 'stylesheet/less') {
+                sheets.push(link);
+              }
+            });
+
+            // Check if the sheets should be refreshed
+            if (less.sheets.length != sheets.length && less.sheets != sheets) {
+              less.sheets = sheets;
+              less.refresh();
             }
-          });
-          less.refresh();
+          }
           return response;
         }
       };

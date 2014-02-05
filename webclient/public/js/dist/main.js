@@ -1,6 +1,6 @@
 "use strict";
 
-angular.module('GHome', ['ngRoute', 'angularFileUpload'])
+angular.module('GHome', ['ngRoute', 'ui.bootstrap', 'angularFileUpload'])
   .config(function($routeProvider, $locationProvider, $httpProvider) {
     $routeProvider.when('/home', {
       templateUrl: '/partials/home.html'
@@ -17,18 +17,30 @@ angular.module('GHome', ['ngRoute', 'angularFileUpload'])
       redirectTo: '/home'
     });
 
-    // Refresh LESS when changing views
+    // LESS configuration
+    less.logLevel = 1;
+
+    // Refresh LESS when changing views (but not on first load)
+    var isFirstLoad = true;
     $httpProvider.interceptors.push(function($timeout) {
       return {
         response: function(response) {
-          less.sheets = [];
-          var links = document.getElementsByTagName('link');
-          angular.forEach(links, function(link) {
-            if (link.rel == 'stylesheet/less') {
-              less.sheets.push(link);
+          if (isFirstLoad) { // First load, do nothing
+            isFirstLoad = false;
+          } else { // Refresh all LESS stylesheets
+            var sheets = [], links = document.getElementsByTagName('link');
+            angular.forEach(links, function(link) {
+              if (link.rel == 'stylesheet/less') {
+                sheets.push(link);
+              }
+            });
+
+            // Check if the sheets should be refreshed
+            if (less.sheets.length != sheets.length && less.sheets != sheets) {
+              less.sheets = sheets;
+              less.refresh();
             }
-          });
-          less.refresh();
+          }
           return response;
         }
       };
@@ -165,7 +177,7 @@ angular.module('GHome', ['ngRoute', 'angularFileUpload'])
     $location.path(module.has_view ? '/modules/' + module.id : '/settings');
   };
 }
-;function StoreCtrl($scope, ModuleService) {
+;function StoreCtrl($scope, $modal, ModuleService) {
   // All modules
   $scope.modules = [];
 
@@ -195,6 +207,31 @@ angular.module('GHome', ['ngRoute', 'angularFileUpload'])
     }).error(function() {
       $scope.uploading = false;
       // TODO handle errors better
+    });
+  };
+
+  $scope.modalInstances = {};
+  $scope.openModal = function(module) {
+    var modalScope = $scope.$new(true);
+
+    // Dismiss the modal
+    modalScope.dismiss = function() {
+      $scope.modalInstances[module.id].dismiss();
+    };
+
+    // Install the module
+    modalScope.install = function() {
+      $scope.install(module);
+      modalScope.dismiss();
+    };
+
+    // Access the modal's module
+    modalScope.module = module;
+
+    // Open the modal
+    $scope.modalInstances[module.id] = $modal.open({
+      templateUrl: 'modal.html',
+      scope: modalScope
     });
   };
 }

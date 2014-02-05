@@ -17,6 +17,6 @@ javascript:
       min: main.min.js
       raw: main.js
     size:
-      gz: 1891
-      min: 5356
-      raw: 11582
+      gz: 2023
+      min: 5709
+      raw: 12615

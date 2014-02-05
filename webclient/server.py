@@ -60,7 +60,7 @@ def api_available_module_icon(module_name):
     module_zipfile = os.path.join(dir_, module_name + '.zip')
     with zipfile.ZipFile(module_zipfile) as zf:
         try:
-            module_conf_filename = os.path.join(module_name, 'module.json')
+            module_conf_filename = os.path.join(module_name, catalog.CONFIG_FILE)
             with zf.open(module_conf_filename) as module_conf_zf:
                 module_conf = json.load(module_conf_zf)
             public_dir = module_conf.get('public_dir', 'public')
