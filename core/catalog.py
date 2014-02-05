@@ -8,18 +8,13 @@ import os
 import json
 import zipfile
 
+from module import get_directory, DIRECTORY
+
 _file = os.path.realpath(__file__)
 _root = os.path.dirname(os.path.dirname(_file))
 
 AVAILABLE_DIRECTORY = os.path.join(_root, 'available_modules')
-DIRECTORY = os.path.join(_root, 'modules')
 CONFIG_FILE = 'module.json'
-
-def get_directory(module_name):
-    """
-    Shortcut to get the directory for a module (absolute path).
-    """
-    return os.path.join(DIRECTORY, module_name)
 
 def get_config_file(module_name, directory=None):
     """

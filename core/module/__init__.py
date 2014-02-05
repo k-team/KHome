@@ -5,26 +5,50 @@ import socket
 import time
 from twisted.internet import reactor
 from twisted.internet.endpoints import UNIXServerEndpoint as ServerEndpoint
-import core.fields
-import connection
+
+import fields
+from . import connection
+
+_file = os.path.realpath(__file__)
+_root = os.path.dirname(os.path.dirname(os.path.dirname(_file)))
+
+DIRECTORY = os.path.join(_root, 'modules')
+
+def get_directory(module_name):
+    """
+    Shortcut to get the directory for a module (absolute path).
+    """
+    return os.path.join(DIRECTORY, module_name)
+
+def get_socket_name(module_name):
+    """
+    Return the filename of the socket of the module named *module_name*.
+    TODO add instance system.
+    """
+    return os.path.join(get_directory(module_name), module_name + '.sock')
+
+def get_socket(module_name):
+    """
+    Return a socket connected to the module named *module_name*.
+    The socket is transformed by the makefile function and has to be use as a
+    file object.
+    """
+    sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+    sock.connect(get_socket_name(module_name))
+    return sock.makefile('rw')
 
 def prop_field(field):
+    """
+    Access the value of the field named as *field*. The access is done
+    either in read or write mode depending on the parameters.
+
+    Several cases are handled, given the parameters of the call:
+    - none: return the last value saved
+    - *t*: return the value whose saved time is nearest
+    - *fr* and *to*: return all the values saved in the interval [fr, to]
+    - unnamed: add a new value and return if it was successful
+    """
     def _prop_field(*args, **kwargs):
-        """
-        Access to the value of the field which name is *field*. The access is
-        done in write or read mode in function of the parameters.
-
-        Without parameters : return the last value saved
-
-        With named parameter *t* : return the value which the saved time is the
-        nearest of *t*.
-
-        With named parameters *fr* and *to* : return all the values saved
-        between the times [fr ; to]
-
-        With non-named parameter : add a new value at the current time and
-        return if it's was successfully done.
-        """
         if len(args) == 1 and not kwargs:
             return field.write(*args)
         elif not args:
@@ -34,36 +58,19 @@ def prop_field(field):
                 return field.read(**kwargs)
             if len(kwargs) == 2 and 'fr' in kwargs and 'to' in kwargs:
                 return field.read(**kwargs)
-        raise Exception
+        raise TypeError("Field isn't specified correctly")
     return _prop_field
-
-def get_module_socket(module_name):
-    """
-    Return the filename of the socket of the module named *module_name*
-    """
-# TODO rearrange this
-    return module_name + '.sock'
-
-def get_module_conn(module_name):
-    """
-    Return a socket connected to the module named *module_name*.
-    The socket is transformed by the makefile function and has to be use as a
-    file object.
-    """
-    sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-    sock.connect(get_module_socket(module_name))
-    return sock.makefile('rw')
 
 def get_network_fields(module_conn):
     """
     Return the list of the fields of a module connected by the *module_conn*
     socket.
     """
-# TODO
+    # TODO
     request = {}
-    # module_conn.send(json.dumps(request))
-    # data = json.loads(module_conn.recv())
-    # parse data
+    #module_conn.send(json.dumps(request))
+    #data = json.loads(module_conn.recv())
+    #parse data
     return [{'name': 'Field'}]
 
 def prop_network_field(module_conn, field_info):
@@ -137,7 +144,7 @@ class BaseMeta(type):
         obj = super(BaseMeta, self).__call__(*args, **kwargs)
         cls = type(obj)
 
-# Gestion du nom du module
+        # Gestion du nom du module
         if not hasattr(obj, 'module_name'):
             if not hasattr(cls, 'module_name'):
                 setattr(obj, 'module_name', cls.__name__)
@@ -149,7 +156,7 @@ class BaseMeta(type):
         type(self).ls_name.add(obj.module_name)
 
         # Handle module socket (server side)
-        setattr(obj, 'module_socket', get_module_socket(obj.module_name))
+        setattr(obj, 'module_socket', get_socket_name(obj.module_name))
         try:
           os.remove(obj.module_socket)
         except OSError:
@@ -208,18 +215,18 @@ class NetworkMeta(type):
         obj = super(NetworkMeta, self).__call__(*args, **kwargs)
         cls = type(obj)
 
-# Gestion du nom du module
+        # Gestion du nom du module
         if not hasattr(obj, 'module_name'):
             if not hasattr(cls, 'module_name'):
                 setattr(obj, 'module_name', cls.__name__)
             else:
                 setattr(obj, 'module_name', cls.module_name)
 
-# Gestion de la connection au module
-        conn = get_module_conn(obj.module_name)
+        # Gestion de la connection au module
+        conn = get_socket(obj.module_name)
         setattr(obj, 'module_conn', conn)
 
-# Gestion des fields du module
+        # Gestion des fields du module
         ls_field = get_network_fields(obj.module_conn)
         for field in ls_field:
             setattr(obj, field['name'], prop_network_field(conn, field))
