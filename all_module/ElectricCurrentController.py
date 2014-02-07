@@ -4,21 +4,18 @@ import core.fields
 import core.fields.io
 import core.fields.persistant
 import time
-import all_modules.electricCurrent
+import all_modules.ElectricCurrent
+import all_modules.HumanPresence
 
 if __name__ == '__main__':
     class ElectricCurrentController(core.module.Base)
-        electricCurrent = use_module('ElectricCurrent')
-        humanPresence = use_module('HumanPresence')
+        electricCurrent = use_module('ElectricCurrentSwitch')
+        humanPresence = use_module('HumanPresenceSensor')
 
-        ElectricCurrentController = fields.proxy.mix('ElectricCurrentController',
-                                   		 'ElectricCurrent', 'ElectricCurrent',
-                                   		 'HumanPresence', 'Presence')
-        def always(self):
-            '''
-            if electricCurrent != 0
-							if humanPresence.Presence
-								ShutDownTheElectricCurrentSwitch
-							else 
-								do nothing
-						'''
+        class Controller(core.fields.Base):
+
+            def always(self):
+                if humanPresence.Presence() :
+                   electricCurrent.ElectricCurrentSwitch(true)
+                else
+                   electricCurrent.ElectricCurrentSwitch(false)
