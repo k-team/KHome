@@ -5,12 +5,12 @@ import fields.io
 import fields.persistant
 import time
 
-class LightButton(core.module.Base)
+class Shutter(core.module.Base)
     update_rate = 10
     
-    LightButton = fields.proxy.mix('LightButton',
-                                   'LightButtonSensor','LightButton',
-                                   'LightButtonActuator','LightButton')
+    Shutter = fields.proxy.mix('Shutter',
+                                   'Shutter','ShutterSensor',
+                                   'Shutter=','ShutterActuator')
         
         
     #code du main a remettre lais il était chelou donc pr le moment je l'ai vire...

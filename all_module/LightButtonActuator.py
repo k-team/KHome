@@ -8,7 +8,7 @@ import time
 class LightButtonActuator(core.module.Base):
 	update_rate = 10
     class LightButton(
-            core.fields.actuator.LightButtonActuator
+            core.fields.actuator.LightButton
             core.fields.io.Writable,
             core.fields.Base)
 		
