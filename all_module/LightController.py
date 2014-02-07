@@ -6,7 +6,6 @@ import fields.persistant
 import time
 
 
-
 class LightController(module.Base):
     light = use_module('LightButton')
     presence = use_module('HumanPresence')
@@ -14,6 +13,7 @@ class LightController(module.Base):
     
     class Controller(
         fields.Base):
+
         
         def _init_:
             luminosityLimit=60 # for the time being it will be a percentage. idk the real values
