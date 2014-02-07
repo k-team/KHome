@@ -8,8 +8,8 @@ import time
 class WaterFlush(core.module.Base):
     update_rate = 10
     pistonActuator = use_module('ActuatorPiston')
-    humanPresence = use_module('HumanPresence')
+    humanPresence = use_module('HumanPresenceSensor')
 
     Flush = fields.proxy.mix('Flush',
     												 'ActuatorPiston', 'Piston', 
-    												 'HumanPresence', 'Presence')
+    												 'HumanPresenceSensor', 'Presence')

@@ -5,10 +5,10 @@ import core.fields.io
 import core.fields.persistant
 import time
 
-class HumanPresenceSensor(core.module.Base):
+class WaterValveSensor(core.module.Base):
     update_rate = 10
-    class Presence(
-            core.fields.sensor.Presence,
+    class WaterValve(
+            core.fields.sensor.WaterValve,
             core.fields.io.Readable,
             core.fields.Base):
         pass
