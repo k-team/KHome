@@ -9,13 +9,16 @@ import all_modules.AlarmActuator
 
 class SmokeSecurityController(core.module.Base):
     update_rate = 10
-    SMOKE_VALUE = 100
     smoke_sensor = use_module('SmokeSensor')
     alarm_actuator = use_module('AlarmActuator')
     
     class Controller(
         core.fields.Base):
         
+        def _init_:
+            SMOKE_VALUE = 100
+            super(Controller, self)._init_
+
         def always(self):
             if smoke_sensor.Smoke() > SMOKE_VALUE:
                 alarm_actuator.Alarm(true)

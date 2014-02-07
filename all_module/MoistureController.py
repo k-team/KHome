@@ -9,10 +9,14 @@ import all_modules.FanActuator
 
 class MoistureController(core.module.Base):
     update_rate = 10
-    MOISTURE_VALUE = 100
     moisture_sensor = use_module('MoistureSensor')
     fan_actuator = use_module('FanActuator')
     class Controller(core.fields.Base):
+        
+        def _init_:
+            MOISTURE_VALUE = 100
+            super(Controller, self)._init_
+
         def always(self):
             if moisture_sensor.Moisture > MOISTURE_VALUE
                 fan_actuator.Fan(true)
