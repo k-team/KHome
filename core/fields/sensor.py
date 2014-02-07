@@ -19,6 +19,10 @@ def Dummy(dummy_funct):
 
 # TemperatureSensor = Dummy(lambda t:
 #         math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
+
+#DoorSensor = Dummy(
+#        True if random.random() > 0.5 else False)
+
 AirSensor = Dummy(lambda t:
         math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
 
@@ -31,26 +35,47 @@ COSensor = Dummy(lambda t:
 CameraSensor = Dummy(lambda t:
         math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
 
-DoorSensor = Dummy(lambda t:
+ElectricCurrentSensor = Dummy(
+        True if random.random() > 0.5 else False)
+
+LightButtonSensor = Dummy(
+        True if random.random() > 0.5 else False)
+
+LuminosityExteriorSensor = Dummy(lambda t:
         math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
 
-ElectricCurrentSensor = Dummy(lambda t:
+MethaneSensor = Dummy(lambda t:
         math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
 
-Sensor = Dummy(lambda t:
+MoistureSensor = Dummy(lambda t:
         math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
 
-Sensor = Dummy(lambda t:
+OutsideBrightnessSensor = Dummy(lambda t:
         math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
 
-Sensor = Dummy(lambda t:
+PropaneSensor = Dummy(lambda t:
         math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
 
-Sensor = Dummy(lambda t:
+RainForecast = Dummy(lambda t:
         math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
 
-Sensor = Dummy(lambda t:
+ShutterSensor = Dummy(lambda t:
         math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
+
+SmokeSensor = Dummy(lambda t:
+        math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
+
+SoundSensor = Dummy(lambda t:
+        math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
+
+TemperatureForecast = Dummy(lambda t:
+        math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
+
+TemperatureExteriorSensor = Dummy(lambda t:
+        math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
+
+
+
 
 class SensorConnection(Protocol):
     def __init__(self, sensor, filter_id):
