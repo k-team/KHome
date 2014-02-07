@@ -9,5 +9,5 @@ class Temperature(core.module.Base):
     update_rate = 10
     salle = use_module('Salle')
     Temperature = fields.proxy.mix('Temperature',
-                                   'TempCapteur', 'Temperature',
-                                   'TempActionneur', 'Temperature')
+                                   'TemperatureSensor', 'Temperature',
+                                   'TemperatureActuator', 'Temperature')
