@@ -9,12 +9,15 @@ import all_modules.AlarmActuator
 
 class BabyMonitoringController(core.module.Base)
     update_rate = 10
-    DECIBEL_VALUE = 100
     sound_sensor = use_module('SoundSensor')
     alarm_actuator = use_module('AlarmActuator')
-    
+
     class Controller(
         core.fields.Base):
+
+        def _init_:
+            DECIBEL_VALUE = 100
+            super(Controller, self)._init_
         
         def always(self):
             if sound_sensor.Sound() > DECIBEL_VALUE:
