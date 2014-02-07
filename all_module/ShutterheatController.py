@@ -1,15 +1,13 @@
 from twisted.internet import reactor
-import core.module
-import core.fields
-import core.fields.io
-import core.fields.persistant
+import module
+import fields
+import fields.io
+import fields.persistant
 import time
 
 
 
-
-if __name__ == '__main__':
-class ShutterController(core.module.Base)
+class ShutterController(module.Base)
     update_rate = 10
 
     shutter = use_module('Shutter')
@@ -17,7 +15,7 @@ class ShutterController(core.module.Base)
     tempExt = use_module('TemperatureExteriorSensor')
     
     class Controller(
-        core.fields.Base):
+        fields.Base):
         
         def always(self):
             if tempInt.Temperature() < tempInt.seuil :
