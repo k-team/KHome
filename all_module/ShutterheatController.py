@@ -18,10 +18,17 @@ class ShutterController(core.module.Base)
             core.fields.Base):
             
             def always(self):
-                if presence.Presence() :
-                    light.LightButton(true)
-                else
-                    light.LightButton(false)
-        
+                if tempInt.Temperature() < tempInt.seuil :
+                    if tempInt.Temperature() < tempExt.Temperature():
+                        shutter.Shutter(100)
+                    else :
+                        shutter.Shutter(0)
+                elif tempInt.Temperature() == tempInt.seuil :
+                        shutter.Shutter(0)    
+                else :
+                    if tempInt.Temperature() < tempExt.Temperature():
+                        shutter.Shutter(0)
+                    else :
+                        shutter.Shutter(100)
         
     #code du main a remettre lais il était chelou donc pr le moment je l'ai vire...

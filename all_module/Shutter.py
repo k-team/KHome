@@ -10,7 +10,10 @@ class Shutter(core.module.Base)
     
     Shutter = fields.proxy.mix('Shutter',
                                    'Shutter','ShutterSensor',
-                                   'Shutter=','ShutterActuator')
+                                   'Shutter','ShutterActuator'):
+        '''this attribute represent the value of the opening of the shutters
+            100 is fully opened, 0 is closed'''
+            pass
         
         
     #code du main a remettre lais il était chelou donc pr le moment je l'ai vire...
