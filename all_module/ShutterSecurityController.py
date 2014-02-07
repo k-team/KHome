@@ -4,13 +4,17 @@ import core.fields
 import core.fields.io
 import core.fields.persistant
 import time
-import all_modules.LightButton
-import all_modules.HumanPresence
+import core.all_modules.Shutter
+import core.all_modules.Temperature
+import core.all_modules.TemperatureForecast
+
+
+
 
 if __name__ == '__main__':
-    class LightController(core.module.Base)
-        light = use_module('LightButton')
-        presence = use_module('HumanPresence')
+class ShutterController(core.module.Base)
+        shutter= use_module('Shutter')
+        temp = use_module('Temperature')
         
         class Controller(
             core.fields.Base):
@@ -20,8 +24,6 @@ if __name__ == '__main__':
                     light.LightButton(true)
                 else
                     light.LightButton(false)
-                
-            
-            
         
-    #code du main a remettre mais il etait chelou donc pr le moment je l'ai vire...
+        
+    #code du main a remettre lais il était chelou donc pr le moment je l'ai vire...
