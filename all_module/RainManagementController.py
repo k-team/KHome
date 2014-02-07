@@ -1,21 +1,25 @@
-from twisted.internet import reactor
-import core.module
-import core.fields
-import core.fields.io
-import core.fields.persistant
-import time
+import module
+import fields
+import fields.io
+import fields.persistant
+import fields.proxy
+import fields.sensor
+import fields.actuator
+from module import use_module
 
 class RainManagementController(core.module.Base):
     update_rate = 10
     window = use_module('WindowRainManagement')
     door = use_module('DoorRainManagement')
-    class Controller(core.fields.Base):
+    class controller(core.fields.Base):
         def always(self):
-           if window.Management() = 'RAIN'
+            curr_win_management = window.Management()
+            curr_door_management = door.Management()    
+            if curr_win_management == 'RAIN':
                 window.Management('CLOSE')
-           else:
+            else:
                 window.Management('OPEN')
-           if door.Management() = 'RAIN'
+            if curr_door_management == 'RAIN':
                 door.Management('CLOSE')
-           else:
+            else:
                 door.Management('OPEN')

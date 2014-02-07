@@ -1,36 +1,32 @@
 import module
-from module import use_module
 import fields
+import fields.io
+import fields.persistant
+import fields.proxy
+import fields.sensor
+import fields.actuator
+from module import use_module
 
-# module constants
-LIMIT = 20
-UP_DELTA = 5
-DOWN_DELTA = 7
-
-class TemperatureController(module.Base):
+class TemperatureController(core.module.Base):
     update_rate = 10
-
     temperature = use_module('Temperature')
     temperature_forecast = use_module('TemperatureForecast')
-
-    class controller(fields.Base):
-        def __init__(self):
-            self.limit = 20
-            self.delta_plus = 5
-            self.delta_moins = 7
-            super(TemperatureController.controller, self).__init__()
-
+    class controller(core.fields.Base):
+        def _init_:
+            limit = 20
+            delta_plus = 5
+            delta_moins = 7
+            super(TemperatureController, self)._init_
         def always(self):
-            temperature = self.module.temperature
-            measured_temperature = temperature.temperature()
-            temperature_forecast = self.module.temperature_forecast.temperature()
-            if measured_temperature < self.limit:
-                if temperature_forecast > self.limit + self.delta_plus:
-                    temperature.temperature(self.limit)
-                if temperature_forecast < self.limit:
-                    temperature.temperature(self.limit)
-            if measured_temperature > self.limit:
-                if temperature_forecast < self.limit - self.delta_moins:
-                    temperature.temperature(self.limit)
-                if temperature_forecast > self.limit:
-                    temperature.temperature(self.limit)
+            current_temp = temperature.Temperature()
+            current_forecast = temperature_forecast.Temperature()
+            if current_temp < limit:
+                if current_forecast > limit + delta_plus:
+                    temperature.Temperature(limit)
+                elif current_forecast < limit:
+                    temperature.Temperature(limit)
+            elif current_temp > limit:
+                if current_forecast < limit - delta_moins:
+                    temperature.Temperature(limit)
+                elif current_forecast > limit:
+                    temperature.Temperature(limit)
