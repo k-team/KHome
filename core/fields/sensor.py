@@ -13,14 +13,11 @@ def Dummy(dummy_funct):
     """
 
     class _Dummy(object):
-        def __init__(self):
-            super(_Dummy, self).__init__()
-
         def acquire_value(self):
             return dummy_funct(time.time())
     return _Dummy
 
-TemperaturSensor = Dummy(lambda t: math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
+TemperatureSensor = Dummy(lambda t: math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
 
 class SensorConnection(Protocol):
     def __init__(self, sensor, filter_id):
