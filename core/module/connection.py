@@ -79,7 +79,8 @@ class Protocol(protocol.Protocol):
         ans = {}
         ans['fields'] = []
         for f in self.module.module_fields:
-            ans['fields'] += [{'name': f.field_name}]
+            ans['fields'] += [{'name': f.field_name,
+                'type': 'string'}]
         self.send_json(ans)
 
     def set_value(self, data):

@@ -1,7 +1,26 @@
+import time
+import math
+import random
 from twisted.internet import reactor
 from twisted.internet.protocol import ClientCreator
 from twisted.internet.protocol import ClientFactory
 from twisted.internet.protocol import Protocol
+
+def Dummy(dummy_funct):
+    """
+    Return a class generating dummy data describe by the *dummy_funct* function.
+    *dummy_funct* receive the time as parameter and return one value
+    """
+
+    class _Dummy(object):
+        def __init__(self):
+            super(_Dummy, self).__init__()
+
+        def acquire_value(self):
+            return dummy_funct(self.dummy_time)
+    return _Dummy
+
+TemperaturSensor = Dummy(lambda t: math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
 
 class SensorConnection(Protocol):
     def __init__(self, sensor, filter_id):

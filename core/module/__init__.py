@@ -192,6 +192,7 @@ class NetworkMeta(type):
         # Gestion des fields du module
         info = get_network_info(conn)
         fields = info['fields']
+        setattr(obj, 'fields', fields)
         for field in fields:
             setattr(obj, field['name'], prop_network_field(conn, field))
 
