@@ -26,7 +26,9 @@ class Protocol(protocol.Protocol):
 
         # interpret protocol message
         code = str(json_data['code'])
-        if code == 'get':
+        if code == 'knockknock':
+            self.knock_knock()
+        elif code == 'get':
             self.get_value(json_data)
         elif code == 'get_at':
             self.get_at(json_data)
@@ -43,7 +45,7 @@ class Protocol(protocol.Protocol):
         """
         #json.dump(obj, self.transport) # doesn't work
         self.transport.write(json.dumps(obj) + '\n')
-        self.transport.flush()
+        # self.transport.flush()
 
     def err(self, msg):
         """
@@ -69,6 +71,16 @@ class Protocol(protocol.Protocol):
         Error handler called when the queried field couldn't be found.
         """
         self.err('Field not found')
+
+    def knock_knock(self):
+        """
+        Send all informations about the module via transport
+        """
+        ans = {}
+        ans['fields'] = []
+        for f in self.module.module_fields:
+            ans['fields'] += [{'name': f.field_name}]
+        self.send_json(ans)
 
     def set_value(self, data):
         """

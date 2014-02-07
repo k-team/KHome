@@ -61,22 +61,23 @@ def prop_field(field):
         raise ValueError("Field isn't specified correctly")
     return _prop_field
 
-def get_network_fields(module_sock):
+def get_network_info(module_conn):
     """
     Return the list of the fields of a module connected through the
-    *module_sock* socket.
+    *module_conn* file socket.
     """
     # TODO
     request = {}
-    #module_conn.send(json.dumps(request))
-    #data = json.loads(module_conn.recv())
-    #parse data
-    return [{'name': 'Field'}]
+    request['code'] = 'knockknock'
+    module_conn.write(json.dumps(request) + '\n')
+    module_conn.flush()
+    ans = json.loads(module_conn.readline())
+    return ans
 
 def prop_network_field(module_conn, field_info):
     """
     Access the value of the field named as *field* inside a external module
-    connected through the *module_sock* socket. The access is done either in
+    connected through the *module_conn* file socket. The access is done either in
     read or write mode depending on the parameters (same as prop_field, but
     through socket connection).
     """
@@ -189,8 +190,9 @@ class NetworkMeta(type):
         setattr(obj, 'module_conn', conn)
 
         # Gestion des fields du module
-        ls_field = get_network_fields(obj.module_conn)
-        for field in ls_field:
+        info = get_network_info(conn)
+        fields = info['fields']
+        for field in fields:
             setattr(obj, field['name'], prop_network_field(conn, field))
 
         return obj
