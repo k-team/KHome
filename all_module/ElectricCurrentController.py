@@ -1,13 +1,13 @@
 from twisted.internet import reactor
-import core.module
-import core.fields
-import core.fields.io
-import core.fields.persistant
+import module
+import fields
+import fields.io
+import fields.persistant
 import time
 import all_modules.electricCurrent
 
 if __name__ == '__main__':
-    class ElectricCurrentController(core.module.Base)
+    class ElectricCurrentController(module.Base)
         electricCurrent = use_module('ElectricCurrent')
         humanPresence = use_module('HumanPresence')
 
@@ -19,6 +19,6 @@ if __name__ == '__main__':
             if electricCurrent != 0
 							if humanPresence.Presence
 								ShutDownTheElectricCurrentSwitch
-							else 
+							else
 								do nothing
 						'''

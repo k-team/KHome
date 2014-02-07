@@ -1,13 +1,10 @@
-from twisted.internet import reactor
-import core.module
-import core.fields
-import core.fields.io
-import core.fields.persistant
-import time
+import module
+import fields
+import fields.io
+import fields.actuator
 
-class AlarmActuator(core.module.Base):
+class AlarmActuator(module.Base):
     update_rate = 10
-    class Alarm(
-            core.fields.actuator.Alarm,
-            core.fields.io.Writable,
-            core.fields.Base)
+
+    class Alarm(fields.actuator.Alarm, fields.io.Writable, fields.Base):
+        pass

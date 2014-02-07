@@ -1,15 +1,11 @@
-from twisted.internet import reactor
-import core.module
-import core.fields
-import core.fields.io
-import core.fields.persistant
-import time
+import module
+import fields
+import fields.io
+import fields.sensor
+import fields.persistant
 
-class ShutterSensor(core.module.Base):
+class ShutterSensor(module.Base):
     update_rate = 10
-    class Shutter(
-            core.fields.sensor.Shutter
-            core.fields.io.Readable,
-            core.fields.persistant.Volatile,
-            core.fields.Base):
+
+    class shutter(fields.sensor.Shutter, fields.io.Readable, fields.persistant.Volatile, fields.Base):
         pass

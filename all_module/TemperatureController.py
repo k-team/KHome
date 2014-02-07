@@ -1,24 +1,21 @@
-from twisted.internet import reactor
-import core.module
-import core.fields
-import core.fields.io
-import core.fields.persistant
-import time
-import all_modules.temperature
+import module
+from module import use_module
+import fields
+import fields.io
+import fields.persistant
 
-if __name__ == '__main__':
-    class TemperatureController(core.module.Base)
-        temperature = use_module('Temperature')
-        temperatureForecast = use_module('TemperatureForecast')
+class TemperatureController(module.Base):
+    Temperature = use_module('Temperature')
+    TemperatureForecast = use_module('TemperatureForecast')
 
-        TemperatureController = fields.proxy.mix('TemperatureController',
-                                   		 'Temperature', 'Temperature',
-                                   		 'TemperatureForecast', 'Temperature')
-        def always(self):
-            '''
-            if temperature < threshold (desired temperature)
-							if temperatureForecast.temperature(t + 1) < threshold
-								RaiseTheTemperature
-							else 
-								LowerTheTemperature
-						'''
+    temperature_controller = fields.proxy.mix('TemperatureController',
+            'Temperature', 'Temperature', 'TemperatureForecast', 'Temperature')
+
+    def always(self):
+        """
+        if temperature < threshold (desired temperature):
+            if temperatureForecast.temperature(t + 1) < threshold:
+                # RaiseTheTemperature
+            else:
+                # LowerTheTemperature
+        """

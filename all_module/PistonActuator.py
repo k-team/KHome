@@ -1,14 +1,10 @@
-from twisted.internet import reactor
-import core.module
-import core.fields
-import core.fields.io
-import core.fields.persistant
-import time
+import module
+import fields
+import fields.io
+import fields.actuator
 
-class PistonActuator(core.module.Base):
+class PistonActuator(module.Base):
     update_rate = 10
-    class Piston(
-            core.fields.actuator.Piston,
-            core.fields.io.Writable,
-            core.fields.Base):
+
+    class piston(fields.actuator.Piston, fields.io.Writable, fields.Base):
         pass

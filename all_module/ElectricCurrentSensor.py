@@ -1,16 +1,16 @@
 from twisted.internet import reactor
-import core.module
-import core.fields
-import core.fields.io
-import core.fields.persistant
+import module
+import fields
+import fields.io
+import fields.persistant
 import time
 
-class ElectricCurrentSensor(core.module.Base):
+class ElectricCurrentSensor(module.Base):
     update_rate = 10
     class ElectricCurrent(
-            core.fields.sensor.ElectricCurrent
-            core.fields.io.Readable,
-            core.fields.persistant.Volatile,
-            core.fields.Base):
+            fields.sensor.ElectricCurrent
+            fields.io.Readable,
+            fields.persistant.Volatile,
+            fields.Base):
         pass
-        
+

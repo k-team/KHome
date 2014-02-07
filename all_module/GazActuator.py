@@ -1,13 +1,13 @@
 from twisted.internet import reactor
-import core.module
-import core.fields
-import core.fields.io
-import core.fields.persistant
+import module
+import fields
+import fields.io
+import fields.persistant
 import time
 
-class GazActuator(core.module.Base):
+class GazActuator(module.Base):
     update_rate = 10
     class Gaz(
-            core.fields.actuator.Gaz,
-            core.fields.io.Writable,
-            core.fields.Base)
+            fields.actuator.Gaz,
+            fields.io.Writable,
+            fields.Base)

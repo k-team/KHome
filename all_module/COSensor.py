@@ -1,14 +1,14 @@
 from twisted.internet import reactor
-import core.module
-import core.fields
-import core.fields.io
-import core.fields.persistant
+import module
+import fields
+import fields.io
+import fields.persistant
 import time
 
-class COSensor(core.module.Base):
+class COSensor(module.Base):
     update_rate = 10
     class COPresence(
-            core.fields.sensor.COPresence,
-            core.fields.io.Readable,
-            core.fields.Base):
+            fields.sensor.COPresence,
+            fields.io.Readable,
+            fields.Base):
         pass

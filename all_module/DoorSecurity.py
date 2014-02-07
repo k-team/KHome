@@ -1,18 +1,12 @@
-from twisted.internet import reactor
-import core.module
-import core.fields
-import core.fields.io
-import core.fields.persistant
-import time
+import module
+from module import use_module
+import fields.proxy
 
-class DoorSecurity(core.module.Base):
+class DoorSecurity(module.Base):
     update_rate = 10
-    doorAccess = use_module('DoorAccess')
+    door_access = use_module('DoorAccess')
     recognition = use_module('Recognition')
-    alarmActuator = use_module('AlarmActuator')
+    alarm_actuator = use_module('AlarmActuator')
 
-    Security = fields.proxy.mix('Security',
-    														'DoorAccess', 'Door', 
-    														'Recognition', 'Recognised', 
-    														'AlarmActuator', 'Alarm')
-    
+    security = fields.proxy.mix('Security', 'DoorAccess', 'Door',
+            'Recognition', 'Recognised', 'AlarmActuator', 'Alarm')

@@ -1,14 +1,11 @@
-from twisted.internet import reactor
-import core.module
-import core.fields
-import core.fields.io
-import core.fields.persistant
-import time
+import module
+import fields
+import fields.io
+import fields.actuator
 
-class TemperatureActuator(core.module.Base):
+class TemperatureActuator(module.Base):
     update_rate = 10
-    class Temperature(
-        core.fields.actuator.Temperature,
-        core.fields.io.Writable,
-        core.fields.Base):
-    pass
+
+    class temperature(fields.actuator.Temperature, fields.io.Writable,
+            fields.Base):
+        pass

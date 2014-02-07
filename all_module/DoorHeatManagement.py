@@ -1,12 +1,7 @@
-from twisted.internet import reactor
-import core.module
-import core.fields
-import core.fields.io
-import core.fields.persistant
-import time
+import module
+import fields.proxy
 
-class DoorHeatManagement(core.module.Base):
+class DoorHeatManagement(module.Base):
     update_rate = 10
-    Management = fields.proxy.mix('Management',
-                                  'TemperatureForecast', 'Temperature',
-                                  'DoorAccess', 'Door')
+    management = fields.proxy.mix('Management', 'TemperatureForecast',
+            'Temperature', 'DoorAccess', 'Door')

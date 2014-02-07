@@ -1,15 +1,15 @@
 from twisted.internet import reactor
-import core.module
-import core.fields
-import core.fields.io
-import core.fields.persistant
+import module
+import fields
+import fields.io
+import fields.persistant
 import time
 
-class DoorSensor(core.module.Base):
+class DoorSensor(module.Base):
     update_rate = 10
     class Door(
-            core.fields.sensor.Door
-            core.fields.io.Readable,
-            core.fields.Base):
+            fields.sensor.Door
+            fields.io.Readable,
+            fields.Base):
         pass
-        
+

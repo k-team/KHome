@@ -1,15 +1,14 @@
-from twisted.internet import reactor
-import core.module
-import core.fields
-import core.fields.io
-import core.fields.persistant
-import time
+import module
+from module import use_module
+import fields
+import fields.io
+import fields.proxy
 
-class WindowAccess(core.module.Base):
+class WindowAccess(module.Base):
     update_rate = 10
-    windowSensor = use_module('WindowSensor')
-    windowActuator = use_module('WindowActuator')
 
-    Window = fields.proxy.mix('Window', 
-                              'WindowSensor', 'Window', 
-                              'WindowActuator', 'Window')
+    WindowSensor = use_module('WindowSensor')
+    WindowActuator = use_module('WindowActuator')
+
+    window = fields.proxy.mix('Window', 'WindowSensor', 'Window',
+            'WindowActuator', 'Window')

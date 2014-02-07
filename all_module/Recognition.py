@@ -1,15 +1,10 @@
-from twisted.internet import reactor
-import core.module
-import core.fields
-import core.fields.io
-import core.fields.persistant
-import time
+import module
+from module import use_module
+import fields.proxy
 
-class Recognition(core.module.Base)
+class Recognition(module.Base)
     update_rate = 10
-    cc = use_module('CameraSensor')
-    
-    Recognised = fields.proxy.mix('Recognised', 
-    															'CameraSensor', 'Image')
 
-    #code du main a remettre lais il était chelou donc pr le moment je l'ai vire...
+    CameraSensor = use_module('CameraSensor')
+
+    recognised = fields.proxy.mix('Recognised', 'CameraSensor', 'Image')
