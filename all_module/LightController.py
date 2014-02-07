@@ -4,16 +4,23 @@ import core.fields
 import core.fields.io
 import core.fields.persistant
 import time
-import all_modules.light_button
+import all_modules.LightButton
+import all_modules.HumanPresence
 
 if __name__ == '__main__':
     class LightController(core.module.Base)
         light= use_module('LightButton')
-        presence= use_module('Presence')
+        presence= use_module('HumanPresence')
         
-        def always(self):
-            #here do action
+        class Controller(
+            core.fields.Base):
             
+            def always(self):
+                if presence.Presence() :
+                    light.LightButton(true)
+                else
+                    light.LightButton(false)
+                
             
             
         
