@@ -1,14 +1,10 @@
-from twisted.internet import reactor
-import core.module
-import core.fields
-import core.fields.io
-import core.fields.persistant
-import time
+import module
+import fields
+import fields.io
+import fields.sensor
 
-class MethaneSensor(core.module.Base):
+class MethaneSensor(module.Base):
     update_rate = 10
-    class MethanePresence(
-            core.fields.sensor.MethanePresence,
-            core.fields.io.Readable,
-            core.fields.Base):
+
+    class methane_presence(fields.sensor.MethanePresence, fields.io.Readable, fields.Base):
         pass

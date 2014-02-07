@@ -1,18 +1,12 @@
-from twisted.internet import reactor
-import core.module
-import core.fields
-import core.fields.io
-import core.fields.persistant
-import time
+import module
+from module import use_module
+import fields.proxy
 
-class LightButton(core.module.Base)
+class LightButton(module.Base)
     update_rate = 10
-    lc = use_module('LightSensor')
-    la = use_module('LightActuator')
 
-    LightButton = fields.proxy.mix('LightButton',
-                                   'LightSensor','LightButton',
-                                   'LightActuator','LightButton')
-        
-        
-    #code du main a remettre lais il était chelou donc pr le moment je l'ai vire...
+    LightSensor = use_module('LightSensor')
+    LightActuator = use_module('LightActuator')
+
+    light_button = fields.proxy.mix('LightButton', 'LightSensor','LightButton',
+            'LightActuator','LightButton')

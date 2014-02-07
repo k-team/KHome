@@ -1,13 +1,12 @@
-from twisted.internet import reactor
 import module
-import fields
-import fields.io
-import fields.persistant
-import time
+from module import use_module
+import fields.proxy
 
 class ElectricCurrent(module.Base):
     update_rate = 10
-    room = use_module('Room')
-    ElectricCurrent = fields.proxy.mix('ElectricCurrent',
-                                   		 'ElectricCurrentSensor', 'ElectricCurrent',
-                                   		 'ElectricCurrentActuator', 'ElectricCurrent')
+
+    Room = use_module('Room')
+
+    electric_current = fields.proxy.mix('ElectricCurrent',
+            'ElectricCurrentSensor', 'ElectricCurrent',
+            'ElectricCurrentActuator', 'ElectricCurrent')

@@ -1,14 +1,12 @@
-from twisted.internet import reactor
 import module
 import fields
 import fields.io
-import fields.persistant
-import time
+import fields.actuator
 
 class ElectricCurrentActuator(module.Base):
     update_rate = 10
-    class ElectricCurrent(
-            fields.actuator.ElectricCurrent
-            fields.io.Writable,
-            fields.Base)
+
+    class electric_current(fields.actuator.ElectricCurrent, fields.io.Writable,
+            fields.Base):
+        pass
 

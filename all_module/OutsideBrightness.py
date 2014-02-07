@@ -1,14 +1,10 @@
-from twisted.internet import reactor
-import core.module
-import core.fields
-import core.fields.io
-import core.fields.persistant
-import time
+import module
+import fields
+import fields.io
+import fields.sensor
 
-class OutsideBrightness(core.module.Base):
+class OutsideBrightness(module.Base):
     update_rate = 10
-    class Brightness(
-            core.fields.sensor.Light,
-            core.fields.io.Readable,
-            core.fields.Base):
+
+    class brightness(fields.sensor.Light, fields.io.Readable, fields.Base):
         pass

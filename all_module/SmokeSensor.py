@@ -6,5 +6,5 @@ import fields.sensor
 class SmokeSensor(module.Base):
     update_rate = 10
 
-    class Smoke(fields.sensor.Smoke, fields.io.Readable, fields.Base):
+    class smoke(fields.sensor.Smoke, fields.io.Readable, fields.Base):
         pass
