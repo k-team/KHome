@@ -8,4 +8,7 @@ class Shutter(module.Base)
     shutter_sensor = use_module('ShutterSensor')
     shutter_actuator = use_module('ShutterActuator')
 
-    shutter = fields.proxy.mix('Shutter', 'ShutterSensor', 'ShutterActuator')
+    # this attribute represent the value of the opening of the shutters
+    # 100 is fully opened, 0 is closed
+    shutter = fields.proxy.mix('Shutter', 'Shutter', 'ShutterSensor',
+            'Shutter', 'ShutterActuator'):

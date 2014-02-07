@@ -16,5 +16,6 @@ class LuminosityInteriorSensor(core.module.Base):
             core.fields.io.Readable,
             core.fields.persistant.Volatile,
             core.fields.Base):
+        pass
         
     

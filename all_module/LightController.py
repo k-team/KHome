@@ -3,7 +3,6 @@ from module import use_module
 import fields
 
 class LightController(module.Base):
-    shutter = use_module('Shutter')
     light = use_module('LightButton')
     presence = use_module('HumanPresence')
     luminosity = use_module('LuminosityInteriorSensor')

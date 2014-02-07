@@ -1,27 +1,34 @@
 from twisted.internet import reactor
-import core.module
-import core.fields
-import core.fields.io
-import core.fields.persistant
+import module
+import fields
+import fields.io
+import fields.persistant
 import time
 
 
 
+class ShutterController(module.Base)
+    update_rate = 10
 
-if __name__ == '__main__':
-class ShutterController(core.module.Base)
-        shutter = use_module('Shutter')
-        tempInt = use_module('Temperature')
-        tempExt = use_module('TemperatureExteriorSensor')
+    shutter = use_module('Shutter')
+    tempInt = use_module('Temperature')
+    tempExt = use_module('TemperatureExteriorSensor')
+    
+    class Controller(
+        fields.Base):
         
-        class Controller(
-            core.fields.Base):
-            
-            def always(self):
-                if presence.Presence() :
-                    light.LightButton(true)
-                else
-                    light.LightButton(false)
-        
-        
-    #code du main a remettre lais il était chelou donc pr le moment je l'ai vire...
+        def always(self):
+            if tempInt.Temperature() < tempInt.seuil :
+                if tempInt.Temperature() < tempExt.Temperature():
+                    shutter.Shutter(100)
+                else :
+                    shutter.Shutter(0)
+            elif tempInt.Temperature() == tempInt.seuil :
+                    shutter.Shutter(0)    
+            else :
+                if tempInt.Temperature() < tempExt.Temperature():
+                    shutter.Shutter(0)
+                else :
+                    shutter.Shutter(100)
+    
+#code du main a remettre lais il était chelou donc pr le moment je l'ai vire...
