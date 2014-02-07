@@ -7,7 +7,7 @@ import time
 
 class Temperature(core.module.Base):
     update_rate = 10
-    salle = use_module('Salle')
+    room = use_module('Room')
     Temperature = fields.proxy.mix('Temperature',
                                    'TemperatureSensor', 'Temperature',
                                    'TemperatureActuator', 'Temperature')
