@@ -5,7 +5,7 @@ import core.fields.io
 import core.fields.persistant
 import time
 import all_modules.ElectricCurrent
-import all_modules.HumanPresence
+import all_modules.HumanPresenceSensor
 
 if __name__ == '__main__':
     class ElectricCurrentController(core.module.Base)

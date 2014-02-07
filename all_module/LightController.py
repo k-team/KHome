@@ -8,7 +8,7 @@ import time
 if __name__ == '__main__':
     class LightController(core.module.Base)
         light = use_module('LightButton')
-        presence = use_module('HumanPresence')
+        presence = use_module('HumanPresenceSensor')
         luminosity = use_module('LuminosityInteriorSensor')
         
         class Controller(
