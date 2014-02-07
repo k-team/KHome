@@ -4,20 +4,24 @@ import core.fields
 import core.fields.io
 import core.fields.persistant
 import time
-import all_modules.LightButton
-import all_modules.HumanPresence
 
 if __name__ == '__main__':
     class LightController(core.module.Base)
         light = use_module('LightButton')
         presence = use_module('HumanPresence')
+        luminosity = use_module('LuminosityInteriorSensor')
         
         class Controller(
             core.fields.Base):
             
+            def _init_:
+                luminosityLimit=60 # for the time being it will be a percentage. idk the real values
+                super(Luminosity, self)._init_
+        
             def always(self):
                 if presence.Presence() :
-                    light.LightButton(true)
+                    if luminosity.Luminosity() < luminosity.Luminosity.LuminosityLimit :
+                        light.LightButton(true)
                 else
                     light.LightButton(false)
                 
