@@ -2,6 +2,7 @@ import os
 import sys
 import json
 import time
+import socket
 import zipfile
 import tempfile
 from flask import (Flask, Response, send_file, request, abort,
@@ -13,6 +14,7 @@ core_dir = os.path.join(os.path.dirname(this_dir), 'core')
 sys.path.insert(1, core_dir)
 # leave this though
 import catalog
+from module import use_module
 
 def jsonify(obj):
     """
@@ -48,6 +50,13 @@ def api_rooms():
 @app.route('/api/modules')
 def api_modules():
     return jsonify(catalog.get_installed_modules(detailed=True))
+
+@app.route('/api/modules/<module_name>/fields')
+def api_module_configure(module_name):
+    try:
+        return jsonify(use_module(module_name).fields)
+    except socket.error:
+        abort(404)
 
 @app.route('/api/available_modules')
 def api_available_modules():
