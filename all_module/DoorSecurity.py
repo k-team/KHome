@@ -19,7 +19,7 @@ class DoorSecurity(core.module.Base):
         
         def always(self):
             if (door_access.Door() == "OPEN" and 
-                recognition.Recognised()="UNKOWN"):
+                recognition.Recognised() == "UNKOWN"):
                 alarm_actuator.Alarm(true)
             else
                 alarm_actuator.Alarm(false)
