@@ -10,26 +10,29 @@ import time
 class ShutterController(module.Base)
     update_rate = 10
 
-    shutter = use_module('Shutter')
-    LuminosityInt = use_module('LuminosityInteriorSensor')
-    LuminosityExt = use_module('LuminosityExteriorSensor')
+
     
-    class Controller(
-        fields.Base):
+    class Controller(fields.Base):
+        
+        shutter = use_module('Shutter')
+        luminosityInt = use_module('LuminosityInteriorSensor')
+        luminosityExt = use_module('LuminosityExteriorSensor')
+        humPres = use_module('HumanPresenceSensor')
+        cur_lum_ext = luminosityExt.luminosity()
+        cur_lum_int = luminosityInt.luminosity()
         
         def always(self):
-            if LuminosityInt.Luminosity() < LuminosityInt.LuminosityLimit :
-                if LuminosityInt.LuminosityLimit < LuminosityExt.Luminosity():
-                    shutter.Shutter(100)
+            if cur_lum_int < luminosityExt.NIGHTLIMIT : 
+                shutter.Shutter(0)
+            else:
+                if cur_lum_int < luminosityInt.luminosityLimit :
+                    if luminosityInt.luminosityLimit < cur_lum_ext:
+                        shutter.Shutter(100)
+                    else :
+                        shutter.Shutter(0)
+                elif cur_lum_int == luminosityInt.luminosityLimit :
+                        shutter.Shutter(0)    
                 else :
-                    shutter.Shutter(0)
-            elif LuminosityInt.Luminosity() == LuminosityInt.LuminosityLimit :
-                    shutter.Shutter(0)    
-            else :
-                if LuminosityInt.LuminosityLimit < LuminosityExt.Luminosity():
-                    shutter.Shutter(0)
-                else :
-                    shutter.Shutter(100)
+                        shutter.Shutter(0)
         
         
-    #code du main a remettre lais il était chelou donc pr le moment je l'ai vire...

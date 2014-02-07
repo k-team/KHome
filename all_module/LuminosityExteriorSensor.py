@@ -10,6 +10,7 @@ import time
 class LuminosityExteriorSensor(core.module.Base):
     update_rate = 10
 
+    NIGHTLIMIT = 20
     
     class Luminosity(
             core.fields.sensor.LuminosityExterior
