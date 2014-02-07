@@ -17,7 +17,4 @@ class LuminosityInteriorSensor(core.module.Base):
             core.fields.persistant.Volatile,
             core.fields.Base):
         
-        def _init_:
-            luminosityLimit=60 # for the time being it will be a percentage. idk the real values
-            super(Luminosity, self)._init_
-        
+    

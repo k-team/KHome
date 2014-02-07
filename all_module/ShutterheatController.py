@@ -4,17 +4,15 @@ import core.fields
 import core.fields.io
 import core.fields.persistant
 import time
-import core.all_modules.Shutter
-import core.all_modules.Temperature
-import core.all_modules.TemperatureForecast
 
 
 
 
 if __name__ == '__main__':
 class ShutterController(core.module.Base)
-        shutter= use_module('Shutter')
-        temp = use_module('Temperature')
+        shutter = use_module('Shutter')
+        tempInt = use_module('Temperature')
+        tempExt = use_module('TemperatureExteriorSensor')
         
         class Controller(
             core.fields.Base):

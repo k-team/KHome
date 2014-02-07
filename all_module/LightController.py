@@ -14,6 +14,10 @@ if __name__ == '__main__':
         class Controller(
             core.fields.Base):
             
+            def _init_:
+                luminosityLimit=60 # for the time being it will be a percentage. idk the real values
+                super(Luminosity, self)._init_
+        
             def always(self):
                 if presence.Presence() :
                     if luminosity.Luminosity() < luminosity.Luminosity.LuminosityLimit :
