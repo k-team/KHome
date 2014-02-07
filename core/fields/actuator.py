@@ -8,5 +8,5 @@ def Dummy(data_type):
     return _Dummy
 
 TemperatureActuator = Dummy(fields.type.Numeric)
-BoolActuator = Dummy(fields.type.BoolActuator)
+BoolActuator = Dummy(fields.type.Boolean)
 StringActuator = Dummy(fields.type.String)
