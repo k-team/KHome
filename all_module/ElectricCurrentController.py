@@ -3,8 +3,15 @@ from module import use_module
 import fields.proxy
 
 class ElectricCurrentController(module.Base):
-    ElectricCurrent = use_module('ElectricCurrent')
-    HumanPresence = use_module('HumanPresence')
+    switch = use_module('ElectricCurrentSwitch')
+    human_presence = use_module('HumanPresenceSensor')
 
-    electric_current_controller = fields.proxy.mix('ElectricCurrentController',
-            'ElectricCurrent', 'ElectricCurrent', 'HumanPresence', 'Presence')
+    electric_current = fields.proxy.mix('ElectricCurrentController',
+            'ElectricCurrent', 'HumanPresence', 'Presence')
+
+    class Controller(fields.Base):
+        def always(self):
+            if self.module.human_presence.presence():
+               self.module.electric_current.switch(True)
+            else:
+               self.module.electric_current.switch(False)

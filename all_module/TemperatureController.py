@@ -4,18 +4,23 @@ import fields
 import fields.io
 import fields.persistant
 
+# module constants
+LIMIT = 20
+UP_DELTA = 5
+DOWN_DELTA = 7
+
+# dependencies
+temperature = use_module('Temperature')
+temperature_forecast = use_module('TemperatureForecast')
+
 class TemperatureController(module.Base):
-    Temperature = use_module('Temperature')
-    TemperatureForecast = use_module('TemperatureForecast')
+    update_rate = 10
 
-    temperature_controller = fields.proxy.mix('TemperatureController',
-            'Temperature', 'Temperature', 'TemperatureForecast', 'Temperature')
-
-    def always(self):
-        """
-        if temperature < threshold (desired temperature):
-            if temperatureForecast.temperature(t + 1) < threshold:
-                # RaiseTheTemperature
-            else:
-                # LowerTheTemperature
-        """
+    class Controller(fields.Base):
+        def always(self):
+            if temperature.temperature < LIMIT:
+                if temperature_forecast.temperature > LIMIT + UP_DELTA:
+                    temperature.temperature = LIMIT
+            if temperature.temperature > LIMIT:
+                if temperature_forecast.temperature < LIMIT - DOWN_DELTA:
+                    temperature.Temperature = LIMIT
