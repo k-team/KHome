@@ -17,7 +17,40 @@ def Dummy(dummy_funct):
             return dummy_funct(time.time())
     return _Dummy
 
-TemperatureSensor = Dummy(lambda t: math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
+# TemperatureSensor = Dummy(lambda t:
+#         math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
+AirSensor = Dummy(lambda t:
+        math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
+
+ButaneSensor = Dummy(lambda t:
+        math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
+
+COSensor = Dummy(lambda t:
+        math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
+
+CameraSensor = Dummy(lambda t:
+        math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
+
+DoorSensor = Dummy(lambda t:
+        math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
+
+ElectricCurrentSensor = Dummy(lambda t:
+        math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
+
+Sensor = Dummy(lambda t:
+        math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
+
+Sensor = Dummy(lambda t:
+        math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
+
+Sensor = Dummy(lambda t:
+        math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
+
+Sensor = Dummy(lambda t:
+        math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
+
+Sensor = Dummy(lambda t:
+        math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
 
 class SensorConnection(Protocol):
     def __init__(self, sensor, filter_id):
