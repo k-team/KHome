@@ -162,6 +162,7 @@ class BaseMeta(type):
                 field = f_cls()
                 setattr(obj, field.field_name, prop_field(field))
                 ls_fields += [field]
+        setattr(field, 'module', obj)
         setattr(obj, 'module_fields', ls_fields)
 
         return obj
