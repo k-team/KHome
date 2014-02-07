@@ -17,7 +17,7 @@ def Dummy(dummy_funct):
             super(_Dummy, self).__init__()
 
         def acquire_value(self):
-            return dummy_funct(self.dummy_time)
+            return dummy_funct(time.time())
     return _Dummy
 
 TemperaturSensor = Dummy(lambda t: math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
