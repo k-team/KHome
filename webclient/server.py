@@ -152,5 +152,5 @@ def api_module_instances_statuses(module_name):
         return jsonify(brightness_statuses())
 
 if __name__ == '__main__':
-    app.run(debug='--debug' in sys.argv or conf.get('debug', False),
+    app.run(host='0.0.0.0', debug='--debug' in sys.argv or conf.get('debug', False),
             port=int(conf.get('port', 8888)))

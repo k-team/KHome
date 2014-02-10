@@ -3,20 +3,15 @@
 </div>
 <div class="content">
   <div data-ng-show="modules" class="row">
-    <div data-ng-repeat="module in modules | filter:{ has_view: true }" class="module-thumbnail col-xs-6 col-sm-4 col-md-2">
+    <div data-ng-repeat="module in modules | filter:{ has_view: true }" class="module-thumbnail col-xs-6 col-sm-4 col-md-2 text-center">
       <div class="thumbnail">
-        <div class="btn-group">
-          <button type="button" class="close btn btn-default thumbnail-tools dropdown-toggle" data-toggle="dropdown">
-            <b class="caret"></b>
-          </button>
-          <ul class="dropdown-menu" role="menu">
-            <li><a data-ng-click="uninstall(module)">Uninstall</a></li>
-          </ul>
-        </div>
         <a data-ng-click="navigate(module)">
           <img alt="Icon for module {{ module.id }}" title="{{ module.name }}"
             data-ng-src="/api/modules/{{ module.id }}/public/icon.png"
             onerror="this.onerror = null; this.src = '/img/module.png'">
+            <div class="caption">
+              <h4>{{ (module.name) ? (module.name | truncate:12) : (module.id | truncate:12) }}</h4>
+            </div>
         </a>
       </div>
     </div>

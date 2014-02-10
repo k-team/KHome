@@ -2,22 +2,23 @@
   <h1>Store</h1>
 </div>
 <div class="content">
-  <h2>Available modules :</h2>
   <div data-ng-show="modules" class="row">
-    <div data-ng-repeat="module in modules" class="col-xs-4 col-md-3">
+    <div data-ng-repeat="module in modules" class="col-xs-6 col-sm-4 col-md-3">
       <div class="thumbnail">
         <a data-ng-click="openModal(module)">
           <img alt="Icon for module {{ module.id }}" title="{{ module.name }}"
             data-ng-src="/api/available_modules/{{ module.id }}/icon"
             onerror="this.onerror = null; this.src = '/img/module.png'">
-        <div class="caption hidden-xs hidden-sm">
-          <h4>{{ (module.name) ? module.name : module.id }}</h4>
-          <p>{{ module.description | truncate:100 }}</p>
-          <div class="btn-group">
-            <a data-ng-click="install(module)" class="btn btn-primary" role="button">Install</a>
-            <a data-ng-click="openModal(module)" class="btn btn-default" role="button">Details</a>
+          <div class="caption">
+            <h4>{{ (module.name) ? (module.name | truncate:12) : (module.id | truncate:12) }}</h4>
+            <div class="hidden-xs hidden-sm">
+              <p>{{ module.description | truncate:100 }}</p>
+              <div class="btn-group">
+                <a data-ng-click="install(module)" class="btn btn-primary" role="button">Install</a>
+                <a data-ng-click="openModal(module)" class="btn btn-default" role="button">Details</a>
+              </div>
+            </div>
           </div>
-        </div>
         </a>
       </div>
     </div>
