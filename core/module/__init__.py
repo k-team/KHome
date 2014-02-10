@@ -12,13 +12,15 @@ from . import connection
 _file = os.path.realpath(__file__)
 _root = os.path.dirname(os.path.dirname(os.path.dirname(_file)))
 
-DIRECTORY = os.path.join(_root, 'modules')
+MODULES_DIRECTORY = os.path.join(_root, 'modules')
+INSTANCES_DIRECTORY = os.path.join(_root, 'instances')
 
 def get_directory(module_name):
     """
     Shortcut to get the directory for a module (absolute path).
     """
-    return os.path.join(DIRECTORY, module_name)
+    # return os.path.join(MODULES_DIRECTORY, module_name)
+    return INSTANCES_DIRECTORY
 
 def get_socket_name(module_name):
     """
