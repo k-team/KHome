@@ -1,5 +1,18 @@
 #!/usr/bin/env python2
 
+"""
+Launch a python module.
+The module has to be construct like this scheme :
+    modules/
+        module_name/
+            module.json
+            __main__.py => module_launcher (this file)
+            module_name.py
+
+The module_name.py file has to contains a module_name class which
+is a module class.
+"""
+
 import os
 import sys
 from twisted.internet import reactor
