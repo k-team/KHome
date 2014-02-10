@@ -1,8 +1,10 @@
 import os
-import threading
+import sys
 import json
-import socket
 import time
+import socket
+import select
+import threading
 from twisted.internet import reactor
 from twisted.internet.endpoints import UNIXServerEndpoint as ServerEndpoint
 
@@ -14,6 +16,18 @@ _root = os.path.dirname(os.path.dirname(os.path.dirname(_file)))
 
 MODULES_DIRECTORY = os.path.join(_root, 'modules')
 INSTANCES_DIRECTORY = os.path.join(_root, 'instances')
+SOCKET_TIMEOUT = 10
+
+_running_modules = []
+
+def kill():
+    """
+    Kill all running modules
+    """
+    for mod in _running_modules:
+        mod.kill()
+    reactor.callFromThread(reactor.stop)
+    sys.exit(1)
 
 def get_module_directory(module_name):
     """
@@ -43,6 +57,46 @@ def get_socket(module_name):
     sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
     sock.connect(get_socket_name(module_name))
     return sock.makefile('rw')
+
+def network_write(conn, data):
+    """
+    Write *data* to the *conn* file, add a new line character at
+    the end and flush the buffer output.
+    Wait a maximum *SOCKET_TIMEOUT* sec for writing. If there is a
+    timeout, modules are killed.
+    When there is a IOError exception, modules are also killed.
+    """
+    _, wl, _ = select.select([], [conn], [], SOCKET_TIMEOUT)
+    if wl is []:
+        kill()
+        return
+
+    conn = wl[0]
+    try:
+        conn.write(data + '\n')
+        conn.flush()
+    except IOError:
+        kill()
+        return
+
+def network_readline(conn):
+    """
+    Read a entire line from the *conn* file.
+    Wait a maximum of *SOCKET_TIMEOUT* sec for reading. If there
+    is a timeout, modules are killed.
+    When there is a IOError exception, modules are also killed.
+    """
+
+    rl, _, _ = select.select([conn], [], [], SOCKET_TIMEOUT)
+    if rl is []:
+        kill()
+        return
+
+    try:
+        return conn.readline()
+    except IOError:
+        kill()
+        return
 
 def prop_field(field):
     """
@@ -76,9 +130,8 @@ def get_network_info(module_conn):
     # TODO
     request = {}
     request['code'] = 'knockknock'
-    module_conn.write(json.dumps(request) + '\n')
-    module_conn.flush()
-    ans = json.loads(module_conn.readline())
+    network_write(module_conn, json.dumps(request))
+    ans = json.loads(network_readline(module_conn))
     return ans
 
 def prop_network_field(module_conn, field_info):
@@ -95,8 +148,8 @@ def prop_network_field(module_conn, field_info):
             request['code'] = 'set'
             request['field_name'] = field_name
             request['field_value'] = field_value
-            module_conn.write(json.dumps(request))
-            ans = json.loads(module_conn.readline())
+            network_write(module_conn, json.dumps(request))
+            ans = json.loads(network_readline(module_conn))
             return ans.get('success', False)
         elif not args:
             if not kwargs:
@@ -115,9 +168,8 @@ def prop_network_field(module_conn, field_info):
                 request['time_to'] = time.time() + kwargs['to']
                 request['fields'] = [field_name]
 
-            module_conn.write(json.dumps(request) + '\n')
-            module_conn.flush()
-            ans = json.loads(module_conn.readline())
+            network_write(module_conn, json.dumps(request))
+            ans = json.loads(network_readline(module_conn))
 
             if not ans.get('success', False):
                 return None
@@ -172,6 +224,7 @@ class BaseMeta(type):
         setattr(field, 'module', obj)
         setattr(obj, 'module_fields', ls_fields)
 
+        _running_modules.append(obj)
         return obj
 
 class NetworkMeta(type):
@@ -232,6 +285,16 @@ class Base(threading.Thread):
         for f in self.module_fields:
             f.stop()
             f.join(1)
+        self.running = False
+
+    def kill(self):
+        for f in self.module_fields:
+            f.on_kill()
+            f.stop()
+            try:
+                f.join(1)
+            except RuntimeError:
+                pass
         self.running = False
 
 class Network(object):
