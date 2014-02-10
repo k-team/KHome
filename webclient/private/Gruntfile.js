@@ -1,33 +1,26 @@
 var path = require('path');
 
 module.exports = function(grunt) {
-  // Directories
-  var dirs = {
-    client: '.', build: 'build',
-    public: '../public'
-  };
-  // ...files
-  var files = {
+  // Directories and files
+  var dirs = { src: '.', dest: '../public' }, files = {
     js: {
-      all: [path.join(dirs.client, 'js', '**/*.js')],
-      build: path.join(dirs.build, 'js', 'main.js'),
-      dist: path.join(dirs.public, 'js', 'main.js')
+      all: [path.join(dirs.src, 'js', '**/*.js')],
+      dist: path.join(dirs.dest, 'js', 'main.js')
     }, less: {
-      all: [path.join(dirs.client, 'less', '**/*.less')],
-      src: [path.join(dirs.client, 'less', 'main.less')],
-      dist: path.join(dirs.public, 'css', 'main.css')
+      all: [path.join(dirs.src, 'less', '**/*.less')],
+      src: [path.join(dirs.src, 'less', 'main.less')],
+      dist: path.join(dirs.dest, 'css', 'main.css')
     }
   };
 
   grunt.initConfig({
     pkg: grunt.file.readJSON(path.join(__dirname, 'package.json')),
-    clean: [dirs.public, dirs.build],
     concat: {
       options: {
         separator: ';'
       }, dist: {
         src: files.js.all,
-        dest: files.js.build
+        dest: files.js.dist
       }
     }, uglify: {
       options: {
@@ -35,7 +28,7 @@ module.exports = function(grunt) {
       }, dist: {
         files: (function() {
           var ret = {};
-          ret[files.js.dist] = files.js.build;
+          ret[files.js.dist] = files.js.dist;
           return ret;
         })()
       }
@@ -52,7 +45,7 @@ module.exports = function(grunt) {
     }, watch: {
       js: {
         files: files.js.all,
-        tasks: ['concat', 'uglify'],
+        tasks: ['concat'],
         interrupt: true
       }, less: {
         files: files.less.all,
@@ -62,7 +55,6 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-less');
