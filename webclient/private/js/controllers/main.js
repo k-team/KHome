@@ -1,4 +1,14 @@
 function MainCtrl($scope, ModuleService, HouseMapService) {
+  // All modules
+  $scope.modules = [];
+
+  // Explicitly reload modules
+  $scope.reloadModules = function() {
+    ModuleService.installed().then(function(modules) {
+      $scope.modules = modules;
+    });
+  };
+
   // Module supervision (history)
   $scope.supervision = {};
   $scope.supervision.module = '';

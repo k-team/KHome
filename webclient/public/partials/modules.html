@@ -3,7 +3,7 @@
 </div>
 <div class="content">
   <div data-ng-show="modules" class="row">
-    <div data-ng-repeat="module in modules" class="module-thumbnail col-xs-6 col-sm-4 col-md-2">
+    <div data-ng-repeat="module in modules | filter:{ has_view: true }" class="module-thumbnail col-xs-6 col-sm-4 col-md-2">
       <div class="thumbnail">
         <div class="btn-group">
           <button type="button" class="close btn btn-default thumbnail-tools dropdown-toggle" data-toggle="dropdown">

@@ -1,19 +1,5 @@
 function ModulesCtrl($scope, $location, ModuleService) {
-  // All modules
-  $scope.modules = [];
-
-  // Explicitly reload modules
-  $scope.reloadModules = function() {
-    ModuleService.installed().then(function(modules) {
-      $scope.modules = [];
-      angular.forEach(modules, function(module) {
-        if (module.has_view) {
-          $scope.modules.push(module);
-        }
-      });
-    });
-  };
-  //...and call immediately
+  // Reload modules immediately
   $scope.reloadModules();
 
   // Uninstall a module

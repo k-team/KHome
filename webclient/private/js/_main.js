@@ -8,7 +8,8 @@ angular.module('GHome', ['ngRoute', 'ui.bootstrap', 'angularFileUpload'])
       templateUrl: '/partials/store.html',
       controller: 'StoreCtrl'
     }).when('/settings', {
-      templateUrl: '/partials/settings.html'
+      templateUrl: '/partials/settings.html',
+      controller: 'SettingsCtrl'
     }).when('/settings/:moduleName', {
       templateUrl: '/partials/module_settings.html'
     }).when('/modules', {
