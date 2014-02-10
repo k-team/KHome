@@ -121,7 +121,7 @@ def api_module_public(module_name, rest):
         abort(404)
 
     # send the requested file
-    module_dir = catalog.get_directory(module_name)
+    module_dir = catalog.get_module_directory(module_name)
     module_public_dir = module_config.get('public_directory', 'public')
     requested_file = os.path.join(module_dir, module_public_dir, rest)
     if os.path.exists(requested_file):
