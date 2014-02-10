@@ -226,7 +226,7 @@ class Base(threading.Thread):
 
     def run(self):
         while self.running:
-            pass
+            time.sleep(0.1)
 
     def stop(self):
         for f in self.module_fields:

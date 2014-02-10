@@ -15,4 +15,6 @@ class Test2(module.Base):
             fields.persistant.Volatile,
             fields.Base):
         def acquire_value(self):
-            return T0.field()[1] + T1.field()[1]
+            _, v0 = T0.field()
+            _, v1 = T1.field()
+            return v0 + v1
