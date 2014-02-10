@@ -23,55 +23,55 @@ def Dummy(dummy_funct):
 #DoorSensor = Dummy(
 #        True if random.random() > 0.5 else False)
 
-AirSensor = Dummy(lambda t:
+Air = Dummy(lambda t:
         math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
 
-ButaneSensor = Dummy(lambda t:
+Butane = Dummy(lambda t:
         math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
 
-COSensor = Dummy(lambda t:
+CO = Dummy(lambda t:
         math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
 
-CameraSensor = Dummy(lambda t:
+Camera = Dummy(lambda t:
         math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
 
-ElectricCurrentSensor = Dummy(
+ElectricCurrent = Dummy(
         True if random.random() > 0.5 else False)
 
-LightButtonSensor = Dummy(
+LightButton = Dummy(
         True if random.random() > 0.5 else False)
 
-LuminosityExteriorSensor = Dummy(lambda t:
+LuminosityExterior = Dummy(lambda t:
         math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
 
-MethaneSensor = Dummy(lambda t:
+Methane = Dummy(lambda t:
         math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
 
-MoistureSensor = Dummy(lambda t:
+Moisture = Dummy(lambda t:
         math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
 
-OutsideBrightnessSensor = Dummy(lambda t:
+OutsideBrightness = Dummy(lambda t:
         math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
 
-PropaneSensor = Dummy(lambda t:
+Propane = Dummy(lambda t:
         math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
 
 RainForecast = Dummy(lambda t:
         math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
 
-ShutterSensor = Dummy(lambda t:
+Shutter = Dummy(lambda t:
         math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
 
-SmokeSensor = Dummy(lambda t:
+Smoke = Dummy(lambda t:
         math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
 
-SoundSensor = Dummy(lambda t:
+Sound = Dummy(lambda t:
         math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
 
 TemperatureForecast = Dummy(lambda t:
         math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
 
-TemperatureExteriorSensor = Dummy(lambda t:
+TemperatureExterior = Dummy(lambda t:
         math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
 
 
