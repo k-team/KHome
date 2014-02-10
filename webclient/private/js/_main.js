@@ -8,11 +8,13 @@ angular.module('GHome', ['ngRoute', 'ui.bootstrap', 'angularFileUpload'])
       templateUrl: '/partials/store.html'
     }).when('/settings', {
       templateUrl: '/partials/settings.html'
+    }).when('/settings/:moduleName', {
+      templateUrl: '/partials/module_settings.html'
     }).when('/modules', {
       templateUrl: '/partials/modules.html'
     }).when('/modules/:moduleName', {
-      controller: 'ModuleInjectorCtrl',
-      templateUrl: '/partials/module_inject.html'
+      templateUrl: '/partials/module_inject.html',
+      controller: 'ModuleInjectorCtrl'
     }).otherwise({
       redirectTo: '/home'
     });

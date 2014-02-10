@@ -5,7 +5,12 @@ function ModulesCtrl($scope, $location, ModuleService) {
   // Explicitly reload modules
   $scope.reloadModules = function() {
     ModuleService.installed().then(function(modules) {
-      $scope.modules = modules;
+      $scope.modules = [];
+      angular.forEach(modules, function(module) {
+        if (module.has_view) {
+          $scope.modules.push(module);
+        }
+      });
     });
   };
   //...and call immediately
