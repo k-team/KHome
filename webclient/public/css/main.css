@@ -33,3 +33,6 @@ a.ng-click:hover {
 .navbar {
   border-radius: initial;
 }
+body {
+  padding-top: 50px;
+}
