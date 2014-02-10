@@ -15,11 +15,16 @@ _root = os.path.dirname(os.path.dirname(os.path.dirname(_file)))
 MODULES_DIRECTORY = os.path.join(_root, 'modules')
 INSTANCES_DIRECTORY = os.path.join(_root, 'instances')
 
-def get_directory(module_name):
+def get_module_directory(module_name):
     """
     Shortcut to get the directory for a module (absolute path).
     """
-    # return os.path.join(MODULES_DIRECTORY, module_name)
+    return os.path.join(MODULES_DIRECTORY, module_name)
+
+def get_instance_directory(module_name):
+    """
+    Shortcut to get the directory for a instance of a module (absolute path).
+    """
     return INSTANCES_DIRECTORY
 
 def get_socket_name(module_name):
@@ -27,7 +32,7 @@ def get_socket_name(module_name):
     Return the filename of the socket of the module named *module_name*.
     TODO add instance system.
     """
-    return os.path.join(get_directory(module_name), module_name + '.sock')
+    return os.path.join(get_instance_directory(module_name), module_name + '.sock')
 
 def get_socket(module_name):
     """
