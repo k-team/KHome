@@ -7,7 +7,7 @@ The module has to be construct like this scheme :
         module_name/
             module.json
             __main__.py => module_launcher (this file)
-            module_name.py
+            local_module.py
 
 The module_name.py file has to contains a module_name class which
 is a module class.
@@ -19,11 +19,17 @@ from twisted.internet import reactor
 
 module_dirname = os.path.dirname(__file__)
 sys.path.append(os.path.join(module_dirname, '../../core/'))
-module_name = os.path.basename(module_dirname)
+import module
+import local_module
 
-# Let the program stop if there is an error
-module = __import__(module_name)
-module_cls = getattr(module, module_name)
+for _, value in local_module.__dict__.items():
+    try:
+        if issubclass(value, module.Base):
+            module_cls = value
+            break
+    except TypeError:
+        pass
+
 instance = module_cls()
 instance.start()
 reactor.run()
