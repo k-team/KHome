@@ -5,13 +5,15 @@ angular.module('GHome', ['ngRoute', 'ui.bootstrap', 'angularFileUpload'])
     $routeProvider.when('/home', {
       templateUrl: '/partials/home.html'
     }).when('/store', {
-      templateUrl: '/partials/store.html'
+      templateUrl: '/partials/store.html',
+      controller: 'StoreCtrl'
     }).when('/settings', {
       templateUrl: '/partials/settings.html'
     }).when('/settings/:moduleName', {
       templateUrl: '/partials/module_settings.html'
     }).when('/modules', {
-      templateUrl: '/partials/modules.html'
+      templateUrl: '/partials/modules.html',
+      controller: 'ModulesCtrl'
     }).when('/modules/:moduleName', {
       templateUrl: '/partials/module_inject.html',
       controller: 'ModuleInjectorCtrl'

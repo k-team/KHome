@@ -2,24 +2,22 @@
   <h1>Modules</h1>
 </div>
 <div class="content">
-  <div data-ng-controller="ModulesCtrl">
-    <div data-ng-show="modules" class="row">
-      <div data-ng-repeat="module in modules" class="module-thumbnail col-md-2">
-        <div class="thumbnail">
-          <div class="btn-group">
-            <button type="button" class="close btn btn-default thumbnail-tools dropdown-toggle" data-toggle="dropdown">
-              <b class="caret"></b>
-            </button>
-            <ul class="dropdown-menu" role="menu">
-              <li><a data-ng-click="uninstall(module)">Uninstall</a></li>
-            </ul>
-          </div>
-          <a data-ng-click="navigate(module)">
-            <img alt="Icon for module {{ module.id }}" title="{{ module.name }}"
-              data-ng-src="/api/modules/{{ module.id }}/public/icon.png"
-              onerror="this.onerror = null; this.src = '/img/module.png'">
-          </a>
+  <div data-ng-show="modules" class="row">
+    <div data-ng-repeat="module in modules" class="module-thumbnail col-md-2">
+      <div class="thumbnail">
+        <div class="btn-group">
+          <button type="button" class="close btn btn-default thumbnail-tools dropdown-toggle" data-toggle="dropdown">
+            <b class="caret"></b>
+          </button>
+          <ul class="dropdown-menu" role="menu">
+            <li><a data-ng-click="uninstall(module)">Uninstall</a></li>
+          </ul>
         </div>
+        <a data-ng-click="navigate(module)">
+          <img alt="Icon for module {{ module.id }}" title="{{ module.name }}"
+            data-ng-src="/api/modules/{{ module.id }}/public/icon.png"
+            onerror="this.onerror = null; this.src = '/img/module.png'">
+        </a>
       </div>
     </div>
   </div>

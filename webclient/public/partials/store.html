@@ -2,50 +2,49 @@
   <h1>Modules</h1>
 </div>
 <div class="content">
-  <div data-ng-controller="StoreCtrl">
-    <h2>Available modules :</h2>
-    <div data-ng-show="modules" class="row">
-      <div data-ng-repeat="module in modules" class="col-xs-6 col-md-3">
-        <div class="thumbnail">
-          <img class="hidden-xs" alt="Icon for module {{ module.id }}" title="{{ module.name }}"
+  <h2>Available modules :</h2>
+  <div data-ng-show="modules" class="row">
+    <div data-ng-repeat="module in modules" class="col-xs-6 col-md-3">
+      <div class="thumbnail">
+        <img class="hidden-xs" alt="Icon for module {{ module.id }}" title="{{ module.name }}"
+          data-ng-src="/api/available_modules/{{ module.id }}/icon"
+          onerror="this.onerror = null; this.src = '/img/module.png'">
+        <a class="visible-xs" data-ng-click="openModal(module)">
+          <img alt="Icon for module {{ module.id }}" title="{{ module.name }}"
             data-ng-src="/api/available_modules/{{ module.id }}/icon"
             onerror="this.onerror = null; this.src = '/img/module.png'">
-          <a class="visible-xs" data-ng-click="openModal(module)">
-            <img alt="Icon for module {{ module.id }}" title="{{ module.name }}"
-              data-ng-src="/api/available_modules/{{ module.id }}/icon"
-              onerror="this.onerror = null; this.src = '/img/module.png'">
-          </a>
-          <div class="caption hidden-xs">
-            <h3>{{ (module.name) ? module.name : module.id }}</h3>
-            <p>{{ module.description | truncate:100 }}</p>
-            <div class="btn-group">
-              <a data-ng-click="install(module)" class="btn btn-primary" role="button">Install</a>
-              <a href="#" class="btn btn-default" role="button">Details</a>
-            </div>
+        </a>
+        <div data-ng-init="expanded = false" class="caption hidden-xs">
+          <h3>{{ (module.name) ? module.name : module.id }}</h3>
+          <p data-ng-show="expanded">{{ module.description }}</p>
+          <p data-ng-hide="expanded">{{ module.description | truncate:100 }}</p>
+          <div class="btn-group">
+            <a data-ng-click="install(module)" class="btn btn-primary" role="button">Install</a>
+            <a data-ng-click="expanded = !expanded" class="btn btn-default" role="button">Details</a>
           </div>
         </div>
       </div>
-
-      <!--Modal for small devices-->
-      <script type="text/ng-template" id="modal.html">
-        <div class="modal-header">
-          <a data-ng-click="dismiss()" type="button" class="close">&times;</a>
-          <h4 class="modal-title">{{ (module.name) ? module.name : module.id }}</h4>
-        </div>
-        <div class="modal-body">
-          {{ module.description }}
-        </div>
-        <div class="modal-footer">
-          <a data-ng-click="install()" class="btn btn-primary" role="button">Install</a>
-          <a data-ng-click="dismiss()" class="btn btn-default" role="button">Close</a>
-        </div>
-      </script>
     </div>
-    <h2>Manual installation (zip) :</h2>
-    <form enctype="multipart/form-data" data-ng-submit="upload()">
-      <label for="fileToUpload"></label>
-      <input id="fileToUpload" type="file" data-ng-file-select="upload($files[0])" >
-    </form>
-    <h4 data-ng-show="uploading">Upload progress: {{ uploadProgress }}</h4>
+
+    <!--Modal for small devices-->
+    <script type="text/ng-template" id="modal.html">
+      <div class="modal-header">
+        <a data-ng-click="dismiss()" type="button" class="close">&times;</a>
+        <h4 class="modal-title">{{ (module.name) ? module.name : module.id }}</h4>
+      </div>
+      <div class="modal-body">
+        {{ module.description }}
+      </div>
+      <div class="modal-footer">
+        <a data-ng-click="install()" class="btn btn-primary" role="button">Install</a>
+        <a data-ng-click="dismiss()" class="btn btn-default" role="button">Close</a>
+      </div>
+    </script>
   </div>
+  <h2>Manual installation (zip) :</h2>
+  <form enctype="multipart/form-data" data-ng-submit="upload()">
+    <label for="fileToUpload"></label>
+    <input id="fileToUpload" type="file" data-ng-file-select="upload($files[0])" >
+  </form>
+  <h4 data-ng-show="uploading">Upload progress: {{ uploadProgress }}</h4>
 </div>
