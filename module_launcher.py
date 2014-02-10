@@ -15,12 +15,12 @@ is a module class.
 
 import os
 import sys
-import local_module
 from twisted.internet import reactor
 
 module_dirname = os.path.dirname(__file__)
 sys.path.append(os.path.join(module_dirname, '../../core/'))
 import module
+import local_module
 
 for _, value in local_module.__dict__.items():
     try:
