@@ -1,3 +1,25 @@
+.module-thumbnail a:hover {
+  cursor: pointer;
+}
+.thumbnail-tools {
+  opacity: .2;
+  color: #000;
+  background-color: transparent;
+}
+.thumbnail-tools + .dropdown-menu {
+  min-width: initial;
+}
+.thumbnail-tools:hover,
+.thumbnail-tools:focus {
+  opacity: .2;
+  color: #000;
+  background-color: transparent;
+}
+.btn-group.open .thumbnail-tools {
+  opacity: .2;
+  color: #000;
+  background-color: transparent;
+}
 [ng\:cloak],
 [ng-cloak],
 .ng-cloak {
