@@ -165,7 +165,7 @@ angular.module('GHome', ['ngRoute', 'ui.bootstrap', 'angularFileUpload'])
   };
 }
 ;function RatingCtrl($scope) {
-  $scope.setRating = function(value) {
+  $scope.setRating = function(module, value) {
     console.log('Motherfucker')
   };
 }
