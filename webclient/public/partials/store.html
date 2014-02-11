@@ -8,14 +8,21 @@
         <img alt="Icon for module {{ module.id }}" title="{{ module.name }}"
           data-ng-src="/api/available_modules/{{ module.id }}/icon"
           onerror="this.onerror = null; this.src = '/img/module.png'">
-        <div class="caption">
-          <h4>{{ (module.name) ? (module.name | truncate:12) : (module.id | truncate:12) }}</h4>
-          <div class="hidden-xs hidden-sm">
-            <p>{{ module.description | truncate:100 }}</p>
-            <!-- <div class="btn&#45;group"> -->
-            <!--   <a data&#45;ng&#45;click="install(module)" class="btn btn&#45;primary" role="button">Install</a> -->
-            <!--   <a data&#45;ng&#45;click="openModal(module)" class="btn btn&#45;default" role="button">Details</a> -->
-            <!-- </div> -->
+        <h4>{{ (module.name) ? (module.name | truncate:20) : (module.id | truncate:20) }}</h4>
+        <div class="visible-sm">
+          <p><small>{{ module.description | truncate:110 }}</small></p>
+        </div>
+        <div class="visible-md visible-lg">
+          <p><small>{{ module.description | truncate:140 }}</small></p>
+        </div>
+        <div class="row">
+          <div class="visible-md visible-lg col-xs-5 col-xs-offset-7">
+            <p class="text-danger"><small>Not installed</small></p>
+            <!-- <p class="text&#45;success"><small>Installed</small></p> -->
+          </div>
+          <div class="visible-sm col-xs-6 col-xs-offset-6">
+            <p class="text-danger"><small>Not installed</small></p>
+            <!-- <p class="text&#45;success"><small>Installed</small></p> -->
           </div>
         </div>
       </div>
