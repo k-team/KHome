@@ -17,11 +17,7 @@
         </div>
         <div class="row">
           <div class="col-md-7 col-sm-6">
-            <span class="glyphicon glyphicon-star"></span>
-            <span class="glyphicon glyphicon-star"></span>
-            <span class="glyphicon glyphicon-star"></span>
-            <span class="glyphicon glyphicon-star-empty"></span>
-            <span class="glyphicon glyphicon-star-empty"></span>
+            <rating value="module.rating" max="5" readonly="true"></rating>
           </div>
           <div class="col-md-5 col-sm-6">
             <!-- <p class="text&#45;danger"><small>Not installed</small></p> -->
@@ -41,11 +37,10 @@
             <p><small>{{ module.description | truncate:65 }}</small></p>
             <div class="row">
               <div class="col-xs-7">
-                <span class="glyphicon glyphicon-star"></span>
-                <span class="glyphicon glyphicon-star"></span>
-                <span class="glyphicon glyphicon-star"></span>
-                <span class="glyphicon glyphicon-star-empty"></span>
-                <span class="glyphicon glyphicon-star-empty"></span>
+<!-- <div class="col&#45;xs&#45;7" data-ng&#45;controller="ratingCtrl"> -->
+    <!-- <rating value="rate" max="5" on&#45;hover="hoveringOver(value)" on&#45;leave="overStar = null"></rating> -->
+    <!-- <span class="label" data&#45;ng&#45;class="{'label&#45;warning': percent<30, 'label&#45;info': percent>=30 &#38;&#38; percent<70, 'label&#45;success': percent>=70}" data&#45;ng&#45;show="overStar">{{percent}}%</span> -->
+<!-- </div> -->
               </div>
               <div class="col-xs-5">
                 <p class="text-danger"><small>Not installed</small></p>
@@ -61,24 +56,17 @@
     <script type="text/ng-template" id="modal.html">
       <div class="modal-header">
         <a data-ng-click="dismiss()" type="button" class="close">&times;</a>
-        <h4 class="modal-title">{{ (module.name) ? module.name : module.id }}</h4>
+        <span class="h4 modal-title">{{ (module.name) ? module.name : module.id }}</span>
+        &nbsp;
+        <span data-ng-controller="RatingCtrl">
+          <rating value="module.rating" max="5" data-ng-click="setRating(module, value)" on-leave="overStar = null"></rating>
+        </span>
       </div>
       <div class="modal-body">
-        <carousel interval="myInterval">
+        <carousel interval="5000">
           <slide data-ng-repeat="slide in module.slides" active="slide.active">
             <img data-ng-src="{{slide.image}}" style="margin:auto;">
           </slide>
-          <slide><img src="http://placekitten.com/600/300" style="margin:auto;"></slide>
-          <slide><img src="http://placekitten.com/600/300" style="margin:auto;"></slide>
-          <slide><img src="http://placekitten.com/600/300" style="margin:auto;"></slide>
-          <slide><img src="http://placekitten.com/600/300" style="margin:auto;"></slide>
-          <slide><img src="http://placekitten.com/600/300" style="margin:auto;"></slide>
-          <slide><img src="http://placekitten.com/600/300" style="margin:auto;"></slide>
-          <slide><img src="http://placekitten.com/600/300" style="margin:auto;"></slide>
-          <slide><img src="http://placekitten.com/600/300" style="margin:auto;"></slide>
-          <slide><img src="http://placekitten.com/600/300" style="margin:auto;"></slide>
-          <slide><img src="http://placekitten.com/600/300" style="margin:auto;"></slide>
-          <slide><img src="http://placekitten.com/600/300" style="margin:auto;"></slide>
         </carousel>
 
         {{ module.description }}

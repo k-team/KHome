@@ -1,3 +1,9 @@
+function RatingCtrl($scope) {
+  $scope.setRating = function(value) {
+    console.log('Motherfucker')
+  };
+}
+
 function StoreCtrl($scope, $modal, ModuleService) {
   // All modules
   $scope.modules = [];
@@ -30,6 +36,21 @@ function StoreCtrl($scope, $modal, ModuleService) {
       // TODO handle errors better
     });
   };
+
+  $scope.ratingCtrl = function($scope) {
+    $scope.hoveringOver = function(value) {
+      $scope.overStar = value;
+      $scope.percent = 100 * (value / $scope.max);
+    };
+
+    $scope.ratingStates = [
+    {stateOn: 'glyphicon-ok-sign', stateOff: 'glyphicon-ok-circle'},
+    {stateOn: 'glyphicon-star', stateOff: 'glyphicon-star-empty'},
+    {stateOn: 'glyphicon-heart', stateOff: 'glyphicon-ban-circle'},
+    {stateOn: 'glyphicon-heart'},
+    {stateOff: 'glyphicon-off'}
+    ];
+  }
 
   $scope.modalInstances = {};
   $scope.openModal = function(module) {
