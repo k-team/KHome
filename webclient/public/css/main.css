@@ -1,5 +1,18 @@
+.vertical-middle {
+  display: inline-block;
+  vertical-align: middle;
+  float: none;
+}
+.module-thumbnail .thumbnail .vertical-middle {
+  padding-left: 17px;
+  padding-right: 0px;
+}
 .module-thumbnail a:hover {
   cursor: pointer;
+}
+.module-thumbnail .thumbnail:hover {
+  cursor: pointer;
+  background-color: #f8f9f8;
 }
 .thumbnail-tools {
   opacity: .2;

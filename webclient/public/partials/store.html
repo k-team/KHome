@@ -3,23 +3,40 @@
 </div>
 <div class="content">
   <div data-ng-show="modules" class="row">
-    <div data-ng-repeat="module in modules" class="col-xs-6 col-sm-4 col-md-3">
-      <div class="thumbnail">
-        <a data-ng-click="openModal(module)">
-          <img alt="Icon for module {{ module.id }}" title="{{ module.name }}"
-            data-ng-src="/api/available_modules/{{ module.id }}/icon"
-            onerror="this.onerror = null; this.src = '/img/module.png'">
-          <div class="caption">
-            <h4>{{ (module.name) ? (module.name | truncate:12) : (module.id | truncate:12) }}</h4>
-            <div class="hidden-xs hidden-sm">
-              <p>{{ module.description | truncate:100 }}</p>
-              <div class="btn-group">
-                <a data-ng-click="install(module)" class="btn btn-primary" role="button">Install</a>
-                <a data-ng-click="openModal(module)" class="btn btn-default" role="button">Details</a>
+    <div data-ng-repeat="module in modules" class="module-thumbnail col-xs-12 col-sm-4 col-md-3">
+      <div data-ng-click="openModal(module)" class="hidden-xs thumbnail">
+        <img alt="Icon for module {{ module.id }}" title="{{ module.name }}"
+          data-ng-src="/api/available_modules/{{ module.id }}/icon"
+          onerror="this.onerror = null; this.src = '/img/module.png'">
+        <div class="caption">
+          <h4>{{ (module.name) ? (module.name | truncate:12) : (module.id | truncate:12) }}</h4>
+          <div class="hidden-xs hidden-sm">
+            <p>{{ module.description | truncate:100 }}</p>
+            <!-- <div class="btn&#45;group"> -->
+            <!--   <a data&#45;ng&#45;click="install(module)" class="btn btn&#45;primary" role="button">Install</a> -->
+            <!--   <a data&#45;ng&#45;click="openModal(module)" class="btn btn&#45;default" role="button">Details</a> -->
+            <!-- </div> -->
+          </div>
+        </div>
+      </div>
+      <div data-ng-click="openModal(module)" class="visible-xs thumbnail">
+        <div class="row">
+          <div class="col-xs-3 vertical-middle center-block">
+              <img class="img-responsive" alt="Icon for module {{ module.id }}" title="{{ module.name }}"
+                data-ng-src="/api/available_modules/{{ module.id }}/icon"
+                onerror="this.onerror = null; this.src = '/img/module.png'">
+          </div>
+          <div class="col-xs-8 vertical-middle">
+            <h4>{{ (module.name) ? (module.name | truncate:20) : (module.id | truncate:20) }}</h4>
+            <p><small>{{ module.description | truncate:65 }}</small></p>
+            <div class="row">
+              <div class="col-xs-5 col-xs-offset-7">
+                <p class="text-danger"><small>Not installed</small></p>
+                <!-- <p class="text&#45;success"><small>Installed</small></p> -->
               </div>
             </div>
           </div>
-        </a>
+        </div>
       </div>
     </div>
 
