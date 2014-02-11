@@ -35,6 +35,21 @@ function StoreCtrl($scope, $modal, ModuleService) {
   $scope.openModal = function(module) {
     var modalScope = $scope.$new(true);
 
+    // Previews screen
+    modalScope.carouselCtrl = function($scope) {
+      $scope.myInterval = 5000;
+      var slides = $scope.slides = [];
+      $scope.addSlide = function() {
+        var newWidth = 600 + slides.length;
+        slides.push({
+          image: 'http://placekitten.com/' + newWidth + '/300',
+        });
+      };
+      for (var i=0; i<4; i++) {
+        $scope.addSlide();
+      }
+    }
+
     // Dismiss the modal
     modalScope.dismiss = function() {
       $scope.modalInstances[module.id].dismiss();

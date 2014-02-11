@@ -64,22 +64,13 @@
         <h4 class="modal-title">{{ (module.name) ? module.name : module.id }}</h4>
       </div>
       <div class="modal-body">
-        <carousel interval="myInterval">
-          <slide data-ng-repeat="slide in module.slides" active="slide.active">
-            <img data-ng-src="{{slide.image}}" style="margin:auto;">
-          </slide>
-          <slide><img src="http://placekitten.com/600/300" style="margin:auto;"></slide>
-          <slide><img src="http://placekitten.com/600/300" style="margin:auto;"></slide>
-          <slide><img src="http://placekitten.com/600/300" style="margin:auto;"></slide>
-          <slide><img src="http://placekitten.com/600/300" style="margin:auto;"></slide>
-          <slide><img src="http://placekitten.com/600/300" style="margin:auto;"></slide>
-          <slide><img src="http://placekitten.com/600/300" style="margin:auto;"></slide>
-          <slide><img src="http://placekitten.com/600/300" style="margin:auto;"></slide>
-          <slide><img src="http://placekitten.com/600/300" style="margin:auto;"></slide>
-          <slide><img src="http://placekitten.com/600/300" style="margin:auto;"></slide>
-          <slide><img src="http://placekitten.com/600/300" style="margin:auto;"></slide>
-          <slide><img src="http://placekitten.com/600/300" style="margin:auto;"></slide>
-        </carousel>
+        <div data-ng-controller="carouselCtrl">
+          <carousel interval="myInterval">
+            <slide data-ng-repeat="slide in slides" active="slide.active">
+              <img data-ng-src="{{slide.image}}" style="margin:auto;">
+            </slide>
+          </carousel>
+        </div>
 
         {{ module.description }}
       </div>
