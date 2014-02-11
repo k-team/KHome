@@ -3,7 +3,7 @@ import sys
 import json
 import zipfile
 import tempfile
-from flask import (Flask, send_file, abort)
+from flask import (Flask, request, send_file, abort)
 from werkzeug.utils import secure_filename
 from app import jsonify
 from utils import crossdomain
@@ -22,13 +22,13 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
-@app.route('/api/available_modules')
+@app.route('/api/available_modules', methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
 def api_available_modules():
     return jsonify(catalog.get_available_modules(detailed=True))
 
+@app.route('/api/available_modules/<module_name>/public/<rest>', methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
-@app.route('/api/available_modules/<module_name>/public/<rest>')
 def api_available_module_public(module_name, rest):
     # security check
     module_name, rest = map(secure_filename, (module_name, rest))
@@ -60,6 +60,15 @@ def api_available_module_public(module_name, rest):
                         abort(404)
         except (KeyError, IOError):
             abort(404)
+
+@app.route('/api/available_modules/<module_name>/rate', methods=['POST', 'OPTIONS'])
+@crossdomain(origin='*')
+def api_available_module(module_name):
+    try:
+        value = request.form['value']
+        print value
+    except KeyError:
+        abort(404)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug='--debug' in sys.argv, port=8889)
