@@ -29,41 +29,36 @@
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <!--Navigation header-->
       <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
         <a class="navbar-brand" href="#/home" title="GHome start page">GHome</a>
+
+        <!--Responsive navigation links-->
+        <span class="visible-xs navbar-text">
+          <a class="navbar-link col-xs-1" href="#/modules" title="Modules">
+            <span class="glyphicon glyphicon-th"></span>
+          </a>
+          <a class="navbar-link col-xs-1" href="#/store" title="Store">
+            <span class="glyphicon glyphicon-shopping-cart"></span>
+          </a>
+        </span>
       </div>
 
-      <!--Collapsible navigation bar-->
-      <div id="navbar-collapse" class="collapse navbar-collapse">
-        <ul class="nav navbar-nav">
-          <li>
-            <a href="#/modules" title="Modules">
-              Modules
-              &nbsp;
-              <span class="glyphicon glyphicon-th"></span>
-            </a>
-          </li>
-          <li>
-            <a href="#/store" title="Store">
-              Store
-              &nbsp;
-              <span class="glyphicon glyphicon-shopping-cart"></span>
-            </a>
-          </li>
-          <li>
-            <a href="#/settings" title="Settings">
-              Settings
-              &nbsp;
-              <span class="glyphicon glyphicon-wrench"></span>
-            </a>
-          </li>
-        </ul>
-      </div>
+      <!--Default navigation-->
+      <ul class="hidden-xs nav navbar-nav">
+        <li>
+          <a href="#/modules" title="Modules">
+            Modules
+            &nbsp;
+            <span class="glyphicon glyphicon-th"></span>
+          </a>
+        </li>
+        <li>
+          <a href="#/store" title="Store">
+            Store
+            &nbsp;
+            <span class="glyphicon glyphicon-shopping-cart"></span>
+          </a>
+        </li>
+      </ul>
     </nav>
 
     <!--Main view-->

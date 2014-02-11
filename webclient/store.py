@@ -4,6 +4,7 @@ import json
 import zipfile
 import tempfile
 from flask import (Flask, send_file, abort)
+from werkzeug.utils import secure_filename
 from app import jsonify
 from utils import crossdomain
 
@@ -16,6 +17,11 @@ import catalog
 
 app = Flask(__name__)
 
+ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+
 @app.route('/api/available_modules')
 @crossdomain(origin='*')
 def api_available_modules():
@@ -24,9 +30,10 @@ def api_available_modules():
 @crossdomain(origin='*')
 @app.route('/api/available_modules/<module_name>/public/<rest>')
 def api_available_module_public(module_name, rest):
-    # for security reasons
-    module_name = module_name.lstrip('.')
-    rest = rest.lstrip('.')
+    # security check
+    module_name, rest = map(secure_filename, (module_name, rest))
+    if not allowed_file(rest):
+        abort(403)
 
     # get zip file from catalog
     dir_ = catalog.AVAILABLE_DIRECTORY
