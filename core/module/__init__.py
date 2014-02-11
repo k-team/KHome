@@ -42,7 +42,14 @@ def get_instance_directory(module_name):
     """
     return INSTANCES_DIRECTORY
 
-def get_socket_name(module_name):
+def get_pid_file(module_name):
+    """
+    Return the filename of the pid of the module named *module_name*.
+    TODO add instance system.
+    """
+    return os.path.join(get_instance_directory(module_name), module_name + '.pid')
+
+def get_socket_file(module_name):
     """
     Return the filename of the socket of the module named *module_name*.
     TODO add instance system.
@@ -56,7 +63,7 @@ def get_socket(module_name):
     file object.
     """
     sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-    sock.connect(get_socket_name(module_name))
+    sock.connect(get_socket_file(module_name))
     return sock.makefile('rw')
 
 def network_write(conn, data):
@@ -206,7 +213,7 @@ class BaseMeta(type):
         type(self).ls_name.add(obj.module_name)
 
         # Handle module socket (server side)
-        setattr(obj, 'module_socket', get_socket_name(obj.module_name))
+        setattr(obj, 'module_socket', get_socket_file(obj.module_name))
         try:
           os.remove(obj.module_socket)
         except OSError:
