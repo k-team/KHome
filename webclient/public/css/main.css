@@ -46,6 +46,19 @@ a[ng-click]:hover,
 a.ng-click:hover {
   cursor: pointer;
 }
+.module-thumbnail .thumbnail .vertical-middle {
+  padding-left: 17px;
+  padding-right: 0px;
+}
+.module-thumbnail .thumbnail:hover {
+  cursor: pointer;
+  background-color: #f8f8f8;
+}
+.vertical-middle {
+  display: inline-block;
+  vertical-align: middle;
+  float: none;
+}
 .navbar {
   border-radius: initial;
 }
