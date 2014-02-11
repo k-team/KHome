@@ -33,6 +33,9 @@
   color: #000;
   background-color: transparent;
 }
+body {
+  padding-top: 70px;
+}
 [ng\:cloak],
 [ng-cloak],
 .ng-cloak {
