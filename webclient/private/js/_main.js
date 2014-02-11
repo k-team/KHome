@@ -21,4 +21,7 @@ angular.module('GHome', ['ngRoute', 'ui.bootstrap', 'angularFileUpload'])
     }).otherwise({
       redirectTo: '/home'
     });
+
+    // Fix for external AJAX
+    delete $httpProvider.defaults.headers.common['X-Requested-With'];
   });

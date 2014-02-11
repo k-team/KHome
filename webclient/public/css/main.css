@@ -1,38 +1,3 @@
-.module-thumbnail a:hover {
-  cursor: pointer;
-}
-.module-thumbnail .thumbnail .vertical-middle {
-  padding-left: 17px;
-  padding-right: 0px;
-}
-.module-thumbnail .thumbnail:hover {
-  cursor: pointer;
-  background-color: #f8f8f8;
-}
-.vertical-middle {
-  display: inline-block;
-  vertical-align: middle;
-  float: none;
-}
-.thumbnail-tools {
-  opacity: .2;
-  color: #000;
-  background-color: transparent;
-}
-.thumbnail-tools + .dropdown-menu {
-  min-width: initial;
-}
-.thumbnail-tools:hover,
-.thumbnail-tools:focus {
-  opacity: .2;
-  color: #000;
-  background-color: transparent;
-}
-.btn-group.open .thumbnail-tools {
-  opacity: .2;
-  color: #000;
-  background-color: transparent;
-}
 body {
   padding-top: 70px;
 }

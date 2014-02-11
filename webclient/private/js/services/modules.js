@@ -1,5 +1,6 @@
 angular.module('GHome').factory('ModuleService', function($q, $http, $timeout, $upload) {
-  var service = { defaultPollingDelay: 1000 };
+  var service = { defaultPollingDelay: 1000 },
+    storeUrl = 'http://0.0.0.0:8889';
 
   var getModules = function(url, cachedModules, forceReload) {
     var deferred = $q.defer();
@@ -18,7 +19,8 @@ angular.module('GHome').factory('ModuleService', function($q, $http, $timeout, $
   // a reload of this list
   service.availableModules = [];
   service.available = function(forceReload) {
-    return getModules('/api/available_modules', this.availableModules, forceReload);
+    return getModules(storeUrl + '/api/available_modules',
+        this.availableModules, forceReload);
   };
 
   // Get the list of installed modules, optionally passing if this should force

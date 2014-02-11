@@ -3,7 +3,7 @@
     <div data-ng-repeat="module in modules" class="module-thumbnail col-xs-12 col-sm-4 col-md-3">
       <div data-ng-click="openModal(module)" class="hidden-xs thumbnail">
         <img alt="Icon for module {{ module.id }}" title="{{ module.name }}"
-          data-ng-src="/api/available_modules/{{ module.id }}/icon"
+          data-ng-src="http://localhost:8889/api/available_modules/{{ module.id }}/public/icon.png"
           onerror="this.onerror = null; this.src = '/img/module.png'">
         <h4>{{ (module.name) ? (module.name | truncate:20) : (module.id | truncate:20) }}</h4>
         <div class="visible-sm">
@@ -26,7 +26,7 @@
         <div class="row">
           <div class="col-xs-3 vertical-middle center-block">
               <img class="img-responsive" alt="Icon for module {{ module.id }}" title="{{ module.name }}"
-                data-ng-src="/api/available_modules/{{ module.id }}/icon"
+                data-ng-src="http://localhost:8889/api/available_modules/{{ module.id }}/public/icon.png"
                 onerror="this.onerror = null; this.src = '/img/module.png'">
           </div>
           <div class="col-xs-8 vertical-middle">
