@@ -8,7 +8,7 @@ import os
 import json
 import zipfile
 
-from module import get_directory, DIRECTORY
+from module import get_module_directory, MODULES_DIRECTORY
 
 _file = os.path.realpath(__file__)
 _root = os.path.dirname(os.path.dirname(_file))
@@ -23,7 +23,7 @@ def get_config_file(module_name, directory=None):
     accessible.
     """
     if directory is None:
-        directory = get_directory(module_name)
+        directory = get_module_directory(module_name)
     return os.path.join(directory, CONFIG_FILE)
 
 def load_config(file_):
@@ -48,7 +48,7 @@ def is_installed(module_name, directory=None):
     module installation directory).
     """
     if directory is None:
-        directory = DIRECTORY
+        directory = MODULES_DIRECTORY
     module_directory = os.path.join(directory, module_name)
     return os.path.isdir(module_directory) \
             and os.path.exists(get_config_file(module_name, module_directory))
@@ -60,7 +60,7 @@ def get_installed_modules(detailed=False):
     "detailed" argument to true.
     """
     module_list = []
-    for module in os.listdir(DIRECTORY):
+    for module in os.listdir(MODULES_DIRECTORY):
         if not is_installed(module):
             continue
         if detailed:
@@ -116,7 +116,7 @@ def install_from_zip(file_):
             # Path traversal defense copied from
             # http://hg.python.org/cpython/file/tip/Lib/http/server.py#l789
             words = zi.filename.split('/')[1:]
-            path = DIRECTORY
+            path = MODULES_DIRECTORY
             for word in words[:-1]:
                 drive, word = os.path.splitdrive(word)
                 head, word = os.path.split(word)

@@ -1,5 +1,5 @@
 {
-  "start": "python2.7 module.py",
+  "start": "python2.7 .",
   "has_view": true,
   "public_directory": "public",
   "name": "Brightness",

@@ -97,3 +97,10 @@ class Base(threading.Thread):
                 self.emit_value(self.acquire_value())
             time.sleep(0.1)
         self.close()
+
+    def on_kill(self):
+        """
+        Method called when the module is killed. Let the field to
+        stop properly.
+        """
+        pass

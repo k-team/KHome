@@ -23,55 +23,56 @@ def Dummy(dummy_funct):
 #DoorSensor = Dummy(
 #        True if random.random() > 0.5 else False)
 
-AirSensor = Dummy(lambda t:
+
+Air = Dummy(lambda t:
         math.sin(t) * 30 + 30 + 0.5 * (random.random() - 0.5))
 
-ButaneSensor = Dummy(lambda t:
+Butane = Dummy(lambda t:
         math.sin(t) * 1500 + 2000 + 0.5 * (random.random() - 0.5)) #seuil 1500
 
-COSensor = Dummy(lambda t:
+CO = Dummy(lambda t:
         math.sin(t) * 200 + 200 + 0.5 * (random.random() - 0.5)) # seuil 60
 
-#CameraSensor = Dummy(lambda t:
+#Camera = Dummy(lambda t:
 #        math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
 
-ElectricCurrentSensor = Dummy(
+ElectricCurrent = Dummy(
         True if random.random() > 0.5 else False)
 
-LightButtonSensor = Dummy(
+LightButton = Dummy(
         True if random.random() > 0.5 else False)
 
-LuminosityExteriorSensor = Dummy(lambda t:
+LuminosityExterior = Dummy(lambda t:
         math.sin(t) * 800 + 820 + 0.5 * (random.random() - 0.5)) #seuil a fixer
 
-MethaneSensor = Dummy(lambda t:
+Methane = Dummy(lambda t:
         math.sin(t) * 600 + 800 + 0.5 * (random.random() - 0.5)) #seuil max 1000
 
-MoistureSensor = Dummy(lambda t:
+Moisture = Dummy(lambda t:
         math.sin(t) * 20 + 35 + 0.5 * (random.random() - 0.5)) #seuil max 45
 
-OutsideBrightnessSensor = Dummy(lambda t:
+OutsideBrightness = Dummy(lambda t:
         math.sin(t) * 800 + 820 + 0.5 * (random.random() - 0.5)) #seuil a fixer
 
-PropaneSensor = Dummy(lambda t:
+Propane = Dummy(lambda t:
         math.sin(t) * 1500 + 2000 + 0.5 * (random.random() - 0.5)) #seuil 1500
 
 RainForecast = Dummy(
         True if random.random() > 0.5 else False)
 
-ShutterSensor = Dummy(lambda t:
+Shutter = Dummy(lambda t:
         math.sin(t) * 50 + 50 + 0.5 * (random.random() - 0.5))
 
-SmokeSensor = Dummy(lambda t:
+Smoke = Dummy(lambda t:
         math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
 
-SoundSensor = Dummy(lambda t:
+Sound = Dummy(lambda t:
         math.sin(t) * 60 + 60 + 0.5 * (random.random() - 0.5)) #seuil cri nourison fixé a 97dBl
 
 TemperatureForecast = Dummy(lambda t:
         math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
 
-TemperatureExteriorSensor = Dummy(lambda t:
+TemperatureExterior = Dummy(lambda t:
         math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
 
 
