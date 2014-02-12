@@ -76,6 +76,7 @@ def exec_module(module_name, daemonize=True):
     if not 'start' in module_config:
         raise RuntimeError(
                 'Missing start entry in the module\'s configuration file')
+        sys.exit(1)
     start_cmd = module_config['start']
 
     # Daemon or not Daemon ?
@@ -130,20 +131,27 @@ def exec_module(module_name, daemonize=True):
         logging.info('Shutdown of the ' + module_name + ' module.')
         os.remove(pid_file)
         sys.exit(return_code)
+    sys.exit(0)
 
 def invoke_module(module_name, daemonize=True):
     """
     As exec_module, execute a module but fork before to keep the current
     process active. To see if the module is really running, use the
     *status_module* function.
-    Return the new process's pid.
+    Return the new process's pid. In case of error, return 0.
     """
-    pid = os.fork()
-    if pid == 0: # Child side
-        exec_module(module_name, daemonize)
-        sys.exit(0)
-    else: # Parent side
-        return pid
+    try:
+        pid = os.fork()
+    except OSError as e:
+        raise e
+        return 0
+    else:
+        if pid == 0: # Child side
+            exec_module(module_name, daemonize)
+            sys.exit(0)
+        else: # Parent side
+            return pid
+    return 0
 
 def invoke_modules():
     """
@@ -153,13 +161,10 @@ def invoke_modules():
     modules = get_installed_modules()
     pids = []
     for name in modules:
-        print 'R', name
-        try:
+        if not status_module(name):
             pid = invoke_module(name, True)
-        except (RuntimeError, OSError):
-            pass # Ignore if we try to invoke a running module or fork fail
-        else:
-            pids.append(pid)
+            if pid != 0:
+                pids.append(pid)
     return pids
 
 def stop_module(module_name):
@@ -170,9 +175,25 @@ def stop_module(module_name):
     if not os.path.exists(pid_file):
         raise RuntimeError('The module `' + module_name + '`is not running')
 
+    remove_file = False
+    pid = 0
     with open(pid_file, 'r') as f:
-        pid = int(f.readline())
-    os.kill(pid, signal.SIGTERM)
+        try:
+            pid = int(f.readline())
+        except ValueError:
+            remove_file = True
+
+    if pid != 0:
+        try:
+            os.kill(pid, signal.SIGTERM)
+        except OSError as e:
+            if e.errno == 3: # No such process
+                remove_file = True
+            else:
+                raise e
+
+    if remove_file:
+        os.remove(pid_file)
 
 def stop_modules():
     """
@@ -208,11 +229,11 @@ if __name__ == '__main__':
     args = docopt(__doc__)
 
     if args['start']:
-        invoke_module(args['<module_name>'], args['--daemon'])
+        print invoke_module(args['<module_name>'], args['--daemon'])
     elif args['stop']:
         stop_module(args['<module_name>'])
     elif args['start-all']:
-        invoke_modules()
+        print '\n'.join(map(str, invoke_modules()))
     elif args['stop-all']:
         stop_modules()
     elif args['status']:
