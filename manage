@@ -141,8 +141,26 @@ def invoke_module(module_name, daemonize=True):
     pid = os.fork()
     if pid == 0: # Child side
         exec_module(module_name, daemonize)
+        sys.exit(0)
     else: # Parent side
         return pid
+
+def invoke_modules():
+    """
+    Invoke all installed modules as daemon. Doesn't check if the modules are
+    correctly launch. Return the list of pid of the new processes.
+    """
+    modules = get_installed_modules()
+    pids = []
+    for name in modules:
+        print 'R', name
+        try:
+            pid = invoke_module(name, True)
+        except (RuntimeError, OSError):
+            pass # Ignore if we try to invoke a running module or fork fail
+        else:
+            pids.append(pid)
+    return pids
 
 def stop_module(module_name):
     """
@@ -151,11 +169,21 @@ def stop_module(module_name):
     pid_file = get_pid_file(module_name)
     if not os.path.exists(pid_file):
         raise RuntimeError('The module `' + module_name + '`is not running')
-        sys.exit(1)
 
     with open(pid_file, 'r') as f:
         pid = int(f.readline())
     os.kill(pid, signal.SIGTERM)
+
+def stop_modules():
+    """
+    Stop all the running modules
+    """
+    modules = get_installed_modules()
+    for name in modules:
+        try:
+            stop_module(name)
+        except RuntimeError:
+            pass # Ignore if we try to stop a stopped module
 
 def status_module(module_name):
     """
@@ -180,9 +208,13 @@ if __name__ == '__main__':
     args = docopt(__doc__)
 
     if args['start']:
-        exec_module(args['<module_name>'], args['--daemon'])
+        invoke_module(args['<module_name>'], args['--daemon'])
     elif args['stop']:
         stop_module(args['<module_name>'])
+    elif args['start-all']:
+        invoke_modules()
+    elif args['stop-all']:
+        stop_modules()
     elif args['status']:
         prefixe = {True: 'R', False: 'S'}
         for name, state in status_modules().iteritems():
