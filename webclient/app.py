@@ -4,6 +4,8 @@ import json
 import time
 import socket
 import tempfile
+import urlparse
+import requests
 from flask import (Flask, Response, send_file, request, abort,
         jsonify as _jsonify)
 
@@ -89,6 +91,28 @@ def api_module_public(module_name, rest):
         return send_file(requested_file)
     else:
         abort(404)
+
+def store_proxy(url):
+    """
+    Generates an app route pointing to the same relative url as the specified
+    store url. Doesn't return anything, only add the route.
+    The generated route acts as a proxy for the store server.
+    """
+    store_url = 'http://localhost:8889'
+    view_name = url.strip('/').replace('/', '_')
+    def view(*args, **kwargs):
+        request_func = getattr(requests, request.method.lower())
+        view_url = urlparse.urljoin(store_url, url)
+        r = request_func(view_url, headers=request.headers, data=request.data)
+        return (r.text, r.status_code, dict(r.headers))
+    app.add_url_rule(url, view_name, view_func=view)
+
+# Proxies for store service
+# TODO get these dynamically
+if __name__ == '__main__':
+    store_proxy('/api/available_modules')
+    store_proxy('/api/available_modules/<module_name>/public/<rest>')
+    store_proxy('/api/available_modules/<module_name>/rate')
 
 # used for samples
 import random

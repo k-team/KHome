@@ -23,4 +23,5 @@ angular.module('GHome', ['ngRoute', 'ui.bootstrap', 'angularFileUpload'])
     });
 
     delete $httpProvider.defaults.headers.common['X-Requested-With'];
+    delete $httpProvider.defaults.headers.post['Content-type']
   });

@@ -6,7 +6,6 @@ import tempfile
 from flask import (Flask, request, send_file, abort)
 from werkzeug.utils import secure_filename
 from app import jsonify
-from utils import crossdomain
 
 # TODO remove this and do use client launcher
 this_dir = os.path.dirname(os.path.realpath(__file__))
@@ -23,12 +22,10 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
 @app.route('/api/available_modules', methods=['GET', 'OPTIONS'])
-@crossdomain(origin='*')
 def api_available_modules():
     return jsonify(catalog.get_available_modules(detailed=True))
 
 @app.route('/api/available_modules/<module_name>/public/<rest>', methods=['GET', 'OPTIONS'])
-@crossdomain(origin='*')
 def api_available_module_public(module_name, rest):
     # security check
     module_name, rest = map(secure_filename, (module_name, rest))
@@ -62,8 +59,7 @@ def api_available_module_public(module_name, rest):
             abort(404)
 
 @app.route('/api/available_modules/<module_name>/rate', methods=['POST', 'OPTIONS'])
-@crossdomain(origin='*')
-def api_available_module(module_name):
+def api_available_module_rate(module_name):
     try:
         value = request.form['value']
         print value
