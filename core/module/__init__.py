@@ -10,7 +10,7 @@ from twisted.internet.endpoints import UNIXServerEndpoint as ServerEndpoint
 
 import fields
 from . import connection
-# import instance
+import instance
 
 _file = os.path.realpath(__file__)
 _root = os.path.dirname(os.path.dirname(os.path.dirname(_file)))
@@ -327,5 +327,7 @@ def use_module(module_name):
     """
     Shortcut for referencing a module through network, given its module name.
     """
-    # module.managing.start_instance(module_name, {})
+    if not instance.status(module_name):
+        instance.invoke(module_name, True)
+        time.sleep(1)
     return Network(name=module_name)

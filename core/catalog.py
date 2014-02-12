@@ -8,7 +8,7 @@ import os
 import json
 import zipfile
 
-from module import get_module_directory, MODULES_DIRECTORY
+import module
 
 _file = os.path.realpath(__file__)
 _root = os.path.dirname(os.path.dirname(_file))
@@ -23,7 +23,7 @@ def get_config_file(module_name, directory=None):
     accessible.
     """
     if directory is None:
-        directory = get_module_directory(module_name)
+        directory = module.get_module_directory(module_name)
     return os.path.join(directory, CONFIG_FILE)
 
 def load_config(file_):
@@ -48,7 +48,7 @@ def is_installed(module_name, directory=None):
     module installation directory).
     """
     if directory is None:
-        directory = MODULES_DIRECTORY
+        directory = module.MODULES_DIRECTORY
     module_directory = os.path.join(directory, module_name)
     return os.path.isdir(module_directory) \
             and os.path.exists(get_config_file(module_name, module_directory))
@@ -60,14 +60,14 @@ def get_installed_modules(detailed=False):
     "detailed" argument to true.
     """
     module_list = []
-    for module in os.listdir(MODULES_DIRECTORY):
-        if not is_installed(module):
+    for module_name in os.listdir(module.MODULES_DIRECTORY):
+        if not is_installed(module_name):
             continue
         if detailed:
-            module_config = get_config(module)
-            module = { 'id': module }
-            module.update(module_config)
-        module_list.append(module)
+            module_config = get_config(module_name)
+            module_name = { 'id': module_name }
+            module_name.update(module_config)
+        module_list.append(module_name)
     return module_list
 
 def get_available_modules(detailed=False):
@@ -77,15 +77,16 @@ def get_available_modules(detailed=False):
     """
     module_list = []
     dir_ = AVAILABLE_DIRECTORY
-    for module in os.listdir(dir_):
-        mod_full_dir = os.path.join(dir_, module)
-        if not module.lower().endswith('.zip'):
+    for module_name in os.listdir(dir_):
+        mod_full_dir = os.path.join(dir_, module_name)
+        if not module_name.lower().endswith('.zip'):
             continue
         with zipfile.ZipFile(mod_full_dir) as zf:
-            module_dir = os.path.splitext(module)[0] + '/'
+            module_dir = os.path.splitext(module_name)[0] + '/'
             if module_dir not in zf.namelist():
                 continue
-            module_config_file = get_config_file(module, directory=module_dir)
+            module_config_file = get_config_file(
+                    module_name, directory=module_dir)
             with zf.open(module_config_file) as module_config_fp:
                 conf = load_config(module_config_fp)
                 module_list.append(conf)
@@ -116,7 +117,7 @@ def install_from_zip(file_):
             # Path traversal defense copied from
             # http://hg.python.org/cpython/file/tip/Lib/http/server.py#l789
             words = zi.filename.split('/')[1:]
-            path = MODULES_DIRECTORY
+            path = module.MODULES_DIRECTORY
             for word in words[:-1]:
                 drive, word = os.path.splitdrive(word)
                 head, word = os.path.split(word)
