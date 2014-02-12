@@ -14,20 +14,35 @@ import logging
 # popen object containing the child
 child_proc = None
 
+# Create a logger
+logger = logging.getLogger()
+logger.setLevel(logging.DEBUG)
+formatter = logging.Formatter(
+        '%(asctime)s :: %(levelname)s :: %(message)s')
+handler = logging.StreamHandler()
+handler.setFormatter(formatter)
+handler.setLevel(logging.DEBUG)
+logger.addHandler(handler)
+
 def signal_handler(signum, frame):
+    """
+    Signal handler. If no child was created, it does nothing.
+    Else, it sends a SIGTERM signal to the child and wait it.
+    Then, it removes the pid file of the running module and exit.
+    """
+    logger.info('Receive a ' + str(signum) + ' signal. Shutdown the module')
     if child_proc is not None:
         child_proc.send_signal(signal.SIGTERM)
+        return_code = child_proc.wait()
         pid_file = get_pid_file(module_name)
         os.remove(pid_file)
+        sys.exit(return_code)
     sys.exit(0)
 
-if __name__ == '__main__':
-    # Get the module to launch
-    try:
-        module_name = sys.argv[1]
-    except IndexError:
-        sys.exit(1)
-
+def start_module(module_name):
+    """
+    Start a new module identified by its name *module_name*.
+    """
     # Check that only one instance is running at the same time
     pid_file = get_pid_file(module_name)
     if os.path.exists(pid_file):
@@ -54,17 +69,7 @@ if __name__ == '__main__':
     # Change the directory to the module directory
     os.chdir(get_module_directory(module_name))
 
-    # Create a logger
-    logger = logging.getLogger()
-    logger.setLevel(logging.DEBUG)
-    formatter = logging.Formatter(
-            '%(asctime)s :: %(levelname)s :: %(message)s')
-    handler = logging.StreamHandler()
-    handler.setFormatter(formatter)
-    handler.setLevel(logging.DEBUG)
-    logger.addHandler(handler)
-
-    # Prepare to get signal SIGINT and SIGTERM
+    # Prepare to receive signal SIGINT and SIGTERM
     signal.signal(signal.SIGINT, signal_handler)
     signal.signal(signal.SIGTERM, signal_handler)
 
@@ -94,3 +99,12 @@ if __name__ == '__main__':
         logging.info('Shutdown of the ' + module_name + ' module.')
         os.remove(pid_file)
         sys.exit(return_code)
+
+if __name__ == '__main__':
+    # Get the module to launch
+    try:
+        module_name = sys.argv[1]
+    except IndexError:
+        sys.exit(1)
+
+    start_module(module_name)
