@@ -5,7 +5,8 @@ import zipfile
 import tempfile
 from flask import (Flask, request, send_file, abort)
 from werkzeug.utils import secure_filename
-from app import jsonify
+from werkzeug.contrib.cache import SimpleCache
+from utils import jsonify, cached
 
 # TODO remove this and do use client launcher
 this_dir = os.path.dirname(os.path.realpath(__file__))
@@ -15,16 +16,19 @@ sys.path.insert(1, core_dir)
 import catalog
 
 app = Flask(__name__)
+cache = SimpleCache()
 
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
+@cached
 @app.route('/api/available_modules', methods=['GET', 'OPTIONS'])
 def api_available_modules():
     return jsonify(catalog.get_available_modules(detailed=True))
 
+@cached
 @app.route('/api/available_modules/<module_name>/public/<rest>', methods=['GET', 'OPTIONS'])
 def api_available_module_public(module_name, rest):
     # security check
@@ -58,6 +62,7 @@ def api_available_module_public(module_name, rest):
         except (KeyError, IOError):
             abort(404)
 
+@cached
 @app.route('/api/available_modules/<module_name>/rate', methods=['POST', 'OPTIONS'])
 def api_available_module_rate(module_name):
     try:

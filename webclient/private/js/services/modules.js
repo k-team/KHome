@@ -1,7 +1,7 @@
 angular.module('GHome').factory('ModuleService', function($q, $http, $timeout, $upload) {
   var service = { defaultPollingDelay: 1000 },
     modulesUrl = '/api/modules',
-    storeUrl = 'http://0.0.0.0:8889/api/available_modules';
+    storeUrl = '/api/available_modules';
 
   var getModules = function(url, cachedModules, forceReload) {
     var deferred = $q.defer();

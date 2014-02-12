@@ -1,13 +1,12 @@
 import os
 import sys
-import json
 import time
 import socket
 import tempfile
 import urlparse
 import requests
-from flask import (Flask, Response, send_file, request, abort,
-        jsonify as _jsonify)
+from flask import Flask, send_file, request, abort, make_response
+from utils import jsonify
 
 # TODO remove this and do use client launcher
 this_dir = os.path.dirname(os.path.realpath(__file__))
@@ -16,14 +15,6 @@ sys.path.insert(1, core_dir)
 # leave this though
 import catalog
 from module import use_module
-
-def jsonify(obj):
-    """
-    Updated jsonify, adding list support.
-    """
-    if isinstance(obj, list):
-        return Response(json.dumps(obj), mimetype='application/json')
-    return _jsonify(obj)
 
 # flask app
 app = Flask(__name__, static_folder='public', static_url_path='')
@@ -99,12 +90,15 @@ def store_proxy(url):
     The generated route acts as a proxy for the store server.
     """
     store_url = 'http://localhost:8889'
-    view_name = url.strip('/').replace('/', '_')
+    view_name = url.strip('/').replace('/<>', '_')
     def view(*args, **kwargs):
         request_func = getattr(requests, request.method.lower())
-        view_url = urlparse.urljoin(store_url, url)
+        view_url = urlparse.urljoin(store_url, request.path)
         r = request_func(view_url, headers=request.headers, data=request.data)
-        return (r.text, r.status_code, dict(r.headers))
+        resp = make_response(r.content)
+        resp.headers['Content-type'] = r.headers['Content-type']
+        resp.status_code = r.status_code
+        return resp
     app.add_url_rule(url, view_name, view_func=view)
 
 # Proxies for store service
