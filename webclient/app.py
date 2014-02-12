@@ -3,9 +3,7 @@ import sys
 import time
 import socket
 import tempfile
-import urlparse
-import requests
-from flask import Flask, send_file, request, abort, make_response
+from flask import Flask, send_file, request, abort
 from utils import jsonify
 
 # TODO remove this and do use client launcher
@@ -83,30 +81,16 @@ def api_module_public(module_name, rest):
     else:
         abort(404)
 
-def store_proxy(url):
-    """
-    Generates an app route pointing to the same relative url as the specified
-    store url. Doesn't return anything, only add the route.
-    The generated route acts as a proxy for the store server.
-    """
-    store_url = 'http://localhost:8889'
-    view_name = url.strip('/').replace('/<>', '_')
-    def view(*args, **kwargs):
-        request_func = getattr(requests, request.method.lower())
-        view_url = urlparse.urljoin(store_url, request.path)
-        r = request_func(view_url, headers=request.headers, data=request.data)
-        resp = make_response(r.content)
-        resp.headers['Content-type'] = r.headers['Content-type']
-        resp.status_code = r.status_code
-        return resp
-    app.add_url_rule(url, view_name, view_func=view)
-
 # Proxies for store service
 # TODO get these dynamically
 if __name__ == '__main__':
-    store_proxy('/api/available_modules')
-    store_proxy('/api/available_modules/<module_name>/public/<rest>')
-    store_proxy('/api/available_modules/<module_name>/rate')
+    from functools import partial
+    from utils import proxy
+    with app.app_context():
+        store_proxy = partial(proxy, 'http://localhost:8889')
+        store_proxy('/api/available_modules')
+        store_proxy('/api/available_modules/<module_name>/public/<rest>')
+        store_proxy('/api/available_modules/<module_name>/rate', methods=['POST'])
 
 # used for samples
 import random

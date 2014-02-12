@@ -1,6 +1,9 @@
 import json
+import urlparse
 from functools import wraps
-from flask import Response, request, jsonify as _jsonify
+import requests
+from flask import (Response, request, jsonify as _jsonify, current_app,
+        make_response)
 
 def jsonify(obj):
     """
@@ -26,3 +29,19 @@ def cached(timeout=5 * 60, key='view/%s'):
             return rv
         return decorated_function
     return decorator
+
+def proxy(proxy_url, url, **options):
+    """
+    Generates an app route pointing to the same relative url as the specified
+    proxy url. Doesn't return anything, only add the route.
+    """
+    view_name = url.strip('/').replace('/<>', '_')
+    def view(*args, **kwargs):
+        request_func = getattr(requests, request.method.lower())
+        view_url = urlparse.urljoin(proxy_url, request.path)
+        r = request_func(view_url, headers=request.headers, data=request.data)
+        resp = make_response(r.content)
+        resp.headers['Content-type'] = r.headers['Content-type']
+        resp.status_code = r.status_code
+        return resp
+    current_app.add_url_rule(url, view_name, view_func=view, **options)
