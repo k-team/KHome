@@ -12,35 +12,24 @@ from catalog import get_config
 # popen object containing the child
 child_proc = None
 
-# Create a logger
-logger = logging.getLogger()
-logger.setLevel(logging.DEBUG)
-formatter = logging.Formatter(
-        '%(asctime)s :: %(levelname)s :: %(message)s')
-handler = logging.StreamHandler()
-handler.setFormatter(formatter)
-handler.setLevel(logging.DEBUG)
-logger.addHandler(handler)
-
 def signal_handler(signum, frame):
     """
     Signal handler. If no child was created, it does nothing.
-    Else, it sends a SIGTERM signal to the child and wait it.
-    Then, it removes the pid file of the running module and exit.
+    Else, it broadcasts the signal to the child.
     """
-    logger.info('Receive a ' + str(signum) + ' signal. Shutdown the module')
+    global child_proc
+    logger = logging.getLogger()
+    logger.info('Receive a signal ' + str(signum) + '. Broadcast it to the child')
     if child_proc is not None:
-        child_proc.send_signal(signal.SIGTERM)
-        return_code = child_proc.wait()
-        pid_file = get_pid_file(module_name)
-        os.remove(pid_file)
-        sys.exit(return_code)
-    sys.exit(0)
+        child_proc.send_signal(signum)
+        child_proc.wait()
 
-def start_module(module_name):
+def start_module(module_name, daemonize=True):
     """
     Start a new module identified by its name *module_name*.
     """
+    global child_proc
+
     # Check that only one instance is running at the same time
     pid_file = get_pid_file(module_name)
     if os.path.exists(pid_file):
@@ -55,7 +44,6 @@ def start_module(module_name):
     start_cmd = module_config['start']
 
     # Daemon or not Daemon ?
-    daemonize = True
     if daemonize:
         # Create a daemon
         daemon.possess_me()
@@ -63,6 +51,16 @@ def start_module(module_name):
         # Redirect stdout and stderr into a log file
         sys.stdout = open(pid_file + '.log', 'a')
         sys.stderr = sys.stdout
+
+    # Create a logger and return it
+    logger = logging.getLogger()
+    logger.setLevel(logging.DEBUG)
+    formatter = logging.Formatter(
+            '%(asctime)s :: %(levelname)s :: %(message)s')
+    handler = logging.StreamHandler()
+    handler.setFormatter(formatter)
+    handler.setLevel(logging.DEBUG)
+    logger.addHandler(handler)
 
     # Change the directory to the module directory
     os.chdir(get_module_directory(module_name))
@@ -105,4 +103,6 @@ if __name__ == '__main__':
     except IndexError:
         sys.exit(1)
 
-    start_module(module_name)
+    daemonize = False
+
+    start_module(module_name, daemonize)
