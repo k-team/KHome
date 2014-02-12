@@ -327,7 +327,13 @@ def use_module(module_name):
     """
     Shortcut for referencing a module through network, given its module name.
     """
-    if not instance.status(module_name):
-        instance.invoke(module_name, True)
+    import re
+    reg = re.compile(r'([A-Z])')
+    name = reg.sub(lambda match: '_' + match.group(0).lower(), module_name)[1:]
+    # TODO unify module name of the socket and module_name of the pid
+    if not instance.status(name):
+        print 'Creation de', name
+        instance.invoke(name, True)
         time.sleep(1)
+        # TODO find a way to wait for the end of the invocation
     return Network(name=module_name)
