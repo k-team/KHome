@@ -23,17 +23,18 @@ def Dummy(dummy_funct):
 #DoorSensor = Dummy(
 #        True if random.random() > 0.5 else False)
 
+
 Air = Dummy(lambda t:
-        math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
+        math.sin(t) * 30 + 30 + 0.5 * (random.random() - 0.5))
 
 Butane = Dummy(lambda t:
-        math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
+        math.sin(t) * 1500 + 2000 + 0.5 * (random.random() - 0.5)) #seuil 1500
 
 CO = Dummy(lambda t:
-        math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
+        math.sin(t) * 200 + 200 + 0.5 * (random.random() - 0.5)) # seuil 60
 
-Camera = Dummy(lambda t:
-        math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
+#Camera = Dummy(lambda t:
+#        math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
 
 ElectricCurrent = Dummy(
         True if random.random() > 0.5 else False)
@@ -42,31 +43,31 @@ LightButton = Dummy(
         True if random.random() > 0.5 else False)
 
 LuminosityExterior = Dummy(lambda t:
-        math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
+        math.sin(t) * 800 + 820 + 0.5 * (random.random() - 0.5)) #seuil a fixer
 
 Methane = Dummy(lambda t:
-        math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
+        math.sin(t) * 600 + 800 + 0.5 * (random.random() - 0.5)) #seuil max 1000
 
 Moisture = Dummy(lambda t:
-        math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
+        math.sin(t) * 20 + 35 + 0.5 * (random.random() - 0.5)) #seuil max 45
 
 OutsideBrightness = Dummy(lambda t:
-        math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
+        math.sin(t) * 800 + 820 + 0.5 * (random.random() - 0.5)) #seuil a fixer
 
 Propane = Dummy(lambda t:
-        math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
+        math.sin(t) * 1500 + 2000 + 0.5 * (random.random() - 0.5)) #seuil 1500
 
-RainForecast = Dummy(lambda t:
-        math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
+RainForecast = Dummy(
+        True if random.random() > 0.5 else False)
 
 Shutter = Dummy(lambda t:
-        math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
+        math.sin(t) * 50 + 50 + 0.5 * (random.random() - 0.5))
 
 Smoke = Dummy(lambda t:
         math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
 
 Sound = Dummy(lambda t:
-        math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
+        math.sin(t) * 60 + 60 + 0.5 * (random.random() - 0.5)) #seuil cri nourison fixé a 97dBl
 
 TemperatureForecast = Dummy(lambda t:
         math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
