@@ -140,6 +140,9 @@ def invoke_module(module_name, daemonize=True):
     *status_module* function.
     Return the new process's pid. In case of error, return 0.
     """
+    if status_module(module_name):
+        raise RuntimeError('The module is already running')
+        return 0
     try:
         pid = os.fork()
     except OSError as e:
