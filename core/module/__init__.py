@@ -323,6 +323,13 @@ def _setup_module(obj, **kwargs):
     if 'name' in kwargs:
         obj.module_name = kwargs['name']
 
+def is_ready(module_name):
+    """
+    Return if the module *module_name* is ready.
+    This is detected by watching the socket file of the module.
+    """
+    return os.path.exists(get_socket_file(module_name))
+
 def use_module(module_name):
     """
     Shortcut for referencing a module through network, given its module name.
@@ -332,8 +339,7 @@ def use_module(module_name):
     name = reg.sub(lambda match: '_' + match.group(0).lower(), module_name)[1:]
     # TODO unify module name of the socket and module_name of the pid
     if not instance.status(name):
-        print 'Creation de', name
         instance.invoke(name, True)
-        time.sleep(1)
-        # TODO find a way to wait for the end of the invocation
+        while not is_ready(module_name):
+            time.sleep(0.1)
     return Network(name=module_name)
