@@ -1,3 +1,21 @@
+#!/bin/env python2
+
+"""
+Module Manager
+
+Start or stop a module.
+
+Usage:
+  module start <module_name> [--daemon]
+  module stop <module_name>
+  module (-h | --help)
+
+Options:
+  -h --help     Show this screen.
+  --daemon     Start the module as a new daemon.
+
+"""
+
 import os
 import sys
 sys.path.append('./core')
@@ -96,13 +114,24 @@ def start_module(module_name, daemonize=True):
         os.remove(pid_file)
         sys.exit(return_code)
 
-if __name__ == '__main__':
-    # Get the module to launch
-    try:
-        module_name = sys.argv[1]
-    except IndexError:
+def stop_module(module_name):
+    """
+    Stop the *module_name* module.
+    """
+    pid_file = get_pid_file(module_name)
+    if not os.path.exists(pid_file):
+        raise RuntimeError('The module `' + module_name + '`is not running')
         sys.exit(1)
 
-    daemonize = False
+    with open(pid_file, 'r') as f:
+        pid = int(f.readline())
+    os.kill(pid, signal.SIGTERM)
 
-    start_module(module_name, daemonize)
+if __name__ == '__main__':
+    from docopt import docopt
+    args = docopt(__doc__)
+
+    if args['start']:
+        start_module(args['<module_name>'], args['--daemon'])
+    elif args['stop']:
+        stop_module(args['<module_name>'])
