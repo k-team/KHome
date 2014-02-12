@@ -41,21 +41,6 @@ import subprocess
 from module import get_pid_file, get_module_directory
 from catalog import get_config, get_installed_modules
 
-# popen object containing the child
-child_proc = None
-
-def signal_handler(signum, frame):
-    """
-    Signal handler. If no child was created, it does nothing.
-    Else, it broadcasts the signal to the child.
-    """
-    global child_proc
-    logger = logging.getLogger()
-    logger.info('Receive a signal ' + str(signum) + '. Broadcast it to the child')
-    if child_proc is not None:
-        child_proc.send_signal(signum)
-        child_proc.wait()
-
 def exec_module(module_name, daemonize=True):
     """
     Start a new module identified by its name *module_name*. The current
@@ -63,7 +48,19 @@ def exec_module(module_name, daemonize=True):
     is, the current processus is killed immediately. Use *invoke_module*
     instead if you want to create a new killable process.
     """
-    global child_proc
+    child_proc = None
+
+    def signal_handler(signum, frame):
+        """
+        Signal handler. If no child was created, it does nothing.
+        Else, it broadcasts the signal to the child.
+        """
+        print child_proc
+        logger = logging.getLogger()
+        logger.info('Receive a signal ' + str(signum) + '. Broadcast it to the child')
+        if child_proc is not None:
+            child_proc.send_signal(signum)
+            child_proc.wait()
 
     # Check that only one instance is running at the same time
     pid_file = get_pid_file(module_name)
@@ -232,7 +229,7 @@ if __name__ == '__main__':
     args = docopt(__doc__)
 
     if args['start']:
-        print invoke_module(args['<module_name>'], args['--daemon'])
+        exec_module(args['<module_name>'], args['--daemon'])
     elif args['stop']:
         stop_module(args['<module_name>'])
     elif args['start-all']:
