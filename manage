@@ -42,9 +42,12 @@ def signal_handler(signum, frame):
         child_proc.send_signal(signum)
         child_proc.wait()
 
-def start_module(module_name, daemonize=True):
+def exec_module(module_name, daemonize=True):
     """
-    Start a new module identified by its name *module_name*.
+    Start a new module identified by its name *module_name*. The current
+    processus is killed at the end of the module when it's not a daemon. If it
+    is, the current processus is killed immediately. Use *invoke_module*
+    instead if you want to create a new killable process.
     """
     global child_proc
 
@@ -114,6 +117,18 @@ def start_module(module_name, daemonize=True):
         os.remove(pid_file)
         sys.exit(return_code)
 
+def invoke_module(module_name, daemonize=True):
+    """
+    As exec_module, execute a module but fork before to keep the current
+    process active.
+    Return the new process's pid.
+    """
+    pid = os.fork()
+    if pid == 0: # Child side
+        exec_module(module_name, daemonize)
+    else: # Parent side
+        return pid
+
 def stop_module(module_name):
     """
     Stop the *module_name* module.
@@ -132,6 +147,6 @@ if __name__ == '__main__':
     args = docopt(__doc__)
 
     if args['start']:
-        start_module(args['<module_name>'], args['--daemon'])
+        exec_module(args['<module_name>'], args['--daemon'])
     elif args['stop']:
         stop_module(args['<module_name>'])
