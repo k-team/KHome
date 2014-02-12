@@ -10,7 +10,7 @@ from twisted.internet.endpoints import UNIXServerEndpoint as ServerEndpoint
 
 import fields
 from . import connection
-import module.managing
+# import instance
 
 _file = os.path.realpath(__file__)
 _root = os.path.dirname(os.path.dirname(os.path.dirname(_file)))

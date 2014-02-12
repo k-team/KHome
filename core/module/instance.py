@@ -5,8 +5,26 @@ import signal
 import daemon
 import logging
 import subprocess
-from module import get_pid_file, get_module_directory
-from catalog import get_config, get_installed_modules
+import module
+import catalog
+
+def status(module_name):
+    """
+    Return the status of the module *module_name*
+    A module is considered as running if its pid file exists.
+    Return true if the module is running else false.
+    """
+    pid_file = module.get_pid_file(module_name)
+    return os.path.exists(pid_file)
+
+def status_all():
+    """
+    Return the status of all the installed modules. See the above function
+    *status* for more details.
+    Return a dictionary from name to status (as boolean).
+    """
+    modules = catalog.get_installed_modules()
+    return {name: status(name) for name in modules}
 
 def execm(module_name, daemonize=True):
     """
@@ -29,13 +47,13 @@ def execm(module_name, daemonize=True):
             child_proc.wait()
 
     # Check that only one instance is running at the same time
-    pid_file = get_pid_file(module_name)
+    pid_file = module.get_pid_file(module_name)
     if os.path.exists(pid_file):
         raise RuntimeError('A pid file already exists for this module')
         sys.exit(1)
 
     # Get the start command from the configuration file
-    module_config = get_config(module_name)
+    module_config = catalog.get_config(module_name)
     if not 'start' in module_config:
         raise RuntimeError(
                 'Missing start entry in the module\'s configuration file')
@@ -62,7 +80,7 @@ def execm(module_name, daemonize=True):
     logger.addHandler(handler)
 
     # Change the directory to the module directory
-    os.chdir(get_module_directory(module_name))
+    os.chdir(module.get_module_directory(module_name))
 
     # Prepare to receive signal SIGINT and SIGTERM
     signal.signal(signal.SIGINT, signal_handler)
@@ -124,7 +142,7 @@ def invoke_all():
     Invoke all installed modules as daemon. Doesn't check if the modules are
     correctly launch. Return the list of pid of the new processes.
     """
-    modules = get_installed_modules()
+    modules = catalog.get_installed_modules()
     pids = []
     for name in modules:
         if not status(name):
@@ -137,12 +155,12 @@ def stop(module_name):
     """
     Stop the *module_name* module.
     """
-    pid_file = get_pid_file(module_name)
-    if not os.path.exists(pid_file):
+    if not status(module_name):
         raise RuntimeError('The module `' + module_name + '`is not running')
 
     remove_file = False
     pid = 0
+    pid_file = module.get_pid_file(module_name)
     with open(pid_file, 'r') as f:
         try:
             pid = int(f.readline())
@@ -165,27 +183,9 @@ def stop_all():
     """
     Stop all the running modules
     """
-    modules = get_installed_modules()
+    modules = catalog.get_installed_modules()
     for name in modules:
         try:
             stop(name)
         except RuntimeError:
             pass # Ignore if we try to stop a stopped module
-
-def status(module_name):
-    """
-    Return the status of the module *module_name*
-    A module is considered as running if its pid file exists.
-    Return true if the module is running else false.
-    """
-    pid_file = get_pid_file(module_name)
-    return os.path.exists(pid_file)
-
-def status_all():
-    """
-    Return the status of all the installed modules. See the above function
-    *status* for more details.
-    Return a dictionary from name to status (as boolean).
-    """
-    modules = get_installed_modules()
-    return {name: status(name) for name in modules}
