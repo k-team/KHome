@@ -4,12 +4,10 @@ sys.path.append('./core')
 import shlex
 import signal
 import daemon
+import logging
 import subprocess
 from module import get_pid_file, get_module_directory
 from catalog import get_config
-
-# Logging
-import logging
 
 # popen object containing the child
 child_proc = None
