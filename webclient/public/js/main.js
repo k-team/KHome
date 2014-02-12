@@ -21,9 +21,6 @@ angular.module('GHome', ['ngRoute', 'ui.bootstrap', 'angularFileUpload'])
     }).otherwise({
       redirectTo: '/home'
     });
-
-    delete $httpProvider.defaults.headers.common['X-Requested-With'];
-    delete $httpProvider.defaults.headers.post['Content-type']
   });
 ;function MainCtrl($scope, ModuleService, HouseMapService) {
   // All modules
@@ -379,8 +376,11 @@ function StoreCtrl($scope, $modal, ModuleService) {
 
   service.rateModule = function(module, value) {
     var deferred = $q.defer();
-    $http.post(storeUrl + '/' + module.id + '/rate', { value: value })
-      .success(function() { deferred.resolve(); })
+    $http({
+      url: storeUrl + '/' + module.id + '/rate',
+      method: 'POST', data: 'value=' + value,
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+    }).success(function() { deferred.resolve(); })
       .error(function() { deferred.reject(); });
     return deferred.promise;
   };

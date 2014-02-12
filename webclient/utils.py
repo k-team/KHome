@@ -9,7 +9,7 @@ def jsonify(obj):
     """
     Updated jsonify, adding list support.
     """
-    if isinstance(obj, list):
+    if isinstance(obj, (list, tuple)):
         return Response(json.dumps(obj), mimetype='application/json')
     return _jsonify(obj)
 
@@ -39,7 +39,11 @@ def proxy(proxy_url, url, **options):
     def view(*args, **kwargs):
         request_func = getattr(requests, request.method.lower())
         view_url = urlparse.urljoin(proxy_url, request.path)
-        r = request_func(view_url, headers=request.headers, data=request.data)
+        data = request.form \
+                if request.method.lower() in ['put', 'post'] \
+                else request.data
+        print 'data', data
+        r = request_func(view_url, headers=request.headers, data=data)
         resp = make_response(r.content)
         resp.headers['Content-type'] = r.headers['Content-type']
         resp.status_code = r.status_code

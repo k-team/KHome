@@ -3,10 +3,13 @@ import sys
 import json
 import zipfile
 import tempfile
-from flask import (Flask, request, send_file, abort)
 from werkzeug.utils import secure_filename
 from werkzeug.contrib.cache import SimpleCache
-from utils import jsonify, cached, proxy
+from flask import (Flask, request, send_file, abort)
+#from flask_peewee.auth import Auth
+from flask_peewee.db import Database
+from peewee import *
+from utils import jsonify, cached
 
 # TODO remove this and do use client launcher
 this_dir = os.path.dirname(os.path.realpath(__file__))
@@ -22,6 +25,26 @@ ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+
+# configure our database
+app.config['DATABASE'] = {
+        'name': os.path.join(this_dir, 'store.db'),
+        'engine': 'peewee.SqliteDatabase',
+        }
+
+# instantiate the db wrapper
+db = Database(app)
+
+# write the models
+
+class Rating(db.Model):
+    module = CharField()
+    value = IntegerField()
+
+# finish setting up database
+#auth = Auth(app, db)
+if __name__ == '__main__':
+    Rating.create_table(fail_silently=True)
 
 @cached
 @app.route('/api/available_modules', methods=['GET'])
@@ -63,12 +86,34 @@ def api_available_module_public(module_name, rest):
             abort(404)
 
 @cached
-@app.route('/api/available_modules/<module_name>/rate', methods=['POST'])
-def api_available_module_rate(module_name):
+@app.route('/api/available_modules/<module_name>/rate', methods=['GET'])
+def api_available_module_get_rate(module_name):
+
+    # check that the module is indeed available
+    if not catalog.is_available(module_name):
+        abort(404)
+
+    # compute the average rating
     try:
-        value = request.form['value']
-        print value
-    except KeyError:
+        value = Rating.get(Rating.module == module_name).select(
+                fn.Avg(Rating.value).alias('value'))[0].value
+    except Rating.DoesNotExist:
+        value = 0
+    finally:
+        return jsonify({ 'value': value })
+
+@cached
+@app.route('/api/available_modules/<module_name>/rate', methods=['POST'])
+def api_available_module_set_rate(module_name):
+
+    # check that the module is indeed available
+    if not catalog.is_available(module_name):
+        abort(404)
+
+    # save the new rating
+    try:
+        Rating.create(module=module_name, value=int(request.form['value']))
+    except (ValueError, KeyError):
         abort(404)
 
 if __name__ == '__main__':

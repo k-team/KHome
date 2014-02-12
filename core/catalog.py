@@ -53,6 +53,12 @@ def is_installed(module_name, directory=None):
     return os.path.isdir(module_directory) \
             and os.path.exists(get_config_file(module_name, module_directory))
 
+def is_available(module_name):
+    """
+    Return if the module named as *module_name* is available.
+    """
+    return module_name in (m['id'] for m in get_available_modules())
+
 def get_installed_modules(detailed=False):
     """
     Return a list of all installed modules in the installation directory.
@@ -88,7 +94,10 @@ def get_available_modules(detailed=False):
             module_config_file = get_config_file(module, directory=module_dir)
             with zf.open(module_config_file) as module_config_fp:
                 conf = load_config(module_config_fp)
-                module_list.append(conf)
+                if detailed:
+                    module_list.append({ 'id': conf['id'] })
+                else:
+                    module_list.append(conf)
     return module_list
 
 def install_from_zip(file_):

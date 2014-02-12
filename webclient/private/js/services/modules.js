@@ -25,8 +25,11 @@ angular.module('GHome').factory('ModuleService', function($q, $http, $timeout, $
 
   service.rateModule = function(module, value) {
     var deferred = $q.defer();
-    $http.post(storeUrl + '/' + module.id + '/rate', { value: value })
-      .success(function() { deferred.resolve(); })
+    $http({
+      url: storeUrl + '/' + module.id + '/rate',
+      method: 'POST', data: 'value=' + value,
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+    }).success(function() { deferred.resolve(); })
       .error(function() { deferred.reject(); });
     return deferred.promise;
   };
