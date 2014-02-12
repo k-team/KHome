@@ -8,11 +8,13 @@ Start or stop a module.
 Usage:
   module start <module_name> [--daemon]
   module stop <module_name>
+  module status <module_name> [--porcelain]
   module (-h | --help)
 
 Options:
   -h --help     Show this screen.
-  --daemon     Start the module as a new daemon.
+  --daemon      Start the module as a new daemon.
+  --porcelain   Give the output in an easy-to-parse format for script.
 
 """
 
@@ -120,7 +122,8 @@ def exec_module(module_name, daemonize=True):
 def invoke_module(module_name, daemonize=True):
     """
     As exec_module, execute a module but fork before to keep the current
-    process active.
+    process active. To see if the module is really running, use the
+    *status_module* function.
     Return the new process's pid.
     """
     pid = os.fork()
@@ -142,6 +145,15 @@ def stop_module(module_name):
         pid = int(f.readline())
     os.kill(pid, signal.SIGTERM)
 
+def status_module(module_name):
+    """
+    Return the status of the module *module_name*
+    A module is considered as running if its pid file exists.
+    Return true if the module is running else false.
+    """
+    pid_file = get_pid_file(module_name)
+    return os.path.exists(pid_file)
+
 if __name__ == '__main__':
     from docopt import docopt
     args = docopt(__doc__)
@@ -150,3 +162,14 @@ if __name__ == '__main__':
         exec_module(args['<module_name>'], args['--daemon'])
     elif args['stop']:
         stop_module(args['<module_name>'])
+    elif args['status']:
+        module_name = args['<module_name>']
+        running = status_module(module_name)
+        if args['--porcelain']:
+            prefixe = 'R' if running else 'D'
+            print prefixe, module_name
+        else:
+            if running:
+                print 'The module', module_name, 'is running'
+            else:
+                print 'The module', module_name, 'is not running'
