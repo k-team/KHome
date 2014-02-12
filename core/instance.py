@@ -1,38 +1,5 @@
-#!/bin/env python2
-
-"""
-Module Manager
-
-Start or stop a module.
-
-Usage:
-  module start <module_name> [--daemon]
-  module stop <module_name>
-  module start-all
-  module stop-all
-  module status
-  module (-h | --help)
-
-Options:
-  -h --help     Show this screen.
-  --daemon      Start the module as a new daemon.
-  --porcelain   Give the output in an easy-to-parse format for script. R, S
-                mean respectively that the module is running, stopped.
-
-Output:
-  When the manager is used with the *status* command, the list of the status of
-  the modules is written into stdin. The format of output is : PREFIXE
-  MODULE_NAME where PREFIXE is one of those described below and MODULE_NAME is
-  the name of the directory of the module (it may be different of the public
-  name and the id of the module).
-
-  R - the module is running
-  S - the module is stopped
-"""
-
 import os
 import sys
-sys.path.append('./core')
 import shlex
 import signal
 import daemon
@@ -41,11 +8,11 @@ import subprocess
 from module import get_pid_file, get_module_directory
 from catalog import get_config, get_installed_modules
 
-def exec_module(module_name, daemonize=True):
+def execm(module_name, daemonize=True):
     """
     Start a new module identified by its name *module_name*. The current
     processus is killed at the end of the module when it's not a daemon. If it
-    is, the current processus is killed immediately. Use *invoke_module*
+    is, the current processus is killed immediately. Use *invoke*
     instead if you want to create a new killable process.
     """
     child_proc = None
@@ -55,7 +22,6 @@ def exec_module(module_name, daemonize=True):
         Signal handler. If no child was created, it does nothing.
         Else, it broadcasts the signal to the child.
         """
-        print child_proc
         logger = logging.getLogger()
         logger.info('Receive a signal ' + str(signum) + '. Broadcast it to the child')
         if child_proc is not None:
@@ -130,14 +96,14 @@ def exec_module(module_name, daemonize=True):
         sys.exit(return_code)
     sys.exit(0)
 
-def invoke_module(module_name, daemonize=True):
+def invoke(module_name, daemonize=True):
     """
     As exec_module, execute a module but fork before to keep the current
     process active. To see if the module is really running, use the
-    *status_module* function.
+    *status* function.
     Return the new process's pid. In case of error, return 0.
     """
-    if status_module(module_name):
+    if status(module_name):
         raise RuntimeError('The module is already running')
         return 0
     try:
@@ -147,13 +113,13 @@ def invoke_module(module_name, daemonize=True):
         return 0
     else:
         if pid == 0: # Child side
-            exec_module(module_name, daemonize)
+            execm(module_name, daemonize)
             sys.exit(0)
         else: # Parent side
             return pid
     return 0
 
-def invoke_modules():
+def invoke_all():
     """
     Invoke all installed modules as daemon. Doesn't check if the modules are
     correctly launch. Return the list of pid of the new processes.
@@ -161,13 +127,13 @@ def invoke_modules():
     modules = get_installed_modules()
     pids = []
     for name in modules:
-        if not status_module(name):
-            pid = invoke_module(name, True)
+        if not status(name):
+            pid = invoke(name, True)
             if pid != 0:
                 pids.append(pid)
     return pids
 
-def stop_module(module_name):
+def stop(module_name):
     """
     Stop the *module_name* module.
     """
@@ -195,18 +161,18 @@ def stop_module(module_name):
     if remove_file:
         os.remove(pid_file)
 
-def stop_modules():
+def stop_all():
     """
     Stop all the running modules
     """
     modules = get_installed_modules()
     for name in modules:
         try:
-            stop_module(name)
+            stop(name)
         except RuntimeError:
             pass # Ignore if we try to stop a stopped module
 
-def status_module(module_name):
+def status(module_name):
     """
     Return the status of the module *module_name*
     A module is considered as running if its pid file exists.
@@ -215,28 +181,11 @@ def status_module(module_name):
     pid_file = get_pid_file(module_name)
     return os.path.exists(pid_file)
 
-def status_modules():
+def status_all():
     """
     Return the status of all the installed modules. See the above function
-    *status_module* for more details.
+    *status* for more details.
     Return a dictionary from name to status (as boolean).
     """
     modules = get_installed_modules()
-    return {name: status_module(name) for name in modules}
-
-if __name__ == '__main__':
-    from docopt import docopt
-    args = docopt(__doc__)
-
-    if args['start']:
-        exec_module(args['<module_name>'], args['--daemon'])
-    elif args['stop']:
-        stop_module(args['<module_name>'])
-    elif args['start-all']:
-        print '\n'.join(map(str, invoke_modules()))
-    elif args['stop-all']:
-        stop_modules()
-    elif args['status']:
-        prefixe = {True: 'R', False: 'S'}
-        for name, state in status_modules().iteritems():
-            print '%s %s' % (prefixe[state], name)
+    return {name: status(name) for name in modules}
