@@ -4,6 +4,7 @@ import json
 import time
 import socket
 import select
+import logging
 import threading
 from twisted.internet import reactor
 from twisted.internet.endpoints import UNIXServerEndpoint as ServerEndpoint
@@ -21,11 +22,24 @@ SOCKET_TIMEOUT = 10
 
 _running_modules = []
 
+# Create a logger
+logger = logging.getLogger()
+logger.setLevel(logging.DEBUG)
+formatter = logging.Formatter(
+        '%(asctime)s :: %(levelname)s :: %(message)s')
+handler = logging.StreamHandler()
+handler.setFormatter(formatter)
+handler.setLevel(logging.DEBUG)
+logger.addHandler(handler)
+
 def kill():
     """
     Kill all running modules
     """
+    logger = logging.getLogger()
+    logger.info('Application killed')
     for mod in _running_modules:
+        logger.info('Kill the module `' + mod + '`.')
         mod.kill()
     reactor.callFromThread(reactor.stop)
     sys.exit(1)
@@ -339,7 +353,20 @@ def use_module(module_name):
     name = reg.sub(lambda match: '_' + match.group(0).lower(), module_name)[1:]
     # TODO unify module name of the socket and module_name of the pid
     if not instance.status(name):
+        logger = logging.getLogger()
+        logger.info(
+                'Try to launch the `' + module_name + '` dependancy module.')
+
         instance.invoke(name, True)
+        t = time.time()
         while not is_ready(module_name):
             time.sleep(0.1)
+            if time.time() - t > SOCKET_TIMEOUT:
+                logger.error('Impossible to launch the `' + \
+                        module_name + '` dependancy module. Abort')
+                kill()
+                return
+
+        logger.info('The `' + module_name + \
+                '` dependancy module successfully launched.')
     return Network(name=module_name)
