@@ -7,6 +7,7 @@ import logging
 import subprocess
 import module
 import catalog
+import path
 
 def status(module_name):
     """
@@ -14,7 +15,7 @@ def status(module_name):
     A module is considered as running if its pid file exists.
     Return true if the module is running else false.
     """
-    pid_file = module.get_pid_file(module_name)
+    pid_file = path.pid_file(module_name)
     return os.path.exists(pid_file)
 
 def status_all():
@@ -47,7 +48,7 @@ def execm(module_name, daemonize=True):
             child_proc.wait()
 
     # Check that only one instance is running at the same time
-    pid_file = module.get_pid_file(module_name)
+    pid_file = path.pid_file(module_name)
     if os.path.exists(pid_file):
         raise RuntimeError('A pid file already exists for this module')
         sys.exit(1)
@@ -66,14 +67,14 @@ def execm(module_name, daemonize=True):
         daemon.possess_me()
 
         # Redirect stdout and stderr into a log file
-        sys.stdout = open(pid_file + '.log', 'a')
+        sys.stdout = open(path.log_file(module_name), 'a')
         sys.stderr = sys.stdout
 
     # Create a logger
     logger = logging.getLogger()
 
     # Change the directory to the module directory
-    os.chdir(module.get_module_directory(module_name))
+    os.chdir(path.module_directory(module_name))
 
     # Prepare to receive signal SIGINT and SIGTERM
     signal.signal(signal.SIGINT, signal_handler)
@@ -153,7 +154,7 @@ def stop(module_name):
 
     remove_file = False
     pid = 0
-    pid_file = module.get_pid_file(module_name)
+    pid_file = path.pid_file(module_name)
     with open(pid_file, 'r') as f:
         try:
             pid = int(f.readline())

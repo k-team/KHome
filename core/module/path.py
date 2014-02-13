@@ -1,8 +1,8 @@
-from os.path import join
+from os.path import join, dirname, realpath
 import re
 
-_file = os.path.realpath(__file__)
-_root = os.path.dirname(os.path.dirname(_file))
+_file = realpath(__file__)
+_root = dirname(dirname(dirname(_file)))
 
 def realname(module_name):
     """
@@ -20,7 +20,7 @@ def availables_directory():
     Get the absolute path to the directory of available modules.
     """
     # NOTE utile pour le code ? Ne doit on pas demander au
-    # serveur de store pour récupérer les availables ?
+    # serveur de store pour recuperer les availables ?
     AVAILABLES_DIRECTORY = 'available_modules'
     return join(_root, AVAILABLES_DIRECTORY)
 
@@ -42,7 +42,7 @@ def pids_directory():
     """
     Get the absolute path to the sockets directory.
     """
-    PIDS_DIRECTORY = 'pids'
+    PIDS_DIRECTORY = 'pid'
     return join(instances_directory(), PIDS_DIRECTORY)
 
 def sockets_directory():
@@ -59,12 +59,14 @@ def logs_directory():
     LOG_DIRECTORY = 'log'
     return join(instances_directory(), LOG_DIRECTORY)
 
-def module_directory(module_name):
+def module_directory(module_name, directory=None):
     """
     Get the absolute path to the module directory for the named module.
     """
     module_name = realname(module_name)
-    return join(modules_directory(), module_name)
+    if directory is None:
+        return join(modules_directory(), module_name)
+    return join(directory, module_name)
 
 def pid_file(module_name):
     """
@@ -87,9 +89,13 @@ def log_file(module_name):
     module_name = realname(module_name)
     return join(logs_directory(), module_name + '.log')
 
-def config_file(module_name):
+def config_file(module_name, directory=None):
     """
-    Get the absolute path to the configuration file for the named module.
+    Get the absolute path to the configuration file for the named module,
+    optionally passing in the directory from which this file will be
+    accessible.
     """
     CONFIG_FILE = 'module.json'
-    return join(module_directory(module_name), CONFIG_FILE)
+    if directory is None:
+        return join(module_directory(module_name), CONFIG_FILE)
+    return join(directory, CONFIG_FILE)
