@@ -4,6 +4,14 @@ import re
 _file = realpath(__file__)
 _root = dirname(dirname(dirname(_file)))
 
+AVAILABLES_DIRECTORY = 'available_modules'
+MODULES_DIRECTORY = 'modules'
+INSTANCES_DIRECTORY = 'instances'
+PIDS_DIRECTORY = 'pid'
+SOCKET_DIRECTORY = 'socket'
+LOG_DIRECTORY = 'log'
+CONFIG_FILE = 'module.json'
+
 def realname(module_name):
     """
     Return the real name of a module. The real name of a modules
@@ -21,42 +29,36 @@ def availables_directory():
     """
     # NOTE utile pour le code ? Ne doit on pas demander au
     # serveur de store pour recuperer les availables ?
-    AVAILABLES_DIRECTORY = 'available_modules'
     return join(_root, AVAILABLES_DIRECTORY)
 
 def modules_directory():
     """
     Get the absolute path to the sockets directory.
     """
-    MODULES_DIRECTORY = 'modules'
     return join(_root, MODULES_DIRECTORY)
 
 def instances_directory():
     """
     Get the absolute path to the sockets directory.
     """
-    INSTANCES_DIRECTORY = 'instances'
     return join(_root, INSTANCES_DIRECTORY)
 
 def pids_directory():
     """
     Get the absolute path to the sockets directory.
     """
-    PIDS_DIRECTORY = 'pid'
     return join(instances_directory(), PIDS_DIRECTORY)
 
 def sockets_directory():
     """
     Get the absolute path to the sockets directory.
     """
-    SOCKET_DIRECTORY = 'socket'
     return join(instances_directory(), SOCKET_DIRECTORY)
 
 def logs_directory():
     """
     Get the absolute path to the logs directory.
     """
-    LOG_DIRECTORY = 'log'
     return join(instances_directory(), LOG_DIRECTORY)
 
 def module_directory(module_name, directory=None):
@@ -95,7 +97,6 @@ def config_file(module_name, directory=None):
     optionally passing in the directory from which this file will be
     accessible.
     """
-    CONFIG_FILE = 'module.json'
     if directory is None:
         return join(module_directory(module_name), CONFIG_FILE)
     return join(directory, CONFIG_FILE)

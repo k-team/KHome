@@ -62,7 +62,7 @@ def get_available_modules(detailed=False):
     (eg. module configuration) by setting the "detailed" argument to true.
     """
     module_list = []
-    dir_ = AVAILABLE_DIRECTORY
+    dir_ = path.availables_directory()
     for module_name in os.listdir(dir_):
         mod_full_dir = os.path.join(dir_, module_name)
         if not module_name.lower().endswith('.zip'):
