@@ -11,13 +11,12 @@ from twisted.internet.endpoints import UNIXServerEndpoint as ServerEndpoint
 
 import fields
 from . import connection
+import path
 import instance
 
 _file = os.path.realpath(__file__)
 _root = os.path.dirname(os.path.dirname(os.path.dirname(_file)))
 
-MODULES_DIRECTORY = os.path.join(_root, 'modules')
-INSTANCES_DIRECTORY = os.path.join(_root, 'instances')
 SOCKET_TIMEOUT = 10
 
 _running_modules = []
@@ -44,32 +43,6 @@ def kill():
     reactor.callFromThread(reactor.stop)
     sys.exit(1)
 
-def get_module_directory(module_name):
-    """
-    Shortcut to get the directory for a module (absolute path).
-    """
-    return os.path.join(MODULES_DIRECTORY, module_name)
-
-def get_instance_directory(module_name):
-    """
-    Shortcut to get the directory for a instance of a module (absolute path).
-    """
-    return INSTANCES_DIRECTORY
-
-def get_pid_file(module_name):
-    """
-    Return the filename of the pid of the module named *module_name*.
-    TODO add instance system.
-    """
-    return os.path.join(get_instance_directory(module_name), module_name + '.pid')
-
-def get_socket_file(module_name):
-    """
-    Return the filename of the socket of the module named *module_name*.
-    TODO add instance system.
-    """
-    return os.path.join(get_instance_directory(module_name), module_name + '.sock')
-
 def get_socket(module_name):
     """
     Return a socket connected to the module named *module_name*.
@@ -77,7 +50,7 @@ def get_socket(module_name):
     file object.
     """
     sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-    sock.connect(get_socket_file(module_name))
+    sock.connect(path.socket_file(module_name))
     return sock.makefile('rw')
 
 def network_write(conn, data):
@@ -227,7 +200,7 @@ class BaseMeta(type):
         type(self).ls_name.add(obj.module_name)
 
         # Handle module socket (server side)
-        setattr(obj, 'module_socket', get_socket_file(obj.module_name))
+        setattr(obj, 'module_socket', path.socket_file(obj.module_name))
         try:
           os.remove(obj.module_socket)
         except OSError:
@@ -344,7 +317,7 @@ def is_ready(module_name):
     Return if the module *module_name* is ready.
     This is detected by watching the socket file of the module.
     """
-    return os.path.exists(get_socket_file(module_name))
+    return os.path.exists(path.socket_file(module_name))
 
 def use_module(module_name):
     """
