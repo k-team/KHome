@@ -294,6 +294,8 @@ class Base(threading.Thread):
         self.endpoint = None
 
     def start(self):
+        logger = logging.getLogger()
+        logger.info('The module `' + self.module_name + '` is running.')
         self.running = True
         for f in self.module_fields:
             f.start()
