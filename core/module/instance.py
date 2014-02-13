@@ -125,8 +125,12 @@ def invoke(module_name, daemonize=True):
         return 0
     else:
         if pid == 0: # Child side
-            execm(module_name, daemonize)
-            sys.exit(0)
+            try:
+                execm(module_name, daemonize)
+            except:
+                pass
+            finally:
+                sys.exit(0)
         else: # Parent side
             return pid
     return 0
@@ -139,8 +143,12 @@ def invoke_all():
     modules = catalog.get_installed_modules()
     pids = []
     for name in modules:
-        if not status(name):
+        # if not status(name):
+        try:
             pid = invoke(name, True)
+        except RuntimeError:
+            pass
+        else:
             if pid != 0:
                 pids.append(pid)
     return pids
