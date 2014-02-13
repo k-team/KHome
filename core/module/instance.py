@@ -69,15 +69,8 @@ def execm(module_name, daemonize=True):
         sys.stdout = open(pid_file + '.log', 'a')
         sys.stderr = sys.stdout
 
-    # Create a logger and return it
+    # Create a logger
     logger = logging.getLogger()
-    logger.setLevel(logging.DEBUG)
-    formatter = logging.Formatter(
-            '%(asctime)s :: %(levelname)s :: %(message)s')
-    handler = logging.StreamHandler()
-    handler.setFormatter(formatter)
-    handler.setLevel(logging.DEBUG)
-    logger.addHandler(handler)
 
     # Change the directory to the module directory
     os.chdir(module.get_module_directory(module_name))
