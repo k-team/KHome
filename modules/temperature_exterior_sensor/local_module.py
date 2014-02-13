@@ -1,16 +1,15 @@
-from twisted.internet import reactor
-import core.module
-import core.fields
-import core.fields.io
-import core.fields.persistant
-import time
+import module
+import fields
+import fields.io
+import fields.persistant
+import fields.sensor
 
-class TemperatureExteriorSensor(core.module.Base):
+class TemperatureExteriorSensor(module.Base):
     update_rate = 10
     
     class Temperature(
-            core.fields.sensor.TemperatureExterior
-            core.fields.io.Readable,
-            core.fields.persistant.Volatile,
-            core.fields.Base):
+            fields.sensor.TemperatureExterior
+            fields.io.Readable,
+            fields.persistant.Volatile,
+            fields.Base):
         pass

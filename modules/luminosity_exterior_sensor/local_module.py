@@ -1,21 +1,17 @@
-from twisted.internet import reactor
-import core.module
-import core.fields
-import core.fields.io
-import core.fields.persistant
-import time
+import module
+import fields
+import fields.io
+import fields.sensor
+import fields.persistant
 
-
-
-class LuminosityExteriorSensor(core.module.Base):
+class LuminosityExteriorSensor(module.Base):
     update_rate = 10
-
-    NIGHTLIMIT = 20
+    night_limit = 20
     
-    class Luminosity(
-            core.fields.sensor.LuminosityExterior
-            core.fields.io.Readable,
-            core.fields.persistant.Volatile,
-            core.fields.Base):
+    class luminosity(
+            fields.sensor.LuminosityExterior
+            fields.io.Readable,
+            fields.persistant.Volatile,
+            fields.Base):
         pass
         

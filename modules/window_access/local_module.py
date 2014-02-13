@@ -7,8 +7,8 @@ import fields.proxy
 class WindowAccess(module.Base):
     update_rate = 10
 
-    WindowSensor = use_module('WindowSensor')
-    WindowActuator = use_module('WindowActuator')
+    windowSensor = use_module('WindowSensor')
+    windowActuator = use_module('WindowActuator')
 
     window = fields.proxy.mix('Window', 'WindowSensor', 'Window',
             'WindowActuator', 'Window')
