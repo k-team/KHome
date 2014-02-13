@@ -4,57 +4,44 @@ import json
 import time
 import socket
 import select
+import logging
 import threading
 from twisted.internet import reactor
 from twisted.internet.endpoints import UNIXServerEndpoint as ServerEndpoint
 
 import fields
 from . import connection
-import module.managing
+import path
+import instance
 
 _file = os.path.realpath(__file__)
 _root = os.path.dirname(os.path.dirname(os.path.dirname(_file)))
 
-MODULES_DIRECTORY = os.path.join(_root, 'modules')
-INSTANCES_DIRECTORY = os.path.join(_root, 'instances')
 SOCKET_TIMEOUT = 10
 
 _running_modules = []
+
+# Create a logger
+logger = logging.getLogger()
+logger.setLevel(logging.DEBUG)
+formatter = logging.Formatter(
+        '%(asctime)s :: %(levelname)s :: %(message)s')
+handler = logging.StreamHandler()
+handler.setFormatter(formatter)
+handler.setLevel(logging.DEBUG)
+logger.addHandler(handler)
 
 def kill():
     """
     Kill all running modules
     """
+    logger = logging.getLogger()
+    logger.info('Application killed')
     for mod in _running_modules:
+        logger.info('Kill the module `' + mod + '`.')
         mod.kill()
     reactor.callFromThread(reactor.stop)
     sys.exit(1)
-
-def get_module_directory(module_name):
-    """
-    Shortcut to get the directory for a module (absolute path).
-    """
-    return os.path.join(MODULES_DIRECTORY, module_name)
-
-def get_instance_directory(module_name):
-    """
-    Shortcut to get the directory for a instance of a module (absolute path).
-    """
-    return INSTANCES_DIRECTORY
-
-def get_pid_file(module_name):
-    """
-    Return the filename of the pid of the module named *module_name*.
-    TODO add instance system.
-    """
-    return os.path.join(get_instance_directory(module_name), module_name + '.pid')
-
-def get_socket_file(module_name):
-    """
-    Return the filename of the socket of the module named *module_name*.
-    TODO add instance system.
-    """
-    return os.path.join(get_instance_directory(module_name), module_name + '.sock')
 
 def get_socket(module_name):
     """
@@ -63,7 +50,7 @@ def get_socket(module_name):
     file object.
     """
     sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-    sock.connect(get_socket_file(module_name))
+    sock.connect(path.socket_file(module_name))
     return sock.makefile('rw')
 
 def network_write(conn, data):
@@ -213,7 +200,7 @@ class BaseMeta(type):
         type(self).ls_name.add(obj.module_name)
 
         # Handle module socket (server side)
-        setattr(obj, 'module_socket', get_socket_file(obj.module_name))
+        setattr(obj, 'module_socket', path.socket_file(obj.module_name))
         try:
           os.remove(obj.module_socket)
         except OSError:
@@ -280,6 +267,8 @@ class Base(threading.Thread):
         self.endpoint = None
 
     def start(self):
+        logger = logging.getLogger()
+        logger.info('The module `' + self.module_name + '` is running.')
         self.running = True
         for f in self.module_fields:
             f.start()
@@ -323,9 +312,36 @@ def _setup_module(obj, **kwargs):
     if 'name' in kwargs:
         obj.module_name = kwargs['name']
 
+def is_ready(module_name):
+    """
+    Return if the module *module_name* is ready.
+    This is detected by watching the socket file of the module.
+    """
+    return os.path.exists(path.socket_file(module_name))
+
 def use_module(module_name):
     """
     Shortcut for referencing a module through network, given its module name.
     """
-    # module.managing.start_instance(module_name, {})
+    import re
+    reg = re.compile(r'([A-Z])')
+    name = reg.sub(lambda match: '_' + match.group(0).lower(), module_name)[1:]
+    # TODO unify module name of the socket and module_name of the pid
+    if not instance.status(name):
+        logger = logging.getLogger()
+        logger.info(
+                'Try to launch the `' + module_name + '` dependancy module.')
+
+        instance.invoke(name, True)
+        t = time.time()
+        while not is_ready(module_name):
+            time.sleep(0.1)
+            if time.time() - t > SOCKET_TIMEOUT:
+                logger.error('Impossible to launch the `' + \
+                        module_name + '` dependancy module. Abort')
+                kill()
+                return
+
+        logger.info('The `' + module_name + \
+                '` dependancy module successfully launched.')
     return Network(name=module_name)

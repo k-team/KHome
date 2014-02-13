@@ -17,6 +17,7 @@ core_dir = os.path.join(os.path.dirname(this_dir), 'core')
 sys.path.insert(1, core_dir)
 # leave this though
 import catalog
+from module import path
 
 app = Flask(__name__)
 cache = SimpleCache()
@@ -60,7 +61,7 @@ def api_available_module_public(module_name, rest):
         abort(403)
 
     # get zip file from catalog
-    dir_ = catalog.AVAILABLE_DIRECTORY
+    dir_ = path.availables_directory()
     module_zipfile = os.path.join(dir_, module_name + '.zip')
     with zipfile.ZipFile(module_zipfile) as zf:
         try:

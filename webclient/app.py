@@ -13,6 +13,7 @@ sys.path.insert(1, core_dir)
 # leave this though
 import catalog
 from module import use_module
+from module import path
 
 # flask app
 app = Flask(__name__, static_folder='public', static_url_path='')
@@ -73,7 +74,7 @@ def api_module_public(module_name, rest):
         abort(404)
 
     # send the requested file
-    module_dir = catalog.get_module_directory(module_name)
+    module_dir = path.module_directory(module_name)
     module_public_dir = module_config.get('public_directory', 'public')
     requested_file = os.path.join(module_dir, module_public_dir, rest)
     if os.path.exists(requested_file):

@@ -8,23 +8,11 @@ import os
 import json
 import zipfile
 
-from module import get_module_directory, MODULES_DIRECTORY
+import module
+import module.path as path
 
 _file = os.path.realpath(__file__)
 _root = os.path.dirname(os.path.dirname(_file))
-
-AVAILABLE_DIRECTORY = os.path.join(_root, 'available_modules')
-CONFIG_FILE = 'module.json'
-
-def get_config_file(module_name, directory=None):
-    """
-    Get the absolute path to the configuration file for the named module,
-    optionally passing in the directory from which this file will be
-    accessible.
-    """
-    if directory is None:
-        directory = get_module_directory(module_name)
-    return os.path.join(directory, CONFIG_FILE)
 
 def load_config(file_):
     """
@@ -40,18 +28,16 @@ def get_config(module_name, directory=None):
     Load the configuration for the named module, passing in the 'directory'
     argument with the same use as for get_config_file().
     """
-    return load_config(get_config_file(module_name, directory))
+    return load_config(path.config_file(module_name, directory))
 
 def is_installed(module_name, directory=None):
     """
     Return if the named module exists in the given directory (defaults to
     module installation directory).
     """
-    if directory is None:
-        directory = MODULES_DIRECTORY
-    module_directory = os.path.join(directory, module_name)
-    return os.path.isdir(module_directory) \
-            and os.path.exists(get_config_file(module_name, module_directory))
+    module_directory = path.module_directory(module_name, directory)
+    config_file = path.config_file(module_name, module_directory)
+    return os.path.isdir(module_directory) and os.path.exists(config_file)
 
 def is_available(module_name):
     """
@@ -66,14 +52,14 @@ def get_installed_modules(detailed=False):
     "detailed" argument to true.
     """
     module_list = []
-    for module in os.listdir(MODULES_DIRECTORY):
-        if not is_installed(module):
+    for module_name in os.listdir(path.modules_directory()):
+        if not is_installed(module_name):
             continue
         if detailed:
-            module_config = get_config(module)
-            module = { 'id': module }
-            module.update(module_config)
-        module_list.append(module)
+            module_config = get_config(module_name)
+            module_name = { 'id': module_name }
+            module_name.update(module_config)
+        module_list.append(module_name)
     return module_list
 
 def get_available_modules(detailed=False):
@@ -82,16 +68,17 @@ def get_available_modules(detailed=False):
     (eg. module configuration) by setting the "detailed" argument to true.
     """
     module_list = []
-    dir_ = AVAILABLE_DIRECTORY
-    for module in os.listdir(dir_):
-        mod_full_dir = os.path.join(dir_, module)
-        if not module.lower().endswith('.zip'):
+    dir_ = path.availables_directory()
+    for module_name in os.listdir(dir_):
+        mod_full_dir = os.path.join(dir_, module_name)
+        if not module_name.lower().endswith('.zip'):
             continue
         with zipfile.ZipFile(mod_full_dir) as zf:
-            module_dir = os.path.splitext(module)[0] + '/'
+            module_dir = os.path.splitext(module_name)[0] + '/'
             if module_dir not in zf.namelist():
                 continue
-            module_config_file = get_config_file(module, directory=module_dir)
+            module_config_file = path.config_file(
+                    module_name, directory=module_dir)
             with zf.open(module_config_file) as module_config_fp:
                 conf = load_config(module_config_fp)
                 if detailed:
@@ -125,7 +112,7 @@ def install_from_zip(file_):
             # Path traversal defense copied from
             # http://hg.python.org/cpython/file/tip/Lib/http/server.py#l789
             words = zi.filename.split('/')[1:]
-            path = MODULES_DIRECTORY
+            path = path.modules_directory()
             for word in words[:-1]:
                 drive, word = os.path.splitdrive(word)
                 head, word = os.path.split(word)
