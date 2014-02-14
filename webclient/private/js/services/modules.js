@@ -15,6 +15,14 @@ angular.module('GHome').factory('ModuleService', function($q, $http, $timeout, $
     });
   };
 
+  service.module = function(name) {
+    var deferred = $q.defer();
+    $http.get(modulesUrl + '/' + name).success(function(data) {
+      console.log(data);
+    });
+    return deferred.promise;
+  };
+
   var getModules = function(url, cachedModules, forceReload) {
     var deferred = $q.defer();
     if (!forceReload) {

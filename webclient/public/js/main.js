@@ -130,15 +130,14 @@ angular.module('GHome', ['ngRoute', 'ui.bootstrap', 'angularFileUpload'])
     });
   });
 }
-;function ModuleInjectorCtrl($scope, $routeParams, $compile, $http) {
-  $scope.moduleName = $routeParams.moduleName;
-  $scope.templateUrl = '/api/modules/' + $scope.moduleName
-    + '/public/partial.html';
+;function ModuleInjectorCtrl($scope, ModuleService, $routeParams, $compile, $http) {
+  var moduleName = $routeParams.moduleName;
 
-  $http.get($scope.templateUrl).then(function(result){
-    $scope.moduleContent = result.data;
+  // Load the current module
+  ModuleService.module(moduleName).then(function(module) { $scope.module = module; });
 
-    // Note: this is a hack, but it works
+  // Load the angular-like html to be injected
+  $http.get('/api/modules/' + moduleName + '/public/partial.html').then(function(result) {
     $('#inject').html($compile(result.data)($scope));
   });
 }
@@ -381,6 +380,14 @@ function StoreCtrl($scope, $modal, ModuleService) {
       url: url, method: 'POST', data: formattedData,
       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
     });
+  };
+
+  service.module = function(name) {
+    var deferred = $q.defer();
+    $http.get(modulesUrl + '/' + name).success(function(data) {
+      console.log(data);
+    });
+    return deferred.promise;
   };
 
   var getModules = function(url, cachedModules, forceReload) {
