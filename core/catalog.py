@@ -82,9 +82,9 @@ def get_available_modules(detailed=False):
             with zf.open(module_config_file) as module_config_fp:
                 conf = load_config(module_config_fp)
                 if detailed:
-                    module_list.append({ 'id': conf['id'] })
-                else:
                     module_list.append(conf)
+                else:
+                    module_list.append({ 'id': conf['id'] })
     return module_list
 
 def install_from_zip(file_):

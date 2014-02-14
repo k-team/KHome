@@ -44,6 +44,11 @@ def api_module_configure(module_name):
         abort(404)
 
 @app.route('/api/modules/install', methods=['POST'])
+def api_install_module():
+    print request.form
+    return ''
+
+@app.route('/api/modules/install', methods=['POST'])
 def api_upload_module():
     return_data = { 'success': False }
     file_ = request.files['file']
@@ -91,7 +96,7 @@ if __name__ == '__main__':
         store_proxy = partial(proxy, 'http://localhost:8889')
         store_proxy('/api/available_modules')
         store_proxy('/api/available_modules/<module_name>/public/<rest>')
-        store_proxy('/api/available_modules/<module_name>/rate', methods=['POST'])
+        store_proxy('/api/available_modules/rate', methods=['POST'])
 
 # used for samples
 import random

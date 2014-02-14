@@ -42,7 +42,6 @@ def proxy(proxy_url, url, **options):
         data = request.form \
                 if request.method.lower() in ['put', 'post'] \
                 else request.data
-        print 'data', data
         r = request_func(view_url, headers=request.headers, data=data)
         resp = make_response(r.content)
         resp.headers['Content-type'] = r.headers['Content-type']

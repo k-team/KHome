@@ -42,6 +42,11 @@ class Rating(db.Model):
     module = CharField()
     value = IntegerField()
 
+    @classmethod
+    def average(cls, module_name):
+        return cls.get(cls.module == module_name).select(
+                fn.Avg(cls.value).alias('value'))[0].value
+
 # finish setting up database
 #auth = Auth(app, db)
 if __name__ == '__main__':
@@ -50,7 +55,13 @@ if __name__ == '__main__':
 @cached
 @app.route('/api/available_modules', methods=['GET'])
 def api_available_modules():
-    return jsonify(catalog.get_available_modules(detailed=True))
+    available_modules = catalog.get_available_modules(detailed=True)
+    for av in available_modules:
+        try:
+            av['rating'] = Rating.average(av['id'])
+        except Rating.DoesNotExist:
+            pass
+    return jsonify(available_modules)
 
 @cached
 @app.route('/api/available_modules/<module_name>/public/<rest>', methods=['GET'])
@@ -87,25 +98,17 @@ def api_available_module_public(module_name, rest):
             abort(404)
 
 @cached
-@app.route('/api/available_modules/<module_name>/rate', methods=['GET'])
-def api_available_module_get_rate(module_name):
-
-    # check that the module is indeed available
-    if not catalog.is_available(module_name):
-        abort(404)
-
-    # compute the average rating
+@app.route('/api/available_modules/rate', methods=['POST'])
+def api_available_module_set_rate():
+    """
+    TODO: api key for rating
+    """
+    # validate module name
     try:
-        value = Rating.get(Rating.module == module_name).select(
-                fn.Avg(Rating.value).alias('value'))[0].value
-    except Rating.DoesNotExist:
-        value = 0
-    finally:
-        return jsonify({ 'value': value })
-
-@cached
-@app.route('/api/available_modules/<module_name>/rate', methods=['POST'])
-def api_available_module_set_rate(module_name):
+        print request.form
+        module_name = request.form['name']
+    except KeyError:
+        abort(400)
 
     # check that the module is indeed available
     if not catalog.is_available(module_name):
@@ -113,7 +116,9 @@ def api_available_module_set_rate(module_name):
 
     # save the new rating
     try:
-        Rating.create(module=module_name, value=int(request.form['value']))
+        value = int(request.form['value'])
+        Rating.create(module=module_name, value=value)
+        return jsonify({ 'success': True })
     except (ValueError, KeyError):
         import traceback; traceback.print_exc()
         abort(404)
