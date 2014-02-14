@@ -1,10 +1,15 @@
-import time
-import math
-import random
+import sys
+import string
+from twisted.internet import reactor, protocol
+from twisted.python.log import startLogging
 from twisted.internet import reactor
 from twisted.internet.protocol import ClientCreator
 from twisted.internet.protocol import ClientFactory
 from twisted.internet.protocol import Protocol
+import time
+import math
+import random
+
 
 def Dummy(dummy_funct):
     """
@@ -33,8 +38,8 @@ Butane = Dummy(lambda t:
 CO = Dummy(lambda t:
         math.sin(t) * 200 + 200 + 0.5 * (random.random() - 0.5)) # seuil 60
 
-Camera = Dummy(lambda t:
-        math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
+#Camera = Dummy(lambda t:
+#        math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
 
 ElectricCurrent = Dummy(
         True if random.random() > 0.5 else False)
@@ -67,7 +72,8 @@ Smoke = Dummy(lambda t:
         math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
 
 Sound = Dummy(lambda t:
-        math.sin(t) * 60 + 60 + 0.5 * (random.random() - 0.5)) #seuil cri nourison fixe a 97dBl
+        math.sin(t) * 60 + 60 + 0.5 * (random.random() - 0.5)) 
+        #seuil cri nourison fixer a 97dBl
 
 TemperatureForecast = Dummy(lambda t:
         math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
@@ -75,9 +81,12 @@ TemperatureForecast = Dummy(lambda t:
 TemperatureExterior = Dummy(lambda t:
         math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
 
-Window = Dummy(lambda t:
-        math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
 
+
+
+
+
+# a client protocol
 
 class SensorConnection(Protocol):
 
@@ -97,7 +106,6 @@ class SensorConnection(Protocol):
         print "connection lost"
       
     def analyser(self,data):
-        print "analyse en cours: "
         #a completer
         org = data[6:8]
 	valeur = '{0:032b}'.format(int(data[8:16],16))
@@ -111,7 +119,7 @@ class SensorConnection(Protocol):
 		if org == "05":
 		    #todo
 		    sentData = self.org05(valeur,status)
-		    #self.sensor.emit_value(sentData)
+		    self.sensor.emit_value(sentData)
 		if org == "06":
 		    #todo
 		    sentData = self.org06(valeur)
@@ -207,21 +215,34 @@ class SensorConnectionFactory(ClientFactory):
 class Sensor(object):
     sensor_host = '134.214.106.23'
     sensor_port = 5000
+    sensor_id = ""
 
-    def __init__(self,sensor_id):
+    def __init__(self):
         super(Sensor, self).__init__()
         reactor.connectTCP(type(self).sensor_host,
                 type(self).sensor_port,
                 SensorConnectionFactory(self,
-                    sensor_id))
+                    type(self).sensor_id))
 
     def start(self):
-        #super(Sensor, self).start()
         reactor.run()
+        super(Sensor, self).start()
 
     def close(self):
         super(Sensor, self).close()
 
-if __name__ == '__main__':
-    sensor = Sensor("0021CC31")
-    sensor.start()
+class Interrupt(Sensor):
+    sensor_id = "0021CC31"
+
+class WindowsContact(Sensor):
+    sensor_id = "0001B595"
+
+class Presence(Sensor):
+    sensor_id = "00063E7B"
+
+class Humidite_Temperature(Sensor):
+    sensor_id = "00893378"
+
+#if __name__ == '__main__':
+#    sensor = Interrupt()
+#    sensor.start()
