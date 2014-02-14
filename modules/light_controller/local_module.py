@@ -15,8 +15,14 @@ class LightController(module.Base):
             super(LightController.controller, self).__init__()
 
         def always(self):
-            if presence.presence():
-                if luminosity.luminosity() < self.luminosity_limit:
-                    light.light_button(True)
+            try:
+                current_presence = self.module.presence.presence()[1]
+                current_lum = self.module.luminosity.luminosity()[1]
+            except TypeError:
+                pass # Ignore
             else:
-                light.light_button(False)
+                if  current_presence:
+                    if  current_lum < self.luminosity_limit:
+                        self.module.light.light_button(True)
+                else:
+                    self.module.light.light_button(False)
