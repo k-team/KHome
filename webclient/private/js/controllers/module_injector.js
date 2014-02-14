@@ -4,7 +4,6 @@ function ModuleInjectorCtrl($scope, $routeParams, $compile, $http) {
     + '/public/partial.html';
 
   $http.get($scope.templateUrl).then(function(result){
-    console.log(result.data);
     $scope.moduleContent = result.data;
 
     // Note: this is a hack, but it works

@@ -136,7 +136,6 @@ angular.module('GHome', ['ngRoute', 'ui.bootstrap', 'angularFileUpload'])
     + '/public/partial.html';
 
   $http.get($scope.templateUrl).then(function(result){
-    console.log(result.data);
     $scope.moduleContent = result.data;
 
     // Note: this is a hack, but it works

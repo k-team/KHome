@@ -3,6 +3,9 @@ import sys
 import time
 import socket
 import tempfile
+import urllib2
+from StringIO import StringIO
+import urlparse
 from flask import Flask, send_file, request, abort
 from utils import jsonify
 
@@ -15,6 +18,8 @@ from module import use_module, path, packaging
 
 # flask app
 app = Flask(__name__, static_folder='public', static_url_path='')
+
+STORE_URL = 'http://localhost:8889'
 
 def allowed_file(filename, exts):
     return '.' in filename and filename.rsplit('.', 1)[1] in exts
@@ -35,7 +40,7 @@ def api_modules():
     return jsonify(packaging.get_installed_modules(detailed=True))
 
 @app.route('/api/modules/<module_name>/fields')
-def api_module_configure(module_name):
+def api_module_fields(module_name):
     try:
         return jsonify(use_module(module_name).fields)
     except socket.error:
@@ -43,29 +48,43 @@ def api_module_configure(module_name):
 
 @app.route('/api/modules/install', methods=['POST'])
 def api_install_module():
-    print request.form
-    return ''
+    try:
+        module_name = request.form['name']
+    except KeyError:
+        abort(400)
+    else:
+        try:
+            io = StringIO()
+            zipfile = urllib2.urlopen(urlparse.urljoin(STORE_URL,
+                '/api/available_modules/%s/download' % module_name))
+            io.write(zipfile.read())
+            packaging.install_from_zip(io)
+        except urllib2.HTTPError:
+            abort(404)
+        except IOError:
+            abort(403)
+        return jsonify({ 'success': False })
 
 @app.route('/api/modules/install', methods=['POST'])
 def api_upload_module():
     return_data = { 'success': False }
     file_ = request.files['file']
-    if file_:
-        if not allowed_file(file_.filename, ['zip']):
-            return_data['message'] = 'File format not allowed'
-        else:
-            _, filename = tempfile.mkstemp()
-            file_.save(filename)
-            try:
-                packaging.install_from_zip(filename)
-            except (IOError, ValueError) as e:
-                return_data['message'] = str(e)
-            else:
-                return_data['success'] = True
-            finally:
-                os.remove(filename)
+    if not file_:
+        abort(400)
+    if not allowed_file(file_.filename, ['zip']):
+        abort(403)
+
+    # all is good, let's go !
+    _, filename = tempfile.mkstemp()
+    file_.save(filename)
+    try:
+        packaging.install_from_zip(filename)
+    except (IOError, ValueError):
+        abort(403)
     else:
-        return_data['message'] = 'No file uploaded'
+        return_data['success'] = True
+    finally:
+        os.remove(filename)
     return jsonify(return_data)
 
 @app.route('/api/modules/<module_name>/public/<rest>')
@@ -91,7 +110,7 @@ if __name__ == '__main__':
     from functools import partial
     from utils import proxy
     with app.app_context():
-        store_proxy = partial(proxy, 'http://localhost:8889')
+        store_proxy = partial(proxy, STORE_URL)
         store_proxy('/api/available_modules')
         store_proxy('/api/available_modules/<module_name>/public/<rest>')
         store_proxy('/api/available_modules/rate', methods=['POST'])

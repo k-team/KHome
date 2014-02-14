@@ -5,8 +5,7 @@ import zipfile
 import tempfile
 from werkzeug.utils import secure_filename
 from werkzeug.contrib.cache import SimpleCache
-from flask import (Flask, request, send_file, abort)
-#from flask_peewee.auth import Auth
+from flask import (Flask, request, send_file, send_from_directory, abort)
 from flask_peewee.db import Database
 from peewee import *
 from utils import jsonify, cached
@@ -19,7 +18,7 @@ sys.path.insert(1, core_dir)
 import catalog
 from module import path
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder=path.availables_directory())
 cache = SimpleCache()
 
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
@@ -48,12 +47,11 @@ class Rating(db.Model):
                 fn.Avg(cls.value).alias('value'))[0].value
 
 # finish setting up database
-#auth = Auth(app, db)
 if __name__ == '__main__':
     Rating.create_table(fail_silently=True)
 
 @cached
-@app.route('/api/available_modules', methods=['GET'])
+@app.route('/api/available_modules')
 def api_available_modules():
     available_modules = catalog.get_available_modules(detailed=True)
     for av in available_modules:
@@ -64,7 +62,7 @@ def api_available_modules():
     return jsonify(available_modules)
 
 @cached
-@app.route('/api/available_modules/<module_name>/public/<rest>', methods=['GET'])
+@app.route('/api/available_modules/<module_name>/public/<rest>')
 def api_available_module_public(module_name, rest):
     # security check
     module_name, rest = map(secure_filename, (module_name, rest))
@@ -72,9 +70,7 @@ def api_available_module_public(module_name, rest):
         abort(403)
 
     # get zip file from catalog
-    dir_ = path.availables_directory()
-    module_zipfile = os.path.join(dir_, module_name + '.zip')
-    with zipfile.ZipFile(module_zipfile) as zf:
+    with zipfile.ZipFile(catalog.get_zipfile(module_name)) as zf:
         try:
             module_conf_filename = os.path.join(module_name, path.CONFIG_FILE)
             with zf.open(module_conf_filename) as module_conf_zf:
@@ -96,6 +92,13 @@ def api_available_module_public(module_name, rest):
                         abort(404)
         except (KeyError, IOError):
             abort(404)
+
+@cached
+@app.route('/api/available_modules/<module_name>/download')
+def api_available_module_download(module_name):
+    module_zipfile = catalog.get_zipfile(module_name).split(os.path.sep)[-1]
+    return send_from_directory(app.static_folder, module_zipfile,
+            as_attachment=True)
 
 @cached
 @app.route('/api/available_modules/rate', methods=['POST'])
