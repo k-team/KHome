@@ -10,8 +10,8 @@ class DoorSecurity(module.Base):
 
     class controller(fields.Base):
         
-        def _init_:
-            super(BabyMonitoringController.controller, self)._init_
+        def __init__(self):
+            super(BabyMonitoringController.controller, self).__init__()
 
         def always(self):
             if self.module.door_access.door() == 'OPEN' and self.module.recognition.recognised() == 'UNKOWN':

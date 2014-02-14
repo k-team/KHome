@@ -7,6 +7,6 @@ import fields.persistant
 class LightButtonSensor(module.Base):
     update_rate = 10
 
-    class light_button(fields.sensor.LightButtonSensor, fields.io.Readable,
+    class light_button(fields.sensor.LightButton, fields.io.Readable,
             fields.persistant.Volatile, fields.Base):
         pass
