@@ -7,6 +7,14 @@ def Dummy(data_type):
         pass
     return _Dummy
 
-TemperatureActuator = Dummy(fields.type.Numeric)
-BoolActuator = Dummy(fields.type.Boolean)
-StringActuator = Dummy(fields.type.String)
+Alarm = Dummy(fields.type.Boolean)
+Door = Dummy(fields.type.Boolean)
+ElectricCurrent = Dummy(fileds.type.Boolean)
+Fan = Dummy(fields.type.Boolean)
+Gaz = Dummy(fields.type.Boolean)
+LightButton = Dummy(fields.type.Boolean)
+Piston = Dummy(fields.type.Boolean)
+Shutter = Dummy(fields.type.Boolean)
+Temperature = Dummy(fields.type.Numeric)
+WaterValve = Dummy(fields.type.Boolean)
+Window = Dummy(fields.type.Boolean)

@@ -1,11 +1,10 @@
 import os
 import sys
-import json
 import time
 import socket
 import tempfile
-from flask import (Flask, Response, send_file, request, abort,
-        jsonify as _jsonify)
+from flask import Flask, send_file, request, abort
+from utils import jsonify
 
 # TODO remove this and do use client launcher
 this_dir = os.path.dirname(os.path.realpath(__file__))
@@ -15,14 +14,6 @@ sys.path.insert(1, core_dir)
 import catalog
 from module import use_module
 from module import path
-
-def jsonify(obj):
-    """
-    Updated jsonify, adding list support.
-    """
-    if isinstance(obj, list):
-        return Response(json.dumps(obj), mimetype='application/json')
-    return _jsonify(obj)
 
 # flask app
 app = Flask(__name__, static_folder='public', static_url_path='')
@@ -90,6 +81,17 @@ def api_module_public(module_name, rest):
         return send_file(requested_file)
     else:
         abort(404)
+
+# Proxies for store service
+# TODO get these dynamically
+if __name__ == '__main__':
+    from functools import partial
+    from utils import proxy
+    with app.app_context():
+        store_proxy = partial(proxy, 'http://localhost:8889')
+        store_proxy('/api/available_modules')
+        store_proxy('/api/available_modules/<module_name>/public/<rest>')
+        store_proxy('/api/available_modules/<module_name>/rate', methods=['POST'])
 
 # used for samples
 import random

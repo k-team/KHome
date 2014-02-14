@@ -3,12 +3,11 @@
   "version": "0.0.0",
   "description": "Webclient for GHome",
   "devDependencies": {
-    "grunt": "~0.4.2",
+    "grunt": "*",
     "grunt-contrib-watch": "*",
     "grunt-contrib-clean": "*",
     "grunt-contrib-uglify": "*",
     "grunt-contrib-concat": "*",
-    "grunt-contrib-less": "*",
-    "grunt-cli": "~0.1.13"
+    "grunt-contrib-less": "*"
   }
 }
