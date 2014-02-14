@@ -1,10 +1,15 @@
-import time
-import math
-import random
+import sys
+import string
+from twisted.internet import reactor, protocol
+from twisted.python.log import startLogging
 from twisted.internet import reactor
 from twisted.internet.protocol import ClientCreator
 from twisted.internet.protocol import ClientFactory
 from twisted.internet.protocol import Protocol
+import time
+import math
+import random
+
 
 def Dummy(dummy_funct):
     """
@@ -33,13 +38,13 @@ Butane = Dummy(lambda t:
 CO = Dummy(lambda t:
         math.sin(t) * 200 + 200 + 0.5 * (random.random() - 0.5)) # seuil 60
 
-Camera = Dummy(lambda t:
-        math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
+#Camera = Dummy(lambda t:
+#        math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
 
-ElectricCurrent = Dummy(
+ElectricCurrent = Dummy(lambda t:
         True if random.random() > 0.5 else False)
 
-LightButton = Dummy(
+LightButton = Dummy(lambda t:
         True if random.random() > 0.5 else False)
 
 LuminosityExterior = Dummy(lambda t:
@@ -57,7 +62,7 @@ OutsideBrightness = Dummy(lambda t:
 Propane = Dummy(lambda t:
         math.sin(t) * 1500 + 2000 + 0.5 * (random.random() - 0.5)) #seuil 1500
 
-RainForecast = Dummy(
+RainForecast = Dummy(lambda t:
         True if random.random() > 0.5 else False)
 
 Shutter = Dummy(lambda t:
@@ -67,7 +72,8 @@ Smoke = Dummy(lambda t:
         math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
 
 Sound = Dummy(lambda t:
-        math.sin(t) * 60 + 60 + 0.5 * (random.random() - 0.5)) #seuil cri nourison fixe a 97dBl
+        math.sin(t) * 60 + 60 + 0.5 * (random.random() - 0.5)) 
+        #seuil cri nourison fixer a 97dBl
 
 TemperatureForecast = Dummy(lambda t:
         math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
@@ -78,6 +84,11 @@ TemperatureExterior = Dummy(lambda t:
 
 
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> cf35310396dc14477988508cc0de655015f7cc3b
 # a client protocol
 
 class SensorConnection(Protocol):
@@ -100,6 +111,7 @@ class SensorConnection(Protocol):
     def analyser(self,data):
         #a completer
         org = data[6:8]
+<<<<<<< HEAD
     valeur = '{0:032b}'.format(int(data[8:16],16))
     sensor_id = data[16:24]
     status = '{0:08b}'.format(int(data[24:26],16))
@@ -129,6 +141,37 @@ class SensorConnection(Protocol):
                 print sendData
                 #self.sensor.emit_value(sentData) 
             
+=======
+	valeur = '{0:032b}'.format(int(data[8:16],16))
+	sensor_id = data[16:24]
+	status = '{0:08b}'.format(int(data[24:26],16))
+	checksum = '{0:08b}'.format(int(data[26:28],16))
+
+	if sensor_id == self.filter_id:
+		print "id: " + sensor_id
+		print "serveur said: " + data
+		if org == "05":
+		    #todo
+		    sentData = self.org05(valeur,status)
+		    self.sensor.emit_value(sentData)
+		if org == "06":
+		    #todo
+		    sentData = self.org06(valeur)
+		    #self.sensor.emit_value(sentData) 
+		if org == "07":
+		    #todo
+		    if sensor_id[4:8] == "3E7B":
+		        print "c'est un capteur de lumiere"
+		        sentData = self.org7_lumiosite_presence(valeur)
+		        print sendData
+		        #self.sensor.emit_value(sentData) 
+		    elif sensor_id == "00893378":
+		        print "c'est un capteur de temperature et humidite"
+		        sentData = self.org7_temp_humi(valeur)
+		        print sendData
+		        #self.sensor.emit_value(sentData) 
+	        
+>>>>>>> cf35310396dc14477988508cc0de655015f7cc3b
     def org7_lumiosite_presence(self, valeur): #ordre des octets: DB0 DB1 DB2 DB3 mais pas DB3 DB2 DB1 DB0
         lumiosite = int(valeur[16:24],2)*510/255
         temp = int(valeur[8:16],2)*51/255
@@ -186,8 +229,13 @@ class SensorConnection(Protocol):
             print "les boutons relaches: ",0b0000
             return 0b0000
             
+<<<<<<< HEAD
                     
             
+=======
+        		    
+		    
+>>>>>>> cf35310396dc14477988508cc0de655015f7cc3b
 class SensorConnectionFactory(ClientFactory):
     def __init__(self, sensor, filter_id):
         self.sensor = sensor
