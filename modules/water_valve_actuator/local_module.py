@@ -8,4 +8,5 @@ class WaterValveActuator(module.Base):
     class water_valve(
             fields.actuator.WaterValve,
             fields.io.Writable,
-            fields.Base)
+            fields.Base):
+                pass

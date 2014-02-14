@@ -1,10 +1,14 @@
 import fields.io
 import fields.syntax
+import fields.persistant
 
 def Dummy(data_type):
     class _Dummy(data_type,
+            fields.io.Readable,
+            fields.persistant.Volatile,
             fields.io.Writable):
-        pass
+        def set_value(self, value):
+            print value
     return _Dummy
 
 Alarm = Dummy(fields.syntax.Boolean)

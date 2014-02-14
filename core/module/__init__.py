@@ -142,7 +142,7 @@ def prop_network_field(module_conn, field_info):
             request = {}
             request['code'] = 'set'
             request['field_name'] = field_name
-            request['field_value'] = field_value
+            request['field_value'] = args[0]
             network_write(module_conn, json.dumps(request))
             ans = json.loads(network_readline(module_conn))
             return ans.get('success', False)
