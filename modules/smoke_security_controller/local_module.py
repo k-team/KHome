@@ -9,9 +9,9 @@ class SmokeSecurityController(module.Base):
     
     class controller(fields.Base):
         
-        def _init_:
-            smoke_value = 20
-            super(SmokeSecurityController.controller, self)._init_
+        def __init__(self):
+            self.smoke_value = 20
+            super(SmokeSecurityController.controller, self).__init__()
 
         def always(self):
             if self.module.smoke_sensor.smoke() > self.module.smoke_value:

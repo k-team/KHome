@@ -12,11 +12,11 @@ class LightController(module.Base):
     class controller(fields.Base):
         def __init__(self):
             self.luminosity_limit = 60 # for the time being it will be a percentage
-            super(Controller, self).__init__()
+            super(controller, self).__init__()
 
         def always(self):
             if presence.presence():
                 if luminosity.luminosity() < self.luminosity_limit:
-                    light.lightButton(True)
+                    light.light_button(True)
             else:
-                light.lightButton(False)
+                light.light_button(False)

@@ -9,17 +9,17 @@ class RainManagementController(module.Base):
 
     class controller(fields.Base):
 
-        def _init_:
-            super(RainManagementController.controller, self)._init_
+        def __init__(self):
+            super(RainManagementController.controller, self).__init__()
 
         def always(self):
-            curr_win_management = self.module.window.Management()
-            curr_door_management = self.module.door.Management()    
-            if curr_win_management == 'RAIN':
-                self.module.window.Management('CLOSE')
+            self.curr_win_management = self.module.window.management()
+            self.curr_door_management = self.module.door.management()    
+            if self.curr_win_management == 'RAIN':
+                self.module.window.management('CLOSE')
             else:
-                self.module.window.Management('OPEN')
-            if curr_door_management == 'RAIN':
-                self.module.door.Management('CLOSE')
+                self.module.window.management('OPEN')
+            if self.curr_door_management == 'RAIN':
+                self.module.door.management('CLOSE')
             else:
-                self.module.door.Management('OPEN')
+                self.module.door.management('OPEN')
