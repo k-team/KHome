@@ -6,8 +6,8 @@ class Recognition(module.Base):
     update_rate = 10
     camera_sensor = use_module('CameraSensor')
 
-    recognised = fields.proxy.mix('Recognised', 'CameraSensor', 'Image')
+    recognised = fields.proxy.basic('recognised', 'CameraSensor', 'image')
 
     class RecognitionImage(module.Base):
-        def _acquire_value(self, who):
+        def acquire_value(self, who):
             pass

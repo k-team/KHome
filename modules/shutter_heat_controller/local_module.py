@@ -2,7 +2,6 @@ import module
 from module import use_module
 import fields
 
-
 class ShutterHeatController(module.Base):
     update_rate = 10000
 
@@ -12,9 +11,6 @@ class ShutterHeatController(module.Base):
     tempControl = use_module('TemperatureController')
     
     class controller(fields.Base):
-    
-  
-        
         def always(self):
             try:
                 tempInt = self.module.temperatureInt.temperature()[1]

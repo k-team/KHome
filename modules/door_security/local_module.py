@@ -9,9 +9,8 @@ class DoorSecurity(module.Base):
     alarm_actuator = use_module('AlarmActuator')
 
     class controller(fields.Base):
-        
         def __init__(self):
-            super(BabyMonitoringController.controller, self).__init__()
+            super(DoorSecurity.controller, self).__init__()
 
         def always(self):
             if self.module.door_access.door() == 'OPEN' and self.module.recognition.recognised() == 'UNKOWN':

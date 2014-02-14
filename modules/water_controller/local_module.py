@@ -4,7 +4,7 @@ from module import use_module
 
 class WaterController(module.Base):
     update_rate = 10
-    water_valve_sensor = use_module('WaterValve')
+    water_valve_sensor = use_module('WaterValveSensor')
     water_valve_actuator = use_module('WaterValveActuator')
     human_presence_sensor = use_module('HumanPresenceSensor')
     class controller(fields.Base):

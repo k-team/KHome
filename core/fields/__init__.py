@@ -26,6 +26,14 @@ class Base(threading.Thread):
         self.old_time = 0
         self.running = False
 
+    def get_info(self):
+        """
+        Return a dictionnary containing all informations about
+        the field. Mixins can (and has to) overload this function
+        to add more information
+        """
+        return {'name': self.field_name}
+
     def emit_value(self, value):
         if value is not None:
             self._set_value(time.time(), value)
