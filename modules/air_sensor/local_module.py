@@ -10,3 +10,6 @@ class AirSensor(module.Base):
             fields.io.Readable,
             fields.Base):
         pass
+    
+    def always(self):
+        print 'ceci est un petit test'
