@@ -16,6 +16,7 @@ if __name__ == '__main__':
     args = docopt.docopt(__doc__)
     module_name = args['<module_name>']
     mod = use_module(module_name)
+    print 'Test du module', module_name
     print 'Informations :', mod.info
     fields = mod.info['fields']
     for field in fields:
@@ -39,7 +40,7 @@ if __name__ == '__main__':
             print 'Test en lecture :', v
             if v is None:
                 print '**** WARNING **** Pas de valeur pour ce champ. (Il faut heriter de fields.persistant.Volatile)'
-        elif 'writable' in field and field['writable']:
+        if 'writable' in field and field['writable']:
             if syntax is float:
                 value = 42.0
             elif syntax is bool:
@@ -47,15 +48,16 @@ if __name__ == '__main__':
             elif syntax is str:
                 value = 'Hello'
 
+            print 'Test en ecriture : ecriture de', value
             field_fn(value)
             if 'readable' in field and field['readable']:
                 v = field_fn()
+                print 'Valeur lu apres ecriture :', v
                 if v is None:
                     print '**** ERROR **** Pas de valeur pour ce champ apres ecriture.'
-                if v != value:
+                elif v[1] != value:
                     print '**** ERROR **** Pas la meme valeur lu apres ecriture.'
-            print 'Test en ecriture :'
-        else:
+        if not 'writable' in field and not 'readable' in field:
             print '**** WARNING **** Champ ni readable ni writable'
         print
 
