@@ -33,8 +33,8 @@ Butane = Dummy(lambda t:
 CO = Dummy(lambda t:
         math.sin(t) * 200 + 200 + 0.5 * (random.random() - 0.5)) # seuil 60
 
-#Camera = Dummy(lambda t:
-#        math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
+Camera = Dummy(lambda t:
+        math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
 
 ElectricCurrent = Dummy(
         True if random.random() > 0.5 else False)
