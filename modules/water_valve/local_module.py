@@ -3,7 +3,7 @@ import fields
 import fields.sensor
 import fields.io
 
-class WaterValveSensor(module.Base):
+class WaterValve(module.Base):
     update_rate = 10
     
     class water_valve(

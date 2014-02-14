@@ -2,7 +2,7 @@ import module
 import fields
 from module import use_module
 
-class WaterFlushController(module.Base)
+class WaterFlushController(module.Base):
     update_reate = 10
     """ todo  """
     water_flush = use_module('WaterFlush')
