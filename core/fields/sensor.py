@@ -47,16 +47,16 @@ LightButton = Dummy(
         True if random.random() > 0.5 else False)
 
 LuminosityExterior = Dummy(lambda t:
-        math.sin(t) * 800 + 820 + 0.5 * (random.random() - 0.5)) #seuil a fixer
+        (math.sin(t)+1) * 50 ) #this will from 0 to 100
+        
+LuminosityInterior = Dummy(lambda t:
+        (math.sin(t)+1) * 50 ) #this will from 0 to 100
 
 Methane = Dummy(lambda t:
         math.sin(t) * 600 + 800 + 0.5 * (random.random() - 0.5)) #seuil max 1000
 
 Moisture = Dummy(lambda t:
         math.sin(t) * 20 + 35 + 0.5 * (random.random() - 0.5)) #seuil max 45
-
-OutsideBrightness = Dummy(lambda t:
-        math.sin(t) * 800 + 820 + 0.5 * (random.random() - 0.5)) #seuil a fixer
 
 Propane = Dummy(lambda t:
         math.sin(t) * 1500 + 2000 + 0.5 * (random.random() - 0.5)) #seuil 1500
@@ -72,6 +72,10 @@ Smoke = Dummy(lambda t:
 
 Sound = Dummy(lambda t:
         math.sin(t) * 60 + 60 + 0.5 * (random.random() - 0.5)) #seuil cri nourison fixe a 97dBl
+
+#this one is for the interior temperature
+Temperature = Dummy(lambda t:
+        math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
 
 TemperatureForecast = Dummy(lambda t:
         math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
@@ -223,8 +227,8 @@ class Sensor(object):
                     sensor_id))
 
     def start(self):
-        #super(Sensor, self).start()
-        reactor.run()
+        # reactor.run()
+        super(Sensor, self).start()
 
     def close(self):
         super(Sensor, self).close()

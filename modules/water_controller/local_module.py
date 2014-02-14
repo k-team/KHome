@@ -13,9 +13,7 @@ class WaterController(module.Base):
             super(WaterController.controller, self).__init__()
 
         def always(self):
-            if self.module.human_presence_sensor.presence():
-                and self.module.water_valve_sensor.water_valve() == 'FERME':
-                    self.module.water_valve_actuator.water_valve('OPEN')
-            elif not self.module.human_presence_sensor.presence()
-                and self.module.water_valve_sensor.water_valve() == 'OPEN':
-                    self.module.water_valve_actuator.water_valve('CLOSE')
+            if self.module.human_presence_sensor.presence() and self.module.water_valve_sensor.water_valve() == 'FERME':
+                self.module.water_valve_actuator.water_valve('OPEN')
+            elif not self.module.human_presence_sensor.presence() and self.module.water_valve_sensor.water_valve() == 'OPEN':
+                self.module.water_valve_actuator.water_valve('CLOSE')
