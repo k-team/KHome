@@ -6,6 +6,7 @@ import fields.persistant
 
 class MoistureSensor(module.Base):
     update_rate = 10
+    
     class moisture(
             fields.sensor.Moisture,
             fields.io.Readable,
