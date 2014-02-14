@@ -6,13 +6,13 @@ class LightController(module.Base):
     update_rate = 5
 
     light = use_module('LightButton')
-    presence = use_module('HumanPresence')
+    presence = use_module('HumanPresenceSensor')
     luminosity = use_module('LuminosityInteriorSensor')
 
     class controller(fields.Base):
         def __init__(self):
             self.luminosity_limit = 60 # for the time being it will be a percentage
-            super(controller, self).__init__()
+            super(LightController.controller, self).__init__()
 
         def always(self):
             if presence.presence():

@@ -142,7 +142,7 @@ def prop_network_field(module_conn, field_info):
             request = {}
             request['code'] = 'set'
             request['field_name'] = field_name
-            request['field_value'] = field_value
+            request['field_value'] = args[0]
             network_write(module_conn, json.dumps(request))
             ans = json.loads(network_readline(module_conn))
             return ans.get('success', False)
@@ -325,7 +325,7 @@ def use_module(module_name):
     """
     import re
     reg = re.compile(r'([A-Z])')
-    name = reg.sub(lambda match: '_' + match.group(0).lower(), module_name)[1:]
+    name = path.realname(module_name)
     # TODO unify module name of the socket and module_name of the pid
     if not instance.status(name):
         logger = logging.getLogger()

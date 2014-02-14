@@ -6,7 +6,7 @@ class ShutterSecurityController(module.Base):
         update_rate = 2
 
         shutter= use_module('Shutter')
-        presence = use_module('HumanPresence')
+        presence = use_module('HumanPresenceSensor')
 
         
         class controller(fields.Base):

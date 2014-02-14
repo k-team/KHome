@@ -14,19 +14,20 @@ class ShutterLightController(module.Base):
     class controller(fields.Base):
         
         def __init__(self):
-            self.luminosity_limit = 60 # for the time being it will be a percentage
-            super(Controller, self).__init__()
+            self.luminosity_limit = 60 # this represent the luminosity the user want in the room
+            self.night_limit = 20 # this represent the luminosity limit to know if it is the night
+            super(controller, self).__init__()
         
         def always(self):
             
-            lumInt=LuminosityInt.Luminosity()
-            lumExt=LuminosityExt.Luminosity()
+            lumInt=LuminosityInt.luminosity()
+            lumExt=LuminosityExt.luminosity()
             
         
-            if  lumExt < 20:
+            if  lumExt < self.night_limit:
                 #this represent he night (so we close the shutters)
-                shutter.Shutter(0)
+                shutter.shutter(0)
             elif presence.presence():
                 if lumInt < self.luminosityLimit :
                     if self.luminosityLimit < lumExt:
-                        shutter.Shutter(100)                
+                        shutter.shutter(100)                
