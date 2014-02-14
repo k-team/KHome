@@ -32,6 +32,7 @@ if __name__ == '__main__':
                 print '**** WARNING **** Pas de type connu pour ce champ. (Il faut faire heriter de fields.syntax.xxx)'
         else:
             print '**** WARNING **** Pas de type pour ce champ. (Il faut faire heriter de fields.syntax.xxx)'
+
         if 'readable' in field and field['readable']:
             v = field_fn()
             print 'Test en lecture :', v
@@ -54,7 +55,8 @@ if __name__ == '__main__':
                     print '**** ERROR **** Pas la meme valeur lu apres ecriture.'
             print 'Test en ecriture :'
         else:
-            print '**** ERROR **** Champ ni readable ni writable'
+            print '**** WARNING **** Champ ni readable ni writable'
+        print
 
     if not fields:
         print '**** ERREUR **** Pas de champ dans le module'
