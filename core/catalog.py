@@ -4,6 +4,13 @@ import zipfile
 import module.path as path
 from module.packaging import load_config
 
+def get_zipfile(module_name):
+    """
+    Return the filename for the module's install zip.
+    TODO make this more elegant (unify)
+    """
+    return os.path.join(path.availables_directory(), module_name + '.zip')
+
 def is_available(module_name):
     """
     Return if the module named as *module_name* is available.

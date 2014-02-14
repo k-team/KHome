@@ -67,15 +67,4 @@ def install_from_zip(file_):
             raise ValueError('Module already installed')
 
         # extract zip file
-        for zi in zf.infolist():
-            # Path traversal defense copied from
-            # http://hg.python.org/cpython/file/tip/Lib/http/server.py#l789
-            words = zi.filename.split('/')[1:]
-            path_ = path.modules_directory()
-            for word in words[:-1]:
-                _, word = os.path.splitdrive(word)
-                _, word = os.path.split(word)
-                if word in (os.curdir, os.pardir, ''):
-                    continue
-                path_ = os.path.join(path, word)
-            zf.extract(zi, path_)
+        zf.extractall(path.modules_directory())
