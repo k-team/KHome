@@ -1,13 +1,11 @@
-from twisted.internet import reactor
-import core.module
-import core.fields
-import core.fields.io
-import core.fields.persistant
-import time
+import module
+import fields
+import fields.actuator
+import fields.io
 
-class WaterValveActuator(core.module.Base):
+class WaterValveActuator(module.Base):
     update_rate = 10
-    class WaterValve(
-            core.fields.actuator.WaterValve,
-            core.fields.io.Writable,
-            core.fields.Base)
+    class water_valve(
+            fields.actuator.WaterValve,
+            fields.io.Writable,
+            fields.Base)

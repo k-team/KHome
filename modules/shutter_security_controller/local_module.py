@@ -1,29 +1,21 @@
-from twisted.internet import reactor
-import core.module
-import core.fields
-import core.fields.io
-import core.fields.persistant
-import time
-import core.all_modules.Shutter
-import core.all_modules.Temperature
-import core.all_modules.TemperatureForecast
+import module
+from module import use_module
+import fields
 
-
-
-
-if __name__ == '__main__':
-class ShutterController(core.module.Base)
-        shutter= use_module('Shutter')
-        temp = use_module('Temperature')
+class ShutterController(module.Base)
+    shutter= use_module('Shutter')
+    temp = use_module('Temperature')
         
-        class Controller(
-            core.fields.Base):
-            
-            def always(self):
-                if presence.Presence() :
-                    light.LightButton(true)
-                else
-                    light.LightButton(false)
+    class controller(fields.Base):
+
+        def _init_:
+            super(ShutterController.controller, self)._init_
+        
+        def always(self):
+            if self.module.presence.presence():
+                self.module.light.light_button(True)
+            else:
+                self.module.light.light_button(False)
         
         
     #code du main a remettre lais il était chelou donc pr le moment je l'ai vire...

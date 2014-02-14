@@ -1,27 +1,21 @@
-from twisted.internet import reactor
-import core.module
-import core.fields
-import core.fields.io
-import core.fields.persistant
-import time
-import all_modules.SoundSensor
-import all_modules.AlarmActuator
+import module
+from module import use_module
+import fields
 
-class BabyMonitoringController(core.module.Base)
+class BabyMonitoringController(module.Base):
     update_rate = 10
     sound_sensor = use_module('SoundSensor')
     alarm_actuator = use_module('AlarmActuator')
 
-    class controller(
-        core.fields.Base):
+    class controller(fields.Base):
 
         def _init_:
-            DECIBEL_VALUE = 100
+            decibel_value = 97 #seuil du cri d'un nourisson
             super(BabyMonitoringController.controller, self)._init_
         
         def always(self):
-            if self.module.sound_sensor.sound() > DECIBEL_VALUE:
+            if self.module.sound_sensor.sound() > self.module.decibel_value:
                 self.module.alarm_actuator.alarm(True)
-            else
+            else:
                 self.module.alarm_actuator.alarm(False)
     

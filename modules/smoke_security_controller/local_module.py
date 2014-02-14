@@ -1,26 +1,20 @@
-from twisted.internet import reactor
-import core.module
-import core.fields
-import core.fields.io
-import core.fields.persistant
-import time
-import all_modules.SmokeSensor
-import all_modules.AlarmActuator
+import module
+from module import use_module
+import fields
 
-class SmokeSecurityController(core.module.Base):
+class SmokeSecurityController(module.Base):
     update_rate = 10
     smoke_sensor = use_module('SmokeSensor')
     alarm_actuator = use_module('AlarmActuator')
     
-    class Controller(
-        core.fields.Base):
+    class controller(fields.Base):
         
         def _init_:
-            SMOKE_VALUE = 100
-            super(Controller, self)._init_
+            smoke_value = 20
+            super(SmokeSecurityController.controller, self)._init_
 
         def always(self):
-            if smoke_sensor.Smoke() > SMOKE_VALUE:
-                alarm_actuator.Alarm(true)
-            else
-                alarm_actuator.Alarm(false)
+            if self.module.smoke_sensor.smoke() > self.module.smoke_value:
+                self.module.alarm_actuator.alarm(True)
+            else:
+                self.module.alarm_actuator.alarm(False)

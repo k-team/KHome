@@ -1,13 +1,12 @@
-from twisted.internet import reactor
-import core.module
-import core.fields
-import core.fields.io
-import core.fields.persistant
-import time
+import module
+import fields
+import fields.io
+import fields.actuator
 
-class FanActuator(core.module.Base):
+class FanActuator(module.Base):
     update_rate = 10
-    class Fan(
-            core.fields.actuator.Fan,
-            core.fields.io.Writable,
-            core.fields.Base)
+    class fan(
+            fields.actuator.Fan,
+            fields.io.Writable,
+            fields.Base):
+        pass

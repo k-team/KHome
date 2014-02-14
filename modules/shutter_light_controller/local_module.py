@@ -1,38 +1,34 @@
-from twisted.internet import reactor
 import module
+from module import use_module
 import fields
-import fields.io
-import fields.persistant
-import time
-
-
 
 class ShutterController(module.Base)
     update_rate = 10
-
-
     
-    class Controller(fields.Base):
+    class controller(fields.Base):
         
         shutter = use_module('Shutter')
         luminosityInt = use_module('LuminosityInteriorSensor')
         luminosityExt = use_module('LuminosityExteriorSensor')
         humPres = use_module('HumanPresenceSensor')
-        cur_lum_ext = luminosityExt.luminosity()
-        cur_lum_int = luminosityInt.luminosity()
-        
+        def _init_:
+            cur_lum_ext = self.module.luminosityExt.luminosity()
+            cur_lum_int = self.module.luminosityInt.luminosity()
+            super(ShutterController.controller, self)._init_
+
+
         def always(self):
-            if cur_lum_int < luminosityExt.NIGHTLIMIT : 
-                shutter.Shutter(0)
+            if self.module.cur_lum_int < self.module.luminosityExt.night_limit : 
+                self.module.shutter.Shutter(0)
             else:
-                if cur_lum_int < luminosityInt.luminosityLimit :
-                    if luminosityInt.luminosityLimit < cur_lum_ext:
-                        shutter.Shutter(100)
-                    else :
-                        shutter.Shutter(0)
-                elif cur_lum_int == luminosityInt.luminosityLimit :
-                        shutter.Shutter(0)    
-                else :
-                        shutter.Shutter(0)
+                if self.module.cur_lum_int < self.module.luminosityInt.luminosity_limit :
+                    if self.module.luminosityInt.luminosity_limit < self.module.cur_lum_ext:
+                        self.module.shutter.shutter(100)
+                    else:
+                        self.module.shutter.shutter(0)
+                elif self.module.cur_lum_int == self.module.luminosityInt.luminosity_limit :
+                        self.module.shutter.shutter(0)    
+                else:
+                        self.module.shutter.shutter(0)
         
         
