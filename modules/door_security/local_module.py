@@ -1,7 +1,6 @@
 import module
 from module import use_module
 import fields
-import fields.proxy
 
 class DoorSecurity(module.Base):
     update_rate = 10
@@ -9,7 +8,11 @@ class DoorSecurity(module.Base):
     recognition = use_module('Recognition')
     alarm_actuator = use_module('AlarmActuator')
 
-    class Controller(fields.Base):
+    class controller(fields.Base):
+        
+        def _init_:
+            super(BabyMonitoringController.controller, self)._init_
+
         def always(self):
             if self.module.door_access.door() == 'OPEN' and self.module.recognition.recognised() == 'UNKOWN':
                 self.module.alarm_actuator.alarm(True)

@@ -1,14 +1,13 @@
-from twisted.internet import reactor
-import core.module
-import core.fields
-import core.fields.io
-import core.fields.persistant
-import time
+import module
+import fields
+import fields.sensor
+import fields.io
 
-class WaterValveSensor(core.module.Base):
+class WaterValveSensor(module.Base):
     update_rate = 10
-    class WaterValve(
-            core.fields.sensor.WaterValve,
-            core.fields.io.Readable,
-            core.fields.Base):
+    
+    class water_valve(
+            fields.sensor.WaterValve,
+            fields.io.Readable,
+            fields.Base):
         pass

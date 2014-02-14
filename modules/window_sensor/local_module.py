@@ -1,7 +1,7 @@
 import module
 import fields
+import fields.sensor
 import fields.io
-import fields.persistant
 
 class WindowSensor(module.Base):
     update_rate = 10
