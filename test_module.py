@@ -1,30 +1,26 @@
+"""
+Test a module with this script
+
+Usage:
+    test_module <module_name>
+"""
 import os
 import sys
-import time
-from twisted.internet import reactor
+import docopt
 
 sys.path.append('core')
-import fields
-import fields.io
-import fields.persistant
-import fields.sensor
-from module import Base, use_module
+from module import use_module
 
 if __name__ == '__main__':
-    class Module(Base):
-        update_rate = 5
-
-        class Field(
-                fields.sensor.TemperaturSensor,
-                fields.io.Readable,
-                fields.io.Writable,
-                fields.persistant.Volatile,
-                fields.Base):
-            pass
-
-    b = Module()
-
-    b.start()
-    reactor.run()
-    b.stop()
-    b.join(1)
+    args = docopt.docopt(__doc__)
+    module_name = args['<module_name>']
+    mod = use_module(module_name)
+    fields = mod.info['fields']
+    if fields:
+        print 'Fields:'
+        for field in fields:
+            field_fn = getattr(mod, field['name'])
+            print '-', field['name'], ':', field['type'], \
+                    '(current value = %s)' % field_fn()
+    else:
+        print 'No fields found'

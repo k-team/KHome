@@ -16,8 +16,6 @@ Usage:
 Options:
   -h --help     Show this screen.
   --daemon      Start the module as a new daemon.
-  --porcelain   Give the output in an easy-to-parse format for script. R, S
-                mean respectively that the module is running, stopped.
 
 Output:
   When the manager is used with the *status* command, the list of the status of

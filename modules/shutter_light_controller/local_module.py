@@ -2,33 +2,32 @@ import module
 from module import use_module
 import fields
 
-class ShutterController(module.Base)
-    update_rate = 10
+
+class ShutterLightController(module.Base):
+    update_rate = 500
+
+    shutter = use_module('Shutter')
+    LuminosityInt = use_module('LuminosityInteriorSensor')
+    LuminosityExt = use_module('LuminosityExteriorSensor')
+    presence = use_module('HumanPresence')
     
     class controller(fields.Base):
         
-        shutter = use_module('Shutter')
-        luminosityInt = use_module('LuminosityInteriorSensor')
-        luminosityExt = use_module('LuminosityExteriorSensor')
-        humPres = use_module('HumanPresenceSensor')
-        def _init_:
-            cur_lum_ext = self.module.luminosityExt.luminosity()
-            cur_lum_int = self.module.luminosityInt.luminosity()
-            super(ShutterController.controller, self)._init_
-
-
+        def __init__(self):
+            self.luminosity_limit = 60 # this represent the luminosity the user want in the room
+            self.night_limit = 20 # this represent the luminosity limit to know if it is the night
+            super(controller, self).__init__()
+        
         def always(self):
-            if self.module.cur_lum_int < self.module.luminosityExt.night_limit : 
-                self.module.shutter.Shutter(0)
-            else:
-                if self.module.cur_lum_int < self.module.luminosityInt.luminosity_limit :
-                    if self.module.luminosityInt.luminosity_limit < self.module.cur_lum_ext:
-                        self.module.shutter.shutter(100)
-                    else:
-                        self.module.shutter.shutter(0)
-                elif self.module.cur_lum_int == self.module.luminosityInt.luminosity_limit :
-                        self.module.shutter.shutter(0)    
-                else:
-                        self.module.shutter.shutter(0)
+            
+            lumInt=LuminosityInt.luminosity()
+            lumExt=LuminosityExt.luminosity()
+            
         
-        
+            if  lumExt < self.night_limit:
+                #this represent he night (so we close the shutters)
+                shutter.shutter(0)
+            elif presence.presence():
+                if lumInt < self.luminosityLimit :
+                    if self.luminosityLimit < lumExt:
+                        shutter.shutter(100)                
