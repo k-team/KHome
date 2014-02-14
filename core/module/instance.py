@@ -5,6 +5,7 @@ import signal
 import daemon
 import logging
 import subprocess
+import traceback
 import module
 import catalog
 import path
@@ -117,23 +118,26 @@ def invoke(module_name, daemonize=True):
     """
     if status(module_name):
         raise RuntimeError('The module is already running')
-        return 0
-    try:
-        pid = os.fork()
-    except OSError as e:
-        raise e
-        return 0
-    else:
-        if pid == 0: # Child side
-            try:
-                execm(module_name, daemonize)
-            except:
-                pass
-            finally:
-                sys.exit(0)
-        else: # Parent side
-            return pid
-    return 0
+    pid = os.fork()
+    if pid == 0: # Child side
+        try:
+            execm(module_name, daemonize)
+        # handle raising SystemExit (code from Python's stdlib)
+        except SystemExit as e:
+            if not e.args:
+                exitcode = 1
+            elif isinstance(e.args[0], int):
+                exitcode = e.args[0]
+            else:
+                sys.stderr.write(str(e.args[0]) + '\n')
+                sys.stderr.flush()
+                exitcode = 0 if isinstance(e.args[0], str) else 1
+        except: # don't lose a possible exception traceback
+            exitcode = 1
+            traceback.print_exc()
+        finally:
+            sys.exit(exitcode)
+    return pid
 
 def invoke_all():
     """
@@ -143,14 +147,13 @@ def invoke_all():
     modules = catalog.get_installed_modules()
     pids = []
     for name in modules:
-        # if not status(name):
         try:
             pid = invoke(name, True)
         except RuntimeError:
-            pass
+            traceback.print_exc()
         else:
-            if pid != 0:
-                pids.append(pid)
+            assert pid != 0
+            pids.append(pid)
     return pids
 
 def stop(module_name):

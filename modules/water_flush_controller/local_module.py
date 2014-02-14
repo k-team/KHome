@@ -9,8 +9,8 @@ class WaterFlushController(module.Base)
     human_presence = use_module('HumanPresenceSensor')
     class controller(fields.Base):
 
-        def _init_:
-            super(WaterFlushController.controller, self)._init_
+        def __init__(self):
+            super(WaterFlushController.controller, self).__init__()
         
         def always(self):
             if self.module.water_flush.flush():
