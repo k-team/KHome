@@ -105,36 +105,35 @@ class SensorConnection(Protocol):
         #a completer
         org = data[6:8]
 
+        valeur = '{0:032b}'.format(int(data[8:16],16))
+        sensor_id = data[16:24]
+        status = '{0:08b}'.format(int(data[24:26],16))
+        checksum = '{0:08b}'.format(int(data[26:28],16))
 
-    valeur = '{0:032b}'.format(int(data[8:16],16))
-    sensor_id = data[16:24]
-    status = '{0:08b}'.format(int(data[24:26],16))
-    checksum = '{0:08b}'.format(int(data[26:28],16))
-
-    if sensor_id == self.filter_id:
-        print "id: " + sensor_id
-        print "serveur said: " + data
-        if org == "05":
-            #todo
-            sentData = self.org05(valeur,status)
-            self.sensor.emit_value(sentData)
-        if org == "06":
-            #todo
-            sentData = self.org06(valeur)
-            #self.sensor.emit_value(sentData) 
-        if org == "07":
-            #todo
-            if sensor_id[4:8] == "3E7B":
-                print "c'est un capteur de lumiere"
-                sentData = self.org7_lumiosite_presence(valeur)
-                print sendData
-                #self.sensor.emit_value(sentData) 
-            elif sensor_id == "00893378":
-                print "c'est un capteur de temperature et humidite"
-                sentData = self.org7_temp_humi(valeur)
-                print sendData
-                #self.sensor.emit_value(sentData) 
-            
+        if sensor_id == self.filter_id:
+            print "id: " + sensor_id
+            print "serveur said: " + data
+            if org == "05":
+                #todo
+                sentData = self.org05(valeur,status)
+                self.sensor.emit_value(sentData)
+            if org == "06":
+                #todo
+                sentData = self.org06(valeur)
+                self.sensor.emit_value(sentData) 
+            if org == "07":
+                #todo
+                if sensor_id[4:8] == "3E7B":
+                    print "c'est un capteur de lumiere"
+                    sentData = self.org7_lumiosite_presence(valeur)
+                    print sendData
+                    self.sensor.emit_value(sentData) 
+                elif sensor_id == "00893378":
+                    print "c'est un capteur de temperature et humidite"
+                    sentData = self.org7_temp_humi(valeur)
+                    print sendData
+                    self.sensor.emit_value(sentData) 
+                    
 
     def org7_lumiosite_presence(self, valeur): #ordre des octets: DB0 DB1 DB2 DB3 mais pas DB3 DB2 DB1 DB0
         lumiosite = int(valeur[16:24],2)*510/255
@@ -193,7 +192,6 @@ class SensorConnection(Protocol):
             print "les boutons relaches: ",0b0000
             return 0b0000
             
-
 class SensorConnectionFactory(ClientFactory):
     def __init__(self, sensor, filter_id):
         self.sensor = sensor
