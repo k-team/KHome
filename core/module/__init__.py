@@ -263,8 +263,11 @@ class NetworkMeta(type):
         info = get_network_info(conn)
         setattr(obj, 'info', info)
         fields = info['fields']
+        fields_info = {}
         for field in fields:
+            fields_info[field['name']] = field
             setattr(obj, field['name'], prop_network_field(conn, field))
+        setattr(obj, 'fields_info', fields_info)
 
         return obj
 

@@ -1,7 +1,7 @@
 import fields
 import fields.io
+import fields.syntax
 from module import use_module
-
 
 def basic(new_field, module_name, field_name):
     """
@@ -13,10 +13,16 @@ def basic(new_field, module_name, field_name):
 
     module = use_module(module_name)
     field = getattr(module, field_name)
+    field_info = module.fields_info[field_name]
+
+    cls_syntax = fields.syntax.String
+    if 'type' in field_info:
+        cls_syntax = fields.syntax.from_string(field_info['type'])
 
     class Field(
             fields.io.Writable,
             fields.io.Readable,
+            cls_syntax,
             fields.Base):
         def read(self, **kwargs):
             return field(**kwargs)
@@ -41,10 +47,19 @@ def mix(new_field, r_module_name, r_field_name, w_module_name, w_field_name):
     w_module = use_module(w_module_name)
     r_field = getattr(r_module, r_field_name)
     w_field = getattr(w_module, w_field_name)
+    r_field_info = r_module.fields_info[r_field_name]
+    w_field_info = w_module.fields_info[w_field_name]
+
+    cls_syntax = fields.syntax.String
+    if 'type' in r_field_info and 'type' in w_field_info:
+        if r_field_info['type'] != w_field_info['type']:
+            raise RuntimeError('The two fields have to be of the same type.')
+        cls_syntax = fields.syntax.from_string(r_field_info['type'])
 
     class Field(
             fields.io.Writable,
             fields.io.Readable,
+            cls_syntax,
             fields.Base):
         def read(self, **kwargs):
             return r_field(**kwargs)
@@ -64,9 +79,15 @@ def readable(new_field, module_name, field_name):
 
     module = use_module(module_name)
     field = getattr(module, field_name)
+    field_info = module.fields_info[field_name]
+
+    cls_syntax = fields.syntax.String
+    if 'type' in field_info:
+        cls_syntax = fields.syntax.from_string(field_info['type'])
 
     class Field(
             fields.io.Readable,
+            cls_syntax,
             fields.Base):
         def read(self, **kwargs):
             return field(**kwargs)
@@ -83,9 +104,15 @@ def writable(new_field, module_name, field_name):
 
     module = use_module(module_name)
     field = getattr(module, field_name)
+    field_info = module.fields_info[field_name]
+
+    cls_syntax = fields.syntax.String
+    if 'type' in field_info:
+        cls_syntax = fields.syntax.from_string(field_info['type'])
 
     class Field(
             fields.io.Writable,
+            cls_syntax,
             fields.Base):
         def write(self, value):
             return field(value)

@@ -42,3 +42,31 @@ class String(object):
         except ValueError:
             return False
         return super(String, self)._set_value(t, value)
+
+def from_string(s):
+    """
+    Return the corresponding syntax class from its string
+    representation.
+    Return String class when the representation is ill-formed.
+    """
+    if s == 'numeric':
+        return Numeric
+    elif s == 'boolean':
+        return Boolean
+    elif s == 'string':
+        return String
+    return String
+
+def to_string(s):
+    """
+    Return the string representation of a syntax class or a
+    syntax class instance.
+    Return 'string' class when there is no match is ill-formed.
+    """
+    if s == Numeric or isinstance(s, Numeric):
+        return 'numeric'
+    elif s == Boolean or isinstance(s, Boolean):
+        return 'boolean'
+    elif s == String or isinstance(s, String):
+        return 'string'
+    return 'string'
