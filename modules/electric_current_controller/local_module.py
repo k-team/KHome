@@ -12,8 +12,8 @@ class ElectricCurrentController(module.Base):
 
     class controller(fields.Base):
 
-        def _init_:
-            super(ElectricCurrentController.controller, self)._init_
+        def __init__(self):
+            super(ElectricCurrentController.controller, self).__init__()
 
         def always(self):
             if self.module.human_presence.presence():

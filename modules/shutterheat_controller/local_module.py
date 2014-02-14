@@ -11,8 +11,8 @@ class ShutterController(module.Base):
     
     class controller(fields.Base):
         
-        def _init_:
-            super(ShutterController.controller, self)._init_
+        def __init__(self):
+            super(ShutterController.controller, self).__init__()
 
         def always(self):
             if self.module.tempInt.temperature() < self.module.tempInt.seuil :
