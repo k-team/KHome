@@ -40,11 +40,14 @@ def api_rooms():
 def api_modules():
     return jsonify(packaging.get_installed_modules(detailed=True))
 
-@app.route('/api/modules/<module_name>/fields')
-def api_module_fields(module_name):
+@app.route('/api/modules/<module_name>/info')
+def api_module_info(module_name):
     try:
-        return jsonify(use_module(module_name).fields)
-    except socket.error:
+        return jsonify(use_module(module_name, False).info)
+    except (TypeError, socket.error) as e:
+        import logging
+        log = logging.getLogger()
+        log.exception(e)
         abort(404)
 
 def route_with_module_posted(url):
@@ -146,6 +149,24 @@ def temperature_statuses():
 
 @app.route('/api/modules/<module_name>/instances/status')
 def api_module_instances_statuses(module_name):
+    if packaging.is_installed(module_name):
+        mod = use_module(module_name)
+        if mod:
+            fields = {}
+            for f in mod.info['fields']:
+                if 'readable' in f and f['readable']:
+                    field_fn = getattr(mod, f['name'])
+                    value = field_fn()
+                    if value is not None:
+                        fields += [{'name': f['name'],
+                            'time': value[0],
+                            'value': value[1]}]
+            return jsonify(fields)
+        else:
+            abort(404)
+    else:
+        abort(404)
+
     if module_name == 'temperature':
         return jsonify(temperature_statuses())
     elif module_name == 'brightness':

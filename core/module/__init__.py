@@ -319,14 +319,12 @@ def is_ready(module_name):
     """
     return os.path.exists(path.socket_file(module_name))
 
-def use_module(module_name):
+def use_module(module_name, ignore_error=False):
     """
     Shortcut for referencing a module through network, given its module name.
+    If *ignore_error* is False, kill the application is case of error. Else, return None.
     """
-    import re
-    reg = re.compile(r'([A-Z])')
     name = path.realname(module_name)
-    # TODO unify module name of the socket and module_name of the pid
     if not instance.status(name):
         logger = logging.getLogger()
         logger.info(

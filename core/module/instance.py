@@ -8,7 +8,7 @@ import logging
 import subprocess
 import traceback
 import module
-import catalog
+import packaging
 import path
 
 def status(module_name):
@@ -26,7 +26,7 @@ def status_all():
     *status* for more details.
     Return a dictionary from name to status (as boolean).
     """
-    modules = catalog.get_installed_modules()
+    modules = packaging.get_installed_modules()
     return {name: status(name) for name in modules}
 
 def execm(module_name, daemonize=True):
@@ -56,7 +56,7 @@ def execm(module_name, daemonize=True):
         sys.exit(1)
 
     # Get the start command from the configuration file
-    module_config = catalog.get_config(module_name)
+    module_config = packaging.get_config(module_name)
     if not 'start' in module_config:
         raise RuntimeError(
                 'Missing start entry in the module\'s configuration file')
@@ -145,7 +145,7 @@ def invoke_all():
     Invoke all installed modules as daemon. Doesn't check if the modules are
     correctly launch. Return the list of pid of the new processes.
     """
-    modules = catalog.get_installed_modules()
+    modules = packaging.get_installed_modules()
     pids = []
     for name in modules:
         try:
@@ -190,7 +190,7 @@ def stop_all():
     """
     Stop all the running modules
     """
-    modules = catalog.get_installed_modules()
+    modules = packaging.get_installed_modules()
     for name in modules:
         try:
             stop(name)
