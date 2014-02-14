@@ -6,12 +6,11 @@ import fields.persistant
 
 class LuminosityExteriorSensor(module.Base):
     update_rate = 10
-    night_limit = 20
+
     
     class luminosity(
-            fields.sensor.LuminosityExterior
+            fields.sensor.LuminosityExterior,
             fields.io.Readable,
             fields.persistant.Volatile,
             fields.Base):
         pass
-        
