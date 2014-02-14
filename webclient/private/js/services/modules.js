@@ -1,6 +1,7 @@
 angular.module('GHome').factory('ModuleService', function($q, $http, $timeout, $upload) {
   var service = { defaultPollingDelay: 1000 },
-    storeUrl = 'http://0.0.0.0:8889';
+    modulesUrl = '/api/modules',
+    storeUrl = '/api/available_modules';
 
   var getModules = function(url, cachedModules, forceReload) {
     var deferred = $q.defer();
@@ -19,15 +20,29 @@ angular.module('GHome').factory('ModuleService', function($q, $http, $timeout, $
   // a reload of this list
   service.availableModules = [];
   service.available = function(forceReload) {
-    return getModules(storeUrl + '/api/available_modules',
-        this.availableModules, forceReload);
+    return getModules(storeUrl, this.availableModules, forceReload);
+  };
+
+  service.rateModule = function(module, oldValue) {
+    var value = parseInt(oldValue);
+    if (!value || value < 1 || value > 5) {
+      console.error('Invalid value', oldValue);
+    }
+    var deferred = $q.defer();
+    $http({
+      url: storeUrl + '/' + module.id + '/rate',
+      method: 'POST', data: 'value=' + value,
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+    }).success(function() { deferred.resolve(); })
+      .error(function() { deferred.reject(); });
+    return deferred.promise;
   };
 
   // Get the list of installed modules, optionally passing if this should force
   // a reload of this list
   service.installedModules = [];
   service.installed = function(forceReload) {
-    return getModules('/api/modules', this.installedModules, forceReload);
+    return getModules(modulesUrl, this.installedModules, forceReload);
   };
 
   // Poll all module instances for their statuses, passing in the module's name
@@ -39,7 +54,7 @@ angular.module('GHome').factory('ModuleService', function($q, $http, $timeout, $
     if (delay === undefined) { delay = service.defaultPollingDelay; }
 
     var timeout = $timeout(function pollFn() {
-      callback($http.get('/api/modules/' + name + '/instances/status'));
+      callback($http.get(modulesUrl + '/' + name + '/instances/status'));
       timeout = $timeout(pollFn, delay);
     }, delay);
 
@@ -54,8 +69,8 @@ angular.module('GHome').factory('ModuleService', function($q, $http, $timeout, $
   // details). Return a promise object for the given upload http call.
   service.install = function(file) {
     return $upload.upload({
-      url: '/api/modules/install',
-      method: 'POST', file: file,
+      url: modulesUrl + '/install',
+      method: 'POST', file: file
     });
   }
 

@@ -1,5 +1,6 @@
 import os
 import sys
+import time
 import shlex
 import signal
 import daemon
@@ -117,7 +118,7 @@ def invoke(module_name, daemonize=True):
     Return the new process's pid. In case of error, return 0.
     """
     if status(module_name):
-        raise RuntimeError('The module is already running')
+        raise RuntimeError('The module `' + module_name + '` is already running')
     pid = os.fork()
     if pid == 0: # Child side
         try:
@@ -149,6 +150,7 @@ def invoke_all():
     for name in modules:
         try:
             pid = invoke(name, True)
+            time.sleep(0.1)
         except RuntimeError:
             traceback.print_exc()
         else:
