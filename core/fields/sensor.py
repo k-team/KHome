@@ -1,15 +1,14 @@
 import sys
-import string
-from twisted.internet import reactor, protocol
-from twisted.python.log import startLogging
-from twisted.internet import reactor
-from twisted.internet.protocol import ClientCreator
-from twisted.internet.protocol import ClientFactory
-from twisted.internet.protocol import Protocol
 import time
 import math
 import random
 
+cd = sys.path.pop(0)
+from twisted.internet import reactor
+from twisted.internet.protocol import ClientCreator
+from twisted.internet.protocol import ClientFactory
+from twisted.internet.protocol import Protocol
+sys.path.insert(0, cd)
 
 def Dummy(dummy_funct):
     """
@@ -38,13 +37,13 @@ Butane = Dummy(lambda t:
 CO = Dummy(lambda t:
         math.sin(t) * 200 + 200 + 0.5 * (random.random() - 0.5)) # seuil 60
 
-#Camera = Dummy(lambda t:
-#        math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
+Camera = Dummy(lambda t:
+        math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
 
-ElectricCurrent = Dummy(lambda t:
+ElectricCurrent = Dummy(
         True if random.random() > 0.5 else False)
 
-LightButton = Dummy(lambda t:
+LightButton = Dummy(
         True if random.random() > 0.5 else False)
 
 LuminosityExterior = Dummy(lambda t:
@@ -62,7 +61,7 @@ Moisture = Dummy(lambda t:
 Propane = Dummy(lambda t:
         math.sin(t) * 1500 + 2000 + 0.5 * (random.random() - 0.5)) #seuil 1500
 
-RainForecast = Dummy(lambda t:
+RainForecast = Dummy(
         True if random.random() > 0.5 else False)
 
 Shutter = Dummy(lambda t:
@@ -72,8 +71,7 @@ Smoke = Dummy(lambda t:
         math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
 
 Sound = Dummy(lambda t:
-        math.sin(t) * 60 + 60 + 0.5 * (random.random() - 0.5)) 
-        #seuil cri nourison fixer a 97dBl
+        math.sin(t) * 60 + 60 + 0.5 * (random.random() - 0.5)) #seuil cri nourison fixe a 97dBl
 
 #this one is for the interior temperature
 Temperature = Dummy(lambda t:
@@ -85,8 +83,12 @@ TemperatureForecast = Dummy(lambda t:
 TemperatureExterior = Dummy(lambda t:
         math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
 
+Window = Dummy(lambda t:
+        math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
 
-# a client protocol
+WaterValve = Dummy(lambda t:
+        math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
+
 
 class SensorConnection(Protocol):
 
@@ -106,6 +108,7 @@ class SensorConnection(Protocol):
         print "connection lost"
       
     def analyser(self,data):
+        print "analyse en cours: "
         #a completer
         org = data[6:8]
 
@@ -215,14 +218,13 @@ class SensorConnectionFactory(ClientFactory):
 class Sensor(object):
     sensor_host = '134.214.106.23'
     sensor_port = 5000
-    sensor_id = ""
 
-    def __init__(self):
+    def __init__(self,sensor_id):
         super(Sensor, self).__init__()
         reactor.connectTCP(type(self).sensor_host,
                 type(self).sensor_port,
                 SensorConnectionFactory(self,
-                    type(self).sensor_id))
+                    sensor_id))
 
     def start(self):
         # reactor.run()
@@ -231,18 +233,6 @@ class Sensor(object):
     def close(self):
         super(Sensor, self).close()
 
-class Interrupt(Sensor):
-    sensor_id = "0021CC31"
-
-class WindowsContact(Sensor):
-    sensor_id = "0001B595"
-
-class Presence(Sensor):
-    sensor_id = "00063E7B"
-
-class Humidite_Temperature(Sensor):
-    sensor_id = "00893378"
-
-#if __name__ == '__main__':
-#    sensor = Interrupt()
-#    sensor.start()
+if __name__ == '__main__':
+    sensor = Sensor("0021CC31")
+    sensor.start()

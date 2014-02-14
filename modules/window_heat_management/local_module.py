@@ -5,4 +5,4 @@ class WindowHeatManagement(module.Base):
     update_rate = 10
 
     management = fields.proxy.mix('Management', 'TemperatureForecast',
-            'Temperature', 'WindowAccess', 'Window')
+            'temperature', 'WindowAccess', 'window')
