@@ -8,4 +8,4 @@ class DoorAccess(module.Base):
     doorSensor = use_module('DoorSensor')
     doorActuator = use_module('DoorActuator')
 
-    door = fields.proxy.mix('Door', 'DoorSensor', 'DoorActuator')
+    door = fields.proxy.mix('door', 'DoorSensor', 'door', 'DoorActuator', 'door')

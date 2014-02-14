@@ -10,5 +10,5 @@ class WindowAccess(module.Base):
     windowSensor = use_module('WindowSensor')
     windowActuator = use_module('WindowActuator')
 
-    window = fields.proxy.mix('Window', 'WindowSensor', 'Window',
-            'WindowActuator', 'Window')
+    window = fields.proxy.mix('window', 'WindowSensor', 'window',
+            'WindowActuator', 'window')

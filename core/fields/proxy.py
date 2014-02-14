@@ -3,7 +3,7 @@ import fields.io
 from module import use_module
 
 
-def __call__(new_field, module_name, field_name):
+def basic(new_field, module_name, field_name):
     """
     Return a new class named *new_field* acting like a field proxy of the
     field *field_name* inside the extern module *module_name*.

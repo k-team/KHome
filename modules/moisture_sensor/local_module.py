@@ -1,14 +1,15 @@
-from twisted.internet import reactor
-import core.module
-import core.fields
-import core.fields.io
-import core.fields.persistant
-import time
+import module
+import fields
+import fields.io
+import fields.sensor
+import fields.persistant
 
 class MoistureSensor(module.Base):
     update_rate = 10
+    
     class moisture(
             fields.sensor.Moisture,
             fields.io.Readable,
+            fields.persistant.Volatile,
             fields.Base):
         pass
