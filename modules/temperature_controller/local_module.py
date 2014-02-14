@@ -7,13 +7,13 @@ class TemperatureController(module.Base):
     temperature = use_module('Temperature')
     temperature_forecast = use_module('TemperatureForecast')
     class controller(fields.Base):
-        def _init_:
-            limit = 20
-            delta_plus = 5
-            delta_moins = 7
-            current_temp = self.module.temperature.temperature()
-            current_forecast = self.module.temperature_forecast.temperature()
-            super(TemperatureController.controller, self)._init_
+        def __init__(self):
+            self.limit = 20
+            self.delta_plus = 5
+            self.delta_moins = 7
+            self.current_temp = self.module.temperature.temperature()
+            self.current_forecast = self.module.temperature_forecast.temperature()
+            super(TemperatureController.controller, self).__init__()
 
         def always(self):
             if self.module.current_temp < self.module.limit:
