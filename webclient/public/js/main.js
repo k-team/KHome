@@ -152,7 +152,7 @@ angular.module('GHome', ['ngRoute', 'ui.bootstrap', 'angularFileUpload'])
 
   // Navigate to module view, either its specific view or configuration
   $scope.navigate = function(module) {
-    $location.path(module.has_view ? '/modules/' + module.id : '/settings');
+    $location.path('/modules/' + module.id);
   };
 }
 ;function SettingsCtrl($scope, $location) {
