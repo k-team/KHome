@@ -2,6 +2,7 @@ import module
 import fields
 import fields.io
 import fields.actuator
+import fields.persistant
 
 class ShutterActuator(module.Base):
     update_rate = 10
