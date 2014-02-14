@@ -1,3 +1,4 @@
+#!/usr/bin/env python2
 """
 Test a module with this script
 
