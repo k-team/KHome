@@ -28,7 +28,7 @@ if __name__ == '__main__':
                 syntax = float
             elif field['type'] == 'boolean':
                 syntax = bool
-            elif fiald['type'] == 'string':
+            elif field['type'] == 'string':
                 syntax = str
             else:
                 print '**** WARNING **** Pas de type connu pour ce champ. (Il faut faire heriter de fields.syntax.xxx)'
