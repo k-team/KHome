@@ -15,7 +15,7 @@ Alarm = Dummy(fields.syntax.Boolean)
 Door = Dummy(fields.syntax.Boolean)
 ElectricCurrent = Dummy(fields.syntax.Boolean)
 Fan = Dummy(fields.syntax.Boolean)
-Gaz = Dummy(fields.syntax.Boolean)
+Gaz = Dummy(fields.syntax.Boolean) #true = ouvert, flase = ferme
 LightButton = Dummy(fields.syntax.Boolean)
 Piston = Dummy(fields.syntax.Boolean)
 Shutter = Dummy(fields.syntax.Boolean)

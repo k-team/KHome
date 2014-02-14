@@ -14,8 +14,13 @@ class BabyMonitoringController(module.Base):
             super(BabyMonitoringController.controller, self).__init__()
     
         def always(self):
-            if self.module.sound_sensor.sound() > self.decibel_value:
+            #print 'sound = %s' % self.module.sound_sensor.sound()[1]
+            #print 'decibel_limit = %s' % self.decibel_value
+            
+            if self.module.sound_sensor.sound()[1] > self.decibel_value:
                 self.module.alarm_actuator.alarm(True)
+                #print 'alerte'
             else:
                 self.module.alarm_actuator.alarm(False)
+                #print 'pas alerte'
     
