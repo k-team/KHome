@@ -15,12 +15,12 @@ if __name__ == '__main__':
     args = docopt.docopt(__doc__)
     module_name = args['<module_name>']
     mod = use_module(module_name)
-
-    # fields
     fields = mod.info['fields']
     if fields:
         print 'Fields:'
-    for field in fields:
-        get = getattr(mod, field['name'])
-        print '-', field['name'], ':', field['type'], '(current value = %s)' % get()
-
+        for field in fields:
+            field_fn = getattr(mod, field['name'])
+            print '-', field['name'], ':', field['type'], \
+                    '(current value = %s)' % field_fn()
+    else:
+        print 'No fields found'
