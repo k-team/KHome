@@ -36,10 +36,10 @@ CO = Dummy(lambda t:
 Camera = Dummy(lambda t:
         math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
 
-ElectricCurrent = Dummy(
+ElectricCurrent = Dummy(lambda t:
         True if random.random() > 0.5 else False)
 
-LightButton = Dummy(
+LightButton = Dummy(lambda t:
         True if random.random() > 0.5 else False)
 
 LuminosityExterior = Dummy(lambda t:
@@ -57,7 +57,7 @@ OutsideBrightness = Dummy(lambda t:
 Propane = Dummy(lambda t:
         math.sin(t) * 1500 + 2000 + 0.5 * (random.random() - 0.5)) #seuil 1500
 
-RainForecast = Dummy(
+RainForecast = Dummy(lambda t:
         True if random.random() > 0.5 else False)
 
 Shutter = Dummy(lambda t:
