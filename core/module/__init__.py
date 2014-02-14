@@ -325,7 +325,7 @@ def use_module(module_name):
     """
     import re
     reg = re.compile(r'([A-Z])')
-    name = reg.sub(lambda match: '_' + match.group(0).lower(), module_name)[1:]
+    name = path.realname(module_name)
     # TODO unify module name of the socket and module_name of the pid
     if not instance.status(name):
         logger = logging.getLogger()

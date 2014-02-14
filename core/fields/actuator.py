@@ -1,5 +1,5 @@
 import fields.io
-import fields.type
+import fields.syntax
 
 def Dummy(data_type):
     class _Dummy(data_type,
@@ -7,14 +7,14 @@ def Dummy(data_type):
         pass
     return _Dummy
 
-Alarm = Dummy(fields.type.Boolean)
-Door = Dummy(fields.type.Boolean)
-ElectricCurrent = Dummy(fileds.type.Boolean)
-Fan = Dummy(fields.type.Boolean)
-Gaz = Dummy(fields.type.Boolean)
-LightButton = Dummy(fields.type.Boolean)
-Piston = Dummy(fields.type.Boolean)
-Shutter = Dummy(fields.type.Boolean)
-Temperature = Dummy(fields.type.Numeric)
-WaterValve = Dummy(fields.type.Boolean)
-Window = Dummy(fields.type.Boolean)
+Alarm = Dummy(fields.syntax.Boolean)
+Door = Dummy(fields.syntax.Boolean)
+ElectricCurrent = Dummy(fields.syntax.Boolean)
+Fan = Dummy(fields.syntax.Boolean)
+Gaz = Dummy(fields.syntax.Boolean)
+LightButton = Dummy(fields.syntax.Boolean)
+Piston = Dummy(fields.syntax.Boolean)
+Shutter = Dummy(fields.syntax.Boolean)
+Temperature = Dummy(fields.syntax.Numeric)
+WaterValve = Dummy(fields.syntax.Boolean)
+Window = Dummy(fields.syntax.Boolean)
