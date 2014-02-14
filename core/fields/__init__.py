@@ -65,6 +65,12 @@ class Base(threading.Thread):
         """
         pass
 
+    def always(self):
+        """
+        Function executed by the field at each loop turn.
+        """
+        pass
+
     def read(self, **kwargs):
         raise NotImplementedError
 
@@ -95,6 +101,7 @@ class Base(threading.Thread):
             if time.time() - self.old_time >= type(self).update_rate:
                 self.old_time = time.time()
                 self.emit_value(self.acquire_value())
+            self.always()
             time.sleep(0.1)
         self.close()
 
