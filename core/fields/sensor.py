@@ -233,6 +233,14 @@ class Sensor(object):
     def close(self):
         super(Sensor, self).close()
 
-if __name__ == '__main__':
-    sensor = Sensor("0021CC31")
-    sensor.start()
+class Interrupt(Sensor):
+    sensor_id = "0021CC31"
+
+class WindowsContact(Sensor):
+    sensor_id = "0001B595"
+
+class Presence(Sensor):
+    sensor_id = "00063E7B"
+
+class Humidite_Temperature(Sensor):
+    sensor_id = "00893378"
