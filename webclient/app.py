@@ -11,9 +11,7 @@ this_dir = os.path.dirname(os.path.realpath(__file__))
 core_dir = os.path.join(os.path.dirname(this_dir), 'core')
 sys.path.insert(1, core_dir)
 # leave this though
-import catalog
-from module import use_module
-from module import path
+from module import use_module, path, packaging
 
 # flask app
 app = Flask(__name__, static_folder='public', static_url_path='')
@@ -34,7 +32,7 @@ def api_rooms():
 
 @app.route('/api/modules')
 def api_modules():
-    return jsonify(catalog.get_installed_modules(detailed=True))
+    return jsonify(packaging.get_installed_modules(detailed=True))
 
 @app.route('/api/modules/<module_name>/fields')
 def api_module_configure(module_name):
@@ -59,7 +57,7 @@ def api_upload_module():
             _, filename = tempfile.mkstemp()
             file_.save(filename)
             try:
-                catalog.install_from_zip(filename)
+                packaging.install_from_zip(filename)
             except (IOError, ValueError) as e:
                 return_data['message'] = str(e)
             else:
@@ -74,7 +72,7 @@ def api_upload_module():
 def api_module_public(module_name, rest):
     rest = rest.lstrip('.') # for security reasons
     try:
-        module_config = catalog.get_config(module_name)
+        module_config = packaging.get_config(module_name)
     except IOError:
         abort(404)
 

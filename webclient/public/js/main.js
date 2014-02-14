@@ -378,8 +378,6 @@ function StoreCtrl($scope, $modal, ModuleService) {
       formattedData += key + '=' + data[key] + '&';
     }
     formattedData = formattedData.substring(0, formattedData.length-1);
-    console.log('data', data);
-    console.log('formattedData', formattedData);
     return $http({
       url: url, method: 'POST', data: formattedData,
       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
@@ -456,7 +454,7 @@ function StoreCtrl($scope, $modal, ModuleService) {
   // ...from the catalog
   service.installFromCatalog = function(module) {
     var deferred = $q.defer();
-    httpPostJSON(modulesUrl + '/install', { name: module.name })
+    httpPostJSON(modulesUrl + '/install', { name: module.id })
       .success(function() { deferred.resolve(); })
       .error(function() { deferred.reject(); });
     return deferred.promise;
