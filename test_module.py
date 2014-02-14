@@ -20,6 +20,7 @@ if __name__ == '__main__':
         print 'Fields:'
         for field in fields:
             field_fn = getattr(mod, field['name'])
+            #field_fn(150)
             print '-', field['name'], ':', field['type'], \
                     '(current value = %s)' % field_fn()
     else:
