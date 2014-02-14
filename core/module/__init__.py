@@ -50,7 +50,13 @@ def get_socket(module_name):
     file object.
     """
     sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-    sock.connect(path.socket_file(module_name))
+    try:
+        sock.connect(path.socket_file(module_name))
+    except socket.error as e:
+        logger = logging.getLogger()
+        logger.exception(e)
+        logger.error('Impossible to connect to the `' + module_name + '` module.')
+        kill()
     return sock.makefile('rw')
 
 def network_write(conn, data):
@@ -88,10 +94,18 @@ def network_readline(conn):
         return
 
     try:
-        return conn.readline()
-    except IOError:
+        return json.loads(conn.readline())
+    except IOError as e:
+        logger = logging.getLogger()
+        logger.exception(e)
+        logger.error('Impossible to read from the `' + module_name + '` module')
         kill()
         return
+    except TypeError as e:
+        logger = logging.getLogger()
+        logger.exception(e)
+        logger.error('The `' + module_name + '` module send bad data')
+        return {}
 
 def prop_field(field):
     """
@@ -126,7 +140,7 @@ def get_network_info(module_conn):
     request = {}
     request['code'] = 'knockknock'
     network_write(module_conn, json.dumps(request))
-    ans = json.loads(network_readline(module_conn))
+    ans = network_readline(module_conn)
     return ans
 
 def prop_network_field(module_conn, field_info):
@@ -144,7 +158,7 @@ def prop_network_field(module_conn, field_info):
             request['field_name'] = field_name
             request['field_value'] = args[0]
             network_write(module_conn, json.dumps(request))
-            ans = json.loads(network_readline(module_conn))
+            ans = network_readline(module_conn)
             return ans.get('success', False)
         elif not args:
             if not kwargs:
@@ -164,7 +178,7 @@ def prop_network_field(module_conn, field_info):
                 request['fields'] = [field_name]
 
             network_write(module_conn, json.dumps(request))
-            ans = json.loads(network_readline(module_conn))
+            ans = network_readline(module_conn)
 
             if not ans.get('success', False):
                 return None

@@ -140,7 +140,6 @@ class SensorConnection(Protocol):
                     sentData = self.org7_temp_humi(valeur)
                     print sendData
                     self.sensor.emit_value(sentData) 
-                    
 
     def org7_lumiosite_presence(self, valeur): #ordre des octets: DB0 DB1 DB2 DB3 mais pas DB3 DB2 DB1 DB0
         lumiosite = int(valeur[16:24],2)*510/255
@@ -150,7 +149,7 @@ class SensorConnection(Protocol):
             presence = 0
         ls = [lumiosite,temp,presence]
         return ls
-            
+
     def org7_temp_humi(self, valeur): #ordre des octets: DB0 DB1 DB2 DB3 mais pas DB3 DB2 DB1 DB0
         humi = int(valeur[16:24],2)*100/250 #use DB2
         l=[]
@@ -161,8 +160,7 @@ class SensorConnection(Protocol):
             temp = int(valeur[8:16],2)*40/250 #use DB1
             l.append(temp)
         return l 
-        
-    
+
     def org06(self,valeur):
         if valeur[31]=="0":
             print "ouvert" 
@@ -218,13 +216,14 @@ class SensorConnectionFactory(ClientFactory):
 class Sensor(object):
     sensor_host = '134.214.106.23'
     sensor_port = 5000
+    sensor_id = ""
 
-    def __init__(self,sensor_id):
+    def __init__(self):
         super(Sensor, self).__init__()
         reactor.connectTCP(type(self).sensor_host,
                 type(self).sensor_port,
                 SensorConnectionFactory(self,
-                    sensor_id))
+                    type(self).sensor_id))
 
     def start(self):
         # reactor.run()
