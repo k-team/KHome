@@ -75,7 +75,8 @@ TemperatureForecast = Dummy(lambda t:
 TemperatureExterior = Dummy(lambda t:
         math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
 
-
+Window = Dummy(lambda t:
+        math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
 
 
 class SensorConnection(Protocol):
