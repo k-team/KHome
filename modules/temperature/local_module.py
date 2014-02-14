@@ -8,5 +8,5 @@ class Temperature(module.Base):
     #room = use_module('Room')
 
     temperature = fields.proxy.mix('temperature',
-		'TemperatureSensor', 'temperature',
-		'TemperatureActuator', 'temperature')
+        'TemperatureSensor', 'temperature',
+        'TemperatureActuator', 'temperature')
