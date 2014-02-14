@@ -23,7 +23,11 @@ angular.module('GHome').factory('ModuleService', function($q, $http, $timeout, $
     return getModules(storeUrl, this.availableModules, forceReload);
   };
 
-  service.rateModule = function(module, value) {
+  service.rateModule = function(module, oldValue) {
+    var value = parseInt(oldValue);
+    if (!value || value < 1 || value > 5) {
+      console.error('Invalid value', oldValue);
+    }
     var deferred = $q.defer();
     $http({
       url: storeUrl + '/' + module.id + '/rate',

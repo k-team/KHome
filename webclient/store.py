@@ -65,7 +65,7 @@ def api_available_module_public(module_name, rest):
     module_zipfile = os.path.join(dir_, module_name + '.zip')
     with zipfile.ZipFile(module_zipfile) as zf:
         try:
-            module_conf_filename = os.path.join(module_name, catalog.CONFIG_FILE)
+            module_conf_filename = os.path.join(module_name, path.CONFIG_FILE)
             with zf.open(module_conf_filename) as module_conf_zf:
                 module_conf = json.load(module_conf_zf)
             public_dir = module_conf.get('public_dir', 'public')
@@ -115,6 +115,7 @@ def api_available_module_set_rate(module_name):
     try:
         Rating.create(module=module_name, value=int(request.form['value']))
     except (ValueError, KeyError):
+        import traceback; traceback.print_exc()
         abort(404)
 
 if __name__ == '__main__':
