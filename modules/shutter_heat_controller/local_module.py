@@ -17,7 +17,7 @@ class ShutterController(module.Base):
         tempExt = temperatureEnt.temperature()
         
         def always(self):
-            if tempInt < tempControl.seuil :
+            if tempInt < tempControl.controller().limit :
                 if tempInt < tempExt:
                     shutter.shutter(100)
                 else :
