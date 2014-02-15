@@ -76,11 +76,7 @@ class Protocol(protocol.Protocol):
         """
         Send all informations about the module via transport
         """
-        ans = {}
-        ans['fields'] = []
-        for f in self.module.module_fields:
-            ans['fields'] += [f.get_info()]
-        self.send_json(ans)
+        self.send_json(self.module.get_info())
 
     def set_value(self, data):
         """

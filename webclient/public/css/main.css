@@ -1,6 +1,20 @@
 body {
   padding-top: 70px;
 }
+@media (max-width: 480px) {
+  h1,
+  .h1 {
+    font-size: 16pt;
+  }
+}
+.field-string,
+dt {
+  display: block;
+}
+.field-string,
+dd {
+  display: block;
+}
 [ng\:cloak],
 [ng-cloak],
 .ng-cloak {

@@ -283,6 +283,18 @@ class Base(threading.Thread):
         self.running = False
         self.endpoint = None
 
+    def get_info(self):
+        """
+        Return a dictionnary containing all informations about
+        the module.
+        """
+        ans = {}
+        ans['name'] = self.module_name
+        ans['fields'] = []
+        for f in self.module_fields:
+            ans['fields'] += [f.get_info()]
+        return ans
+
     def start(self):
         logger = logging.getLogger()
         logger.info('The module `' + self.module_name + '` is running.')
