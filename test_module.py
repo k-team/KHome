@@ -1,26 +1,38 @@
+# -*- coding: utf-8 -*-
 #!/usr/bin/env python2
 """
-Test a module with this script
+Script simplifiant les test d'un module.
 
 Usage:
     test_module <module_name>
+    test_module (-a|--all)
+
+Options:
+    -a, --all   Tester tous les modules
+    -h, --help  Afficher ce message d'aide
 """
 import os
 import sys
 import docopt
+import logging
 
-sys.path.append('core')
+this_dir = os.path.dirname(os.path.realpath(__file__))
+core_dir = os.path.join(this_dir, 'core')
+sys.path.insert(1, core_dir)
 from module import use_module
+from module.path import modules_directory
 
-if __name__ == '__main__':
-    args = docopt.docopt(__doc__)
-    module_name = args['<module_name>']
+logger = logging.getLogger(__name__)
+
+def test_module(module_name):
+    logger.info('Début du test du module "%s"', module_name)
     mod = use_module(module_name)
-    print 'Test du module', module_name
-    print 'Informations :', mod.info
+    logger.info('Informations (brutes) : %s', mod.info)
     fields = mod.info['fields']
+    if not fields:
+        logger.error('Pas de champ défini dans le module')
     for field in fields:
-        print 'Test du champ :', field['name']
+        logger.info('Début du test du champ : "%s"', field['name'].encode('utf8'))
         field_fn = getattr(mod, field['name'])
         syntax = str
         if 'type' in field:
@@ -28,38 +40,46 @@ if __name__ == '__main__':
                 syntax = float
             elif field['type'] == 'boolean':
                 syntax = bool
-            elif fiald['type'] == 'string':
+            elif field['type'] == 'string':
                 syntax = str
             else:
-                print '**** WARNING **** Pas de type connu pour ce champ. (Il faut faire heriter de fields.syntax.xxx)'
+                logger.warning('Pas de type connu pour ce champ. (Il faut faire heriter de fields.syntax.xxx)')
         else:
-            print '**** WARNING **** Pas de type pour ce champ. (Il faut faire heriter de fields.syntax.xxx)'
+            logger.warning('Pas de type pour ce champ. (Il faut faire heriter de "fields.syntax.<type>")')
 
         if 'readable' in field and field['readable']:
-            v = field_fn()
-            print 'Test en lecture :', v
-            if v is None:
-                print '**** WARNING **** Pas de valeur pour ce champ. (Il faut heriter de fields.persistant.Volatile)'
+            value = field_fn()
+            if isinstance(value, str):
+                value = value.encode('utf8')
+            logger.info('Test en lecture : "%s"', value)
+            if value is None:
+                logger.warning('Pas de valeur pour ce champ. (Il faut heriter de "fields.persistant.Volatile")')
         if 'writable' in field and field['writable']:
             if syntax is float:
-                value = 42.0
+                new_value = 42.0
             elif syntax is bool:
-                value = True
+                new_value = True
             elif syntax is str:
-                value = 'Hello'
+                new_value = 'Hello world!'
 
-            print 'Test en ecriture : ecriture de', value
-            field_fn(value)
+            logger.info('Test en écriture : écriture de "%s"', new_value)
+            field_fn(new_value)
             if 'readable' in field and field['readable']:
-                v = field_fn()
-                print 'Valeur lu apres ecriture :', v
-                if v is None:
-                    print '**** ERROR **** Pas de valeur pour ce champ apres ecriture.'
-                elif v[1] != value:
-                    print '**** ERROR **** Pas la meme valeur lu apres ecriture.'
+                value = field_fn()
+                logger.info('Valeur lue après écriture : "%s"', value)
+                if value is None:
+                    logger.error('Pas de valeur pour ce champ après écriture')
+                elif value[1] != new_value:
+                    logger.error('Pas la même valeur lue après écriture')
         if not 'writable' in field and not 'readable' in field:
-            print '**** WARNING **** Champ ni readable ni writable'
-        print
+            logger.warning('Champ ni "readable" ni "writable"')
+        logger.info('Fin du test du champ : "%s"', field['name'])
+    logger.info('Fin du test du module "%s"', module_name)
 
-    if not fields:
-        print '**** ERREUR **** Pas de champ dans le module'
+if __name__ == '__main__':
+    args = docopt.docopt(__doc__)
+    if args['--all']:
+        for module_name in os.listdir(modules_directory()):
+            test_module(module_name)
+    else:
+        test_module(args['<module_name>'])
