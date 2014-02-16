@@ -135,7 +135,7 @@ class SensorConnection(Protocol):
                 #todo
                 if sensor_id[4:8] == "3E7B":
                     print "c'est un capteur de lumiere"
-                    sentData = self.org7_lumiosite_presence(valeur)
+                    sentData = self.org7_presence(valeur)
                     print sendData
                     self.sensor.emit_value(sentData) 
                 elif sensor_id == "00893378":
@@ -144,15 +144,21 @@ class SensorConnection(Protocol):
                     print sendData
                     self.sensor.emit_value(sentData) 
 
-    def org7_lumiosite_presence(self, valeur): #ordre des octets: DB0 DB1 DB2 DB3 mais pas DB3 DB2 DB1 DB0
-        lumiosite = int(valeur[16:24],2)*510/255
-        temp = int(valeur[8:16],2)*51/255
+    def org7_presence(self, valeur): #ordre des octets: DB0 DB1 DB2 DB3 mais pas DB3 DB2 DB1 DB0
+        #lumiosite = int(valeur[16:24],2)*510/255
+        #temp = int(valeur[8:16],2)*51/255
         presence = 1
         if valeur[1]=="1":
             presence = 0
+<<<<<<< HEAD
+        #ls = [lumiosite,temp,presence]
+        return presence
+            
+=======
         ls = [lumiosite,temp,presence]
         return ls
 
+>>>>>>> db4ced399e75352c231d471000dc6fa4cd589621
     def org7_temp_humi(self, valeur): #ordre des octets: DB0 DB1 DB2 DB3 mais pas DB3 DB2 DB1 DB0
         humi = int(valeur[16:24],2)*100/250 #use DB2
         l=[]
