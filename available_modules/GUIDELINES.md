@@ -21,5 +21,6 @@ These entries are read in the module's __module.json__.
 
     start: how to start the module (shell command)
     public_directory: the public directory's name
+    partial_name: specific view's filename, relative to public directory
+    icon_name: specific icon's filename, relative to public directory
     has_view: specify if the module has a specific view or not (deprecated)
-    partial_name: specific view's filename, relative to public directory (not implemented)

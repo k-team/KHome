@@ -1,29 +1,15 @@
-function RatingCtrl($scope, ModuleService) {
-  $scope.isRating = false;
-  $scope.rate = function() {
-    $scope.isRating = true;
-    ModuleService.rate($scope.module, $scope.module.rating).then(function() {
-      console.log('rating success');
-    }, function() {
-      console.log('rating error');
-    }, function() {
-      $scope.isRating = false;
-    });
-  };
-}
-
 function StoreCtrl($scope, $modal, ModuleService) {
   // All modules
-  $scope.modules = [];
+  $scope.availableModules = [];
 
   // Explicitly reload modules
-  $scope.reloadModules = function() {
+  $scope.reloadAvailableModules = function() {
     ModuleService.available().then(function(modules) {
-      $scope.modules = modules;
+      $scope.availableModules = modules;
     });
   };
   //...and call immediately
-  $scope.reloadModules();
+  $scope.reloadAvailableModules();
 
   // Install a module
   $scope.modulesInstalling = [];
@@ -56,7 +42,7 @@ function StoreCtrl($scope, $modal, ModuleService) {
       $scope.uploadProgress = parseInt(100.0 * evt.loaded / evt.total);
     }).success(function() {
       $scope.uploading = false;
-      $scope.reloadModules();
+      $scope.reloadAvailableModules();
     }).error(function() {
       $scope.uploading = false;
       // TODO handle errors better

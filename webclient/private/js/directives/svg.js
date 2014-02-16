@@ -2,11 +2,10 @@ angular.module('GHome').directive('svgVbox', function() {
   return {
     link: function($scope, elem, attrs) {
       // Configurable viewBox padding
-      var padding = 0
+      var paddingRatio = 0.05;
       attrs.$observe('svgVboxPadding', function(value) {
         if (value === undefined) { return; }
-        value = parseFloat($scope.$eval(value));
-        padding = value;
+        paddingRatio = parseFloat($scope.$eval(value));
       });
 
       $scope.$watch(attrs.svgVbox, function(vbox) {
@@ -16,12 +15,18 @@ angular.module('GHome').directive('svgVbox', function() {
         if (vbox.minY === undefined) { vbox.minY = 0; }
         if (vbox.maxY === undefined) { vbox.maxY = 0; }
 
+        // Compute map width/height and padding (relative to bbox)
+        var
+          w = vbox.maxX - vbox.minX,
+          h = vbox.maxY - vbox.minY,
+          padding = paddingRatio*Math.max(w, h);
+
         // Actual (x, y, w, h) values
         var
           x = vbox.minX - padding,
-          y = vbox.minY - padding,
-          w = (vbox.maxX - vbox.minX) + 2*padding,
-          h = (vbox.maxY - vbox.minY) + 2*padding;
+          y = vbox.minY - padding;
+        w += 2*padding;
+        h += 2*padding;
 
         // Update svg element
         // TODO check compatibility (jQuery/DOM)

@@ -68,6 +68,8 @@ def api_available_module_public(module_name, rest):
     module_name, rest = map(secure_filename, (module_name, rest))
     if not allowed_file(rest):
         abort(403)
+    if not catalog.is_available(module_name):
+        abort(404)
 
     # get zip file from catalog
     with zipfile.ZipFile(catalog.get_zipfile(module_name)) as zf:
@@ -75,7 +77,7 @@ def api_available_module_public(module_name, rest):
             module_conf_filename = os.path.join(module_name, path.CONFIG_FILE)
             with zf.open(module_conf_filename) as module_conf_zf:
                 module_conf = json.load(module_conf_zf)
-            public_dir = module_conf.get('public_dir', 'public')
+            public_dir = catalog.get_from_config(module_conf, 'public_directory')
             requested_file = os.path.join(module_name, public_dir, rest)
             with zf.open(requested_file) as requested_zf:
                 try:

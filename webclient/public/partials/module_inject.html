@@ -1,5 +1,5 @@
 <div class="header">
-  <span class="h1 vertical-middle">{{ module.name }} Titre du module</span>
+  <span class="h1 vertical-middle">{{ module.name }}</span>
   &nbsp;
   <span class="vertical-middle" data-ng-controller="RatingCtrl">
     <rating value="module.rating" max="5" data-ng-click="rate()" on-leave="overStar = null"></rating>
@@ -7,102 +7,31 @@
 </div>
 <hr />
 <div class="content">
-  <!-- <div ng&#45;controller="AlertCtrl"> -->
-    <!-- <alert ng&#45;repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}</alert> -->
-    <alert type="danger">Une erreur est survenue durant la modification du field 5</alert>
-  <!-- </div> -->
-
-  <!--
-  Edition d'un field :
-  1 Text avec la valeur -click->
-  2 Apparition de la form  -valide_form->
-  3 Mise en attente de réponse -success->
-  4 Succes -timeout-> 1
-
-  2 -click_out-> 1
-  3 -timeout | error->
-  5 Erreur -timeout-> 1
-  -->
-
-  <!-- fields readable et type="string" -->
-  <div class="fields-string">
-    <div class="field-string">
-      <label for="field-field1">Public name 1</label>
-      <span id="field-field1">value 1</span>
-    </div>
-    <div class="field-string">
-      <label for="field-field2">Public name 2</label>
-      <span id="field-field2">value 2</span>
-    </div>
-  </div>
-
-  <!-- fields readable, writable et type="string" -->
-  <div class="fields-string-writable">
-    <form class="field-string form-horizontal" role="form">
-      <fieldset disabled>
-        <div class="form-group">
-          <label for="field-field3" class="col-sm-2 control-label">En attente rép</label>
-          <div class="input-group input-group-sm col-sm-10">
-            <span class="input-group-addon">
-              <span class="glyphicon glyphicon-time"></span>
-            </span>
-            <input id=field-field3" type="text" class="form-control" value="value 3" placeholder="value 3" />
-            <span class="input-group-btn">
-              <button type="button" class="btn btn-default">
-                <span class="glyphicon glyphicon-share-alt"></span>
-              </button>
-            </span>
-          </div>
-        </div>
-      </fieldset>
-    </form>
-
-    <form class="field-string form-horizontal" role="form">
+  <div data-ng-controller="ModuleFieldCtrl" data-ng-repeat="field in module.fields">
+    <form data-ng-submit="update(field)" class="form-horizontal" role="form">
       <fieldset>
-        <div class="form-group has-success">
-          <label for="field-field4" class="col-sm-2 control-label">En validation</label>
+        <div class="form-group" data-ng-class="{success:'has-success', error:'has-error', '':''}[field.state]">
+          <label for="field-{{field.name}}" class="col-sm-2 control-label">{{field.name}}</label>
           <div class="input-group input-group-sm col-sm-10">
-            <span class="input-group-addon">
-              <span class="glyphicon glyphicon-ok"></span>
-            </span>
-            <input id=field-field4" type="text" class="form-control" value="value 4" placeholder="value 4" />
-            <span class="input-group-btn">
-              <button type="button" class="btn btn-default">
-                <span class="glyphicon glyphicon-share-alt"></span>
-              </button>
-            </span>
-          </div>
-        </div>
-      </fieldset>
-    </form>
-
-    <form class="field-string form-horizontal" role="form">
-      <fieldset>
-        <div class="form-group has-error">
-          <label for="field-field4" class="col-sm-2 control-label">En erreur</label>
-          <div class="input-group input-group-sm col-sm-10">
-            <span class="input-group-addon">
-              <span class="glyphicon glyphicon-remove"></span>
-            </span>
-            <input id=field-field5" type="text" class="form-control" value="value 5" placeholder="value 5" />
-            <span class="input-group-btn">
-              <button type="button" class="btn btn-default">
-                <span class="glyphicon glyphicon-share-alt"></span>
-              </button>
-            </span>
-          </div>
-        </div>
-      </fieldset>
-    </form>
-
-    <form class="field-string form-horizontal" role="form">
-      <fieldset>
-        <div class="form-group">
-          <label for="field-field4" class="col-sm-2 control-label">En edition</label>
-          <div class="input-group input-group-sm col-sm-10">
-            <input id=field-field6" type="text" class="form-control" value="value 6" placeholder="value 6" />
-            <span class="input-group-btn">
-              <button type="button" class="btn btn-default">
+            <div class="input-group-addon" data-ng-show="field.writable" data-ng-switch on="field.state">
+              <span data-ng-switch-default>
+                <span class="glyphicon glyphicon-pencil"></span>
+              </span>
+              <span data-ng-switch-when="success">
+                <span class="glyphicon glyphicon-ok"></span>
+              </span>
+              <span data-ng-switch-when="error">
+                <span class="glyphicon glyphicon-remove"></span>
+              </span>
+              <span data-ng-switch-when="waiting">
+                <span class="glyphicon glyphicon-time"></span>
+              </span>
+            </div>
+            <input data-ng-model="value" data-ng-show="field.type=='string'" name="field-str-{{field.name}}" type="text" class="form-control" value="{{field.value}}" placeholder="{{field.name}}" />
+            <input data-ng-model="value" data-ng-show="field.type=='numeric'" name="field-num-{{field.name}}" type="number" class="form-control" value="{{field.value}}" placeholder="{{field.name}}" />
+            <input data-ng-model="value" data-ng-show="field.type=='boolean'" name="field-bool-{{field.name}}" type="checkbox" class="form-control" value="{{field.value}}" />
+            <span data-ng-show="field.writable" class="input-group-btn">
+              <button type="submit" class="btn btn-default">
                 <span class="glyphicon glyphicon-share-alt"></span>
               </button>
             </span>
@@ -111,5 +40,8 @@
       </fieldset>
     </form>
   </div>
+
+  <hr />
+
   <div id="inject"></div>
 </div>

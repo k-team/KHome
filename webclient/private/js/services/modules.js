@@ -19,7 +19,17 @@ angular.module('GHome').factory('ModuleService', function($q, $http, $timeout, $
     var deferred = $q.defer();
     $http.get(modulesUrl + '/' + name).success(function(data) {
       console.log(data);
+      deferred.resolve(data);
     });
+    return deferred.promise;
+  };
+
+  service.updateField = function(module, field, value) {
+    var deferred = $q.defer();
+    httpPostJSON(modulesUrl + '/update_field',
+        { name: module.id, field: field.name, value: value })
+      .success(function() { deferred.resolve(); })
+      .error(function() { deferred.reject(); });
     return deferred.promise;
   };
 

@@ -2,7 +2,8 @@ import os
 import zipfile
 
 import module.path as path
-from module.packaging import load_config
+from module.packaging import (load_config, get_from_config, CONFIG_DEFAULTS,
+        is_installed, MODULE_NAME_ENTRY as _mne)
 
 def get_zipfile(module_name):
     """
@@ -15,7 +16,7 @@ def is_available(module_name):
     """
     Return if the module named as *module_name* is available.
     """
-    return module_name in (m['id'] for m in get_available_modules())
+    return module_name in (m[_mne] for m in get_available_modules())
 
 def get_available_modules(detailed=False):
     """
@@ -24,20 +25,22 @@ def get_available_modules(detailed=False):
     """
     module_list = []
     dir_ = path.availables_directory()
-    for module_name in os.listdir(dir_):
-        mod_full_dir = os.path.join(dir_, module_name)
-        if not module_name.lower().endswith('.zip'):
+    for module_fname in os.listdir(dir_):
+        mod_full_dir = os.path.join(dir_, module_fname)
+        if not module_fname.lower().endswith('.zip'):
             continue
         with zipfile.ZipFile(mod_full_dir) as zf:
-            module_dir = os.path.splitext(module_name)[0] + '/'
+            module_name = os.path.splitext(module_fname)[0]
+            module_dir = module_name + '/'
             if module_dir not in zf.namelist():
                 continue
-            module_config_file = path.config_file(
-                    module_name, directory=module_dir)
+            module_config_file = path.config_file(module_name,
+                    directory=module_dir)
             with zf.open(module_config_file) as module_config_fp:
                 conf = load_config(module_config_fp)
                 if detailed:
+                    conf['installed'] = is_installed(module_name)
                     module_list.append(conf)
                 else:
-                    module_list.append({ 'id': conf['id'] })
+                    module_list.append({ _mne: conf[_mne] })
     return module_list
