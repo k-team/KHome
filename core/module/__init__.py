@@ -56,7 +56,8 @@ def get_socket(module_name):
         logger = logging.getLogger()
         logger.exception(e)
         logger.error('Impossible to connect to the `' + module_name + '` module.')
-        kill()
+        raise RuntimeError('Impossible to connect to the `' + module_name + '` module.')
+        # kill()
     return sock.makefile('rw')
 
 def network_write(conn, data):
@@ -69,16 +70,18 @@ def network_write(conn, data):
     """
     _, wl, _ = select.select([], [conn], [], SOCKET_TIMEOUT)
     if wl is []:
-        kill()
-        return
+        raise RuntimeError('Impossible to write to the `' + module_name + '` module.')
+        # kill()
+        # return
 
     conn = wl[0]
     try:
         conn.write(data + '\n')
         conn.flush()
     except IOError:
-        kill()
-        return
+        raise RuntimeError('Impossible to write to the `' + module_name + '` module.')
+        # kill()
+        # return
 
 def network_readline(conn):
     """
@@ -90,8 +93,9 @@ def network_readline(conn):
 
     rl, _, _ = select.select([conn], [], [], SOCKET_TIMEOUT)
     if rl is []:
-        kill()
-        return
+        raise RuntimeError('Impossible to read from the `' + module_name + '` module.')
+        # kill()
+        # return
 
     try:
         return json.loads(conn.readline())
@@ -99,8 +103,9 @@ def network_readline(conn):
         logger = logging.getLogger()
         logger.exception(e)
         logger.error('Impossible to read from the `' + module_name + '` module')
-        kill()
-        return
+        raise RuntimeError('Impossible to read from the `' + module_name + '` module.')
+        # kill()
+        # return
     except TypeError as e:
         logger = logging.getLogger()
         logger.exception(e)
@@ -366,8 +371,7 @@ def use_module(module_name, ignore_error=False):
             if time.time() - t > SOCKET_TIMEOUT:
                 logger.error('Impossible to launch the `' + \
                         module_name + '` dependancy module. Abort')
-                kill()
-                return
+                raise RuntimeError('Impossible to launch the `' + module_name + '` dependancy module.')
 
         logger.info('The `' + module_name + \
                 '` dependancy module successfully launched.')
