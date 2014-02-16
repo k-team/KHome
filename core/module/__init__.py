@@ -33,15 +33,17 @@ logger.addHandler(handler)
 
 def kill():
     """
-    Kill all running modules
+    Call the kill function of all running in this proc.
+    Raise a runtime error.
     """
     logger = logging.getLogger()
     logger.info('Application killed')
     for mod in _running_modules:
         logger.info('Kill the module `' + mod + '`.')
         mod.kill()
-    reactor.callFromThread(reactor.stop)
-    sys.exit(1)
+    raise RuntimeError('GTFO')
+    # reactor.callFromThread(reactor.stop)
+    # sys.exit(1)
 
 def get_socket(module_name):
     """
@@ -56,6 +58,7 @@ def get_socket(module_name):
         logger = logging.getLogger()
         logger.exception(e)
         logger.error('Impossible to connect to the `' + module_name + '` module.')
+        raise RuntimeError('Impossible to connect to the `' + module_name + '` module.')
         kill()
     return sock.makefile('rw')
 
@@ -69,16 +72,15 @@ def network_write(conn, data):
     """
     _, wl, _ = select.select([], [conn], [], SOCKET_TIMEOUT)
     if wl is []:
-        kill()
-        return
+        raise RuntimeError('Impossible to write to the `' + module_name + '` module.')
+        return kill()
 
     conn = wl[0]
     try:
         conn.write(data + '\n')
         conn.flush()
     except IOError:
-        kill()
-        return
+        return kill()
 
 def network_readline(conn):
     """
@@ -90,21 +92,19 @@ def network_readline(conn):
 
     rl, _, _ = select.select([conn], [], [], SOCKET_TIMEOUT)
     if rl is []:
-        kill()
-        return
+        return kill()
 
     try:
         return json.loads(conn.readline())
-    except IOError as e:
+    except (IOError, ValueError) as e:
         logger = logging.getLogger()
         logger.exception(e)
-        logger.error('Impossible to read from the `' + module_name + '` module')
-        kill()
-        return
+        logger.error('Impossible to read from the module')
+        return kill()
     except TypeError as e:
         logger = logging.getLogger()
         logger.exception(e)
-        logger.error('The `' + module_name + '` module send bad data')
+        logger.error('The module send bad data')
         return {}
 
 def prop_field(field):
@@ -348,10 +348,9 @@ def is_ready(module_name):
     """
     return os.path.exists(path.socket_file(module_name))
 
-def use_module(module_name, ignore_error=False):
+def use_module(module_name):
     """
     Shortcut for referencing a module through network, given its module name.
-    If *ignore_error* is False, kill the application is case of error. Else, return None.
     """
     name = path.realname(module_name)
     if not instance.status(name):
@@ -366,8 +365,8 @@ def use_module(module_name, ignore_error=False):
             if time.time() - t > SOCKET_TIMEOUT:
                 logger.error('Impossible to launch the `' + \
                         module_name + '` dependancy module. Abort')
-                kill()
-                return
+                return kill()
+                # raise RuntimeError('Impossible to launch the `' + module_name + '` dependancy module.')
 
         logger.info('The `' + module_name + \
                 '` dependancy module successfully launched.')
