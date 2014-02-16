@@ -17,8 +17,8 @@
             <rating value="module.rating" max="5" readonly="true"></rating>
           </div>
           <div class="col-md-5 col-sm-6">
-            <!-- <p class="text&#45;danger"><small>Not installed</small></p> -->
-            <p class="text-success"><small>Installed</small></p>
+            <p data-ng-hide="module.installed" class="text-danger"><small>Not installed</small></p>
+            <p data-ng-show="module.installed" class="text-success"><small>Installed</small></p>
           </div>
         </div>
       </div>
@@ -37,8 +37,8 @@
                 <rating value="module.rating" max="5" readonly="true"></rating>
               </div>
               <div class="col-xs-6">
-                <p class="text-danger"><small>Not installed</small></p>
-                <!-- <p class="text&#45;success"><small>Installed</small></p> -->
+                <p data-ng-hide="module.installed" class="text-danger"><small>Not installed</small></p>
+                <p data-ng-show="module.installed" class="text-success"><small>Installed</small></p>
               </div>
             </div>
           </div>
@@ -57,7 +57,7 @@
         </span>
       </div>
       <div class="modal-body">
-        <carousel interval="5000">
+        <carousel data-ng-show="module.slides" data-interval="5000">
           <slide data-ng-repeat="slide in module.slides" active="slide.active">
             <img data-ng-src="{{slide.image}}" style="margin:auto;">
           </slide>
@@ -66,7 +66,8 @@
         {{ module.description }}
       </div>
       <div class="modal-footer">
-        <a data-ng-click="install()" class="btn btn-primary" role="button">Install</a>
+        <a data-ng-click="install()" data-ng-hide="module.installed" class="btn btn-primary" role="button">Install</a>
+        <a data-ng-click="uninstall()" data-ng-show="module.installed" class="btn btn-danger" role="button">Uninstall</a>
         <a data-ng-click="dismiss()" class="btn btn-default" role="button">Close</a>
       </div>
     </script>
