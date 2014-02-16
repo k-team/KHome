@@ -45,8 +45,7 @@ if __name__ == '__main__':
     elif args['stop']:
         instance.stop(args['<module_name>'])
     elif args['start-all']:
-        re = instance.invoke_all()
-        print '\n'.join(map(str, re))
+        instance.invoke_all()
     elif args['stop-all']:
         instance.stop_all()
     elif args['status']:
