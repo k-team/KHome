@@ -46,6 +46,9 @@ ElectricCurrent = Dummy(lambda t:
 LightButton = Dummy(lambda t:
         True if random.random() > 0.5 else False)
 
+Presence = Dummy(lambda t:
+        True if random.random() > 0.5 else False)
+
 LuminosityExterior = Dummy(lambda t:
         (math.sin(t)+1) * 50 ) #this will from 0 to 100
         
@@ -238,8 +241,8 @@ class Interrupt(Sensor):
 class WindowsContact(Sensor):
     sensor_id = "0001B595"
 
-class Presence(Sensor):
-    sensor_id = "00063E7B"
+#class Presence(Sensor):
+#    sensor_id = "00063E7B"
 
 class Humidite_Temperature(Sensor):
     sensor_id = "00893378"
