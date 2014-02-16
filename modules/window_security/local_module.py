@@ -5,9 +5,9 @@ import logging
 
 class WindowSecurity(module.Base):
     update_rate = 10
-    windowAccess = use_module('WindowAccess')
+    window_access = use_module('WindowAccess')
     recognition = use_module('Recognition')
-    alarmActuator = use_module('AlarmActuator')
+    alarm_actuator = use_module('AlarmActuator')
 
     class controller(fields.Base):
         def __init__(self):
