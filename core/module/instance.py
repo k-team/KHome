@@ -6,6 +6,7 @@ import signal
 import daemon
 import logging
 import subprocess
+import multiprocessing
 import traceback
 import module
 import packaging
@@ -113,30 +114,13 @@ def invoke(module_name, daemonize=True):
     As exec_module, execute a module but fork before to keep the current
     process active. To see if the module is really running, use the
     *status* function.
-    Return the new process's pid. In case of error, return 0.
     """
     if status(module_name):
         raise RuntimeError('The module `' + module_name + '` is already running')
-    pid = os.fork()
-    if pid == 0: # Child side
-        try:
-            execm(module_name, daemonize)
-        # handle raising SystemExit (code from Python's stdlib)
-        except SystemExit as e:
-            if not e.args:
-                exitcode = 1
-            elif isinstance(e.args[0], int):
-                exitcode = e.args[0]
-            else:
-                sys.stderr.write(str(e.args[0]) + '\n')
-                sys.stderr.flush()
-                exitcode = 0 if isinstance(e.args[0], str) else 1
-        except: # don't lose a possible exception traceback
-            exitcode = 1
-            traceback.print_exc()
-        finally:
-            sys.exit(exitcode)
-    return pid
+
+    p = multiprocessing.Process(target=execm, args=(module_name, daemonize))
+    p.start()
+    p.join()
 
 def invoke_all():
     """
@@ -144,17 +128,12 @@ def invoke_all():
     correctly launch. Return the list of pid of the new processes.
     """
     modules = packaging.get_installed_modules()
-    pids = []
     for name in modules:
         try:
-            pid = invoke(name, True)
+            invoke(name, True)
             time.sleep(0.1)
         except RuntimeError:
             traceback.print_exc()
-        else:
-            assert pid != 0
-            pids.append(pid)
-    return pids
 
 def stop(module_name):
     """
