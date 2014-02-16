@@ -43,6 +43,7 @@ def api_modules():
 @app.route('/api/modules/<module_name>')
 def api_module_info(module_name):
     try:
+        return jsonify([])
         return jsonify(use_module(module_name).info)
     except (TypeError, RuntimeError) as e:
         app.logger.exception(e)
