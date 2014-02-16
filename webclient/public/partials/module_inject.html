@@ -25,64 +25,92 @@
   -->
 
   <!-- fields readable et type="string" -->
-  <dl class="fields-string">
-    <dt>Public name 1&nbsp;:&nbsp;</dt>
-    <dd>value 1</dd><br />
+  <div class="fields-string">
+    <div class="field-string">
+      <label for="field-field1">Public name 1</label>
+      <span id="field-field1">value 1</span>
+    </div>
 
-    <dt>Public name 2&nbsp;:&nbsp;</dt>
-    <dd>value 2</dd><br />
+    <div class="field-string">
+      <label for="field-field2">Public name 2</label>
+      <span id="field-field2">value 2</span>
+    </div>
+  </div>
 
-    <dt>En attente rép&nbsp;:&nbsp;</dt>
-    <dd>
-      <form class="form-inline" role="form">
-        <fieldset disabled>
-          <div class="form-group has-feedback">
-            <input type="text" class="form-control input-sm" value="value 3" placeholder="value 3" />
-            <span class="glyphicon glyphicon-refresh form-control-feedback"></span>
+  <!-- fields readable, writable et type="string" -->
+  <div class="fields-string-writable">
+    <form class="field-string form-horizontal" role="form">
+      <fieldset disabled>
+        <div class="form-group">
+          <label for="field-field3" class="col-sm-2 control-label">En attente rép</label>
+          <div class="input-group input-group-sm col-sm-10">
+            <span class="input-group-addon">
+              <span class="glyphicon glyphicon-time"></span>
+            </span>
+            <input id=field-field3" type="text" class="form-control" value="value 3" placeholder="value 3" />
+            <span class="input-group-btn">
+              <button type="button" class="btn btn-default">
+                <span class="glyphicon glyphicon-share-alt"></span>
+              </button>
+            </span>
           </div>
-          <button type="submit" class="btn btn-default btn-sm">OK</button>
-        </fieldset>
-      </form>
-    </dd><br />
+        </div>
+      </fieldset>
+    </form>
 
-    <dt>En validation&nbsp;:&nbsp;</dt>
-    <dd>
-      <form class="form-inline" role="form">
-        <fieldset>
-          <div class="form-group has-success has-feedback">
-            <input type="text" class="form-control input-sm" value="value 4" placeholder="value 4" />
-            <span class="glyphicon glyphicon-ok form-control-feedback"></span>
+    <form class="field-string form-horizontal" role="form">
+      <fieldset>
+        <div class="form-group has-success">
+          <label for="field-field4" class="col-sm-2 control-label">En validation</label>
+          <div class="input-group input-group-sm col-sm-10">
+            <span class="input-group-addon">
+              <span class="glyphicon glyphicon-ok"></span>
+            </span>
+            <input id=field-field4" type="text" class="form-control" value="value 4" placeholder="value 4" />
+            <span class="input-group-btn">
+              <button type="button" class="btn btn-default">
+                <span class="glyphicon glyphicon-share-alt"></span>
+              </button>
+            </span>
           </div>
-          <button type="submit" class="btn btn-default btn-sm">OK</button>
-        </fieldset>
-      </form>
-    </dd><br />
+        </div>
+      </fieldset>
+    </form>
 
-    <dt>En erreur&nbsp;:&nbsp;</dt>
-    <dd>
-      <form class="form-inline" role="form">
-        <fieldset>
-          <div class="form-group has-error has-feedback">
-            <input type="text" class="form-control input-sm" value="value 5" placeholder="value 5" />
-            <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+    <form class="field-string form-horizontal" role="form">
+      <fieldset>
+        <div class="form-group has-error">
+          <label for="field-field4" class="col-sm-2 control-label">En erreur</label>
+          <div class="input-group input-group-sm col-sm-10">
+            <span class="input-group-addon">
+              <span class="glyphicon glyphicon-remove"></span>
+            </span>
+            <input id=field-field5" type="text" class="form-control" value="value 5" placeholder="value 5" />
+            <span class="input-group-btn">
+              <button type="button" class="btn btn-default">
+                <span class="glyphicon glyphicon-share-alt"></span>
+              </button>
+            </span>
           </div>
-          <button type="submit" class="btn btn-default btn-sm">OK</button>
-        </fieldset>
-      </form>
-    </dd><br />
+        </div>
+      </fieldset>
+    </form>
 
-    <dt>En edition&nbsp;:&nbsp;</dt>
-    <dd>
-      <form class="form-inline" role="form">
-        <fieldset>
-          <div class="form-group has-feedback">
-            <input type="text" class="form-control input-sm" value="value 6" placeholder="value 6" />
-            <span class="glyphicon form-control-feedback"></span>
+    <form class="field-string form-horizontal" role="form">
+      <fieldset>
+        <div class="form-group">
+          <label for="field-field4" class="col-sm-2 control-label">En edition</label>
+          <div class="input-group input-group-sm col-sm-10">
+            <input id=field-field6" type="text" class="form-control" value="value 6" placeholder="value 6" />
+            <span class="input-group-btn">
+              <button type="button" class="btn btn-default">
+                <span class="glyphicon glyphicon-share-alt"></span>
+              </button>
+            </span>
           </div>
-          <button type="submit" class="btn btn-default btn-sm">OK</button>
-        </fieldset>
-      </form>
-    </dd><br />
-  </dl>
+        </div>
+      </fieldset>
+    </form>
+  </div>
   <div id="inject"></div>
 </div>

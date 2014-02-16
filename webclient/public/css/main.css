@@ -7,14 +7,6 @@ body {
     font-size: 16pt;
   }
 }
-.field-string,
-dt {
-  display: block;
-}
-.field-string,
-dd {
-  display: block;
-}
 [ng\:cloak],
 [ng-cloak],
 .ng-cloak {
