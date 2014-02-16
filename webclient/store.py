@@ -68,6 +68,8 @@ def api_available_module_public(module_name, rest):
     module_name, rest = map(secure_filename, (module_name, rest))
     if not allowed_file(rest):
         abort(403)
+    if not catalog.is_available(module_name):
+        abort(404)
 
     # get zip file from catalog
     with zipfile.ZipFile(catalog.get_zipfile(module_name)) as zf:
