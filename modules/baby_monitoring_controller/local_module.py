@@ -15,7 +15,7 @@ class BabyMonitoringController(module.Base):
             super(BabyMonitoringController.controller, self).__init__()
     
         def always(self):
-            print "testons"
+            print 'testons'
             try:
                 sound_now = self.module.sound_sensor.sound()[1]
                 print 'sound_now= %s' % sound_now
