@@ -42,8 +42,8 @@ class Actuator(object):
     from twisted.internet import reactor
     #host = '134.214.106.23'
     #port = 5000
-    host = '127.0.0.1'
-    port = 1234
+    host = '134.214.106.23'
+    port = 5000
     actuator_id = ""
     org =""
     sentData=""
