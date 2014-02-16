@@ -20,18 +20,22 @@ class ShutterLightController(module.Base):
             super(ShutterLightController.controller, self).__init__()
         
         def always(self):
+            print "luminosity_limit = %s / night_limit = %s" % (self.luminosity_limit, self.night_limit)
             try:
                 lumInt = self.module.luminosityInt.luminosity()[1]
                 lumExt = self.module.luminosityExt.luminosity()[1]
-                presence = self.module.presence.presence()
+                presence = self.module.presence.presence()[1]
+                print "lumInt = %s / lumExt = %s / pres = %s" % (lumInt, lumExt, presence)
             except TypeError as e:
                 logger = logging.getLogger()
                 logger.exception(e)
             else:
                 if  lumExt < self.night_limit:
                     #this represent he night (so we close the shutters)
-                    shutter.shutter(0)
+                    print "close shutter because of night"
+                    self.module.shutter.shutter(0)
                 elif presence:
-                    if lumInt < self.luminosityLimit :
-                        if self.luminosityLimit < lumExt:
-                            shutter.shutter(100)
+                    if lumInt < self.luminosity_limit :
+                        if self.luminosity_limit < lumExt:
+                           print "open shutter"
+                           self.module.shutter.shutter(100)

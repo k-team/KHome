@@ -15,11 +15,14 @@ class ElectricCurrentController(module.Base):
         def always(self):
             try:
                 presence = self.module.human_presence.presence()[1]
+                print "presence = %s" % presence
             except TypeError as e:
                 logger = logging.getLogger()
                 logger.exception(e)
             else:
                 if presence:
-                   self.module.electric_current.switch(True)
+                   print "ouvrir courrant"
+                   self.module.switch.electric_current(True)
                 else:
-                   self.module.electric_current.switch(False)
+                   print "fermer courrant"
+                   self.module.switch.electric_current(False)

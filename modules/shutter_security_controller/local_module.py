@@ -5,7 +5,7 @@ import fields
 class ShutterSecurityController(module.Base):
         update_rate = 2
 
-        shutter= use_module('Shutter')
+        shutter = use_module('Shutter')
         presence = use_module('HumanPresenceSensor')
 
         
@@ -13,10 +13,12 @@ class ShutterSecurityController(module.Base):
             
             def always(self):
                 try:
-                    pres = presence.presence()
+                    pres = self.module.presence.presence()
+                    print "presence = %s" % pres
                 except TypeError:
                     pass # Ignore
                 else:
-                    if not pres :
+                    if not pres[1] :
+                        print "volet ferme"
                         self.module.shutter.shutter(0)
         

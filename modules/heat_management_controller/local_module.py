@@ -15,15 +15,21 @@ class HeatManagementController(module.Base):
             try:
                 self.curr_win_management = self.module.window.management()[1]
                 self.curr_door_management = self.module.door.management()[1]
+		print "chaleur fenetre = %s / chaleur porte = %s" % (self.curr_win_management, self.curr_door_management)
+                print "limite temp = %s" % (self.temp_max)
             except TypeError as e:
                 logger = logging.getLogger()
                 logger.exception(e)
             else:
                 if self.curr_win_management > self.temp_max:
-                    self.module.window.management('CLOSE')
+                    self.module.window.management(False)
+                    print "la fenetre se ferme"
                 else:
-                    self.module.window.management('OPEN')
+                    self.module.window.management(True)
+                    print "la fenetre s'ouvre"
                 if self.curr_door_management > self.temp_max:
-                    self.module.door.management('CLOSE')
+                    self.module.door.management(False)
+		    print "la porte se ferme"
                 else:
-                    self.module.door.management('OPEN')
+                    self.module.door.management(True)
+                    print "la porte s'ouvre"

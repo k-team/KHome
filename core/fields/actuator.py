@@ -18,7 +18,7 @@ Fan = Dummy(fields.syntax.Boolean)
 Gaz = Dummy(fields.syntax.Boolean) #true = ouvert, flase = ferme
 LightButton = Dummy(fields.syntax.Boolean)
 Piston = Dummy(fields.syntax.Boolean)
-Shutter = Dummy(fields.syntax.Boolean)
+Shutter = Dummy(fields.syntax.Numeric)
 Temperature = Dummy(fields.syntax.Numeric)
 WaterValve = Dummy(fields.syntax.Boolean)
 Window = Dummy(fields.syntax.Boolean)
