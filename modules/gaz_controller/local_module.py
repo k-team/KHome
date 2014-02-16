@@ -9,7 +9,6 @@ class GazController(module.Base):
     kitchen_butane_gaz_security = use_module('KitchenButaneGazSecurity')
     kitchen_propane_gaz_security = use_module('KitchenPropaneGazSecurity')
     kitchen_methane_gaz_security = use_module('KitchenMethaneGazSecurity')
-    alarm_actuator = use_module('AlarmActuator')
     
     class controller(fields.Base):
         def __init__(self):
@@ -24,36 +23,42 @@ class GazController(module.Base):
         def always(self):
             print 'testons'
             try:
-                co_value_current = self.module.co_gaz_security.gaz()[1]
+                co_value_current = self.module.co_gaz_security.taux()[1]
                 print 'co_value_current = %s / co_value_limit = %s' % (co_value_current, self.co_value_limit)
-                propane_value_current = self.module.propane_gaz_security.gaz()[1]
+                propane_value_current = self.module.kitchen_propane_gaz_security.taux()[1]
                 print 'propane_value_current = %s / propane_value_limit = %s' % (propane_value_current, self.propane_value_limit)
-                butane_value_current = self.module.butane_gaz_security.gaz()[1]
+                butane_value_current = self.module.kitchen_butane_gaz_security.taux()[1]
                 print 'butane_value = %s / butane_value_limit = %s' % (butane_value_current, self.butane_value_limit)
-                methane_value_current = self.module.methane_gaz_security.gaz()[1]
+                methane_value_current = self.module.kitchen_methane_gaz_security.taux()[1]
                 print 'methane_value = %s / methane_value_limit = %s' % (methane_value_current, self.methane_value_limit)
             except TypeError as e:
                 logger = logging.getLogger()
                 logger.exception(e)
             else:
                 if co_value_current > self.co_value_limit:
-                    self.module.alarm_actuator.alarm(True)
+                    self.module.co_gaz_security.alarm(True)
                     print 'Alert A lot of CO gaz in the house'
                 if propane_value_current > self.propane_value_limit:
-                    self.module.kitchen_propane_gaz_security.gaz(True)
+                    self.module.kitchen_propane_gaz_security.alarm(True)
+		    self.module.kitchen_propane_gaz_security.gaz_actuator(True)
                     print 'Propane gaz is closed'
                 else:
-                    self.module.kitchen_propane_gaz_security.gaz(False)
+                    self.module.kitchen_propane_gaz_security.alarm(False)
+		    self.module.kitchen_propane_gaz_security.gaz_actuator(False)
                     print 'Propane gaz is opened'
                 if butane_value_current > self.butane_value_limit:
-                    self.module.kitchen_butane_gaz_security.gaz(True)
+                    self.module.kitchen_butane_gaz_security.alarm(True)
+		    self.module.kitchen_butane_gaz_security.gaz_actuator(True)
                     print 'Butane gaz is closed'
                 else:
-                    self.module.kitchen_butane_gaz_security.gaz(False)
+                    self.module.kitchen_butane_gaz_security.alarm(False)
+		    self.module.kitchen_butane_gaz_security.gaz_actuator(False)
                     print 'Butane gaz is opened'
                 if methane_value_current > self.methane_value_limit:
-                    self.module.kitchen_methane_gaz_security.gaz(True)
+                    self.module.kitchen_methane_gaz_security.alarm(True)
+		    self.module.kitchen_methane_gaz_security.gaz_actuator(True)
                     print 'Methane gaz is closed'
                 else:
-                    self.module.kitchen_methane_gaz_security.gaz(False)
+                    self.module.kitchen_methane_gaz_security.alarm(False)
+		    self.module.kitchen_methane_gaz_security.gaz_actuator(False)
                     print 'Methane gaz is opened'

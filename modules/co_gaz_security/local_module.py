@@ -4,4 +4,7 @@ import fields.proxy
 class COGazSecurity(module.Base):
     update_rate = 10
 
-    gaz = fields.proxy.mix('gaz', 'COSensor', 'co_presence', 'AlarmActuator', 'alarm')
+    taux = fields.proxy.readable('taux', 'COSensor', 'co_presence')
+    alarm = fields.proxy.writable('alarm', 'AlarmActuator', 'alarm')
+    #gaz = fields.proxy.mix('gaz', 'COSensor', 'co_presence', 'AlarmActuator',
+    #        'alarm')
