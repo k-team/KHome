@@ -1,6 +1,7 @@
 import module
 from module import use_module
 import fields
+import logging
 
 class MoistureController(module.Base):
     update_rate = 10
@@ -9,11 +10,21 @@ class MoistureController(module.Base):
     class controller(fields.Base):
 
         def __init__(self):
-            self.moisture_value = 45 #faut le considerer en pourcentage
+            self.moisture_value_limit = 45 #faut le considerer en pourcentage
             super(MoistureController.controller, self).__init__()
 
         def always(self):
-            if self.module.moisture_sensor.moisture() > self.moisture_value:
-                self.module.fan_actuator.fan(True)
+            print 'testons'
+            try:
+                moisture_value = self.module.moisture_sensor.moisture()
+                print 'moisture_value = %s, moisture_value_limit = %s' % (moisture_value, self.moisture_value_limit)
+            except TypeError as e:
+                logger = logging.getLogger()
+                logger.exception(e)
             else:
-                self.module.fan_actuator.fan(False)
+                if moisture_value > self.moisture_value_limit:
+                    self.module.fan_actuator.fan(True)
+                    print 'Run the fan'
+                else:
+                    self.module.fan_actuator.fan(False)
+                    print 'Stop the fan'

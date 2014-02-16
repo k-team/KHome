@@ -1,6 +1,7 @@
 import module
 from module import use_module
 import fields
+import logging
 
 class SmokeSecurityController(module.Base):
     update_rate = 10
@@ -10,14 +11,21 @@ class SmokeSecurityController(module.Base):
     class controller(fields.Base):
         
         def __init__(self):
-            self.smoke_value = 20
+            self.smoke_value_limit = 20
             super(SmokeSecurityController.controller, self).__init__()
 
         def always(self):
-	    print "smoke sensor = %s " % self.module.smoke_sensor.smoke()[1]
-            if self.module.smoke_sensor.smoke()[1] > self.smoke_value:
-	        print "Alarme"
-                self.module.alarm_actuator.alarm(True)
+            print 'testons'
+            try:
+                smoke_value = self.module.smoke_sensor.smoke()[1]
+                print 'smoke_value = %s, smoke_value_limit = %s' % (smoke_value, self.smoke_value_limit)
+            except TypeError as e:
+                logger = logging.getLogger()
+                logger.exception(e)
             else:
-                print "pas alarme"
-                self.module.alarm_actuator.alarm(False)
+                if smoke_value > self.smoke_value_limit:
+                    print 'Alarm There is a lot of smoke in the house'
+                    self.module.alarm_actuator.alarm(True)
+                else:
+                    print 'Nothing to worry no smoke in the house'
+                    self.module.alarm_actuator.alarm(False)
