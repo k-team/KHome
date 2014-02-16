@@ -40,14 +40,12 @@ def api_rooms():
 def api_modules():
     return jsonify(packaging.get_installed_modules(detailed=True))
 
-@app.route('/api/modules/<module_name>/info')
+@app.route('/api/modules/<module_name>')
 def api_module_info(module_name):
     try:
-        return jsonify(use_module(module_name, False).info)
-    except (TypeError, socket.error) as e:
-        import logging
-        log = logging.getLogger()
-        log.exception(e)
+        return jsonify(use_module(module_name).info)
+    except (TypeError, RuntimeError) as e:
+        app.logger.exception(e)
         abort(404)
 
 def route_with_module_posted(url):
@@ -77,9 +75,8 @@ def api_install_module(module_name):
         abort(403)
     return jsonify({ 'success': False })
 
-@route_with_module_posted('/api/modules/uninstall/<instance_id>')
-def api_uninstall_module(module_name, instance_id):
-    print 'Stopping instance %s of module %s' % (instance_id, module_name)
+@route_with_module_posted('/api/modules/uninstall')
+def api_uninstall_module(module_name):
     pass #instance.stop(module_name, instance_id)
 
 @app.route('/api/modules/upload', methods=['POST'])
@@ -135,42 +132,33 @@ if __name__ == '__main__':
 # used for samples
 import random
 
-def brightness_statuses():
-    r = lambda: int(random.random()*10)
-    return [ { 'name': 'b1', 'time': time.time(), 'attrs': { 'brightness': r() } },
-             { 'name': 'b2', 'time': time.time(), 'attrs': { 'brightness': r() } },
-             { 'name': 'b3', 'time': time.time(), 'attrs': { 'brightness': r() } }, ]
-
 def temperature_statuses():
     r = lambda: int(random.random()*40)
-    return [ { 'name': 't1', 'time': time.time(), 'attrs': { 'temperature': r() } },
-             { 'name': 't2', 'time': time.time(), 'attrs': { 'temperature': r() } },
-             { 'name': 't3', 'time': time.time(), 'attrs': { 'temperature': r() } }, ]
+    return [ { 'name': 'i1', 'attrs': { 'temperature': { 'time': time.time(), 'value': r() } } },
+             { 'name': 'i2', 'attrs': { 'temperature': { 'time': time.time(), 'value': r() } } },
+             { 'name': 'i3', 'attrs': { 'temperature': { 'time': time.time(), 'value': r() } } }, ]
 
 @app.route('/api/modules/<module_name>/instances/status')
 def api_module_instances_statuses(module_name):
-    if packaging.is_installed(module_name):
-        mod = use_module(module_name)
-        if mod:
-            fields = {}
-            for f in mod.info['fields']:
-                if 'readable' in f and f['readable']:
-                    field_fn = getattr(mod, f['name'])
-                    value = field_fn()
-                    if value is not None:
-                        fields += [{'name': f['name'],
-                            'time': value[0],
-                            'value': value[1]}]
-            return jsonify(fields)
-        else:
-            abort(404)
-    else:
-        abort(404)
+    return jsonify(temperature_statuses())
 
-    if module_name == 'temperature':
-        return jsonify(temperature_statuses())
-    elif module_name == 'brightness':
-        return jsonify(brightness_statuses())
+    # TODO add support for multiple instances
+    if not packaging.is_installed(module_name):
+        abort(404)
+    try:
+        mod = use_module(module_name)
+    except RuntimeError as e:
+        app.logger.exception(e)
+    else:
+        fields = []
+        for f in mod.info['fields']:
+            if 'readable' not in f or not f['readable']:
+                continue
+            value = getattr(mod, f['name'])()
+            if value is None:
+                continue
+            fields[field['name']] = dict(zip(('time', 'value'), value))
+        return jsonify([ { 'name': module_name, 'fields': fields } ])
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug='--debug' in sys.argv, port=8888)
