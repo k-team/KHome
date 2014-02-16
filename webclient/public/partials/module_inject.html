@@ -8,8 +8,8 @@
 <hr />
 <div class="content">
   <!-- <div ng&#45;controller="AlertCtrl"> -->
-    <!-- <alert ng&#45;repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}</alert> -->
-    <alert type="danger">Une erreur est survenue durant la modification du field 5</alert>
+    <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}</alert>
+    <alert type="danger" close="">Une erreur est survenue durant la modification du field 5</alert>
   <!-- </div> -->
 
   <!--
@@ -24,22 +24,30 @@
   5 Erreur -timeout-> 1
   -->
 
-  <!-- fields readable, pas writable et type="string" -->
-  <div class="fields-string">
-    <div class="field-string">
-      <label for="field-field1">Public name 1</label>
-      <span id="field-field1">value 1</span>
-    </div>
-    <div class="field-string">
-      <label for="field-field2">Public name 2</label>
-      <span id="field-field2">value 2</span>
-    </div>
-  </div>
-
-  <hr />
-
-  <!-- fields writable et type="string" -->
+  <!-- fields type="string" -->
   <div class="fields-string-writable">
+    <form class="field-string form-horizontal" role="form">
+      <fieldset disabled>
+        <div class="form-group">
+          <label for="field-field1" class="col-sm-2 control-label">Pas writable 1</label>
+          <div class="input-group input-group-sm col-sm-10">
+            <input id=field-field1" type="text" class="form-control" value="value 1" />
+          </div>
+        </div>
+      </fieldset>
+    </form>
+
+    <form class="field-string form-horizontal" role="form">
+      <fieldset disabled>
+        <div class="form-group">
+          <label for="field-field2" class="col-sm-2 control-label">Pas writable 2</label>
+          <div class="input-group input-group-sm col-sm-10">
+            <input id=field-field2" type="text" class="form-control" value="value 2" />
+          </div>
+        </div>
+      </fieldset>
+    </form>
+
     <form class="field-string form-horizontal" role="form">
       <fieldset disabled>
         <div class="form-group">
@@ -165,5 +173,7 @@
       </fieldset>
     </form>
   </div>
+
+  <input bs-switch ng-model="isSelected" type="checkbox">
   <div id="inject"></div>
 </div>
