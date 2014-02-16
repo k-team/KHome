@@ -4,6 +4,15 @@ import zipfile
 
 import module.path as path
 
+MODULE_NAME_ENTRY = 'id'
+
+CONFIG_DEFAULTS = {
+        'public_directory': 'public',
+        'icon_name': 'icon.png',
+        'partial_name': 'partial.html',
+        'has_view': False
+        }
+
 def load_config(file_):
     """
     Load the configuration for the named module, passing in either the absolute
@@ -19,6 +28,9 @@ def get_config(module_name, directory=None):
     argument with the same use as for get_config_file().
     """
     return load_config(path.config_file(module_name, directory))
+
+def get_from_config(conf, entry_name):
+    return conf.get(entry_name, CONFIG_DEFAULTS[entry_name])
 
 def is_installed(module_name, directory=None):
     """
@@ -41,7 +53,7 @@ def get_installed_modules(detailed=False):
             continue
         if detailed:
             module_config = get_config(module_name)
-            module_name = { 'id': module_name }
+            module_name = { MODULE_NAME_ENTRY: module_name }
             module_name.update(module_config)
         module_list.append(module_name)
     return module_list

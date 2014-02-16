@@ -75,7 +75,7 @@ def api_available_module_public(module_name, rest):
             module_conf_filename = os.path.join(module_name, path.CONFIG_FILE)
             with zf.open(module_conf_filename) as module_conf_zf:
                 module_conf = json.load(module_conf_zf)
-            public_dir = module_conf.get('public_dir', 'public')
+            public_dir = catalog.get_from_config(module_conf, 'public_directory')
             requested_file = os.path.join(module_name, public_dir, rest)
             with zf.open(requested_file) as requested_zf:
                 try:
