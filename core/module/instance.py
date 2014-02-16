@@ -8,8 +8,10 @@ import logging
 import subprocess
 import traceback
 import module
-import catalog
+import packaging
 import path
+
+logger = logging.getLogger(__name__)
 
 def status(module_name):
     """
@@ -26,7 +28,7 @@ def status_all():
     *status* for more details.
     Return a dictionary from name to status (as boolean).
     """
-    modules = catalog.get_installed_modules()
+    modules = packaging.get_installed_modules()
     return {name: status(name) for name in modules}
 
 def execm(module_name, daemonize=True):
@@ -43,8 +45,7 @@ def execm(module_name, daemonize=True):
         Signal handler. If no child was created, it does nothing.
         Else, it broadcasts the signal to the child.
         """
-        logger = logging.getLogger()
-        logger.info('Receive a signal ' + str(signum) + '. Broadcast it to the child')
+        logger.info('Received signal %s, broadcasting it to child' % signum)
         if child_proc is not None:
             child_proc.send_signal(signum)
             child_proc.wait()
@@ -56,10 +57,10 @@ def execm(module_name, daemonize=True):
         sys.exit(1)
 
     # Get the start command from the configuration file
-    module_config = catalog.get_config(module_name)
+    module_config = packaging.get_config(module_name)
     if not 'start' in module_config:
         raise RuntimeError(
-                'Missing start entry in the module\'s configuration file')
+                'Missing "start" entry in the module\'s configuration file')
         sys.exit(1)
     start_cmd = module_config['start']
 
@@ -71,9 +72,6 @@ def execm(module_name, daemonize=True):
         # Redirect stdout and stderr into a log file
         sys.stdout = open(path.log_file(module_name), 'a')
         sys.stderr = sys.stdout
-
-    # Create a logger
-    logger = logging.getLogger()
 
     # Change the directory to the module directory
     os.chdir(path.module_directory(module_name))
@@ -92,20 +90,20 @@ def execm(module_name, daemonize=True):
         return_code = 1
     else:
         # Execute the start command
-        logging.info('Start of the ' + module_name + ' module.')
+        logger.info('Start of the ' + module_name + ' module.')
         try:
             child_proc = subprocess.Popen(
                     shlex.split(start_cmd),
                     stdout=sys.stdout,
                     stderr=sys.stderr)
         except OSError as e:
-            logging.exception(e)
+            logger.exception(e)
             return_code = 1
         else:
             return_code = child_proc.wait()
     finally:
         # Remove the pid file and return the corresponding code
-        logging.info('Shutdown of the ' + module_name + ' module.')
+        logger.info('Shutdown of the ' + module_name + ' module.')
         os.remove(pid_file)
         sys.exit(return_code)
     sys.exit(0)
@@ -145,7 +143,7 @@ def invoke_all():
     Invoke all installed modules as daemon. Doesn't check if the modules are
     correctly launch. Return the list of pid of the new processes.
     """
-    modules = catalog.get_installed_modules()
+    modules = packaging.get_installed_modules()
     pids = []
     for name in modules:
         try:
@@ -190,7 +188,7 @@ def stop_all():
     """
     Stop all the running modules
     """
-    modules = catalog.get_installed_modules()
+    modules = packaging.get_installed_modules()
     for name in modules:
         try:
             stop(name)

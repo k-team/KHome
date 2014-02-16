@@ -11,5 +11,6 @@ class WindowSecurity(module.Base):
     recognition = use_module('Recognition')
     alarmActuator = use_module('AlarmActuator')
 
-    security = fields.proxy.mix('Security', 'WindowAccess', 'Window',
+    # TODO What the fuck is that ?
+    security = fields.proxy.mix('security', 'WindowAccess', 'Window',
             'Recognition', 'Recognised', 'AlarmActuator', 'Alarm')

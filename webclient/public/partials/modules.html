@@ -1,16 +1,13 @@
-<div class="header">
-  <h1>Modules</h1>
-</div>
 <div class="content">
   <div data-ng-show="modules" class="row">
-    <div data-ng-repeat="module in modules | filter:{ has_view: true }" class="module-thumbnail col-xs-6 col-sm-4 col-md-2 text-center">
+    <div data-ng-repeat="module in modules" class="module-thumbnail col-xs-6 col-sm-4 col-md-2 text-center">
       <div class="thumbnail">
         <a data-ng-click="navigate(module)">
           <img alt="Icon for module {{ module.id }}" title="{{ module.name }}"
             data-ng-src="/api/modules/{{ module.id }}/public/icon.png"
             onerror="this.onerror = null; this.src = '/img/module.png'">
             <div class="caption">
-              <h4>{{ (module.name) ? (module.name | truncate:12) : (module.id | truncate:12) }}</h4>
+              <h4>{{ ((module.name) ? module.name : module.id) | truncate:12 }}</h4>
             </div>
         </a>
       </div>

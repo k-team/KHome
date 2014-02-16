@@ -1,8 +1,8 @@
 function RatingCtrl($scope, ModuleService) {
   $scope.isRating = false;
-  $scope.setRating = function(module, value) {
+  $scope.rate = function() {
     $scope.isRating = true;
-    ModuleService.rateModule(module, value).then(function() {
+    ModuleService.rate($scope.module, $scope.module.rating).then(function() {
       console.log('rating success');
     }, function() {
       console.log('rating error');
@@ -26,15 +26,33 @@ function StoreCtrl($scope, $modal, ModuleService) {
   $scope.reloadModules();
 
   // Install a module
+  $scope.modulesInstalling = [];
   $scope.install = function(module) {
-    console.log('installing module', module);
+    for (var i = 0; i < $scope.modulesInstalling.length; i++) {
+      if ($scope.modulesInstalling[i].id == module.id) {
+        return;
+      }
+    }
+
+    // Start installing
+    $scope.modulesInstalling.push(module);
+    ModuleService.installFromCatalog(module).then(function() {
+    }, function() {
+    }, function() {
+      for (var i = 0; i < $scope.modulesInstalling.length; i++) {
+        if ($scope.modulesInstalling[i].id == module.id) {
+          $scope.modulesInstalling.splice(i, 1);
+          break;
+        }
+      }
+    });
   };
 
   // Uploading system
   $scope.uploading = false
   $scope.upload = function(file) {
     $scope.uploading = true;
-    $scope.upload = ModuleService.install(file).progress(function(evt) {
+    $scope.upload = ModuleService.installFromFile(file).progress(function(evt) {
       $scope.uploadProgress = parseInt(100.0 * evt.loaded / evt.total);
     }).success(function() {
       $scope.uploading = false;

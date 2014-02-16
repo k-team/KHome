@@ -7,5 +7,8 @@ import fields.persistant
 class OutsideBrightness(module.Base):
     update_rate = 10
 
-    class brightness(fields.sensor.Light, fields.io.Readable,  fields.persistant.Volatile, fields.Base):
+    class brightness(fields.sensor.LuminosityExterior,
+            fields.io.Readable,
+            fields.persistant.Volatile,
+            fields.Base):
         pass

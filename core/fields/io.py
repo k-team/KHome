@@ -8,6 +8,12 @@ class Writable(object):
     new value is really written.
     Return if the new value is written.
     """
+
+    def get_info(self):
+        a = super(Writable, self).get_info()
+        a['writable'] = True
+        return a
+
     def write(self, value):
         return self._set_value(time.time(), value)
 
@@ -22,6 +28,12 @@ class Readable(object):
 
     The argument `t` is given : the result correspond to the value which its saved time is the nearest of `t`.
     """
+
+    def get_info(self):
+        a = super(Readable, self).get_info()
+        a['readable'] = True
+        return a
+
     def read(self, **kwargs):
         if 't' in kwargs:
             return self._get_value_at(kwargs['t'])

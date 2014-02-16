@@ -1,15 +1,14 @@
 import sys
-import string
-from twisted.internet import reactor, protocol
-from twisted.python.log import startLogging
-from twisted.internet import reactor
-from twisted.internet.protocol import ClientCreator
-from twisted.internet.protocol import ClientFactory
-from twisted.internet.protocol import Protocol
 import time
 import math
 import random
 
+cd = sys.path.pop(0)
+from twisted.internet import reactor
+from twisted.internet.protocol import ClientCreator
+from twisted.internet.protocol import ClientFactory
+from twisted.internet.protocol import Protocol
+sys.path.insert(0, cd)
 
 def Dummy(dummy_funct):
     """
@@ -38,8 +37,8 @@ Butane = Dummy(lambda t:
 CO = Dummy(lambda t:
         math.sin(t) * 200 + 200 + 0.5 * (random.random() - 0.5)) # seuil 60
 
-#Camera = Dummy(lambda t:
-#        math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
+Camera = Dummy(lambda t:
+        math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
 
 ElectricCurrent = Dummy(lambda t:
         True if random.random() > 0.5 else False)
@@ -47,17 +46,20 @@ ElectricCurrent = Dummy(lambda t:
 LightButton = Dummy(lambda t:
         True if random.random() > 0.5 else False)
 
+Presence = Dummy(lambda t:
+        True if random.random() > 0.5 else False)
+
 LuminosityExterior = Dummy(lambda t:
-        math.sin(t) * 800 + 820 + 0.5 * (random.random() - 0.5)) #seuil a fixer
+        (math.sin(t)+1) * 50 ) #this will from 0 to 100
+        
+LuminosityInterior = Dummy(lambda t:
+        (math.sin(t)+1) * 50 ) #this will from 0 to 100
 
 Methane = Dummy(lambda t:
         math.sin(t) * 600 + 800 + 0.5 * (random.random() - 0.5)) #seuil max 1000
 
 Moisture = Dummy(lambda t:
         math.sin(t) * 20 + 35 + 0.5 * (random.random() - 0.5)) #seuil max 45
-
-OutsideBrightness = Dummy(lambda t:
-        math.sin(t) * 800 + 820 + 0.5 * (random.random() - 0.5)) #seuil a fixer
 
 Propane = Dummy(lambda t:
         math.sin(t) * 1500 + 2000 + 0.5 * (random.random() - 0.5)) #seuil 1500
@@ -72,8 +74,11 @@ Smoke = Dummy(lambda t:
         math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
 
 Sound = Dummy(lambda t:
-        math.sin(t) * 60 + 60 + 0.5 * (random.random() - 0.5)) 
-        #seuil cri nourison fixer a 97dBl
+        math.sin(t) * 60 + 60 + 0.5 * (random.random() - 0.5)) #seuil cri nourison fixe a 97dBl
+
+#this one is for the interior temperature
+Temperature = Dummy(lambda t:
+        math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
 
 TemperatureForecast = Dummy(lambda t:
         math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
@@ -81,7 +86,12 @@ TemperatureForecast = Dummy(lambda t:
 TemperatureExterior = Dummy(lambda t:
         math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
 
-# a client protocol
+Window = Dummy(lambda t:
+        math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
+
+WaterValve = Dummy(lambda t:
+        math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
+
 
 class SensorConnection(Protocol):
 
@@ -101,8 +111,10 @@ class SensorConnection(Protocol):
         print "connection lost"
       
     def analyser(self,data):
+        print "analyse en cours: "
         #a completer
         org = data[6:8]
+
         valeur = '{0:032b}'.format(int(data[8:16],16))
         sensor_id = data[16:24]
         status = '{0:08b}'.format(int(data[24:26],16))
@@ -138,9 +150,15 @@ class SensorConnection(Protocol):
         presence = 1
         if valeur[1]=="1":
             presence = 0
+<<<<<<< HEAD
         #ls = [lumiosite,temp,presence]
         return presence
             
+=======
+        ls = [lumiosite,temp,presence]
+        return ls
+
+>>>>>>> db4ced399e75352c231d471000dc6fa4cd589621
     def org7_temp_humi(self, valeur): #ordre des octets: DB0 DB1 DB2 DB3 mais pas DB3 DB2 DB1 DB0
         humi = int(valeur[16:24],2)*100/250 #use DB2
         l=[]
@@ -151,8 +169,7 @@ class SensorConnection(Protocol):
             temp = int(valeur[8:16],2)*40/250 #use DB1
             l.append(temp)
         return l 
-        
-    
+
     def org06(self,valeur):
         if valeur[31]=="0":
             print "ouvert" 
@@ -218,7 +235,7 @@ class Sensor(object):
                     type(self).sensor_id))
 
     def start(self):
-        reactor.run()
+        # reactor.run()
         super(Sensor, self).start()
 
     def close(self):
@@ -230,12 +247,8 @@ class Interrupt(Sensor):
 class WindowsContact(Sensor):
     sensor_id = "0001B595"
 
-class Presence(Sensor):
-    sensor_id = "00063E7B"
+#class Presence(Sensor):
+#    sensor_id = "00063E7B"
 
 class Humidite_Temperature(Sensor):
     sensor_id = "00893378"
-
-#if __name__ == '__main__':
-#    sensor = Interrupt()
-#    sensor.start()

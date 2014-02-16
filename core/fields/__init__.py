@@ -26,6 +26,14 @@ class Base(threading.Thread):
         self.old_time = 0
         self.running = False
 
+    def get_info(self):
+        """
+        Return a dictionnary containing all informations about
+        the field. Mixins can (and has to) overload this function
+        to add more information
+        """
+        return {'name': self.field_name}
+
     def emit_value(self, value):
         if value is not None:
             self._set_value(time.time(), value)
@@ -65,6 +73,12 @@ class Base(threading.Thread):
         """
         pass
 
+    def always(self):
+        """
+        Function executed by the field at each loop turn.
+        """
+        pass
+
     def read(self, **kwargs):
         raise NotImplementedError
 
@@ -95,6 +109,7 @@ class Base(threading.Thread):
             if time.time() - self.old_time >= type(self).update_rate:
                 self.old_time = time.time()
                 self.emit_value(self.acquire_value())
+            self.always()
             time.sleep(0.1)
         self.close()
 

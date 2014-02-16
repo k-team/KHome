@@ -3,6 +3,26 @@ angular.module('GHome').factory('ModuleService', function($q, $http, $timeout, $
     modulesUrl = '/api/modules',
     storeUrl = '/api/available_modules';
 
+  var httpPostJSON = function(url, data) {
+    var formattedData = '';
+    for (var key in data) {
+      formattedData += key + '=' + data[key] + '&';
+    }
+    formattedData = formattedData.substring(0, formattedData.length-1);
+    return $http({
+      url: url, method: 'POST', data: formattedData,
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+    });
+  };
+
+  service.module = function(name) {
+    var deferred = $q.defer();
+    $http.get(modulesUrl + '/' + name).success(function(data) {
+      console.log(data);
+    });
+    return deferred.promise;
+  };
+
   var getModules = function(url, cachedModules, forceReload) {
     var deferred = $q.defer();
     if (!forceReload) {
@@ -23,17 +43,14 @@ angular.module('GHome').factory('ModuleService', function($q, $http, $timeout, $
     return getModules(storeUrl, this.availableModules, forceReload);
   };
 
-  service.rateModule = function(module, oldValue) {
+  service.rate = function(module, oldValue) {
     var value = parseInt(oldValue);
     if (!value || value < 1 || value > 5) {
       console.error('Invalid value', oldValue);
     }
     var deferred = $q.defer();
-    $http({
-      url: storeUrl + '/' + module.id + '/rate',
-      method: 'POST', data: 'value=' + value,
-      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-    }).success(function() { deferred.resolve(); })
+    httpPostJSON(storeUrl + '/rate', { name: module.id, value: value })
+      .success(function() { deferred.resolve(); })
       .error(function() { deferred.reject(); });
     return deferred.promise;
   };
@@ -67,11 +84,19 @@ angular.module('GHome').factory('ModuleService', function($q, $http, $timeout, $
 
   // Install a module, passing in the uploaded file object (see $upload for
   // details). Return a promise object for the given upload http call.
-  service.install = function(file) {
+  service.installFromFile = function(file) {
     return $upload.upload({
       url: modulesUrl + '/install',
       method: 'POST', file: file
     });
+  }
+  // ...from the catalog
+  service.installFromCatalog = function(module) {
+    var deferred = $q.defer();
+    httpPostJSON(modulesUrl + '/install', { name: module.id })
+      .success(function() { deferred.resolve(); })
+      .error(function() { deferred.reject(); });
+    return deferred.promise;
   }
 
   return service;

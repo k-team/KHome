@@ -53,7 +53,7 @@
         <span class="h4 modal-title">{{ (module.name) ? module.name : module.id }}</span>
         &nbsp;
         <span data-ng-controller="RatingCtrl">
-          <rating value="module.rating" max="5" data-ng-click="setRating(module, value)" on-leave="overStar = null"></rating>
+          <rating value="module.rating" max="5" data-ng-click="rate()" on-leave="overStar = null"></rating>
         </span>
       </div>
       <div class="modal-body">

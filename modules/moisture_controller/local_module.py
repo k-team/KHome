@@ -9,7 +9,7 @@ class MoistureController(module.Base):
     class controller(fields.Base):
 
         def __init__(self):
-            self.moisture_value = 45 #faut le considérer en pourcentage
+            self.moisture_value = 45 #faut le considerer en pourcentage
             super(MoistureController.controller, self).__init__()
 
         def always(self):

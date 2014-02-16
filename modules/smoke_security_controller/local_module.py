@@ -14,7 +14,10 @@ class SmokeSecurityController(module.Base):
             super(SmokeSecurityController.controller, self).__init__()
 
         def always(self):
-            if self.module.smoke_sensor.smoke() > self.module.smoke_value:
+	    print "smoke sensor = %s " % self.module.smoke_sensor.smoke()[1]
+            if self.module.smoke_sensor.smoke()[1] > self.smoke_value:
+	        print "Alarme"
                 self.module.alarm_actuator.alarm(True)
             else:
+                print "pas alarme"
                 self.module.alarm_actuator.alarm(False)

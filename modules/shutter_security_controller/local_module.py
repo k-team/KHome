@@ -6,12 +6,17 @@ class ShutterSecurityController(module.Base):
         update_rate = 2
 
         shutter= use_module('Shutter')
-        presence = use_module('HumanPresence')
+        presence = use_module('HumanPresenceSensor')
 
         
         class controller(fields.Base):
             
             def always(self):
-                if not presence.presence() :
-                    shutter.shutter(0)
+                try:
+                    pres = presence.presence()
+                except TypeError:
+                    pass # Ignore
+                else:
+                    if not pres :
+                        self.module.shutter.shutter(0)
         
