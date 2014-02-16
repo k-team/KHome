@@ -1,6 +1,6 @@
 "use strict";
 
-angular.module('GHome', ['ngRoute', 'ui.bootstrap', 'angularFileUpload', 'frapontillo.bootstrap-switch'])
+angular.module('GHome', ['ngRoute', 'ngAnimate', 'ui.bootstrap', 'angularFileUpload', 'frapontillo.bootstrap-switch'])
   .config(function($routeProvider, $locationProvider, $httpProvider) {
     $routeProvider.when('/home', {
       templateUrl: '/partials/home.html'
@@ -43,7 +43,6 @@ angular.module('GHome', ['ngRoute', 'ui.bootstrap', 'angularFileUpload', 'frapon
 
   // Load the current module
   ModuleService.module(moduleName).then(function(module) {
-    // module.fields[0].state = 'success';
     $scope.module = module;
   });
 
@@ -51,6 +50,24 @@ angular.module('GHome', ['ngRoute', 'ui.bootstrap', 'angularFileUpload', 'frapon
   $http.get('/api/modules/' + moduleName + '/public/partial.html').then(function(result) {
     $('#inject').html($compile(result.data)($scope));
   });
+}
+
+function ModuleFieldCtrl($scope, ModuleService, $timeout) {
+  $scope.field.state = '';
+  $scope.update = function(value) {
+    var field = $scope.field;
+    field.state = 'waiting';
+    setTimeout(function() {
+      var fade = function()  { console.log('fade'); $timeout(function() { field.state = ''; }, 2000); };
+      ModuleService.updateField($scope.module, field, value).then(function() {
+        field.state = 'success';
+        fade();
+      }, function() {
+        field.state = 'error';
+        fade();
+      });
+    }, 500);
+  };
 }
 ;function ModulesCtrl($scope, $location, ModuleService) {
   // Reload modules immediately
@@ -289,6 +306,19 @@ angular.module('GHome', ['ngRoute', 'ui.bootstrap', 'angularFileUpload', 'frapon
     }
   };
   });
+;angular.module('GHome').directive('customInput', function() {
+  return {
+    restrict: 'EA',
+    link: function($scope, elem, attrs) {
+      $scope.$watch('field.state', function(state) {
+        elem.children().fadeOut(500, function() {
+          elem.children().find('.glyphicon-pencil').fadeIn(500);
+          console.log(elem.children().find('.glyphicon-pencil'));
+        });
+      });
+    }
+  };
+});
 ;angular.module('GHome').directive('svgVbox', function() {
   return {
     link: function($scope, elem, attrs) {
@@ -383,6 +413,15 @@ angular.module('GHome', ['ngRoute', 'ui.bootstrap', 'angularFileUpload', 'frapon
       console.log(data);
       deferred.resolve(data);
     });
+    return deferred.promise;
+  };
+
+  service.updateField = function(module, field, value) {
+    var deferred = $q.defer();
+    httpPostJSON(modulesUrl + '/update_field',
+        { name: module.id, field: field.name, value: value })
+      .success(function() { deferred.resolve(); })
+      .error(function() { deferred.reject(); });
     return deferred.promise;
   };
 

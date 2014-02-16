@@ -43,7 +43,7 @@ def api_modules():
 @app.route('/api/modules/<module_name>')
 def api_module_info(module_name):
     try:
-        return jsonify([])
+        # return jsonify([])
         return jsonify(use_module(module_name).info)
     except (TypeError, RuntimeError) as e:
         app.logger.exception(e)
@@ -141,7 +141,7 @@ def temperature_statuses():
 
 @app.route('/api/modules/<module_name>/instances/status')
 def api_module_instances_statuses(module_name):
-    return jsonify(temperature_statuses())
+    # return jsonify(temperature_statuses())
 
     # TODO add support for multiple instances
     if not packaging.is_installed(module_name):

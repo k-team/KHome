@@ -1,6 +1,6 @@
 "use strict";
 
-angular.module('GHome', ['ngRoute', 'ui.bootstrap', 'angularFileUpload', 'frapontillo.bootstrap-switch'])
+angular.module('GHome', ['ngRoute', 'ngAnimate', 'ui.bootstrap', 'angularFileUpload', 'frapontillo.bootstrap-switch'])
   .config(function($routeProvider, $locationProvider, $httpProvider) {
     $routeProvider.when('/home', {
       templateUrl: '/partials/home.html'
