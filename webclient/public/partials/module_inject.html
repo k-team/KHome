@@ -24,7 +24,7 @@
   5 Erreur -timeout-> 1
   -->
 
-  <!-- fields readable et type="string" -->
+  <!-- fields readable, pas writable et type="string" -->
   <div class="fields-string">
     <div class="field-string">
       <label for="field-field1">Public name 1</label>
@@ -36,7 +36,9 @@
     </div>
   </div>
 
-  <!-- fields readable, writable et type="string" -->
+  <hr />
+
+  <!-- fields writable et type="string" -->
   <div class="fields-string-writable">
     <form class="field-string form-horizontal" role="form">
       <fieldset disabled>
@@ -79,7 +81,7 @@
     <form class="field-string form-horizontal" role="form">
       <fieldset>
         <div class="form-group has-error">
-          <label for="field-field4" class="col-sm-2 control-label">En erreur</label>
+          <label for="field-field5" class="col-sm-2 control-label">En erreur</label>
           <div class="input-group input-group-sm col-sm-10">
             <span class="input-group-addon">
               <span class="glyphicon glyphicon-remove"></span>
@@ -98,9 +100,61 @@
     <form class="field-string form-horizontal" role="form">
       <fieldset>
         <div class="form-group">
-          <label for="field-field4" class="col-sm-2 control-label">En edition</label>
+          <label for="field-field6" class="col-sm-2 control-label">En edition</label>
           <div class="input-group input-group-sm col-sm-10">
             <input id=field-field6" type="text" class="form-control" value="value 6" placeholder="value 6" />
+            <span class="input-group-btn">
+              <button type="button" class="btn btn-default">
+                <span class="glyphicon glyphicon-share-alt"></span>
+              </button>
+            </span>
+          </div>
+        </div>
+      </fieldset>
+    </form>
+
+    <form class="field-string form-horizontal" role="form">
+      <fieldset>
+        <div class="form-group">
+          <label for="field-field7" class="col-sm-2 control-label">Pas readable</label>
+          <div class="input-group input-group-sm col-sm-10">
+            <input id=field-field7" type="text" class="form-control" placeholder="public_name7" />
+            <span class="input-group-btn">
+              <button type="button" class="btn btn-default">
+                <span class="glyphicon glyphicon-share-alt"></span>
+              </button>
+            </span>
+          </div>
+        </div>
+      </fieldset>
+    </form>
+  </div>
+
+  <hr />
+
+  <!-- fields readable, pas writable et type="numeric" -->
+  <h1>TODO : plutot les placer dans un graphique incluant les writable (tant qu'ils sont readable)</h1>
+  <div class="fields-numeric">
+    <div class="field-numeric">
+      <label for="field-num-field1">Public name 1</label>
+      <span id="field-num-field1">42</span>
+    </div>
+    <div class="field-numeric">
+      <label for="field-num-field2">Public name 2</label>
+      <span id="field-num-field2">1337</span>
+    </div>
+  </div>
+
+  <hr />
+
+  <!-- fields writable et type="numeric" -->
+  <div class="fields-numeric-writable">
+    <form class="field-numeric form-horizontal" role="form">
+      <fieldset>
+        <div class="form-group">
+          <label for="field-num-field3" class="col-sm-2 control-label">Numeric</label>
+          <div class="input-group input-group-sm col-sm-10">
+            <input id=field-num-field3" type="number" class="form-control" value="3.1415" placeholder="3.1415" />
             <span class="input-group-btn">
               <button type="button" class="btn btn-default">
                 <span class="glyphicon glyphicon-share-alt"></span>
