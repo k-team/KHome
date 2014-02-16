@@ -1,6 +1,7 @@
 import module
 from module import use_module
 import fields
+import logging
 
 class BabyMonitoringController(module.Base):
     update_rate = 10
@@ -14,13 +15,19 @@ class BabyMonitoringController(module.Base):
             super(BabyMonitoringController.controller, self).__init__()
     
         def always(self):
-            #print 'sound = %s' % self.module.sound_sensor.sound()[1]
-            #print 'decibel_limit = %s' % self.decibel_value
-            
-            if self.module.sound_sensor.sound()[1] > self.decibel_value:
-                self.module.alarm_actuator.alarm(True)
-                #print 'alerte'
+            print "testons"
+            try:
+                sound_now = self.module.sound_sensor.sound()[1]
+                print 'sound_now= %s' % sound_now
+                print 'decibel_limit = %s' % self.decibel_value
+            except TypeError as e:
+                logger = logging.getLogger()
+                logger.exception(e)
             else:
-                self.module.alarm_actuator.alarm(False)
-                #print 'pas alerte'
+                if sound_now > self.decibel_value:
+                    self.module.alarm_actuator.alarm(True)
+                    print 'Alert the baby is crying'
+                else:
+                    self.module.alarm_actuator.alarm(False)
+                    print 'Nothing to worry the baby is ok'
     
