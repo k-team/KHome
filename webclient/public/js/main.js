@@ -1,6 +1,6 @@
 "use strict";
 
-angular.module('GHome', ['ngRoute', 'ui.bootstrap', 'angularFileUpload'])
+angular.module('GHome', ['ngRoute', 'ui.bootstrap', 'angularFileUpload', 'frapontillo.bootstrap-switch'])
   .config(function($routeProvider, $locationProvider, $httpProvider) {
     $routeProvider.when('/home', {
       templateUrl: '/partials/home.html'
@@ -42,7 +42,10 @@ angular.module('GHome', ['ngRoute', 'ui.bootstrap', 'angularFileUpload'])
   var moduleName = $routeParams.moduleName;
 
   // Load the current module
-  ModuleService.module(moduleName).then(function(module) { $scope.module = module; });
+  ModuleService.module(moduleName).then(function(module) {
+    // module.fields[0].state = 'success';
+    $scope.module = module;
+  });
 
   // Load the angular-like html to be injected
   $http.get('/api/modules/' + moduleName + '/public/partial.html').then(function(result) {
@@ -378,6 +381,7 @@ angular.module('GHome', ['ngRoute', 'ui.bootstrap', 'angularFileUpload'])
     var deferred = $q.defer();
     $http.get(modulesUrl + '/' + name).success(function(data) {
       console.log(data);
+      deferred.resolve(data);
     });
     return deferred.promise;
   };
