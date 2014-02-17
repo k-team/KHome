@@ -141,7 +141,7 @@ class SensorConnection(Protocol):
                 elif sensor_id == "00893378":
                     print "c'est un capteur de temperature et humidite"
                     sentData = self.org7_temp_humi(valeur)
-                    print sendData
+                    print sentData
                     self.sensor.emit_value(sentData) 
 
     def org7_presence(self, valeur): #ordre des octets: DB0 DB1 DB2 DB3 mais pas DB3 DB2 DB1 DB0
