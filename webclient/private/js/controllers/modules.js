@@ -4,6 +4,7 @@ function ModulesCtrl($scope, $location, ModuleService) {
 
   // Uninstall a module
   $scope.uninstall = function(module) {
+    //ModuleService.uninstall(module);
     console.log('uninstalling', module);
   };
 
