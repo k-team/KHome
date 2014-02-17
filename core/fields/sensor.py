@@ -141,24 +141,24 @@ class SensorConnection(Protocol):
                 elif sensor_id == "00893378":
                     print "c'est un capteur de temperature et humidite"
                     sentData = self.org7_temp_humi(valeur)
-                    print sendData
+                    print sentData
                     self.sensor.emit_value(sentData) 
 
     def org7_presence(self, valeur): #ordre des octets: DB0 DB1 DB2 DB3 mais pas DB3 DB2 DB1 DB0
-        #lumiosite = int(valeur[16:24],2)*510/255
+        lumiosite = int(valeur[16:24],2)*510/255 #DB2
         #temp = int(valeur[8:16],2)*51/255
-        presence = 1
-        if valeur[1]=="1":
-            presence = 0
-        ls = [lumiosite,temp,presence]
+        presence = 0
+        if valeur[6]=="0": #DB0.BIT1
+            presence = 1
+        ls = [lumiosite,presence]
         return ls
 
     def org7_temp_humi(self, valeur): #ordre des octets: DB0 DB1 DB2 DB3 mais pas DB3 DB2 DB1 DB0
         humi = int(valeur[16:24],2)*100/250 #use DB2
         l=[]
         l.append(humi)
-        if valeur[1] =="0":
-            l.append(-1)
+        if valeur[6] =="0": #DB0.BIT1
+            l.append(-1) #temperature not available
         else:
             temp = int(valeur[8:16],2)*40/250 #use DB1
             l.append(temp)
@@ -241,8 +241,8 @@ class Interrupt(Sensor):
 class WindowsContact(Sensor):
     sensor_id = "0001B595"
 
-#class Presence(Sensor):
-#    sensor_id = "00063E7B"
+class Presence(Sensor):
+    sensor_id = "00063E7B"
 
 class Humidite_Temperature(Sensor):
     sensor_id = "00893378"
