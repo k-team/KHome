@@ -150,8 +150,8 @@ class SensorConnection(Protocol):
         presence = 1
         if valeur[1]=="1":
             presence = 0
-        ls = [lumiosite,temp,presence]
-        return ls
+        #ls = [lumiosite,temp,presence]
+        return presence
 
     def org7_temp_humi(self, valeur): #ordre des octets: DB0 DB1 DB2 DB3 mais pas DB3 DB2 DB1 DB0
         humi = int(valeur[16:24],2)*100/250 #use DB2
