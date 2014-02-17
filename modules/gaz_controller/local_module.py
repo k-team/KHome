@@ -6,7 +6,9 @@ from module import use_module
 import logging
 
 class GazController(module.Base):
+    public_name = 'Control sécurisé du gaz'
     update_rate = 10
+
     co_gaz_security = use_module('COGazSecurity')
     kitchen_butane_gaz_security = use_module('KitchenButaneGazSecurity')
     kitchen_propane_gaz_security = use_module('KitchenPropaneGazSecurity')
