@@ -1,8 +1,25 @@
-function SupervisionCtrl($scope, ModuleService) {
-  $scope.module = '';
+function SupervisionCtrl($scope, ModuleService, $timeout) {
   $scope.data = {};
   $scope.maxData = 10;
-  $scope.poll = null;
+
+  // Poll all module instances for their statuses, passing in the module's name
+  // and a callback which should be applied on a $http promise object.
+  // Optionally, pass in the delay to override the service's default polling
+  // delay.
+  var pollInstances = function(name, callback, delay) {
+    if (delay === undefined) { delay = 1000; }
+
+    var timeout = $timeout(function pollFn() {
+      callback(ModuleService.module(name));
+      timeout = $timeout(pollFn, delay);
+    }, delay);
+
+    return {
+      cancel: function() {
+        $timeout.cancel(timeout);
+      }
+    };
+  };
 
   $scope.$watch('module', function() {
     // Cancel the previous poll
@@ -15,7 +32,7 @@ function SupervisionCtrl($scope, ModuleService) {
     if (!$scope.module) { return; }
 
     // Poll the current supervised module for its status
-    $scope.poll = ModuleService.pollInstances($scope.module, function(promise) {
+    $scope.poll = pollInstances($scope.module, function(promise) {
       promise.success(function(data) {
         angular.forEach(data, function(instance) {
           var instanceName = instance.name;
