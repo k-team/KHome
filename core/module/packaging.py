@@ -4,7 +4,7 @@ import zipfile
 
 import module.path as path
 
-MODULE_NAME_ENTRY = 'id'
+MODULE_NAME_ENTRY = 'name'
 
 CONFIG_DEFAULTS = {
         'public_directory': 'public',

@@ -2,10 +2,10 @@
   <div data-ng-show="availableModules" class="row">
     <div data-ng-repeat="module in availableModules" class="module-thumbnail col-xs-12 col-sm-4 col-md-3">
       <div data-ng-click="openModal(module)" class="hidden-xs thumbnail">
-        <img alt="Icon for module {{ module.id }}" title="{{ module.name }}"
-          data-ng-src="/api/available_modules/{{ module.id }}/public/icon.png"
+        <img alt="Icon for module {{ module.name }}" title="{{ module.public_name }}"
+          data-ng-src="/api/available_modules/{{ module.name }}/public/icon.png"
           onerror="this.onerror = null; this.src = '/img/module.png'">
-        <h4>{{ (module.name) ? (module.name | truncate:20) : (module.id | truncate:20) }}</h4>
+        <h4>{{ (module.public_name) ? (module.public_name | truncate:20) : (module.name | truncate:20) }}</h4>
         <div class="visible-sm">
           <p><small>{{ module.description | truncate:110 }}</small></p>
         </div>
@@ -25,12 +25,12 @@
       <div data-ng-click="openModal(module)" class="visible-xs thumbnail">
         <div class="row">
           <div class="col-xs-3 vertical-middle center-block">
-              <img class="img-responsive" alt="Icon for module {{ module.id }}" title="{{ module.name }}"
-                data-ng-src="/api/available_modules/{{ module.id }}/public/icon.png"
+              <img class="img-responsive" alt="Icon for module {{ module.name }}" title="{{ module.public_name }}"
+                data-ng-src="/api/available_modules/{{ module.name }}/public/icon.png"
                 onerror="this.onerror = null; this.src = '/img/module.png'">
           </div>
           <div class="col-xs-8 vertical-middle">
-            <h4>{{ (module.name) ? (module.name | truncate:20) : (module.id | truncate:20) }}</h4>
+            <h4>{{ (module.public_name) ? (module.public_name | truncate:20) : (module.name | truncate:20) }}</h4>
             <p><small>{{ module.description | truncate:65 }}</small></p>
             <div class="row">
               <div class="col-xs-6">
@@ -50,7 +50,7 @@
     <script type="text/ng-template" id="modal.html">
       <div class="modal-header">
         <a data-ng-click="dismiss()" type="button" class="close">&times;</a>
-        <span class="h4 modal-title">{{ (module.name) ? module.name : module.id }}</span>
+        <span class="h4 modal-title">{{ (module.public_name) ? module.public_name : module.name }}</span>
         &nbsp;
         <span data-ng-controller="RatingCtrl">
           <rating value="module.rating" max="5" data-ng-click="rate()" on-leave="overStar = null"></rating>

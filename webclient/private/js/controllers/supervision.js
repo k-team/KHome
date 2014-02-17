@@ -2,15 +2,11 @@ function SupervisionCtrl($scope, ModuleService, $timeout) {
   $scope.data = {};
   $scope.maxData = 10;
 
-  // Poll all module instances for their statuses, passing in the module's name
-  // and a callback which should be applied on a $http promise object.
-  // Optionally, pass in the delay to override the service's default polling
-  // delay.
-  var pollInstances = function(name, callback, delay) {
+  var pollModule = function(name, callback, delay) {
     if (delay === undefined) { delay = 1000; }
 
     var timeout = $timeout(function pollFn() {
-      callback(ModuleService.module(name));
+      callback(ModuleService.moduleStatus(name));
       timeout = $timeout(pollFn, delay);
     }, delay);
 
@@ -21,19 +17,22 @@ function SupervisionCtrl($scope, ModuleService, $timeout) {
     };
   };
 
-  $scope.$watch('module', function() {
+  var poll = null;
+  $scope.$watch('moduleName', function() {
     // Cancel the previous poll
-    if ($scope.poll) {
-      $scope.poll.cancel();
+    if (poll) {
+      poll.cancel();
       $scope.data = {};
     }
 
     // Do nothing if the module isn't set
-    if (!$scope.module) { return; }
+    if (!$scope.moduleName) { return; }
+    console.log('moduleName', $scope.moduleName);
 
     // Poll the current supervised module for its status
-    $scope.poll = pollInstances($scope.module, function(promise) {
+    poll = pollModule($scope.moduleName, function(promise) {
       promise.then(function(data) {
+        console.log('poll got', data);
         angular.forEach(data, function(instance) {
           var instanceName = instance.name;
           angular.forEach(instance.attrs, function(data, attr) {
@@ -52,14 +51,13 @@ function SupervisionCtrl($scope, ModuleService, $timeout) {
           });
         });
       }, function() {
-        // TODO
+        console.log('poll failed');
       });
     });
 
     // Stop polling when location is changed
     $scope.$on('$routeChangeSuccess', function () {
-      $scope.poll.cancel();
-      $scope.module = '';
+      poll.cancel();
       $scope.data = {};
       $scope.graphData = [];
     });

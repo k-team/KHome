@@ -15,13 +15,20 @@ angular.module('GHome').factory('ModuleService', function($q, $http, $timeout, $
     });
   };
 
-  service.module = function(name) {
+  var httpGetJSON = function(url) {
     var deferred = $q.defer();
-    $http.get(modulesUrl + '/' + name + '/instances/status').success(function(data) {
-      console.log(data);
-      deferred.resolve(data);
-    });
+    $http.get(url)
+      .success(function(data) { deferred.resolve(data); })
+      .error(function() { deferred.reject(); });
     return deferred.promise;
+  };
+
+  service.module = function(name) {
+    return httpGetJSON(modulesUrl + '/' + name);
+  };
+
+  service.moduleStatus = function(name) {
+    return httpGetJSON(modulesUrl + '/' + name + '/instances/status');
   };
 
   service.updateField = function(module, field, value) {
@@ -39,7 +46,7 @@ angular.module('GHome').factory('ModuleService', function($q, $http, $timeout, $
       $http.get(url).success(function(data) {
         cachedModules = data;
         deferred.resolve(data);
-      }); // TODO handle errors
+      }).error(function() { deferred.reject(); });
     } else {
       deferred.resolve(cachedModules);
     }

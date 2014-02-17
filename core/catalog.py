@@ -3,7 +3,8 @@ import zipfile
 
 import module.path as path
 from module.packaging import (load_config, get_from_config, CONFIG_DEFAULTS,
-        is_installed, MODULE_NAME_ENTRY as _mne)
+        is_installed, MODULE_NAME_ENTRY)
+_mne = MODULE_NAME_ENTRY
 
 def get_zipfile(module_name):
     """

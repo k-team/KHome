@@ -1,10 +1,10 @@
 function ModuleInjectorCtrl($scope, ModuleService, $routeParams, $compile, $http, $timeout) {
-  var moduleName = $routeParams.moduleName;
   $scope.module = undefined;
+  $scope.moduleName = $routeParams.moduleName;
 
   // Load the current module
   var loadModule = function() {
-    ModuleService.module(moduleName).then(function(module) {
+    ModuleService.module($scope.moduleName).then(function(module) {
       $scope.module = module;
       $scope.module.show = true;
     });
@@ -13,13 +13,13 @@ function ModuleInjectorCtrl($scope, ModuleService, $routeParams, $compile, $http
 
   // Poll the current module for its status
   var pollModule = function() {
-    var update_rate = 1, poll = $timeout(function() {
+    var updateRate = 1, poll = $timeout(function() {
       loadModule();
       if ($scope.module) {
-        update_rate = $scope.module.update_rate;
+        updateRate = $scope.module.updateRate;
       }
-      poll = $timeout(poll, 1000*update_rate);
-    }, 1000*update_rate);
+      poll = $timeout(poll, 1000*updateRate);
+    }, 1000*updateRate);
 
     $scope.$on('$routeChangeSuccess', function () {
       $timeout.cancel(poll);
@@ -28,7 +28,7 @@ function ModuleInjectorCtrl($scope, ModuleService, $routeParams, $compile, $http
   pollModule();
 
   // Load the angular-like html to be injected
-  $http.get('/api/modules/' + moduleName + '/public/partial.html').then(function(result) {
+  $http.get('/api/modules/' + $scope.moduleName + '/public/partial.html').then(function(result) {
     $('#inject').html($compile(result.data)($scope));
   });
 
