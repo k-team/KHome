@@ -148,7 +148,7 @@ class SensorConnection(Protocol):
         lumiosite = int(valeur[16:24],2)*510/255 #DB2
         #temp = int(valeur[8:16],2)*51/255
         presence = 0
-        if valeur[1]=="0":
+        if valeur[6]=="0": #DB0.BIT1
             presence = 1
         ls = [lumiosite,presence]
         return ls
@@ -241,8 +241,8 @@ class Interrupt(Sensor):
 class WindowsContact(Sensor):
     sensor_id = "0001B595"
 
-#class Presence(Sensor):
-#    sensor_id = "00063E7B"
+class Presence(Sensor):
+    sensor_id = "00063E7B"
 
 class Humidite_Temperature(Sensor):
     sensor_id = "00893378"
