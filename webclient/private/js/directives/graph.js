@@ -45,4 +45,4 @@ angular.module('GHome').directive('graph', function() {
       }, true);
     }
   };
-  });
+});

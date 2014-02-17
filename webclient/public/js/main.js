@@ -73,7 +73,7 @@ angular.module('GHome', ['ngRoute', 'ngAnimate', 'ui.bootstrap', 'angularFileUpl
   });
 
   // Load the angular-like html to be injected
-  $http.get('/api/modules/' + moduleName + '/public/independant.html').then(function(result) {
+  $http.get('/api/modules/' + $scope.moduleName + '/public/independant.html').then(function(result) {
     $('#inject-independant').html($compile(result.data)($scope));
   });
 }
@@ -245,7 +245,7 @@ function ModuleFieldCtrl($scope, ModuleService, $timeout) {
     });
   };
 }
-;function SupervisionCtrl($scope, ModuleService, $timeout) {
+;function SupervisionCtrl($scope, ModuleService, $timeout, $rootScope) {
   $scope.data = {};
   $scope.maxData = 10;
 
@@ -301,7 +301,7 @@ function ModuleFieldCtrl($scope, ModuleService, $timeout) {
     });
 
     // Stop polling when location is changed
-    $scope.$on('$routeChangeSuccess', function () {
+    $rootScope.$on('$routeChangeSuccess', function () {
       poll.cancel();
       $scope.data = {};
       $scope.graphData = [];
@@ -355,7 +355,7 @@ function ModuleFieldCtrl($scope, ModuleService, $timeout) {
       }, true);
     }
   };
-  });
+});
 ;angular.module('GHome').directive('customInput', function() {
   return {
     restrict: 'EA',

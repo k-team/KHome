@@ -1,4 +1,4 @@
-function SupervisionCtrl($scope, ModuleService, $timeout) {
+function SupervisionCtrl($scope, ModuleService, $timeout, $rootScope) {
   $scope.data = {};
   $scope.maxData = 10;
 
@@ -54,7 +54,7 @@ function SupervisionCtrl($scope, ModuleService, $timeout) {
     });
 
     // Stop polling when location is changed
-    $scope.$on('$routeChangeSuccess', function () {
+    $rootScope.$on('$routeChangeSuccess', function () {
       poll.cancel();
       $scope.data = {};
       $scope.graphData = [];
