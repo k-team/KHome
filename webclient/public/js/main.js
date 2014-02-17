@@ -38,13 +38,24 @@ angular.module('GHome', ['ngRoute', 'ngAnimate', 'ui.bootstrap', 'angularFileUpl
     $scope.rooms = rooms;
   });
 }
-;function ModuleInjectorCtrl($scope, ModuleService, $routeParams, $compile, $http) {
+;function ModuleInjectorCtrl($scope, ModuleService, $routeParams, $compile, $http, $timeout) {
   var moduleName = $routeParams.moduleName;
 
   // Load the current module
-  ModuleService.module(moduleName).then(function(module) {
-    $scope.module = module;
-  });
+  var loadModule = function() {
+    ModuleService.module(moduleName).then(function(module) {
+      $scope.module = module;
+    });
+  };
+  loadModule();
+
+  var pollModule = function() {
+    $timeout(function() {
+      loadModule();
+      pollModule();
+    }, 1000);
+  };
+  pollModule();
 
   // Load the angular-like html to be injected
   $http.get('/api/modules/' + moduleName + '/public/partial.html').then(function(result) {
