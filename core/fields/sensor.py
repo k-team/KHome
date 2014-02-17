@@ -145,13 +145,13 @@ class SensorConnection(Protocol):
                     self.sensor.emit_value(sentData) 
 
     def org7_presence(self, valeur): #ordre des octets: DB0 DB1 DB2 DB3 mais pas DB3 DB2 DB1 DB0
-        #lumiosite = int(valeur[16:24],2)*510/255
+        lumiosite = int(valeur[16:24],2)*510/255 #DB2
         #temp = int(valeur[8:16],2)*51/255
-        presence = 1
-        if valeur[1]=="1":
-            presence = 0
-        #ls = [lumiosite,temp,presence]
-        return presence
+        presence = 0
+        if valeur[1]=="0":
+            presence = 1
+        ls = [lumiosite,presence]
+        return ls
 
     def org7_temp_humi(self, valeur): #ordre des octets: DB0 DB1 DB2 DB3 mais pas DB3 DB2 DB1 DB0
         humi = int(valeur[16:24],2)*100/250 #use DB2
