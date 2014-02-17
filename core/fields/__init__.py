@@ -20,6 +20,7 @@ class Base(threading.Thread):
     __metaclass__ = FieldMeta
 
     update_rate = 1
+    public_name = None
 
     def __init__(self):
         super(Base, self).__init__()
@@ -32,6 +33,9 @@ class Base(threading.Thread):
         the field. Mixins can (and has to) overload this function
         to add more information
         """
+        public_name = type(self).public_name
+        if public_name:
+            return {'name': public_name}
         return {'name': self.field_name}
 
     def emit_value(self, value):

@@ -15,22 +15,22 @@ def basic(new_field, module_name, field_name):
     field = getattr(module, field_name)
     field_info = module.fields_info[field_name]
 
-    cls_syntax = fields.syntax.String
-    if 'type' in field_info:
-        cls_syntax = fields.syntax.from_string(field_info['type'])
-
     class Field(
             fields.io.Writable,
             fields.io.Readable,
-            cls_syntax,
             fields.Base):
+        def get_info(self):
+            a = super(Field, self).get_info()
+            field_info.update(a)
+            return field_info
+
         def read(self, **kwargs):
             return field(**kwargs)
 
         def write(self, value):
             return field(value)
 
-    return type(new_field, Field.__bases__, dict(Field.__dict__))
+    return type(new_field, (Field,), dict())
 
 
 def mix(new_field, r_module_name, r_field_name, w_module_name, w_field_name):
@@ -50,24 +50,26 @@ def mix(new_field, r_module_name, r_field_name, w_module_name, w_field_name):
     r_field_info = r_module.fields_info[r_field_name]
     w_field_info = w_module.fields_info[w_field_name]
 
-    cls_syntax = fields.syntax.String
     if 'type' in r_field_info and 'type' in w_field_info:
         if r_field_info['type'] != w_field_info['type']:
             raise RuntimeError('The two fields have to be of the same type.')
-        cls_syntax = fields.syntax.from_string(r_field_info['type'])
 
     class Field(
             fields.io.Writable,
             fields.io.Readable,
-            cls_syntax,
             fields.Base):
+        def get_info(self):
+            a = super(Field, self).get_info()
+            w_field_info.update(a)
+            return w_field_info
+
         def read(self, **kwargs):
             return r_field(**kwargs)
 
         def write(self, value):
             return w_field(value)
 
-    return type(new_field, Field.__bases__, dict(Field.__dict__))
+    return type(new_field, (Field,), dict())
 
 
 def readable(new_field, module_name, field_name):
@@ -81,18 +83,18 @@ def readable(new_field, module_name, field_name):
     field = getattr(module, field_name)
     field_info = module.fields_info[field_name]
 
-    cls_syntax = fields.syntax.String
-    if 'type' in field_info:
-        cls_syntax = fields.syntax.from_string(field_info['type'])
-
     class Field(
             fields.io.Readable,
-            cls_syntax,
             fields.Base):
+        def get_info(self):
+            a = super(Field, self).get_info()
+            field_info.update(a)
+            return field_info
+
         def read(self, **kwargs):
             return field(**kwargs)
 
-    return type(new_field, Field.__bases__, dict(Field.__dict__))
+    return type(new_field, (Field,), dict())
 
 
 def writable(new_field, module_name, field_name):
@@ -106,15 +108,15 @@ def writable(new_field, module_name, field_name):
     field = getattr(module, field_name)
     field_info = module.fields_info[field_name]
 
-    cls_syntax = fields.syntax.String
-    if 'type' in field_info:
-        cls_syntax = fields.syntax.from_string(field_info['type'])
-
     class Field(
             fields.io.Writable,
-            cls_syntax,
             fields.Base):
+        def get_info(self):
+            a = super(Field, self).get_info()
+            field_info.update(a)
+            return field_info
+
         def write(self, value):
             return field(value)
 
-    return type(new_field, Field.__bases__, dict(Field.__dict__))
+    return type(new_field, (Field,), dict())

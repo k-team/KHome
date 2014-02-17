@@ -33,10 +33,7 @@ from twisted.internet import reactor
 from twisted.internet.protocol import ClientCreator
 from twisted.internet.protocol import ClientFactory
 from twisted.internet.protocol import Protocol
-import time
-import math
-import random
-import time
+from twisted.internet.endpoints import TCP4ClientEndpoint
 
 class Actuator(object):
     from twisted.internet import reactor
@@ -51,10 +48,12 @@ class Actuator(object):
 
     def __init__(self):
         super(Actuator, self).__init__()
-        reactor.connectTCP(type(self).host,
-                type(self).port,
-                ActuatorConnectionFactory(self,
-                    type(self).actuator_id))
+        # reactor.connectTCP(type(self).host,
+        #         type(self).port,
+        #         ActuatorConnectionFactory(self,
+        #             type(self).actuator_id))
+        point =    TCP4ClientEndpoint(reactor,self.host,self.port)
+        self.deferred = point.connect(ActuatorConnectionFactory(self,self.actuator_id))
 
 
     def sendData(self,data):
@@ -80,13 +79,14 @@ class ActuatorConnection(Protocol):
     def connectionMade(self):
         print "Connexion etablished"
         self.transport.write(self.actuator.sentData)
-        # self.transport.loseConnection()
+        #self.transport.loseConnection()
+        #reactor.callLater(1, self.actuator.deferred.cancel)
+        self.actuator.deferred.cancel
         # reactor.stop()
         #self.transport.write(self.actuator.sentData)
 
     def dataReceived(self, data):
-        "As soon as any data is received, write it back."
-        print "Server said:", data
+        pass
     def sendData(self):
         self.transport.write(self.actuator.sentData)
 
@@ -111,7 +111,8 @@ class ActuatorConnectionFactory(ClientFactory):
         
         
 class PriseElectrique(Actuator):
-    actuator_id = "00893378"
+    actuator_id = "FF9F1E02"
+    #actuator_id = "FF9F1E03"
     org = "05"
     
     
@@ -128,4 +129,3 @@ class PriseElectrique(Actuator):
 if __name__ == '__main__':
    a = PriseElectrique()
    a.sendData("1")
-

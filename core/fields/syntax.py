@@ -1,3 +1,19 @@
+import fields.io
+import fields.persistant
+
+class Constant(fields.io.Readable,
+        fields.persistant.Volatile):
+    update_rate = 100000
+    const_value = None
+
+    def get_info(self):
+        a = super(Constant, self).get_info()
+        a['const'] = True
+        return a
+
+    def acquire_value(self):
+        return type(self).const_value
+
 class Numeric(object):
     def get_info(self):
         a = super(Numeric, self).get_info()

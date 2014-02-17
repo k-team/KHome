@@ -4,7 +4,7 @@ import fields.io
 import fields.sensor
 import fields.persistant
 
-class OutsideBrightness(module.Base):
+class OutsideBrightnessSensor(module.Base):
     update_rate = 10
 
     class brightness(fields.sensor.LuminosityExterior,
