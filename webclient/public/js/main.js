@@ -49,15 +49,19 @@ angular.module('GHome', ['ngRoute', 'ngAnimate', 'ui.bootstrap', 'angularFileUpl
   };
   loadModule();
 
+  // Poll the current module for its status
   var pollModule = function() {
-    var update_rate = 1000;
-    if($scope.module)
-      update_rate = $scope.module.update_rate * 1000;
-
-    $timeout(function() {
+    var update_rate = 1, poll = $timeout(function() {
       loadModule();
-      pollModule();
-    }, update_rate);
+      if ($scope.module) {
+        update_rate = $scope.module.update_rate;
+      }
+      poll = $timeout(poll, 1000*update_rate);
+    }, 1000*update_rate);
+
+    $scope.$on('$routeChangeSuccess', function () {
+      $timeout.cancel(poll);
+    });
   };
   pollModule();
 
@@ -74,10 +78,13 @@ function ModuleFieldCtrl($scope, ModuleService, $timeout) {
     var field = $scope.field;
     field.state = 'waiting';
     setTimeout(function() {
-      var fade = function()  { console.log('fade'); $timeout(function() { field.state = ''; }, 2000); };
+      // Fade out field state
+      var fade = function()  {
+        $timeout(function() { field.state = ''; }, 2000);
+      };
+
       ModuleService.updateField($scope.module, field, field.value).then(function(data) {
-        console.log(data);
-        if(data['success']) {
+        if (data.success) {
           field.state = 'success';
         } else {
           field.state = 'error';
