@@ -8,7 +8,7 @@
               data-ng-src="/api/modules/{{ module.name }}/public/icon.png"
               onerror="this.onerror = null; this.src = '/img/module.png'">
             <div class="caption">
-              <h4>{{ ((module.public_name) ? module.public_name : module.name) | truncate:12 }}</h4>
+              <strong>{{ ((module.public_name) ? module.public_name : module.name) | truncate:15 }}</strong>
             </div>
           </a>
         </div>
