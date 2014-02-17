@@ -17,7 +17,7 @@ angular.module('GHome').factory('ModuleService', function($q, $http, $timeout, $
 
   service.module = function(name) {
     var deferred = $q.defer();
-    $http.get(modulesUrl + '/' + name).success(function(data) {
+    $http.get(modulesUrl + '/' + name + '/instances/status').success(function(data) {
       console.log(data);
       deferred.resolve(data);
     });

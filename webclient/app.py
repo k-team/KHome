@@ -168,15 +168,16 @@ def api_module_instances_statuses(module_name):
     except RuntimeError as e:
         app.logger.exception(e)
     else:
-        fields = []
+        print [f for f in mod.info['fields'] if 'readable' if f and f['readable']]
+        fields = {}
         for f in mod.info['fields']:
             if 'readable' not in f or not f['readable']:
                 continue
             value = getattr(mod, f['name'])()
             if value is None:
                 continue
-            fields[field['name']] = dict(zip(('time', 'value'), value))
-        return jsonify([ { 'name': module_name, 'fields': fields } ])
+            f.update(dict(zip(('time', 'value'), value)))
+        return jsonify(mod.info)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug='--debug' in sys.argv, port=8888)
