@@ -154,11 +154,13 @@ import random
 def api_module_instances_statuses(module_name):
     # TODO add support for multiple instances
     if not packaging.is_installed(module_name):
+        print '%s not installed' % module_name
         abort(404)
     try:
         mod = use_module(module_name)
     except RuntimeError as e:
         app.logger.exception(e)
+        abort(404)
     else:
         print [f for f in mod.info['fields'] if 'readable' if f and f['readable']]
         fields = {}
@@ -169,8 +171,8 @@ def api_module_instances_statuses(module_name):
             if value is None:
                 continue
             f.update(dict(zip(('time', 'value'), value)))
+        print mod.info
         return jsonify(mod.info)
-    abort(404)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug='--debug' in sys.argv, port=8888)
