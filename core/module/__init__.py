@@ -232,8 +232,8 @@ class BaseMeta(type):
             if isinstance(f_cls, type) and issubclass(f_cls, fields.Base):
                 field = f_cls()
                 setattr(obj, field.field_name, prop_field(field))
+                setattr(field, 'module', obj)
                 ls_fields += [field]
-        setattr(field, 'module', obj)
         setattr(obj, 'module_fields', ls_fields)
 
         _running_modules.append(obj)
