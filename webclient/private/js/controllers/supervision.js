@@ -33,7 +33,7 @@ function SupervisionCtrl($scope, ModuleService, $timeout) {
 
     // Poll the current supervised module for its status
     $scope.poll = pollInstances($scope.module, function(promise) {
-      promise.success(function(data) {
+      promise.then(function(data) {
         angular.forEach(data, function(instance) {
           var instanceName = instance.name;
           angular.forEach(instance.attrs, function(data, attr) {
@@ -51,7 +51,7 @@ function SupervisionCtrl($scope, ModuleService, $timeout) {
             }
           });
         });
-      }).error(function() {
+      }, function() {
         // TODO
       });
     });

@@ -150,16 +150,8 @@ if __name__ == '__main__':
 # used for samples
 import random
 
-def temperature_statuses():
-    r = lambda: int(random.random()*40)
-    return [ { 'name': 'i1', 'attrs': { 'temperature': { 'time': time.time(), 'value': r() } } },
-             { 'name': 'i2', 'attrs': { 'temperature': { 'time': time.time(), 'value': r() } } },
-             { 'name': 'i3', 'attrs': { 'temperature': { 'time': time.time(), 'value': r() } } }, ]
-
 @app.route('/api/modules/<module_name>/instances/status')
 def api_module_instances_statuses(module_name):
-    # return jsonify(temperature_statuses())
-
     # TODO add support for multiple instances
     if not packaging.is_installed(module_name):
         abort(404)
@@ -178,6 +170,7 @@ def api_module_instances_statuses(module_name):
                 continue
             f.update(dict(zip(('time', 'value'), value)))
         return jsonify(mod.info)
+    abort(404)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug='--debug' in sys.argv, port=8888)
