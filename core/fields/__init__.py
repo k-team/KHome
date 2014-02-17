@@ -19,7 +19,6 @@ class FieldMeta(type):
 class Base(threading.Thread):
     __metaclass__ = FieldMeta
 
-    update_rate = 1
     public_name = ''
 
     def __init__(self):
@@ -108,7 +107,7 @@ class Base(threading.Thread):
         add this one.
         """
         while self.running:
-            if time.time() - self.old_time >= type(self).update_rate:
+            if time.time() - self.old_time >= self.module.update_rate:
                 self.old_time = time.time()
                 self.emit_value(self.acquire_value())
             self.always()

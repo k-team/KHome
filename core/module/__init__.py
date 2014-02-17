@@ -280,6 +280,7 @@ class Base(threading.Thread):
     """
     __metaclass__ = BaseMeta
 
+    update_rate = 1
     public_name = ''
 
     def __init__(self, **kwargs):
@@ -287,6 +288,7 @@ class Base(threading.Thread):
         _setup_module(self, **kwargs)
         self.running = False
         self.endpoint = None
+        self.update_rate = type(self).update_rate
 
     def get_info(self):
         """

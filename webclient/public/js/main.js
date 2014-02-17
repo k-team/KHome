@@ -50,10 +50,14 @@ angular.module('GHome', ['ngRoute', 'ngAnimate', 'ui.bootstrap', 'angularFileUpl
   loadModule();
 
   var pollModule = function() {
+    var update_rate = 1000;
+    if($scope.module)
+      update_rate = $scope.module.update_rate * 1000;
+
     $timeout(function() {
       loadModule();
       pollModule();
-    }, 1000);
+    }, update_rate);
   };
   pollModule();
 
