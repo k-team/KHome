@@ -62,6 +62,23 @@ def route_with_module_posted(url):
         return app.add_url_rule(url, view_func=view, methods=['POST'])
     return decorator
 
+@route_with_module_posted('/api/modules/update_field')
+def api_update_field(module_name):
+    try:
+        field_name = request.form['field']
+        value = request.form['value']
+    except KeyError:
+        abort(400)
+    else:
+        try:
+            mod = use_module(module_name)
+            field_fn = getattr(mod, field_name)
+            return jsonify({ 'success':  field_fn(value) })
+        except (AttributeError, RuntimeError) as e:
+            app.logger.exception(e)
+            abort(400)
+    abort(400)
+
 @route_with_module_posted('/api/modules/install')
 def api_install_module(module_name):
     try:

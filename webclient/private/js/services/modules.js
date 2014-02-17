@@ -27,8 +27,8 @@ angular.module('GHome').factory('ModuleService', function($q, $http, $timeout, $
   service.updateField = function(module, field, value) {
     var deferred = $q.defer();
     httpPostJSON(modulesUrl + '/update_field',
-        { name: module.id, field: field.name, value: value })
-      .success(function() { deferred.resolve(); })
+        { name: module.name, field: field.name, value: value })
+      .success(function(data) { deferred.resolve(data); })
       .error(function() { deferred.reject(); });
     return deferred.promise;
   };

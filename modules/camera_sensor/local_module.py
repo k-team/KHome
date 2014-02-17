@@ -9,8 +9,8 @@ class CameraSensor(module.Base):
     update_rate = 10
 
     class image(fields.syntax.Numeric,
-		fields.sensor.Camera,
-		fields.persistant.Volatile,
-		fields.io.Readable,
-		fields.Base):
+            fields.sensor.Camera,
+            fields.persistant.Volatile,
+            fields.io.Readable,
+            fields.Base):
         pass

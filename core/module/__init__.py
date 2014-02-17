@@ -39,7 +39,7 @@ def kill():
     logger = logging.getLogger()
     logger.info('Application killed')
     for mod in _running_modules:
-        logger.info('Kill the module `' + mod + '`.')
+        logger.info('Kill the module `' + mod.module_name + '`.')
         mod.kill()
     raise RuntimeError('GTFO')
     # reactor.callFromThread(reactor.stop)
@@ -296,6 +296,7 @@ class Base(threading.Thread):
         ans = {}
         ans['name'] = self.module_name
         ans['public_name'] = type(self).public_name
+        ans['update_rate'] = type(self).update_rate
         ans['fields'] = []
         for f in self.module_fields:
             ans['fields'] += [f.get_info()]

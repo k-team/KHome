@@ -14,13 +14,19 @@ function ModuleInjectorCtrl($scope, ModuleService, $routeParams, $compile, $http
 
 function ModuleFieldCtrl($scope, ModuleService, $timeout) {
   $scope.field.state = '';
-  $scope.update = function(value) {
+
+  $scope.update = function() {
     var field = $scope.field;
     field.state = 'waiting';
     setTimeout(function() {
       var fade = function()  { console.log('fade'); $timeout(function() { field.state = ''; }, 2000); };
-      ModuleService.updateField($scope.module, field, value).then(function() {
-        field.state = 'success';
+      ModuleService.updateField($scope.module, field, field.value).then(function(data) {
+        console.log(data);
+        if(data['success']) {
+          field.state = 'success';
+        } else {
+          field.state = 'error';
+        }
         fade();
       }, function() {
         field.state = 'error';
