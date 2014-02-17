@@ -10,6 +10,7 @@ function ModulesCtrl($scope, $location, ModuleService) {
 
   // Navigate to module view, either its specific view or configuration
   $scope.navigate = function(module) {
-    $location.path('/modules/' + module.id);
+    console.log(module);
+    $location.path('/modules/' + module.name);
   };
 }
