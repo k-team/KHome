@@ -30,10 +30,16 @@ def test_module(module_name):
     mod = use_module(module_name)
     logger.info('Informations (brutes) : %s', mod.info)
     fields = mod.info['fields']
+
+    if 'public_name' in mod.info or not mod.info['public_name']:
+        logger.warning('Pas de nom public pour le module (ajouter un public_name = "xxx" dans la description du module')
+
     if not fields:
         logger.error('Pas de champ défini dans le module')
     for field in fields:
         logger.info('Début du test du champ : "%s"', field['name'].encode('utf8'))
+        if 'public_name' in field or not field['public_name']:
+            logger.warning('Pas de nom public pour le field (ajouter un public_name = "xxx" dans la description du field')
         field_fn = getattr(mod, field['name'])
         syntax = str
         if 'type' in field:

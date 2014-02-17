@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import module
 import fields
 import fields.syntax
@@ -40,7 +41,7 @@ class GazController(module.Base):
             fields.syntax.Numeric,
             fields.Base):
         const_value = 1500.0
-        public_name = 'Limite de methane'
+        public_name = 'Limite de méthane'
 
     class controller(fields.Base):
         def always(self):

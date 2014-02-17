@@ -280,6 +280,8 @@ class Base(threading.Thread):
     """
     __metaclass__ = BaseMeta
 
+    public_name = ''
+
     def __init__(self, **kwargs):
         super(Base, self).__init__()
         _setup_module(self, **kwargs)
@@ -293,6 +295,7 @@ class Base(threading.Thread):
         """
         ans = {}
         ans['name'] = self.module_name
+        ans['public_name'] = type(self).public_name
         ans['fields'] = []
         for f in self.module_fields:
             ans['fields'] += [f.get_info()]

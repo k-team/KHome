@@ -1,5 +1,5 @@
 <div class="header">
-  <span class="h1 vertical-middle">{{ module.name }}</span>
+  <span class="h1 vertical-middle">{{ module.public_name || module.name }}</span>
   &nbsp;
   <span class="vertical-middle" data-ng-controller="RatingCtrl">
     <rating value="module.rating" max="5" data-ng-click="rate()" on-leave="overStar = null"></rating>
@@ -11,7 +11,7 @@
     <form data-ng-show="field.readable || field.writable" data-ng-submit="update(field)" class="form-horizontal" role="form">
       <fieldset data-ng-disabled="!field.writable">
         <div class="form-group" data-ng-class="{success:'has-success', error:'has-error', '':''}[field.state]">
-          <label for="field-{{field.name}}" class="col-sm-2 control-label">{{field.name}}</label>
+          <label for="field-{{field.name}}" class="col-sm-2 control-label">{{field.public_name || field.name}}</label>
           <div class="input-group input-group-sm col-sm-10">
             <div class="input-group-addon" data-ng-show="field.writable" data-ng-switch on="field.state">
               <span data-ng-switch-default>

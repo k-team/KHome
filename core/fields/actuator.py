@@ -4,8 +4,8 @@ import persistant
 
 def Dummy(data_type):
     class _Dummy(data_type,
-            io.Readable,
             persistant.Volatile,
+            io.Readable,
             io.Writable):
         def set_value(self, value):
             print value
