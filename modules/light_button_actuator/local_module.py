@@ -9,9 +9,10 @@ class LightButtonActuator(module.Base):
     update_rate = 10
 
     class light_button(
+            fields.syntax.Boolean,
             fields.actuator.LightButton, 
             fields.io.Writable,
-            #fields.persistant.Volatile, 
+            fields.persistant.Volatile, 
             #idk the reason bu putting volatile get me a GTFO ...
             fields.Base):
         pass
