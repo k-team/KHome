@@ -45,22 +45,25 @@ def kill():
     # reactor.callFromThread(reactor.stop)
     # sys.exit(1)
 
-def get_socket(module_name):
+def get_socket(module_name, nb_try=5):
     """
     Return a socket connected to the module named *module_name*.
     The socket is transformed by the makefile function and has to be use as a
     file object.
     """
-    sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-    try:
-        sock.connect(path.socket_file(module_name))
-    except socket.error as e:
-        logger = logging.getLogger()
-        logger.exception(e)
-        logger.error('Impossible to connect to the `' + module_name + '` module.')
-        raise RuntimeError('Impossible to connect to the `' + module_name + '` module.')
-        kill()
-    return sock.makefile('rw')
+    for i in xrange(nb_try):
+        try:
+            sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+            sock.connect(path.socket_file(module_name))
+        except socket.error as e:
+            logger = logging.getLogger()
+            logger.exception(e)
+            logger.error('Impossible to connect to the `' + module_name + '` module. (%d / %d)', i + 1, nb_try)
+            time.sleep(0.5)
+        else:
+            return sock.makefile('rw')
+    logger.error('Impossible to connect to the `' + module_name + '` module.')
+    return kill()
 
 def network_write(conn, data):
     """
