@@ -2,5 +2,6 @@
   "start":"/home/turpif/Projet/Togetic/Blender.py --input /tmp/togetic-1 --blender /home/turpif/togetic/blender/Togetic.blend",
   "name": "togetic_blender",
   "public_name": "Togetic-Blender",
+  "slides": ["screen-1.jpg", "screen-2.jpg", "screen-3.jpg", "screen-4.jpg"],
   "description": "Cette vue utilisant blender vous place dans un monde fantastique où vous pourrez vous immerger en prenant le contrôle de la caméra.<br /> L'écran devient vos yeux, vous êtes le personnage de cette histoire, vous êtes dans un autre monde. A vous de regardez autour de vous afin de découvrir un tout nouveau monde."
 }
