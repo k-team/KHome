@@ -40,11 +40,13 @@ angular.module('GHome', ['ngRoute', 'ngAnimate', 'ui.bootstrap', 'angularFileUpl
 }
 ;function ModuleInjectorCtrl($scope, ModuleService, $routeParams, $compile, $http, $timeout) {
   var moduleName = $routeParams.moduleName;
+  $scope.module = undefined;
 
   // Load the current module
   var loadModule = function() {
     ModuleService.module(moduleName).then(function(module) {
       $scope.module = module;
+      $scope.module.show = true;
     });
   };
   loadModule();
@@ -68,6 +70,11 @@ angular.module('GHome', ['ngRoute', 'ngAnimate', 'ui.bootstrap', 'angularFileUpl
   // Load the angular-like html to be injected
   $http.get('/api/modules/' + moduleName + '/public/partial.html').then(function(result) {
     $('#inject').html($compile(result.data)($scope));
+  });
+
+  // Load the angular-like html to be injected
+  $http.get('/api/modules/' + moduleName + '/public/independant.html').then(function(result) {
+    $('#inject-independant').html($compile(result.data)($scope));
   });
 }
 
