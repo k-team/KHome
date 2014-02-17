@@ -7,6 +7,7 @@ import logging
 class ElectricCurrentController(module.Base):
     switch = use_module('ElectricCurrentSwitch')
     human_presence = use_module('HumanPresenceSensor')
+    public_name = 'Gestion intelligente de l electricite'
 
     class controller(fields.Base):
         def __init__(self):
