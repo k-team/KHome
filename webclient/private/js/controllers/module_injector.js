@@ -33,7 +33,7 @@ function ModuleInjectorCtrl($scope, ModuleService, $routeParams, $compile, $http
   });
 
   // Load the angular-like html to be injected
-  $http.get('/api/modules/' + moduleName + '/public/independant.html').then(function(result) {
+  $http.get('/api/modules/' + $scope.moduleName + '/public/independant.html').then(function(result) {
     $('#inject-independant').html($compile(result.data)($scope));
   });
 }
