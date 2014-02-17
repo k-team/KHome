@@ -157,8 +157,8 @@ class SensorConnection(Protocol):
         humi = int(valeur[16:24],2)*100/250 #use DB2
         l=[]
         l.append(humi)
-        if valeur[1] =="0":
-            l.append(-1)
+        if valeur[6] =="0": #DB0.BIT1
+            l.append(-1) #temperature not available
         else:
             temp = int(valeur[8:16],2)*40/250 #use DB1
             l.append(temp)
