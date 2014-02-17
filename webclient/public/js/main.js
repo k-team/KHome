@@ -22,7 +22,7 @@ angular.module('GHome', ['ngRoute', 'ngAnimate', 'ui.bootstrap', 'angularFileUpl
       redirectTo: '/home'
     });
   });
-;function MainCtrl($scope, ModuleService, HouseMapService) {
+;function MainCtrl($scope, $location, ModuleService) {
   // All modules
   $scope.modules = [];
 
@@ -33,9 +33,11 @@ angular.module('GHome', ['ngRoute', 'ngAnimate', 'ui.bootstrap', 'angularFileUpl
     });
   };
 
-  // Get the rooms (asynchronous)
-  HouseMapService.getRooms().then(function(rooms) {
-    $scope.rooms = rooms;
+  $scope.$watch('query', function() {
+    var path = $location.path();
+    if ($scope.query && path != '/store' && path != '/modules') {
+      $location.path('/modules');
+    }
   });
 }
 ;function ModuleInjectorCtrl($scope, ModuleService, $routeParams, $compile, $http, $timeout) {
@@ -131,36 +133,6 @@ function ModuleFieldCtrl($scope, ModuleService, $timeout) {
       $scope.isRating = false;
     });
   };
-}
-;function RoomsCtrl($scope) {
-  // Minimal bbox af all rooms
-  $scope.box = {};
-
-  // Comma-separated representation for points (x1,y1 x2,y2 x3,y3 etc...), used
-  // for svg rendering.
-  $scope.points = function(room) {
-    var pointsRepr = '';
-    angular.forEach(room.polygon, function(point, i) {
-      // Update the points representation
-      pointsRepr += point.x + ',' + point.y;
-      if (i < room.polygon.length - 1) {
-        pointsRepr += ' ';
-      }
-    });
-    return pointsRepr;
-  };
-
-  // Watch expression on rooms in order to update the bbox accordingly
-  $scope.$watch('rooms', function() {
-    angular.forEach($scope.rooms, function(room) {
-      angular.forEach(room.polygon, function(point) {
-        if      ($scope.box.minX === undefined || point.x < $scope.box.minX) { $scope.box.minX = point.x; }
-        else if ($scope.box.maxX === undefined || point.x > $scope.box.maxX) { $scope.box.maxX = point.x; }
-        if      ($scope.box.minY === undefined || point.y < $scope.box.minY) { $scope.box.minY = point.y; }
-        else if ($scope.box.maxY === undefined || point.y > $scope.box.maxY) { $scope.box.maxY = point.y; }
-      });
-    });
-  });
 }
 ;function SettingsCtrl($scope, $location) {
   $scope.reloadModules();
@@ -426,19 +398,6 @@ function ModuleFieldCtrl($scope, ModuleService, $timeout) {
       return String(text).substring(0, length - end.length) + end;
     }
   };
-});
-;angular.module('GHome').factory('HouseMapService', function($q, $timeout, $http) {
-  var service = {};
-
-  // Replace with an AJAX call
-  service.getRooms = function() {
-    var deferred = $q.defer();
-    $http.get('/api/rooms').success(function(rooms) {
-      deferred.resolve(rooms);
-    });
-    return deferred.promise;
-  };
-  return service;
 });
 ;angular.module('GHome').factory('ModuleService', function($q, $http, $timeout, $upload) {
   var service = {},
