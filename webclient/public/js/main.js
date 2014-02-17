@@ -109,7 +109,6 @@ function ModuleFieldCtrl($scope, ModuleService, $timeout) {
 
   // Navigate to module view, either its specific view or configuration
   $scope.navigate = function(module) {
-    console.log(module);
     $location.path('/modules/' + module.name);
   };
 }
@@ -268,16 +267,14 @@ function ModuleFieldCtrl($scope, ModuleService, $timeout) {
 
     // Do nothing if the module isn't set
     if (!$scope.moduleName) { return; }
-    console.log('moduleName', $scope.moduleName);
 
     // Poll the current supervised module for its status
     poll = pollModule($scope.moduleName, function(promise) {
       promise.then(function(data) {
-        console.log('poll got', data);
+        data = [data];
         angular.forEach(data, function(instance) {
-          var instanceName = instance.name;
-          angular.forEach(instance.attrs, function(data, attr) {
-            var attrName = instanceName + '.' + attr
+          angular.forEach(instance.fields, function(data, field) {
+            var attrName = instance.name + '.' + field;
             // Empty data case
             if (!$scope.data[attrName]) {
               $scope.data[attrName] = [];
@@ -285,14 +282,14 @@ function ModuleFieldCtrl($scope, ModuleService, $timeout) {
 
             // Push new data
             var attrData = $scope.data[attrName];
-            attrData.push([instance.time, data]);
+            attrData.push([data.time, data.value]);
             if ($scope.maxData < attrData.length) {
               attrData.splice(0, attrData.length - $scope.maxData);
             }
           });
         });
       }, function() {
-        console.log('poll failed');
+        // TODO
       });
     });
 
