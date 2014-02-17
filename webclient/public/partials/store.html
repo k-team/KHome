@@ -1,6 +1,6 @@
 <div class="content">
   <div data-ng-show="availableModules" class="row">
-    <div data-ng-repeat="module in availableModules" class="module-thumbnail col-xs-12 col-sm-4 col-md-3">
+    <div data-ng-repeat="module in availableModules | filter:query" class="module-thumbnail col-xs-12 col-sm-4 col-md-3">
       <div data-ng-click="openModal(module)" class="hidden-xs thumbnail">
         <img alt="Icon for module {{ module.name }}" title="{{ module.public_name }}"
           data-ng-src="/api/available_modules/{{ module.name }}/public/icon.png"

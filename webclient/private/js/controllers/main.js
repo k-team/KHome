@@ -1,4 +1,4 @@
-function MainCtrl($scope, ModuleService) {
+function MainCtrl($scope, $location, ModuleService) {
   // All modules
   $scope.modules = [];
 
@@ -8,4 +8,11 @@ function MainCtrl($scope, ModuleService) {
       $scope.modules = modules;
     });
   };
+
+  $scope.$watch('query', function() {
+    var path = $location.path();
+    if ($scope.query && path != '/store' && path != '/modules') {
+      $location.path('/modules');
+    }
+  });
 }

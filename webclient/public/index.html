@@ -31,22 +31,29 @@
       </div>
 
       <!--Default navigation-->
-      <ul class="hidden-xs nav navbar-nav">
-        <li>
-          <a href="#/modules" title="Modules">
-            Modules
-            &nbsp;
-            <span class="glyphicon glyphicon-th"></span>
-          </a>
-        </li>
-        <li>
-          <a href="#/store" title="Store">
-            Store
-            &nbsp;
-            <span class="glyphicon glyphicon-shopping-cart"></span>
-          </a>
-        </li>
-      </ul>
+      <div class="hidden-xs">
+        <ul class="nav navbar-nav">
+          <li>
+            <a href="#/modules" title="Modules">
+              Modules
+              &nbsp;
+              <span class="glyphicon glyphicon-th"></span>
+            </a>
+          </li>
+          <li>
+            <a href="#/store" title="Store">
+              Store
+              &nbsp;
+              <span class="glyphicon glyphicon-shopping-cart"></span>
+            </a>
+          </li>
+        </ul>
+        <form class="navbar-form" role="search">
+          <div class="form-group">
+            <input data-ng-model="query" class="form-control" type="text" placeholder="Search">
+          </div>
+        </form>
+      </div>
     </nav>
 
     <span id="inject-independant"></span>
