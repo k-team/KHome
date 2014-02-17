@@ -1,4 +1,4 @@
-function MainCtrl($scope, ModuleService, HouseMapService) {
+function MainCtrl($scope, ModuleService) {
   // All modules
   $scope.modules = [];
 
@@ -8,9 +8,4 @@ function MainCtrl($scope, ModuleService, HouseMapService) {
       $scope.modules = modules;
     });
   };
-
-  // Get the rooms (asynchronous)
-  HouseMapService.getRooms().then(function(rooms) {
-    $scope.rooms = rooms;
-  });
 }
