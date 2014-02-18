@@ -53,10 +53,20 @@ angular.module('GHome', ['ngRoute', 'ui.bootstrap', 'angularFileUpload', 'frapon
     });
   };
 
+  var loadFieldValue = function() {
+    return ModuleService.moduleStatus($scope.moduleName).then(function(module) {
+      for (var i = 0; i < module.fields.length; i++) {
+        $scope.module.fields[i].time = module.fields[i].time;
+        $scope.module.fields[i].value = module.fields[i].value;
+      }
+      $scope.$broadcast('module.statusUpdate', module);
+    });
+  };
+
   // Poll the current module for its status
-  var pollModule = function() {
+  var pollFieldValue = function() {
     var updateRate = 1, poll = $timeout(function doPoll() {
-      loadModule().then(function(module) {
+      loadFieldValue().then(function(module) {
         if (module) { updateRate = module['update_rate']; }
         poll = $timeout(doPoll, 1000*updateRate);
       });
@@ -68,7 +78,7 @@ angular.module('GHome', ['ngRoute', 'ui.bootstrap', 'angularFileUpload', 'frapon
   };
 
   // Start polling
-  loadModule().then(pollModule);
+  loadModule().then(pollFieldValue);
 
   // Load the angular-like html to be injected
   $http.get('/api/modules/' + $scope.moduleName + '/public/partial.html')
@@ -215,40 +225,25 @@ function ModuleFieldCtrl($scope, ModuleService, $timeout) {
 ;function SupervisionCtrl($scope, ModuleService, $timeout, $rootScope) {
   $scope.data = null;
   $scope.maxData = 100;
+  var field = $scope.field;
 
   // Poll the current supervised module for its status
   $scope.$on('module.statusUpdate', function(_, data) {
-    if (!data) { return; }
-    data = [data]; // Hack !
+    // Empty data case
+    if (!$scope.data) {
+      $scope.data = {};
+      $scope.data[field.name] = [];
+    }
 
-    angular.forEach(data, function(instance) {
-      for (var i = 0; i < instance.fields.length; i++) {
-        var field = instance.fields[i];
+    // Verify if data should be added
+    var fieldData = $scope.data[field.name];
+    if (fieldData.length && fieldData[fieldData.length - 1][0] == field.time) { return; }
 
-        // Check if field is ok
-        if (!field.readable || !field.graphable) { continue; }
-        // if (!field.readable || field.type != 'numeric' || field.constant) { return; }
-
-        var fieldFullName = instance.name + '.' + field.name;
-        // Empty data case
-        if (!$scope.data) {
-          $scope.data = {};
-        }
-        if (!$scope.data[fieldFullName]) {
-          $scope.data[fieldFullName] = [];
-        }
-
-        // Verify if data should be added
-        var fieldData = $scope.data[fieldFullName];
-        if (fieldData.length && fieldData[fieldData.length - 1][0] == field.time) { continue; }
-
-        // Push new data
-        fieldData.push([field.time, field.value]);
-        if ($scope.maxData < fieldData.length) {
-          fieldData.splice(0, fieldData.length - $scope.maxData);
-        }
-      }
-    });
+    // Push new data
+    fieldData.push([field.time, field.value]);
+    if ($scope.maxData < fieldData.length) {
+      fieldData.splice(0, fieldData.length - $scope.maxData);
+    }
   });
 
   // Clear data when location is changed
@@ -316,6 +311,23 @@ function ModuleFieldCtrl($scope, ModuleService, $timeout) {
     }
   };
 });
+;angular.module('GHome').filter('graphable', function () {
+  return function (fields){
+    if (fields === undefined) {
+      return;
+    }
+
+    var re = Array();
+    for (var i = 0 ; i < fields.length ; i++) {
+      var field = fields[i];
+      if (field.readable && field.graphable) {
+        re.push(field);
+      }
+    }
+    return re;
+  };
+});
+
 ;angular.module('GHome').filter('truncate', function () {
   return function (text, length, end){
     if (text === undefined) {

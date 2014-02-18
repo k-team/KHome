@@ -11,10 +11,20 @@ function ModuleInjectorCtrl($scope, ModuleService, $routeParams, $compile, $http
     });
   };
 
+  var loadFieldValue = function() {
+    return ModuleService.moduleStatus($scope.moduleName).then(function(module) {
+      for (var i = 0; i < module.fields.length; i++) {
+        $scope.module.fields[i].time = module.fields[i].time;
+        $scope.module.fields[i].value = module.fields[i].value;
+      }
+      $scope.$broadcast('module.statusUpdate', module);
+    });
+  };
+
   // Poll the current module for its status
-  var pollModule = function() {
+  var pollFieldValue = function() {
     var updateRate = 1, poll = $timeout(function doPoll() {
-      loadModule().then(function(module) {
+      loadFieldValue().then(function(module) {
         if (module) { updateRate = module['update_rate']; }
         poll = $timeout(doPoll, 1000*updateRate);
       });
@@ -26,7 +36,7 @@ function ModuleInjectorCtrl($scope, ModuleService, $routeParams, $compile, $http
   };
 
   // Start polling
-  loadModule().then(pollModule);
+  loadModule().then(pollFieldValue);
 
   // Load the angular-like html to be injected
   $http.get('/api/modules/' + $scope.moduleName + '/public/partial.html')

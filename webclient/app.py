@@ -154,7 +154,6 @@ def api_module_instances_statuses(module_name):
         app.logger.exception(e)
         abort(404)
     else:
-        print [f for f in mod.info['fields'] if 'readable' if f and f['readable']]
         fields = {}
         for f in mod.info['fields']:
             if 'readable' not in f or not f['readable']:
