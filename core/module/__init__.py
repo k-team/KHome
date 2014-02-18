@@ -301,7 +301,13 @@ class Base(threading.Thread):
         ans['update_rate'] = type(self).update_rate
         ans['fields'] = []
         for f in self.module_fields:
-            ans['fields'] += [f.get_info()]
+            try:
+                info = f.get_info()
+            except TypeError:
+                pass # On ignore le field
+            else:
+                if info:
+                    ans['fields'] += [info]
         return ans
 
     def start(self):

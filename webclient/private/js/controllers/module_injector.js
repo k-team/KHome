@@ -7,6 +7,7 @@ function ModuleInjectorCtrl($scope, ModuleService, $routeParams, $compile, $http
     ModuleService.module($scope.moduleName).then(function(module) {
       $scope.module = module;
       $scope.module.show = true;
+      console.log(module);
     });
   };
   loadModule();

@@ -9,8 +9,28 @@ import fields.persistant
 import fields.syntax
 
 class Weather(module.Base):
-    update_rate = 60
+    update_rate = 2
     public_name = 'Météo'
+
+    class _weather(
+            fields.io.Hidden,
+            fields.io.Readable,
+            fields.persistant.Volatile,
+            fields.Base):
+        def acquire_value(self):
+            try:
+                woeid = self.module.woeid()[1]
+                ans = weatherpy.Response('User-KHome', woeid, metric=True)
+                return {
+                        'temperature': ans.condition.temperature,
+                        'humidity': ans.atmosphere.humidity,
+                        'pressure': ans.atmosphere.pressure,
+                        'city': ans.location.city,
+                        'region': ans.location.region,
+                        'country': ans.location.country
+                }
+            except (IOError, TypeError):
+                return
 
     class woeid(fields.persistant.Volatile,
             fields.syntax.Numeric,
@@ -32,10 +52,8 @@ class Weather(module.Base):
 
         def acquire_value(self):
             try:
-                woeid = self.module.woeid()[1]
-                ans = weatherpy.Response('User-KHome', woeid, metric=True)
-                return ans.condition.temperature
-            except (IOError, TypeError):
+                return self.module._weather()[1]['temperature']
+            except TypeError:
                 return
 
     class humidity(
@@ -47,10 +65,8 @@ class Weather(module.Base):
 
         def acquire_value(self):
             try:
-                woeid = self.module.woeid()[1]
-                ans = weatherpy.Response('User-KHome', woeid, metric=True)
-                return ans.atmosphere.humidity
-            except (IOError, TypeError):
+                return self.module._weather()[1]['humidity']
+            except TypeError:
                 return
 
     class pressure(
@@ -62,10 +78,8 @@ class Weather(module.Base):
 
         def acquire_value(self):
             try:
-                woeid = self.module.woeid()[1]
-                ans = weatherpy.Response('User-KHome', woeid, metric=True)
-                return ans.atmosphere.pressure
-            except (IOError, TypeError):
+                return self.module._weather()[1]['pressure']
+            except TypeError:
                 return
 
     class city(
@@ -77,10 +91,8 @@ class Weather(module.Base):
 
         def acquire_value(self):
             try:
-                woeid = self.module.woeid()[1]
-                ans = weatherpy.Response('User-KHome', woeid, metric=True)
-                return ans.location.city
-            except (IOError, TypeError):
+                return self.module._weather()[1]['city']
+            except TypeError:
                 return
 
     class region(
@@ -92,10 +104,8 @@ class Weather(module.Base):
 
         def acquire_value(self):
             try:
-                woeid = self.module.woeid()[1]
-                ans = weatherpy.Response('User-KHome', woeid, metric=True)
-                return ans.location.region
-            except (IOError, TypeError):
+                return self.module._weather()[1]['region']
+            except TypeError:
                 return
 
     class country(
@@ -107,8 +117,6 @@ class Weather(module.Base):
 
         def acquire_value(self):
             try:
-                woeid = self.module.woeid()[1]
-                ans = weatherpy.Response('User-KHome', woeid, metric=True)
-                return ans.location.country
-            except (IOError, TypeError):
+                return self.module._weather()[1]['country']
+            except TypeError:
                 return

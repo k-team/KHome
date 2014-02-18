@@ -49,6 +49,7 @@ angular.module('GHome', ['ngRoute', 'ui.bootstrap', 'angularFileUpload', 'frapon
     ModuleService.module($scope.moduleName).then(function(module) {
       $scope.module = module;
       $scope.module.show = true;
+      console.log(module);
     });
   };
   loadModule();
