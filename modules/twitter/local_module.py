@@ -19,8 +19,8 @@ class Twitter(module.Base):
     class status(fields.io.Writable, fields.io.Readable,
             fields.syntax.String, fields.persistant.Volatile,
             fields.Base):
-        def set_value(self, value):
+        def write(self, value):
             if len(value) >= 128: # magic number FTW
                 return False
             twitter.statuses.update(status=value)
-            print 'tweet', value
+            return True
