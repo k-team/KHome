@@ -4,7 +4,7 @@ function ModuleInjectorCtrl($scope, ModuleService, $routeParams, $compile, $http
 
   // Load the current module
   var loadModule = function() {
-    return ModuleService.module($scope.moduleName).then(function(module) {
+    return ModuleService.moduleStatus($scope.moduleName).then(function(module) {
       $scope.module = module;
       $scope.$broadcast('module.statusUpdate', module);
       return module;
