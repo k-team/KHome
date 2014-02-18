@@ -226,7 +226,7 @@ function ModuleFieldCtrl($scope, ModuleService, $timeout) {
   };
 }
 ;function SupervisionCtrl($scope, ModuleService, $timeout, $rootScope) {
-  $scope.data = {};
+  $scope.data = null;
   $scope.maxData = 100;
 
   var pollModule = function(name, callback, delay) {
@@ -268,6 +268,9 @@ function ModuleFieldCtrl($scope, ModuleService, $timeout) {
 
             var fieldFullName = instance.name + '.' + field.name;
             // Empty data case
+            if (!$scope.data) {
+              $scope.data = {};
+            }
             if (!$scope.data[fieldFullName]) {
               $scope.data[fieldFullName] = [];
             }
@@ -291,7 +294,7 @@ function ModuleFieldCtrl($scope, ModuleService, $timeout) {
     // Stop polling when location is changed
     $rootScope.$on('$routeChangeSuccess', function () {
       poll.cancel();
-      $scope.data = {};
+      $scope.data = null;
     });
   });
 }
