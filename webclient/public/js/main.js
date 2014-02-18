@@ -200,8 +200,6 @@ function ModuleFieldCtrl($scope, ModuleService, $timeout) {
 
   $scope.modalInstances = {};
   $scope.openModal = function(module) {
-    console.log(module);
-    console.log('coucou');
     var modalScope = $scope.$new(true);
 
     // Dismiss the modal
@@ -446,7 +444,7 @@ function ModuleFieldCtrl($scope, ModuleService, $timeout) {
       console.error('Invalid value', oldValue);
     }
     var deferred = $q.defer();
-    httpPostJSON(storeUrl + '/rate', { name: module.id, value: value })
+    httpPostJSON(storeUrl + '/rate', { name: module.name, value: value })
       .success(function() { deferred.resolve(); })
       .error(function() { deferred.reject(); });
     return deferred.promise;
@@ -470,7 +468,7 @@ function ModuleFieldCtrl($scope, ModuleService, $timeout) {
   // ...from the catalog
   service.installFromCatalog = function(module) {
     var deferred = $q.defer();
-    httpPostJSON(modulesUrl + '/install', { name: module.id })
+    httpPostJSON(modulesUrl + '/install', { name: module.name })
       .success(function() { deferred.resolve(); })
       .error(function() { deferred.reject(); });
     return deferred.promise;
