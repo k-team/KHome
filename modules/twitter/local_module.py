@@ -3,6 +3,7 @@ from twitter import OAuth
 import module
 import fields
 import fields.io
+import fields.syntax
 import fields.persistant
 
 con_key = 'f5z6uqPM9N87KLJqYIZDg'
@@ -15,9 +16,11 @@ twitter = Twitter(auth=OAuth(acc_token, acc_token_secret,
 
 class Twitter(module.Base):
     public_name = 'Twitter'
-    class status(fields.io.Writable, fields.io.Readable,
+
+    class status(fields.io.Writable, fields.io.Readable, fields.syntax.String,
             fields.persistant.Volatile, fields.Base):
         def write(self, value):
             if len(value) >= 128: # magic number FTW
                 return False
             twitter.statuses.update(status=value)
+            return True
