@@ -1,4 +1,4 @@
-function MainCtrl($scope, ModuleService, HouseMapService) {
+function MainCtrl($scope, $location, ModuleService) {
   // All modules
   $scope.modules = [];
 
@@ -9,8 +9,10 @@ function MainCtrl($scope, ModuleService, HouseMapService) {
     });
   };
 
-  // Get the rooms (asynchronous)
-  HouseMapService.getRooms().then(function(rooms) {
-    $scope.rooms = rooms;
+  $scope.$watch('query', function() {
+    var path = $location.path();
+    if ($scope.query && path != '/store' && path != '/modules') {
+      $location.path('/modules');
+    }
   });
 }

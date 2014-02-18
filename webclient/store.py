@@ -56,7 +56,7 @@ def api_available_modules():
     available_modules = catalog.get_available_modules(detailed=True)
     for av in available_modules:
         try:
-            av['rating'] = Rating.average(av['id'])
+            av['rating'] = Rating.average(av[catalog.MODULE_NAME_ENTRY])
         except Rating.DoesNotExist:
             pass
     return jsonify(available_modules)

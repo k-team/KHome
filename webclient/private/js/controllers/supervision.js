@@ -1,26 +1,40 @@
-function SupervisionCtrl($scope, ModuleService) {
-  $scope.module = '';
+function SupervisionCtrl($scope, ModuleService, $timeout, $rootScope) {
   $scope.data = {};
   $scope.maxData = 10;
-  $scope.poll = null;
 
-  $scope.$watch('module', function() {
+  var pollModule = function(name, callback, delay) {
+    if (delay === undefined) { delay = 1000; }
+
+    var timeout = $timeout(function pollFn() {
+      callback(ModuleService.moduleStatus(name));
+      timeout = $timeout(pollFn, delay);
+    }, delay);
+
+    return {
+      cancel: function() {
+        $timeout.cancel(timeout);
+      }
+    };
+  };
+
+  var poll = null;
+  $scope.$watch('moduleName', function() {
     // Cancel the previous poll
-    if ($scope.poll) {
-      $scope.poll.cancel();
+    if (poll) {
+      poll.cancel();
       $scope.data = {};
     }
 
     // Do nothing if the module isn't set
-    if (!$scope.module) { return; }
+    if (!$scope.moduleName) { return; }
 
     // Poll the current supervised module for its status
-    $scope.poll = ModuleService.pollInstances($scope.module, function(promise) {
-      promise.success(function(data) {
+    poll = pollModule($scope.moduleName, function(promise) {
+      promise.then(function(data) {
+        data = [data];
         angular.forEach(data, function(instance) {
-          var instanceName = instance.name;
-          angular.forEach(instance.attrs, function(data, attr) {
-            var attrName = instanceName + '.' + attr
+          angular.forEach(instance.fields, function(data, field) {
+            var attrName = instance.name + '.' + field;
             // Empty data case
             if (!$scope.data[attrName]) {
               $scope.data[attrName] = [];
@@ -28,21 +42,20 @@ function SupervisionCtrl($scope, ModuleService) {
 
             // Push new data
             var attrData = $scope.data[attrName];
-            attrData.push([instance.time, data]);
+            attrData.push([data.time, data.value]);
             if ($scope.maxData < attrData.length) {
               attrData.splice(0, attrData.length - $scope.maxData);
             }
           });
         });
-      }).error(function() {
+      }, function() {
         // TODO
       });
     });
 
     // Stop polling when location is changed
-    $scope.$on('$routeChangeSuccess', function () {
-      $scope.poll.cancel();
-      $scope.module = '';
+    $rootScope.$on('$routeChangeSuccess', function () {
+      poll.cancel();
       $scope.data = {};
       $scope.graphData = [];
     });

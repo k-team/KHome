@@ -1,35 +1,39 @@
 function ModuleInjectorCtrl($scope, ModuleService, $routeParams, $compile, $http, $timeout) {
-  var moduleName = $routeParams.moduleName;
   $scope.module = undefined;
+  $scope.moduleName = $routeParams.moduleName;
 
   // Load the current module
   var loadModule = function() {
-    ModuleService.module(moduleName).then(function(module) {
+    ModuleService.module($scope.moduleName).then(function(module) {
       $scope.module = module;
       $scope.module.show = true;
     });
   };
   loadModule();
 
+  // Poll the current module for its status
   var pollModule = function() {
-    var update_rate = 1000;
-    if($scope.module)
-      update_rate = $scope.module.update_rate * 1000;
-
-    $timeout(function() {
+    var updateRate = 1, poll = $timeout(function() {
       loadModule();
-      pollModule();
-    }, update_rate);
+      if ($scope.module) {
+        updateRate = $scope.module.updateRate;
+      }
+      poll = $timeout(poll, 1000*updateRate);
+    }, 1000*updateRate);
+
+    $scope.$on('$routeChangeSuccess', function () {
+      $timeout.cancel(poll);
+    });
   };
   pollModule();
 
   // Load the angular-like html to be injected
-  $http.get('/api/modules/' + moduleName + '/public/partial.html').then(function(result) {
+  $http.get('/api/modules/' + $scope.moduleName + '/public/partial.html').then(function(result) {
     $('#inject').html($compile(result.data)($scope));
   });
 
   // Load the angular-like html to be injected
-  $http.get('/api/modules/' + moduleName + '/public/independant.html').then(function(result) {
+  $http.get('/api/modules/' + $scope.moduleName + '/public/independant.html').then(function(result) {
     $('#inject-independant').html($compile(result.data)($scope));
   });
 }
@@ -41,10 +45,13 @@ function ModuleFieldCtrl($scope, ModuleService, $timeout) {
     var field = $scope.field;
     field.state = 'waiting';
     setTimeout(function() {
-      var fade = function()  { console.log('fade'); $timeout(function() { field.state = ''; }, 2000); };
+      // Fade out field state
+      var fade = function()  {
+        $timeout(function() { field.state = ''; }, 2000);
+      };
+
       ModuleService.updateField($scope.module, field, field.value).then(function(data) {
-        console.log(data);
-        if(data['success']) {
+        if (data.success) {
           field.state = 'success';
         } else {
           field.state = 'error';

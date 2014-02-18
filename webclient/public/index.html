@@ -2,14 +2,11 @@
 <html data-ng-app="GHome" lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>GHome &ndash; KTeam</title>
+    <title>KHome &ndash; KTeam</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!--Themes-->
     <link rel="stylesheet" href="/css/bootstrap-custom.min.css" />
-
-    <!-- Bootstrap switch -->
-    <link rel="stylesheet" href="/css/bootstrap-switch.min.css" />
 
     <!--App CSS-->
     <link rel="stylesheet" href="/css/main.css" />
@@ -20,7 +17,7 @@
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <!--Navigation header-->
       <div class="navbar-header">
-        <a class="navbar-brand" href="#/home" title="GHome start page">GHome</a>
+        <a class="navbar-brand" href="#/home" title="KHome start page">KHome</a>
 
         <!--Responsive navigation links-->
         <span class="visible-xs navbar-text">
@@ -34,35 +31,44 @@
       </div>
 
       <!--Default navigation-->
-      <ul class="hidden-xs nav navbar-nav">
-        <li>
-          <a href="#/modules" title="Modules">
-            Modules
-            &nbsp;
-            <span class="glyphicon glyphicon-th"></span>
-          </a>
-        </li>
-        <li>
-          <a href="#/store" title="Store">
-            Store
-            &nbsp;
-            <span class="glyphicon glyphicon-shopping-cart"></span>
-          </a>
-        </li>
-      </ul>
+      <div class="hidden-xs">
+        <ul class="nav navbar-nav">
+          <li>
+            <a href="#/modules" title="Modules">
+              Modules
+              &nbsp;
+              <span class="glyphicon glyphicon-th"></span>
+            </a>
+          </li>
+          <li>
+            <a href="#/store" title="Store">
+              Store
+              &nbsp;
+              <span class="glyphicon glyphicon-shopping-cart"></span>
+            </a>
+          </li>
+        </ul>
+        <form class="navbar-form" role="search">
+          <div class="form-group">
+            <input data-ng-model="query" class="form-control" type="text" placeholder="Search">
+          </div>
+        </form>
+      </div>
     </nav>
-
-    <span id="inject-independant"></span>
-
     <!--Main view-->
-    <div class="container" data-ng-controller="MainCtrl">
-      <div data-ng-view></div>
+    <div data-ng-controller="MainCtrl">
+      <ng-view></ng-view>
     </div>
 
     <!--JQuery and Bootstrap-->
     <script src="/js/vendor/jquery.min.js"></script>
     <script src="/js/vendor/bootstrap.min.js"></script>
     <script src="/js/vendor/bootstrap-switch.min.js"></script>
+
+    <!--Flot-->
+    <script src="/js/vendor/jquery.flot.min.js"></script>
+    <script src="/js/vendor/jquery.flot.time.min.js"></script>
+    <script src="/js/vendor/jquery.flot.resize.js"></script>
 
     <!--AngularJS file uploads-->
     <script src="/js/vendor/angular-file-upload-shim.min.js"></script>
@@ -72,11 +78,6 @@
     <script src="/js/vendor/angular-file-upload.min.js"></script>
     <script src="/js/vendor/angular-route.min.js"></script>
     <script src="/js/vendor/angular-animate.min.js"></script>
-
-    <!--Flot-->
-    <script src="/js/vendor/jquery.flot.min.js"></script>
-    <script src="/js/vendor/jquery.flot.time.min.js"></script>
-    <script src="/js/vendor/jquery.flot.resize.js"></script>
 
     <!--App-->
     <script src="/js/main.js"></script>

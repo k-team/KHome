@@ -22,7 +22,7 @@ angular.module('GHome', ['ngRoute', 'ngAnimate', 'ui.bootstrap', 'angularFileUpl
       redirectTo: '/home'
     });
   });
-;function MainCtrl($scope, ModuleService, HouseMapService) {
+;function MainCtrl($scope, $location, ModuleService) {
   // All modules
   $scope.modules = [];
 
@@ -33,43 +33,49 @@ angular.module('GHome', ['ngRoute', 'ngAnimate', 'ui.bootstrap', 'angularFileUpl
     });
   };
 
-  // Get the rooms (asynchronous)
-  HouseMapService.getRooms().then(function(rooms) {
-    $scope.rooms = rooms;
+  $scope.$watch('query', function() {
+    var path = $location.path();
+    if ($scope.query && path != '/store' && path != '/modules') {
+      $location.path('/modules');
+    }
   });
 }
 ;function ModuleInjectorCtrl($scope, ModuleService, $routeParams, $compile, $http, $timeout) {
-  var moduleName = $routeParams.moduleName;
   $scope.module = undefined;
+  $scope.moduleName = $routeParams.moduleName;
 
   // Load the current module
   var loadModule = function() {
-    ModuleService.module(moduleName).then(function(module) {
+    ModuleService.module($scope.moduleName).then(function(module) {
       $scope.module = module;
       $scope.module.show = true;
     });
   };
   loadModule();
 
+  // Poll the current module for its status
   var pollModule = function() {
-    var update_rate = 1000;
-    if($scope.module)
-      update_rate = $scope.module.update_rate * 1000;
-
-    $timeout(function() {
+    var updateRate = 1, poll = $timeout(function() {
       loadModule();
-      pollModule();
-    }, update_rate);
+      if ($scope.module) {
+        updateRate = $scope.module.updateRate;
+      }
+      poll = $timeout(poll, 1000*updateRate);
+    }, 1000*updateRate);
+
+    $scope.$on('$routeChangeSuccess', function () {
+      $timeout.cancel(poll);
+    });
   };
   pollModule();
 
   // Load the angular-like html to be injected
-  $http.get('/api/modules/' + moduleName + '/public/partial.html').then(function(result) {
+  $http.get('/api/modules/' + $scope.moduleName + '/public/partial.html').then(function(result) {
     $('#inject').html($compile(result.data)($scope));
   });
 
   // Load the angular-like html to be injected
-  $http.get('/api/modules/' + moduleName + '/public/independant.html').then(function(result) {
+  $http.get('/api/modules/' + $scope.moduleName + '/public/independant.html').then(function(result) {
     $('#inject-independant').html($compile(result.data)($scope));
   });
 }
@@ -81,10 +87,13 @@ function ModuleFieldCtrl($scope, ModuleService, $timeout) {
     var field = $scope.field;
     field.state = 'waiting';
     setTimeout(function() {
-      var fade = function()  { console.log('fade'); $timeout(function() { field.state = ''; }, 2000); };
+      // Fade out field state
+      var fade = function()  {
+        $timeout(function() { field.state = ''; }, 2000);
+      };
+
       ModuleService.updateField($scope.module, field, field.value).then(function(data) {
-        console.log(data);
-        if(data['success']) {
+        if (data.success) {
           field.state = 'success';
         } else {
           field.state = 'error';
@@ -103,12 +112,13 @@ function ModuleFieldCtrl($scope, ModuleService, $timeout) {
 
   // Uninstall a module
   $scope.uninstall = function(module) {
+    //ModuleService.uninstall(module);
     console.log('uninstalling', module);
   };
 
   // Navigate to module view, either its specific view or configuration
   $scope.navigate = function(module) {
-    $location.path('/modules/' + module.id);
+    $location.path('/modules/' + module.name);
   };
 }
 ;function RatingCtrl($scope, ModuleService) {
@@ -123,36 +133,6 @@ function ModuleFieldCtrl($scope, ModuleService, $timeout) {
       $scope.isRating = false;
     });
   };
-}
-;function RoomsCtrl($scope) {
-  // Minimal bbox af all rooms
-  $scope.box = {};
-
-  // Comma-separated representation for points (x1,y1 x2,y2 x3,y3 etc...), used
-  // for svg rendering.
-  $scope.points = function(room) {
-    var pointsRepr = '';
-    angular.forEach(room.polygon, function(point, i) {
-      // Update the points representation
-      pointsRepr += point.x + ',' + point.y;
-      if (i < room.polygon.length - 1) {
-        pointsRepr += ' ';
-      }
-    });
-    return pointsRepr;
-  };
-
-  // Watch expression on rooms in order to update the bbox accordingly
-  $scope.$watch('rooms', function() {
-    angular.forEach($scope.rooms, function(room) {
-      angular.forEach(room.polygon, function(point) {
-        if      ($scope.box.minX === undefined || point.x < $scope.box.minX) { $scope.box.minX = point.x; }
-        else if ($scope.box.maxX === undefined || point.x > $scope.box.maxX) { $scope.box.maxX = point.x; }
-        if      ($scope.box.minY === undefined || point.y < $scope.box.minY) { $scope.box.minY = point.y; }
-        else if ($scope.box.maxY === undefined || point.y > $scope.box.maxY) { $scope.box.maxY = point.y; }
-      });
-    });
-  });
 }
 ;function SettingsCtrl($scope, $location) {
   $scope.reloadModules();
@@ -214,6 +194,8 @@ function ModuleFieldCtrl($scope, ModuleService, $timeout) {
 
   $scope.modalInstances = {};
   $scope.openModal = function(module) {
+    console.log(module);
+    console.log('coucou');
     var modalScope = $scope.$new(true);
 
     // Dismiss the modal
@@ -237,29 +219,43 @@ function ModuleFieldCtrl($scope, ModuleService, $timeout) {
     });
   };
 }
-;function SupervisionCtrl($scope, ModuleService) {
-  $scope.module = '';
+;function SupervisionCtrl($scope, ModuleService, $timeout, $rootScope) {
   $scope.data = {};
   $scope.maxData = 10;
-  $scope.poll = null;
 
-  $scope.$watch('module', function() {
+  var pollModule = function(name, callback, delay) {
+    if (delay === undefined) { delay = 1000; }
+
+    var timeout = $timeout(function pollFn() {
+      callback(ModuleService.moduleStatus(name));
+      timeout = $timeout(pollFn, delay);
+    }, delay);
+
+    return {
+      cancel: function() {
+        $timeout.cancel(timeout);
+      }
+    };
+  };
+
+  var poll = null;
+  $scope.$watch('moduleName', function() {
     // Cancel the previous poll
-    if ($scope.poll) {
-      $scope.poll.cancel();
+    if (poll) {
+      poll.cancel();
       $scope.data = {};
     }
 
     // Do nothing if the module isn't set
-    if (!$scope.module) { return; }
+    if (!$scope.moduleName) { return; }
 
     // Poll the current supervised module for its status
-    $scope.poll = ModuleService.pollInstances($scope.module, function(promise) {
-      promise.success(function(data) {
+    poll = pollModule($scope.moduleName, function(promise) {
+      promise.then(function(data) {
+        data = [data];
         angular.forEach(data, function(instance) {
-          var instanceName = instance.name;
-          angular.forEach(instance.attrs, function(data, attr) {
-            var attrName = instanceName + '.' + attr
+          angular.forEach(instance.fields, function(data, field) {
+            var attrName = instance.name + '.' + field;
             // Empty data case
             if (!$scope.data[attrName]) {
               $scope.data[attrName] = [];
@@ -267,21 +263,20 @@ function ModuleFieldCtrl($scope, ModuleService, $timeout) {
 
             // Push new data
             var attrData = $scope.data[attrName];
-            attrData.push([instance.time, data]);
+            attrData.push([data.time, data.value]);
             if ($scope.maxData < attrData.length) {
               attrData.splice(0, attrData.length - $scope.maxData);
             }
           });
         });
-      }).error(function() {
+      }, function() {
         // TODO
       });
     });
 
     // Stop polling when location is changed
-    $scope.$on('$routeChangeSuccess', function () {
-      $scope.poll.cancel();
-      $scope.module = '';
+    $rootScope.$on('$routeChangeSuccess', function () {
+      poll.cancel();
       $scope.data = {};
       $scope.graphData = [];
     });
@@ -313,6 +308,7 @@ function ModuleFieldCtrl($scope, ModuleService, $timeout) {
 
       // Actual plotting based on the graph data model
       $scope.$watch(attrs.graphModel, function(data) {
+        console.log('replotting', data);
         var plottedData = [];
         if (data instanceof Array) {
           plottedData = data;
@@ -333,7 +329,7 @@ function ModuleFieldCtrl($scope, ModuleService, $timeout) {
       }, true);
     }
   };
-  });
+});
 ;angular.module('GHome').directive('customInput', function() {
   return {
     restrict: 'EA',
@@ -405,21 +401,8 @@ function ModuleFieldCtrl($scope, ModuleService, $timeout) {
     }
   };
 });
-;angular.module('GHome').factory('HouseMapService', function($q, $timeout, $http) {
-  var service = {};
-
-  // Replace with an AJAX call
-  service.getRooms = function() {
-    var deferred = $q.defer();
-    $http.get('/api/rooms').success(function(rooms) {
-      deferred.resolve(rooms);
-    });
-    return deferred.promise;
-  };
-  return service;
-});
 ;angular.module('GHome').factory('ModuleService', function($q, $http, $timeout, $upload) {
-  var service = { defaultPollingDelay: 1000 },
+  var service = {},
     modulesUrl = '/api/modules',
     storeUrl = '/api/available_modules';
 
@@ -435,13 +418,20 @@ function ModuleFieldCtrl($scope, ModuleService, $timeout) {
     });
   };
 
-  service.module = function(name) {
+  var httpGetJSON = function(url) {
     var deferred = $q.defer();
-    $http.get(modulesUrl + '/' + name + '/instances/status').success(function(data) {
-      console.log(data);
-      deferred.resolve(data);
-    });
+    $http.get(url)
+      .success(function(data) { deferred.resolve(data); })
+      .error(function() { deferred.reject(); });
     return deferred.promise;
+  };
+
+  service.module = function(name) {
+    return httpGetJSON(modulesUrl + '/' + name);
+  };
+
+  service.moduleStatus = function(name) {
+    return httpGetJSON(modulesUrl + '/' + name + '/instances/status');
   };
 
   service.updateField = function(module, field, value) {
@@ -459,7 +449,7 @@ function ModuleFieldCtrl($scope, ModuleService, $timeout) {
       $http.get(url).success(function(data) {
         cachedModules = data;
         deferred.resolve(data);
-      }); // TODO handle errors
+      }).error(function() { deferred.reject(); });
     } else {
       deferred.resolve(cachedModules);
     }
@@ -490,26 +480,6 @@ function ModuleFieldCtrl($scope, ModuleService, $timeout) {
   service.installedModules = [];
   service.installed = function(forceReload) {
     return getModules(modulesUrl, this.installedModules, forceReload);
-  };
-
-  // Poll all module instances for their statuses, passing in the module's name
-  // and a callback which should be applied on a $http promise object.
-  // Optionally, pass in the delay to override the service's default polling
-  // delay.
-  // FIXME
-  service.pollInstances = function(name, callback, delay) {
-    if (delay === undefined) { delay = service.defaultPollingDelay; }
-
-    var timeout = $timeout(function pollFn() {
-      callback($http.get(modulesUrl + '/' + name + '/instances/status'));
-      timeout = $timeout(pollFn, delay);
-    }, delay);
-
-    return {
-      cancel: function() {
-        $timeout.cancel(timeout);
-      }
-    };
   };
 
   // Install a module, passing in the uploaded file object (see $upload for

@@ -150,23 +150,17 @@ if __name__ == '__main__':
 # used for samples
 import random
 
-def temperature_statuses():
-    r = lambda: int(random.random()*40)
-    return [ { 'name': 'i1', 'attrs': { 'temperature': { 'time': time.time(), 'value': r() } } },
-             { 'name': 'i2', 'attrs': { 'temperature': { 'time': time.time(), 'value': r() } } },
-             { 'name': 'i3', 'attrs': { 'temperature': { 'time': time.time(), 'value': r() } } }, ]
-
 @app.route('/api/modules/<module_name>/instances/status')
 def api_module_instances_statuses(module_name):
-    # return jsonify(temperature_statuses())
-
     # TODO add support for multiple instances
     if not packaging.is_installed(module_name):
+        print '%s not installed' % module_name
         abort(404)
     try:
         mod = use_module(module_name)
     except RuntimeError as e:
         app.logger.exception(e)
+        abort(404)
     else:
         print [f for f in mod.info['fields'] if 'readable' if f and f['readable']]
         fields = {}
@@ -177,6 +171,7 @@ def api_module_instances_statuses(module_name):
             if value is None:
                 continue
             f.update(dict(zip(('time', 'value'), value)))
+        print mod.info
         return jsonify(mod.info)
 
 if __name__ == '__main__':

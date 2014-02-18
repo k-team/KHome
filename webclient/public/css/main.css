@@ -11,6 +11,9 @@ body {
     font-size: 16pt;
   }
 }
+.container {
+  padding-top: 25px;
+}
 [ng\:cloak],
 [ng-cloak],
 .ng-cloak {

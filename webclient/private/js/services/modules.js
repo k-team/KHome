@@ -1,5 +1,5 @@
 angular.module('GHome').factory('ModuleService', function($q, $http, $timeout, $upload) {
-  var service = { defaultPollingDelay: 1000 },
+  var service = {},
     modulesUrl = '/api/modules',
     storeUrl = '/api/available_modules';
 
@@ -15,13 +15,20 @@ angular.module('GHome').factory('ModuleService', function($q, $http, $timeout, $
     });
   };
 
-  service.module = function(name) {
+  var httpGetJSON = function(url) {
     var deferred = $q.defer();
-    $http.get(modulesUrl + '/' + name + '/instances/status').success(function(data) {
-      console.log(data);
-      deferred.resolve(data);
-    });
+    $http.get(url)
+      .success(function(data) { deferred.resolve(data); })
+      .error(function() { deferred.reject(); });
     return deferred.promise;
+  };
+
+  service.module = function(name) {
+    return httpGetJSON(modulesUrl + '/' + name);
+  };
+
+  service.moduleStatus = function(name) {
+    return httpGetJSON(modulesUrl + '/' + name + '/instances/status');
   };
 
   service.updateField = function(module, field, value) {
@@ -39,7 +46,7 @@ angular.module('GHome').factory('ModuleService', function($q, $http, $timeout, $
       $http.get(url).success(function(data) {
         cachedModules = data;
         deferred.resolve(data);
-      }); // TODO handle errors
+      }).error(function() { deferred.reject(); });
     } else {
       deferred.resolve(cachedModules);
     }
@@ -70,26 +77,6 @@ angular.module('GHome').factory('ModuleService', function($q, $http, $timeout, $
   service.installedModules = [];
   service.installed = function(forceReload) {
     return getModules(modulesUrl, this.installedModules, forceReload);
-  };
-
-  // Poll all module instances for their statuses, passing in the module's name
-  // and a callback which should be applied on a $http promise object.
-  // Optionally, pass in the delay to override the service's default polling
-  // delay.
-  // FIXME
-  service.pollInstances = function(name, callback, delay) {
-    if (delay === undefined) { delay = service.defaultPollingDelay; }
-
-    var timeout = $timeout(function pollFn() {
-      callback($http.get(modulesUrl + '/' + name + '/instances/status'));
-      timeout = $timeout(pollFn, delay);
-    }, delay);
-
-    return {
-      cancel: function() {
-        $timeout.cancel(timeout);
-      }
-    };
   };
 
   // Install a module, passing in the uploaded file object (see $upload for
