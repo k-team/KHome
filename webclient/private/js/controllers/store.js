@@ -51,6 +51,8 @@ function StoreCtrl($scope, $modal, ModuleService) {
 
   $scope.modalInstances = {};
   $scope.openModal = function(module) {
+    console.log(module);
+    console.log('coucou');
     var modalScope = $scope.$new(true);
 
     // Dismiss the modal

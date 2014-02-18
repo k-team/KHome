@@ -194,6 +194,8 @@ function ModuleFieldCtrl($scope, ModuleService, $timeout) {
 
   $scope.modalInstances = {};
   $scope.openModal = function(module) {
+    console.log(module);
+    console.log('coucou');
     var modalScope = $scope.$new(true);
 
     // Dismiss the modal

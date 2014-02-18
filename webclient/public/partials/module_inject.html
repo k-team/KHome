@@ -30,9 +30,9 @@
                     <span class="glyphicon glyphicon-time"></span>
                   </span>
                 </div>
-                <input data-ng-model="field.value" data-ng-show="field.type=='string'" name="field-{{field.name}}" type="text" class="form-control" value="{{field.value}}" placeholder="{{field.name}}" />
-                <input data-ng-model="field.value" data-ng-show="field.type=='numeric'" name="field-{{field.name}}" type="number" class="form-control" placeholder="{{field.name}}" />
-                <input data-ng-model="field.value" data-ng-show="field.type=='boolean'" name="field-{{field.name}}" type="checkbox" class="form-control" value="{{field.value}}" />
+                <input data-ng-model="field.value" name="field-{{field.name}}"
+                    type="{'string': 'text', 'numeric': 'number', 'boolean': 'checkbox'}[field.type]"
+                    class="form-control" placeholder="{{field.name}}" />
                 <span data-ng-show="field.writable" class="input-group-btn">
                   <button type="submit" class="btn btn-default">
                     <span class="glyphicon glyphicon-share-alt"></span>

@@ -60,7 +60,10 @@
         <div class="modal-body">
           <carousel data-ng-show="module.slides" data-interval="5000">
             <slide data-ng-repeat="slide in module.slides" active="slide.active">
-              <img data-ng-src="{{slide.image}}" style="margin:auto;">
+              <img data-ng-src="/api/available_modules/{{module.name}}/public/{{slide.image}}" style="margin:auto;">
+              <div class="carousel-caption">
+                <p>{{slide.text}}</p>
+              </div>
             </slide>
           </carousel>
 
