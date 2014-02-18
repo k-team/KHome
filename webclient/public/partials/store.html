@@ -58,14 +58,17 @@
           </span>
         </div>
         <div class="modal-body">
-          <carousel data-ng-show="module.slides" data-interval="5000">
-            <slide data-ng-repeat="slide in module.slides" active="slide.active">
-              <img data-ng-src="/api/available_modules/{{module.name}}/public/{{slide.image}}" style="margin:auto;">
-              <div class="carousel-caption">
-                <p>{{slide.text}}</p>
-              </div>
-            </slide>
-          </carousel>
+          <div data-ng-show="module.slides">
+            <carousel data-interval="5000">
+              <slide data-ng-repeat="slide in module.slides" active="slide.active">
+                <img data-ng-src="/api/available_modules/{{module.name}}/public/{{slide.image}}" style="margin:auto;">
+                <div class="carousel-caption">
+                  <p>{{slide.text}}</p>
+                </div>
+              </slide>
+            </carousel>
+            <hr />
+          </div>
 
           {{ module.description }}
         </div>
