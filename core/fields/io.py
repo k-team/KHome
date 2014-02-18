@@ -46,3 +46,7 @@ class Graphable(Readable):
         a = super(Graphable, self).get_info()
         a['graphable'] = True
         return a
+
+class Hidden(object):
+    def get_info(self):
+        return None
