@@ -24,13 +24,19 @@ a[ng-click]:hover,
 a.ng-click:hover {
   cursor: pointer;
 }
+a:hover {
+  text-decoration: none;
+}
+.module-thumbnail .thumbnail {
+  border: none;
+}
 .module-thumbnail .thumbnail .vertical-middle {
   padding-left: 17px;
   padding-right: 0px;
 }
 .module-thumbnail .thumbnail:hover {
   cursor: pointer;
-  background-color: #f8f8f8;
+  background-color: #f6f6f6;
 }
 .vertical-middle {
   display: inline-block;
