@@ -1,0 +1,83 @@
+<div class="container">
+  <div class="content">
+    <div data-ng-show="availableModules" class="row">
+      <div data-ng-repeat="module in availableModules | filter:query" class="module-thumbnail col-xs-12 col-sm-4 col-md-3">
+        <div data-ng-click="openModal(module)" class="hidden-xs thumbnail">
+          <img alt="Icon for module {{ module.name }}" title="{{ module.public_name }}"
+            data-ng-src="/api/available_modules/{{ module.name }}/public/icon.png"
+            onerror="this.onerror = null; this.src = '/img/module.png'">
+          <h4>{{ (module.public_name) ? (module.public_name | truncate:20) : (module.name | truncate:20) }}</h4>
+          <div class="visible-sm">
+            <p><small>{{ module.description | truncate:110 }}</small></p>
+          </div>
+          <div class="visible-md visible-lg">
+            <p><small>{{ module.description | truncate:135 }}</small></p>
+          </div>
+          <div class="row">
+            <div class="col-md-7 col-sm-6">
+              <rating value="module.rating" max="5" readonly="true"></rating>
+            </div>
+            <div class="col-md-5 col-sm-6">
+              <p data-ng-hide="module.installed" class="text-danger"><small>Not installed</small></p>
+              <p data-ng-show="module.installed" class="text-success"><small>Installed</small></p>
+            </div>
+          </div>
+        </div>
+        <div data-ng-click="openModal(module)" class="visible-xs thumbnail">
+          <div class="row">
+            <div class="col-xs-3 vertical-middle center-block">
+                <img class="img-responsive" alt="Icon for module {{ module.name }}" title="{{ module.public_name }}"
+                  data-ng-src="/api/available_modules/{{ module.name }}/public/icon.png"
+                  onerror="this.onerror = null; this.src = '/img/module.png'">
+            </div>
+            <div class="col-xs-8 vertical-middle">
+              <h4>{{ (module.public_name) ? (module.public_name | truncate:20) : (module.name | truncate:20) }}</h4>
+              <p><small>{{ module.description | truncate:65 }}</small></p>
+              <div class="row">
+                <div class="col-xs-6">
+                  <rating value="module.rating" max="5" readonly="true"></rating>
+                </div>
+                <div class="col-xs-6">
+                  <p data-ng-hide="module.installed" class="text-danger"><small>Not installed</small></p>
+                  <p data-ng-show="module.installed" class="text-success"><small>Installed</small></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!--Modal for small devices-->
+      <script type="text/ng-template" id="modal.html">
+        <div class="modal-header">
+          <a data-ng-click="dismiss()" type="button" class="close">&times;</a>
+          <span class="h4 modal-title">{{ (module.public_name) ? module.public_name : module.name }}</span>
+          &nbsp;
+          <span data-ng-controller="RatingCtrl">
+            <rating value="module.rating" max="5" data-ng-click="rate()" on-leave="overStar = null"></rating>
+          </span>
+        </div>
+        <div class="modal-body">
+          <div data-ng-show="module.slides">
+            <carousel data-interval="5000">
+              <slide data-ng-repeat="slide in module.slides" active="slide.active">
+                <img data-ng-src="/api/available_modules/{{module.name}}/public/{{slide.image}}" style="margin:auto;">
+                <div class="carousel-caption">
+                  <p>{{slide.text}}</p>
+                </div>
+              </slide>
+            </carousel>
+            <hr />
+          </div>
+
+          {{ module.description }}
+        </div>
+        <div class="modal-footer">
+          <a data-ng-click="install()" data-ng-hide="module.installed" class="btn btn-primary" role="button">Install</a>
+          <a data-ng-click="uninstall()" data-ng-show="module.installed" class="btn btn-danger" role="button">Uninstall</a>
+          <a data-ng-click="dismiss()" class="btn btn-default" role="button">Close</a>
+        </div>
+      </script>
+    </div>
+  </div>
+</div>

@@ -50,4 +50,3 @@ class Volatile(object):
                 self._persisted_volatile_values = \
                         self._persisted_volatile_values[1:]
         return True
-

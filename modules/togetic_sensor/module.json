@@ -1,0 +1,11 @@
+{
+  "start":"/home/turpif/Projet/Togetic/SerialSensor.py --input /dev/ttyACM0 --output /tmp/togetic-0",
+  "name": "togetic_sensor",
+  "public_name": "Togetic-Capteur",
+  "slides": [
+    {"image": "screen-1.png", "text": "Petite ballade"},
+    {"image": "screen-2.png", "text": "Beau paysage"},
+    {"image": "screen-3.png", "text": "Soleil couchant"},
+    {"image": "screen-4.png", "text": "Plein de champignons"}],
+  "description": "Ce module d'acquisition de données permet de communiquer avec un capteur de type central inertielle. Accéléromètre, gyroscope et magnétomètre sont à votre portée pour repousser les limites de l'imaginable."
+}

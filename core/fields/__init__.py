@@ -19,14 +19,27 @@ class FieldMeta(type):
 class Base(threading.Thread):
     __metaclass__ = FieldMeta
 
-    update_rate = 1
+    public_name = ''
 
     def __init__(self):
         super(Base, self).__init__()
         self.old_time = 0
         self.running = False
 
-    def _acquire_value(self):
+    def get_info(self):
+        """
+        Return a dictionnary containing all informations about
+        the field. Mixins can (and has to) overload this function
+        to add more information
+        """
+        return {'name': self.field_name,
+                'public_name': type(self).public_name}
+
+    def emit_value(self, value):
+        if value is not None:
+            self._set_value(time.time(), value)
+
+    def acquire_value(self):
         """
         Function called during a data acquisition.
         This method is automatically called at every loop's turns of the
@@ -54,10 +67,16 @@ class Base(threading.Thread):
     def _get_value_from_to(self, fr, to):
         return []
 
-    def _close(self):
+    def close(self):
         """
         Method close when the thread is finishing.
         Let the mixins override this to garantee a good shutting of the field.
+        """
+        pass
+
+    def always(self):
+        """
+        Function executed by the field at each loop turn.
         """
         pass
 
@@ -88,8 +107,16 @@ class Base(threading.Thread):
         add this one.
         """
         while self.running:
-            if time.time() - self.old_time >= type(self).update_rate:
+            if time.time() - self.old_time >= self.module.update_rate:
                 self.old_time = time.time()
-                self._set_value(time.time(), self._acquire_value())
+                self.emit_value(self.acquire_value())
+            self.always()
             time.sleep(0.1)
-        self._close()
+        self.close()
+
+    def on_kill(self):
+        """
+        Method called when the module is killed. Let the field to
+        stop properly.
+        """
+        pass

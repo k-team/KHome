@@ -1,0 +1,42 @@
+html {
+  height: 100%;
+}
+body {
+  padding-top: 50px;
+  height: 100%;
+}
+@media (max-width: 480px) {
+  h1,
+  .h1 {
+    font-size: 16pt;
+  }
+}
+.container {
+  padding-top: 25px;
+}
+[ng\:cloak],
+[ng-cloak],
+.ng-cloak {
+  display: none;
+}
+a[ng\:click]:hover,
+a[ng-click]:hover,
+a.ng-click:hover {
+  cursor: pointer;
+}
+.module-thumbnail .thumbnail .vertical-middle {
+  padding-left: 17px;
+  padding-right: 0px;
+}
+.module-thumbnail .thumbnail:hover {
+  cursor: pointer;
+  background-color: #f8f8f8;
+}
+.vertical-middle {
+  display: inline-block;
+  vertical-align: middle;
+  float: none;
+}
+.navbar {
+  border-radius: initial;
+}

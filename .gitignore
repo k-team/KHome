@@ -41,3 +41,5 @@ nosetests.xml
 # Java
 *.java
 *.javac
+*.pid
+*.log

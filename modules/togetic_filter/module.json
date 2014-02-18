@@ -1,0 +1,11 @@
+{
+  "start":"/home/turpif/Projet/Togetic/Filter.py --input /tmp/togetic-0 --output /tmp/togetic-1",
+  "name": "togetic_filter",
+  "public_name": "Togetic-Filtre",
+  "slides": [
+    {"image": "screen-1.png", "text": "Petite ballade"},
+    {"image": "screen-2.png", "text": "Beau paysage"},
+    {"image": "screen-3.png", "text": "Soleil couchant"},
+    {"image": "screen-4.png", "text": "Plein de champignons"}],
+  "description": "Ce filtre permet de traiter les données bruts venant d'une centrale inertielle. Un filtre de Kalman statique avec pondération et fusion des capteurs transformerons les données bruts en données facilement utilisables par la suite."
+}
