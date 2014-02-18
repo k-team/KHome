@@ -221,7 +221,7 @@ function ModuleFieldCtrl($scope, ModuleService, $timeout) {
 }
 ;function SupervisionCtrl($scope, ModuleService, $timeout, $rootScope) {
   $scope.data = {};
-  $scope.maxData = 10;
+  $scope.maxData = 100;
 
   var pollModule = function(name, callback, delay) {
     if (delay === undefined) { delay = 1000; }
@@ -254,20 +254,28 @@ function ModuleFieldCtrl($scope, ModuleService, $timeout) {
       promise.then(function(data) {
         data = [data];
         angular.forEach(data, function(instance) {
-          angular.forEach(instance.fields, function(data, field) {
-            var attrName = instance.name + '.' + field;
+          for (var i = 0; i < instance.fields.length; i++) {
+            var field = instance.fields[i];
+
+            // Check if field is ok
+            if (!field.readable || field.type != 'numeric' || field.constant) { return; }
+
+            var fieldFullName = instance.name + '.' + field.name;
             // Empty data case
-            if (!$scope.data[attrName]) {
-              $scope.data[attrName] = [];
+            if (!$scope.data[fieldFullName]) {
+              $scope.data[fieldFullName] = [];
             }
 
+            // Verify if data should be added
+            var fieldData = $scope.data[fieldFullName];
+            if (fieldData.length && fieldData[fieldData.length - 1][0] == field.time) { return; }
+
             // Push new data
-            var attrData = $scope.data[attrName];
-            attrData.push([data.time, data.value]);
-            if ($scope.maxData < attrData.length) {
-              attrData.splice(0, attrData.length - $scope.maxData);
+            fieldData.push([field.time, field.value]);
+            if ($scope.maxData < fieldData.length) {
+              fieldData.splice(0, fieldData.length - $scope.maxData);
             }
-          });
+          }
         });
       }, function() {
         // TODO
@@ -278,7 +286,6 @@ function ModuleFieldCtrl($scope, ModuleService, $timeout) {
     $rootScope.$on('$routeChangeSuccess', function () {
       poll.cancel();
       $scope.data = {};
-      $scope.graphData = [];
     });
   });
 }
@@ -308,7 +315,6 @@ function ModuleFieldCtrl($scope, ModuleService, $timeout) {
 
       // Actual plotting based on the graph data model
       $scope.$watch(attrs.graphModel, function(data) {
-        console.log('replotting', data);
         var plottedData = [];
         if (data instanceof Array) {
           plottedData = data;
@@ -339,44 +345,6 @@ function ModuleFieldCtrl($scope, ModuleService, $timeout) {
           elem.children().find('.glyphicon-pencil').fadeIn(500);
           console.log(elem.children().find('.glyphicon-pencil'));
         });
-      });
-    }
-  };
-});
-;angular.module('GHome').directive('svgVbox', function() {
-  return {
-    link: function($scope, elem, attrs) {
-      // Configurable viewBox padding
-      var paddingRatio = 0.05;
-      attrs.$observe('svgVboxPadding', function(value) {
-        if (value === undefined) { return; }
-        paddingRatio = parseFloat($scope.$eval(value));
-      });
-
-      $scope.$watch(attrs.svgVbox, function(vbox) {
-        // Default values for viewBox
-        if (vbox.minX === undefined) { vbox.minX = 0; }
-        if (vbox.maxX === undefined) { vbox.maxX = 0; }
-        if (vbox.minY === undefined) { vbox.minY = 0; }
-        if (vbox.maxY === undefined) { vbox.maxY = 0; }
-
-        // Compute map width/height and padding (relative to bbox)
-        var
-          w = vbox.maxX - vbox.minX,
-          h = vbox.maxY - vbox.minY,
-          padding = paddingRatio*Math.max(w, h);
-
-        // Actual (x, y, w, h) values
-        var
-          x = vbox.minX - padding,
-          y = vbox.minY - padding;
-        w += 2*padding;
-        h += 2*padding;
-
-        // Update svg element
-        // TODO check compatibility (jQuery/DOM)
-        elem[0].setAttribute('viewBox',
-          x + ' ' + y + ' ' + w + ' ' + h);
       });
     }
   };
