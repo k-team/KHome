@@ -4,8 +4,14 @@ function StoreCtrl($scope, $modal, ModuleService) {
 
   // Explicitly reload modules
   $scope.reloadAvailableModules = function() {
+    $scope.loading = true;
     ModuleService.available().then(function(modules) {
       $scope.availableModules = modules;
+      $scope.loading = false;
+      $scope.unreachable = false;
+    }, function() {
+      $scope.loading = false;
+      $scope.unreachable = true;
     });
   };
   //...and call immediately
@@ -51,8 +57,6 @@ function StoreCtrl($scope, $modal, ModuleService) {
 
   $scope.modalInstances = {};
   $scope.openModal = function(module) {
-    console.log(module);
-    console.log('coucou');
     var modalScope = $scope.$new(true);
 
     // Dismiss the modal

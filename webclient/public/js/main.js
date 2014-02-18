@@ -147,8 +147,14 @@ function ModuleFieldCtrl($scope, ModuleService, $timeout) {
 
   // Explicitly reload modules
   $scope.reloadAvailableModules = function() {
+    $scope.loading = true;
     ModuleService.available().then(function(modules) {
       $scope.availableModules = modules;
+      $scope.loading = false;
+      $scope.unreachable = false;
+    }, function() {
+      $scope.loading = false;
+      $scope.unreachable = true;
     });
   };
   //...and call immediately
@@ -194,8 +200,6 @@ function ModuleFieldCtrl($scope, ModuleService, $timeout) {
 
   $scope.modalInstances = {};
   $scope.openModal = function(module) {
-    console.log(module);
-    console.log('coucou');
     var modalScope = $scope.$new(true);
 
     // Dismiss the modal
@@ -220,7 +224,7 @@ function ModuleFieldCtrl($scope, ModuleService, $timeout) {
   };
 }
 ;function SupervisionCtrl($scope, ModuleService, $timeout, $rootScope) {
-  $scope.data = {};
+  $scope.data = null;
   $scope.maxData = 100;
 
   var pollModule = function(name, callback, delay) {
@@ -263,6 +267,9 @@ function ModuleFieldCtrl($scope, ModuleService, $timeout) {
 
             var fieldFullName = instance.name + '.' + field.name;
             // Empty data case
+            if (!$scope.data) {
+              $scope.data = {};
+            }
             if (!$scope.data[fieldFullName]) {
               $scope.data[fieldFullName] = [];
             }
@@ -286,7 +293,7 @@ function ModuleFieldCtrl($scope, ModuleService, $timeout) {
     // Stop polling when location is changed
     $rootScope.$on('$routeChangeSuccess', function () {
       poll.cancel();
-      $scope.data = {};
+      $scope.data = null;
     });
   });
 }
@@ -438,7 +445,7 @@ function ModuleFieldCtrl($scope, ModuleService, $timeout) {
       console.error('Invalid value', oldValue);
     }
     var deferred = $q.defer();
-    httpPostJSON(storeUrl + '/rate', { name: module.id, value: value })
+    httpPostJSON(storeUrl + '/rate', { name: module.name, value: value })
       .success(function() { deferred.resolve(); })
       .error(function() { deferred.reject(); });
     return deferred.promise;
@@ -462,7 +469,7 @@ function ModuleFieldCtrl($scope, ModuleService, $timeout) {
   // ...from the catalog
   service.installFromCatalog = function(module) {
     var deferred = $q.defer();
-    httpPostJSON(modulesUrl + '/install', { name: module.id })
+    httpPostJSON(modulesUrl + '/install', { name: module.name })
       .success(function() { deferred.resolve(); })
       .error(function() { deferred.reject(); });
     return deferred.promise;
