@@ -226,7 +226,7 @@ function ModuleFieldCtrl($scope, ModuleService, $timeout) {
         var field = instance.fields[i];
 
         // Check if field is ok
-        if (!field.readable || !field.graphable) { return; }
+        if (!field.readable || !field.graphable) { continue; }
         // if (!field.readable || field.type != 'numeric' || field.constant) { return; }
 
         var fieldFullName = instance.name + '.' + field.name;
@@ -240,7 +240,7 @@ function ModuleFieldCtrl($scope, ModuleService, $timeout) {
 
         // Verify if data should be added
         var fieldData = $scope.data[fieldFullName];
-        if (fieldData.length && fieldData[fieldData.length - 1][0] == field.time) { return; }
+        if (fieldData.length && fieldData[fieldData.length - 1][0] == field.time) { continue; }
 
         // Push new data
         fieldData.push([field.time, field.value]);
