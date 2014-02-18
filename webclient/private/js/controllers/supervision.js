@@ -37,7 +37,8 @@ function SupervisionCtrl($scope, ModuleService, $timeout, $rootScope) {
             var field = instance.fields[i];
 
             // Check if field is ok
-            if (!field.readable || field.type != 'numeric' || field.constant) { return; }
+            if (!field.readable || !field.graphable) { return; }
+            // if (!field.readable || field.type != 'numeric' || field.constant) { return; }
 
             var fieldFullName = instance.name + '.' + field.name;
             // Empty data case
