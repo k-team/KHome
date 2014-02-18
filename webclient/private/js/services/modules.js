@@ -31,6 +31,10 @@ angular.module('GHome').factory('ModuleService', function($q, $http, $timeout, $
     return httpGetJSON(modulesUrl + '/' + name + '/instances/status');
   };
 
+  service.fieldStatus = function(module_name, field_name) {
+    return httpGetJSON(modulesUrl + '/' + module_name + '/fields/' + field_name + '/status');
+  };
+
   service.updateField = function(module, field, value) {
     var deferred = $q.defer();
     httpPostJSON(modulesUrl + '/update_field',

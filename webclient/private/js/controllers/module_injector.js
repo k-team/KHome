@@ -36,7 +36,7 @@ function ModuleInjectorCtrl($scope, ModuleService, $routeParams, $compile, $http
   };
 
   // Start polling
-  loadModule().then(pollFieldValue);
+  loadModule();//.then(pollFieldValue);
 
   // Load the angular-like html to be injected
   $http.get('/api/modules/' + $scope.moduleName + '/public/partial.html')

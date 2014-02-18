@@ -22,6 +22,53 @@ angular.module('GHome', ['ngRoute', 'ui.bootstrap', 'angularFileUpload', 'frapon
       redirectTo: '/home'
     });
   });
+;function FieldCtrl($scope, $rootScope, ModuleService, $timeout) {
+  $scope.state = '';
+  console.log($scope.field);
+
+  $scope.update = function() {
+    $scope.state = 'waiting';
+
+    // Fade out field state
+    var fade = function()  { $timeout(function() {
+      $scope.state = '';
+    }, 2000); };
+
+    // Call update
+    ModuleService.updateField($scope.module, $scope.field, $scope.field.value).then(function(data) {
+      $scope.state = (data.success) ? 'success' : 'error';
+      fade();
+    }, function() {
+      $scope.state = 'error';
+      fade();
+    });
+  };
+
+  var loadValue = function() {
+    return ModuleService.fieldStatus($scope.moduleName, $scope.field.name).then(function(data) {
+      $scope.field.value = data.value;
+
+      // Super hack
+      $rootScope.$broadcast('fieldUpdate', $scope.field, data);
+    });
+  };
+
+  // Poll the current module for its status
+  var pollValue = function() {
+    var updateRate = $scope.module['update_rate'];
+    var poll = $timeout(function doPoll() {
+      loadValue().then(function() {
+        poll = $timeout(doPoll, 1000*updateRate);
+      });
+    }, 1000*updateRate);
+
+    $scope.$on('$destroy', function () {
+      $timeout.cancel(poll);
+    });
+  };
+
+  pollValue();
+}
 ;function MainCtrl($scope, $location, ModuleService) {
   // All modules
   $scope.modules = [];
@@ -78,7 +125,7 @@ angular.module('GHome', ['ngRoute', 'ui.bootstrap', 'angularFileUpload', 'frapon
   };
 
   // Start polling
-  loadModule().then(pollFieldValue);
+  loadModule();//.then(pollFieldValue);
 
   // Load the angular-like html to be injected
   $http.get('/api/modules/' + $scope.moduleName + '/public/partial.html')
@@ -228,7 +275,9 @@ function ModuleFieldCtrl($scope, ModuleService, $timeout) {
   var field = $scope.field;
 
   // Poll the current supervised module for its status
-  $scope.$on('module.statusUpdate', function(_, data) {
+  $scope.$on('fieldUpdate', function(_, fieldEmit, data) {
+    if(field != fieldEmit) { return; }
+
     // Empty data case
     if (!$scope.data) {
       $scope.data = {};
@@ -240,7 +289,7 @@ function ModuleFieldCtrl($scope, ModuleService, $timeout) {
     if (fieldData.length && fieldData[fieldData.length - 1][0] == field.time) { return; }
 
     // Push new data
-    fieldData.push([field.time, field.value]);
+    fieldData.push([data.time, data.value]);
     if ($scope.maxData < fieldData.length) {
       fieldData.splice(0, fieldData.length - $scope.maxData);
     }
@@ -379,6 +428,10 @@ function ModuleFieldCtrl($scope, ModuleService, $timeout) {
 
   service.moduleStatus = function(name) {
     return httpGetJSON(modulesUrl + '/' + name + '/instances/status');
+  };
+
+  service.fieldStatus = function(module_name, field_name) {
+    return httpGetJSON(modulesUrl + '/' + module_name + '/fields/' + field_name + '/status');
   };
 
   service.updateField = function(module, field, value) {

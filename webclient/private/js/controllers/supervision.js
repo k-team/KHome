@@ -4,7 +4,9 @@ function SupervisionCtrl($scope, ModuleService, $timeout, $rootScope) {
   var field = $scope.field;
 
   // Poll the current supervised module for its status
-  $scope.$on('module.statusUpdate', function(_, data) {
+  $scope.$on('fieldUpdate', function(_, fieldEmit, data) {
+    if(field != fieldEmit) { return; }
+
     // Empty data case
     if (!$scope.data) {
       $scope.data = {};
@@ -16,7 +18,7 @@ function SupervisionCtrl($scope, ModuleService, $timeout, $rootScope) {
     if (fieldData.length && fieldData[fieldData.length - 1][0] == field.time) { return; }
 
     // Push new data
-    fieldData.push([field.time, field.value]);
+    fieldData.push([data.time, data.value]);
     if ($scope.maxData < fieldData.length) {
       fieldData.splice(0, fieldData.length - $scope.maxData);
     }
