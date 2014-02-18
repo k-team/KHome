@@ -147,8 +147,14 @@ function ModuleFieldCtrl($scope, ModuleService, $timeout) {
 
   // Explicitly reload modules
   $scope.reloadAvailableModules = function() {
+    $scope.loading = true;
     ModuleService.available().then(function(modules) {
       $scope.availableModules = modules;
+      $scope.loading = false;
+      $scope.unreachable = false;
+    }, function() {
+      $scope.loading = false;
+      $scope.unreachable = true;
     });
   };
   //...and call immediately
