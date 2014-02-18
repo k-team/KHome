@@ -1,7 +1,7 @@
 <!--Independent view placeholder-->
 <span id="inject-independant"></span>
 
-<div data-ng-show="module.show" class="container">
+<div data-ng-show="module" class="container">
   <div class="header">
     <span class="h1 vertical-middle">{{ module.public_name || module.name }}</span>
     &nbsp;
@@ -16,8 +16,8 @@
     <div data-ng-controller="ModuleFieldCtrl" data-ng-repeat="field in module.fields">
       <form data-ng-show="field.readable || field.writable" data-ng-submit="update()" class="form-horizontal" role="form">
         <fieldset data-ng-disabled="!field.writable">
-          <div class="form-group" data-ng-class="{success:'has-success', error:'has-error', '':''}[field.state]">
-            <label for="field-{{field.name}}" class="col-sm-2 control-label">{{field.public_name || field.name}}</label>
+          <div class="form-group" data-ng-class="{ success: 'has-success', error: 'has-error' }[field.state]">
+            <label for="field-{{ field.name }}" class="col-sm-2 control-label">{{ field.public_name || field.name }}</label>
             <div class="input-group input-group-sm col-sm-10">
               <div class="input-group-addon" data-ng-show="field.writable" data-ng-switch on="field.state">
                 <span data-ng-switch-default>
@@ -33,9 +33,9 @@
                   <span class="glyphicon glyphicon-time"></span>
                 </span>
               </div>
-              <input data-ng-model="field.value" name="field-{{field.name}}"
+              <input data-ng-model="field.value" name="field-{{ field.name }}"
                   type="{'string': 'text', 'numeric': 'number', 'boolean': 'checkbox'}[field.type]"
-                  class="form-control" placeholder="{{field.name}}" />
+                  class="form-control" placeholder="{{ (field.writable) ? field.name : 'unspecified' }}" />
               <span data-ng-show="field.writable" class="input-group-btn">
                 <button type="submit" class="btn btn-default">
                   <span class="glyphicon glyphicon-share-alt"></span>

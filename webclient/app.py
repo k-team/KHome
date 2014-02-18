@@ -31,11 +31,6 @@ IMAGE_EXTS = ['png', 'jpg', 'jpeg', 'gif', 'bmp']
 def index():
     return app.send_static_file('index.html')
 
-# move in module ?
-@app.route('/api/rooms')
-def api_rooms():
-    return app.send_static_file('rooms.json')
-
 @app.route('/api/modules')
 def api_modules():
     return jsonify(packaging.get_installed_modules(detailed=True))
@@ -146,9 +141,6 @@ if __name__ == '__main__':
         store_proxy('/api/available_modules')
         store_proxy('/api/available_modules/<module_name>/public/<rest>')
         store_proxy('/api/available_modules/rate', methods=['POST'])
-
-# used for samples
-import random
 
 @app.route('/api/modules/<module_name>/instances/status')
 def api_module_instances_statuses(module_name):
