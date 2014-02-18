@@ -3,7 +3,7 @@ import urlparse
 from functools import wraps
 import requests
 from flask import (Response, request, jsonify as _jsonify, current_app,
-        make_response)
+        abort, make_response)
 
 def jsonify(obj):
     """
@@ -42,9 +42,13 @@ def proxy(proxy_url, url, **options):
         data = request.form \
                 if request.method.lower() in ['put', 'post'] \
                 else request.data
-        r = request_func(view_url, headers=request.headers, data=data)
-        resp = make_response(r.content)
-        resp.headers['Content-type'] = r.headers['Content-type']
-        resp.status_code = r.status_code
-        return resp
+        try:
+            r = request_func(view_url, headers=request.headers, data=data)
+        except requests.ConnectionError:
+            abort(404)
+        else:
+            resp = make_response(r.content)
+            resp.headers['Content-type'] = r.headers['Content-type']
+            resp.status_code = r.status_code
+            return resp
     current_app.add_url_rule(url, view_name, view_func=view, **options)
