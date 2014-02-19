@@ -2,6 +2,8 @@
 <div class="container">
   <div data-ng-show="module.show">
     <div class="header">
+      <img class="header-img" src="/api/modules/{{ module.name }}/public/icon.png"
+        alt="Icon for {{ module.public_name || module.name }}">
       <span class="h1 vertical-middle">{{ module.public_name || module.name }}</span>
       &nbsp;
       <span class="vertical-middle" data-ng-controller="RatingCtrl">

@@ -46,3 +46,10 @@ a:hover {
 .navbar {
   border-radius: initial;
 }
+.header .h1 {
+  margin: 0 auto;
+}
+.header .header-img {
+  width: 55px;
+  padding-right: 10px;
+}
