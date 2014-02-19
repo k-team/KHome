@@ -12,7 +12,7 @@ function SupervisionCtrl($scope, ModuleService, $timeout, $rootScope) {
 
     // Verify if data should be added
     var fieldData = $scope.data[field.name];
-    if (fieldData.length && fieldData[fieldData.length - 1][0] == field.time) { return; }
+    if (fieldData.length && fieldData[fieldData.length - 1][0] == data.time) { return; }
 
     // Push new data
     fieldData.push([data.time, data.value]);
