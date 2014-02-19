@@ -104,5 +104,14 @@ angular.module('GHome').factory('ModuleService', function($q, $http, $timeout, $
     return deferred.promise;
   }
 
+  // Uninstall a module
+  service.uninstall = function(module) {
+    var deferred = $q.defer();
+    httpPostJSON(modulesUrl + '/uninstall', { name: module.name })
+      .success(function() { deferred.resolve(); })
+      .error(function() { deferred.reject(); });
+    return deferred.promise;
+  };
+
   return service;
 });

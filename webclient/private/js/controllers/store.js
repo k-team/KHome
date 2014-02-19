@@ -49,6 +49,12 @@ function StoreCtrl($scope, ModuleService, $modal, $timeout) {
     });
   };
 
+  $scope.uninstall = function(module) {
+    ModuleService.uninstall(module).then(function() {
+      module.installed = false;
+    });
+  };
+
   // Uploading system
   $scope.uploading = false
   $scope.upload = function(file) {
@@ -78,6 +84,12 @@ function StoreCtrl($scope, ModuleService, $modal, $timeout) {
       modalScope.dismiss();
     };
 
+    // Uninstall the module
+    modalScope.install = function() {
+      $scope.uninstall(module);
+      modalScope.dismiss();
+    };
+
     // Access the modal's module
     modalScope.module = module;
 
@@ -85,6 +97,10 @@ function StoreCtrl($scope, ModuleService, $modal, $timeout) {
     $scope.modalInstances[module.id] = $modal.open({
       templateUrl: 'modal.html',
       scope: modalScope
+    });
+
+    $scope.$on('$destroy', function () {
+      modalScope.dismiss();
     });
   };
 }
