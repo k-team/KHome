@@ -315,9 +315,22 @@ function ModuleFieldCtrl($scope, ModuleService, $timeout) {
       var color_g = (Math.random()*(200)|0).toString();
       var color_b = (Math.random()*(200)|0).toString();
 
+      var allData = [];
       var chart = null, opts = {
         xaxis: {
-          tickLength: 0
+          tickSize: 1,
+          tickFormatter: function(n) {
+            function twoDigits(value) {
+              if(value < 10) {
+                return '0' + value;
+              }
+              return value;
+            }
+            var d = new Date(n * 1000);
+            var h = twoDigits(d.getHours());
+            var m = twoDigits(d.getMinutes());
+            return h + ":" + m;
+          },
         }, yaxis: {
           tickLength: 0
         }, grid: {
@@ -337,11 +350,10 @@ function ModuleFieldCtrl($scope, ModuleService, $timeout) {
           }
         }
       };
-      console.log(opts)
 
       // Actual plotting based on the graph data model
       $scope.$watch(attrs.graphModel, function(data) {
-        var plottedData = [];
+        var plottedData = []
         if (data instanceof Array) {
           plottedData = data;
         } else {
@@ -358,6 +370,13 @@ function ModuleFieldCtrl($scope, ModuleService, $timeout) {
           chart.setupGrid();
           chart.draw();
         }
+        allData.concat(plottedData);
+      }, true);
+
+      // Set the tick size
+      $scope.$watch(attrs.tickSize, function(tick) {
+        opts.xaxis.tickSize = tick;
+        chart = $.plot(elem, allData, opts);
       }, true);
     }
   };

@@ -55,7 +55,7 @@
 
       <!--Supervision graph-->
       <div data-ng-show="data" data-ng-controller="SupervisionCtrl" data-ng-repeat="field in module.fields | graphable">
-        <div graph graph-model="data" class="graph"></div>
+        <div graph data-graph-model="data" data-tick-size="field.update_rate * 10" class="graph"></div>
       </div>
     </div>
   </div>
