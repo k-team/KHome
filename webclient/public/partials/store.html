@@ -84,10 +84,10 @@
             </carousel>
             <hr />
           </div>
-
           {{ module.description }}
         </div>
         <div class="modal-footer">
+          <a href="#/modules/{{ module.name }}" data-ng-show="module.installed" class="btn btn-success" role="button">Ouvrir</a>
           <a data-ng-click="install()" data-ng-hide="module.installed" class="btn btn-primary" role="button">Installer</a>
           <a data-ng-click="uninstall()" data-ng-show="module.installed" class="btn btn-danger" role="button">Désinstaller</a>
           <a data-ng-click="dismiss()" class="btn btn-default" role="button">Close</a>

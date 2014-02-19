@@ -77,11 +77,13 @@ def install_from_zip(file_):
             raise IOError(msg)
 
         # validate against already installed modules
-        if is_installed(toplevel_directories[0][:-1]):
+        module_name = toplevel_directories[0][:-1]
+        if is_installed(module_name):
             raise ValueError('Module already installed')
 
         # extract zip file
         zf.extractall(path.modules_directory())
+    instance.invoke(module_name)
 
 def uninstall(module_name):
     """
@@ -90,8 +92,16 @@ def uninstall(module_name):
     """
     if not is_installed(module_name):
         raise ValueError('Module not installed')
+
+    # stop the instance
     try:
         instance.stop(module_name)
     except RuntimeError:
         pass # ignore if module is already stopped
-    shutil.rmtree(path.realname(module_name), True)
+
+    # remove the module directory tree
+    try:
+        shutil.rmtree(path.module_directory(module_name))
+    except OSError as e:
+        logger.exception(e)
+        raise RuntimeError('Error when removing module directory')

@@ -3,7 +3,8 @@
   <div data-ng-show="module">
     <div class="header">
       <img class="header-img" src="/api/modules/{{ module.name }}/public/icon.png"
-        alt="Icon for {{ module.public_name || module.name }}">
+        alt="Icon for {{ module.public_name || module.name }}"
+        onerror="this.onerror = null; this.src = '/img/module.png'">
       <span class="h1 vertical-middle">{{ module.public_name || module.name }}</span>
       &nbsp;
       <span class="vertical-middle" data-ng-controller="RatingCtrl">
@@ -32,9 +33,18 @@
                     <span class="glyphicon glyphicon-time"></span>
                   </span>
                 </div>
-                <input data-ng-model="field.value" name="field-{{field.name}}"
-                    type="{'string': 'text', 'numeric': 'number', 'boolean': 'checkbox'}[field.type]"
-                    class="form-control" placeholder="{{field.name}}" />
+                <input data-ng-model="value"
+                  data-ng-show="field.type=='string'"
+                  name="field-str-{{field.name}}" type="text"
+                  class="form-control" placeholder="{{field.name}}" />
+                <input data-ng-model="value"
+                  data-ng-show="field.type=='numeric'"
+                  name="field-num-{{field.name}}" type="number"
+                  class="form-control" placeholder="{{field.name}}" />
+                <input data-ng-model="value"
+                  data-ng-show="field.type=='boolean'"
+                  name="field-bool-{{field.name}}" type="checkbox"
+                  class="form-control" />
                 <span data-ng-show="field.writable" class="input-group-btn">
                   <button type="submit" class="btn btn-default">
                     <span class="glyphicon glyphicon-share-alt"></span>

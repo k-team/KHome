@@ -7,6 +7,8 @@
 
     <!--Themes-->
     <link rel="stylesheet" href="/css/bootstrap-custom.min.css" />
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
 
     <!--App CSS-->
     <link rel="stylesheet" href="/css/main.css" />
@@ -18,6 +20,11 @@
       <!--Navigation header-->
       <div class="navbar-header">
         <a class="navbar-brand" href="#/home" title="KHome start page">KHome</a>
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
 
         <!--Responsive navigation links-->
         <span class="visible-xs navbar-text">
@@ -53,6 +60,16 @@
             <input data-ng-model="query" class="form-control" type="text" placeholder="Rechercher">
           </div>
         </form>
+      </div>
+
+      <div id="collapse" class="collapse navbar-collapse">
+        <div class="visible-xs">
+          <form class="navbar-form navbar-left" role="search">
+            <div class="form-group">
+              <input data-ng-model="query" class="form-control" type="text" placeholder="Rechercher">
+            </div>
+          </form>
+        </div>
       </div>
     </nav>
     <!--Main view-->

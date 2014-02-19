@@ -120,3 +120,26 @@ a:hover {
     transform: rotate(360deg);
   }
 }
+.home .home-header {
+  font-size: 24px;
+}
+.home .home-header h1 {
+  font-size: 60px;
+}
+.home .home-content {
+  font-size: 18px;
+}
+.home .home-content .fa-thumbnail {
+  text-align: center;
+}
+.home .home-content .fa-thumbnail .fa {
+  color: #ccc;
+  font-size: 180px;
+}
+.home .home-content h2 {
+  text-align: center;
+  /*margin-bottom: 35px;*/
+}
+.home .home-content p {
+  margin: 20px;
+}
