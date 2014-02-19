@@ -14,7 +14,7 @@ class Typed(object):
             value = type(self).typed_type(value)
         except ValueError:
             return False
-        return super(Typed, self)._set_value(t, value)
+        return super(Typed, self).set_value(t, value)
 
 class Constant(fields.io.Readable, fields.persistant.Volatile):
     update_rate = 100000
@@ -30,6 +30,10 @@ class Constant(fields.io.Readable, fields.persistant.Volatile):
 
 class Numeric(Typed):
     typed_type = float
+    typed_name = 'numeric'
+
+class Integer(Typed):
+    typed_type = int
     typed_name = 'numeric'
 
 class Boolean(Typed):

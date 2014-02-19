@@ -12,7 +12,7 @@ class Database(object):
         return False
 
 class Volatile(object):
-    volpersist_nb_values = 100
+    volpersist_nb_values = 200
     volpersist_save_lost = True
 
     def __init__(self):

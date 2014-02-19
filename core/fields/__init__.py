@@ -20,6 +20,7 @@ class Base(threading.Thread):
     __metaclass__ = FieldMeta
 
     public_name = ''
+    sleep_on_start = 0
 
     def __init__(self):
         super(Base, self).__init__()
@@ -48,7 +49,7 @@ class Base(threading.Thread):
         Function called at the start of the field
         Usefull for init something.
         """
-        pass
+        time.sleep(type(self).sleep_on_start)
 
     def emit_value(self, value):
         if value is not None:
