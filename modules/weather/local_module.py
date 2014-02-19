@@ -10,7 +10,7 @@ import fields.syntax
 import logging
 
 class Weather(module.Base):
-    update_rate = 2
+    update_rate = 30 * 60
     public_name = 'Météo'
 
     class _weather(
@@ -18,6 +18,8 @@ class Weather(module.Base):
             fields.io.Readable,
             fields.persistant.Volatile,
             fields.Base):
+        sleep_on_start = 0.5
+
         def acquire_value(self):
             try:
                 woeid = self.module.woeid()[1]
@@ -46,8 +48,7 @@ class Weather(module.Base):
 
         def on_start(self):
             super(Weather.woeid, self).on_start()
-            print self.get_info()
-            self.emit_value(609125)
+            self.emit_value(609125) # Lyon
 
         # def acquire_value(self):
         #     woeid = 609125 # Lyon
@@ -59,7 +60,7 @@ class Weather(module.Base):
             fields.persistant.Volatile,
             fields.Base):
         public_name = 'Température (°C)'
-        update_rate = 1
+        sleep_on_start = 2
 
         def acquire_value(self):
             try:
@@ -73,6 +74,7 @@ class Weather(module.Base):
             fields.persistant.Volatile,
             fields.Base):
         public_name = 'Humidité (%)'
+        sleep_on_start = 2
 
         def acquire_value(self):
             try:
@@ -86,6 +88,7 @@ class Weather(module.Base):
             fields.persistant.Volatile,
             fields.Base):
         public_name = 'Pression (mbars)'
+        sleep_on_start = 2
 
         def acquire_value(self):
             try:
@@ -99,6 +102,7 @@ class Weather(module.Base):
             fields.persistant.Volatile,
             fields.Base):
         public_name = 'Vitesse du vent (km/h)'
+        sleep_on_start = 2
 
         def acquire_value(self):
             try:
@@ -112,10 +116,15 @@ class Weather(module.Base):
             fields.persistant.Volatile,
             fields.Base):
         public_name = 'Direction du vent'
+        sleep_on_start = 2
 
         def acquire_value(self):
             try:
-                direction = {None: 'Pas de vent', 'N': 'Nord', 'S': 'Sud', 'E': 'Est', 'W': 'Ouest'}
+                direction = {None: 'Pas de vent', 
+                        'N': 'Nord',
+                        'S': 'Sud',
+                        'E': 'Est',
+                        'W': 'Ouest'}
                 return direction[self.module._weather()[1]['wind_direction']]
             except (KeyError, TypeError):
                 return
@@ -126,6 +135,7 @@ class Weather(module.Base):
             fields.io.Readable,
             fields.Base):
         public_name = 'Ville'
+        sleep_on_start = 2
 
         def acquire_value(self):
             try:
@@ -139,6 +149,7 @@ class Weather(module.Base):
             fields.io.Readable,
             fields.Base):
         public_name = 'Région'
+        sleep_on_start = 2
 
         def acquire_value(self):
             try:
@@ -152,6 +163,7 @@ class Weather(module.Base):
             fields.io.Readable,
             fields.Base):
         public_name = 'Pays'
+        sleep_on_start = 2
 
         def acquire_value(self):
             try:
