@@ -42,16 +42,20 @@ function StoreCtrl($scope, ModuleService, $modal, $timeout) {
     // Start installing
     $scope.modulesInstalling.push(module);
     ModuleService.installFromCatalog(module).then(function() {
-      removeInstallingModule(module);
+      $scope.removeInstallingModule(module);
       module.installed = true;
     }, function() {
-      removeInstallingModule(module);
+      $scope.removeInstallingModule(module);
     });
   };
 
   $scope.uninstall = function(module) {
+    console.log('uninstalling');
     ModuleService.uninstall(module).then(function() {
+      console.log('uninstall success');
       module.installed = false;
+    }, function() {
+      console.log('uninstall error');
     });
   };
 
@@ -85,7 +89,7 @@ function StoreCtrl($scope, ModuleService, $modal, $timeout) {
     };
 
     // Uninstall the module
-    modalScope.install = function() {
+    modalScope.uninstall = function() {
       $scope.uninstall(module);
       modalScope.dismiss();
     };
