@@ -40,6 +40,16 @@ a:hover {
   cursor: pointer;
   background-color: #f6f6f6;
 }
+.module-thumbnail .thumbnail img {
+  width: 128px;
+  height: 128px;
+}
+@media (max-width: 480px) {
+  .module-thumbnail .thumbnail img {
+    height: 80px;
+    width: 80px;
+  }
+}
 .vertical-middle {
   display: inline-block;
   vertical-align: middle;
@@ -47,6 +57,13 @@ a:hover {
 }
 .navbar {
   border-radius: initial;
+}
+.header .h1 {
+  margin: 0 auto;
+}
+.header .header-img {
+  width: 55px;
+  padding-right: 10px;
 }
 .inject-independant {
   height: 100%;
