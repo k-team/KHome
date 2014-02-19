@@ -33,7 +33,7 @@ angular.module('GHome').directive('graph', function() {
           color: "rgb(" + color_r + ", " + color_g + ", " + color_b + ")",
           shadowSize: 0,
           points: {
-            show: true
+            show: false
           }, lines: {
             show: true,
             fill: 1.0,
@@ -67,6 +67,10 @@ angular.module('GHome').directive('graph', function() {
       // Set the tick size
       $scope.$watch(attrs.tickSize, function(tick) {
         opts.xaxis.tickSize = tick;
+        if(chart) {
+          chart.shutdown();
+        }
+        console.log(tick);
         chart = $.plot(elem, allData, opts);
       }, true);
     }
