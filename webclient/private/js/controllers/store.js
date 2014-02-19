@@ -19,24 +19,33 @@ function StoreCtrl($scope, ModuleService, $modal, $timeout) {
 
   // Install a module
   $scope.modulesInstalling = [];
-  $scope.install = function(module) {
+  $scope.removeInstallingModule = function(module) {
+    for (var i = 0; i < $scope.modulesInstalling.length; i++) {
+      if ($scope.modulesInstalling[i].id == module.id) {
+        $scope.modulesInstalling.splice(i, 1);
+        break;
+      }
+    }
+  };
+
+  $scope.moduleAlreadyInstalling = function(module) {
     for (var i = 0; i < $scope.modulesInstalling.length; i++) {
       if ($scope.modulesInstalling[i].id == module.id) {
         return;
       }
     }
+  };
+
+  $scope.install = function(module) {
+    if ($scope.moduleAlreadyInstalling(module)) { return; }
 
     // Start installing
     $scope.modulesInstalling.push(module);
     ModuleService.installFromCatalog(module).then(function() {
+      removeInstallingModule(module);
+      module.installed = true;
     }, function() {
-    }, function() {
-      for (var i = 0; i < $scope.modulesInstalling.length; i++) {
-        if ($scope.modulesInstalling[i].id == module.id) {
-          $scope.modulesInstalling.splice(i, 1);
-          break;
-        }
-      }
+      removeInstallingModule(module);
     });
   };
 
@@ -50,8 +59,7 @@ function StoreCtrl($scope, ModuleService, $modal, $timeout) {
       $scope.uploading = false;
       $scope.reloadAvailableModules();
     }).error(function() {
-      $scope.uploading = false;
-      // TODO handle errors better
+      $scope.uploading = false; // TODO handle errors better
     });
   };
 

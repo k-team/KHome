@@ -1,8 +1,10 @@
 import os
 import json
+import shutil
 import zipfile
 
-import module.path as path
+import path
+import instance
 
 MODULE_NAME_ENTRY = 'name'
 
@@ -80,3 +82,16 @@ def install_from_zip(file_):
 
         # extract zip file
         zf.extractall(path.modules_directory())
+
+def uninstall(module_name):
+    """
+    Uninstall a module by its name. Raise a ValueError if the module is already
+    installed.
+    """
+    if not is_installed(module_name):
+        raise ValueError('Module not installed')
+    try:
+        instance.stop(module_name)
+    except RuntimeError:
+        pass # ignore if module is already stopped
+    shutil.rmtree(path.realname(module_name), True)
