@@ -315,6 +315,7 @@ function ModuleFieldCtrl($scope, ModuleService, $timeout) {
           markings: [ { yaxis: { from: 0, to: 0 }, color: '#888' },
                       { xaxis: { from: 0, to: 0 }, color: '#888' }]
         }, series: {
+          color: "#"+('00000'+(Math.random()*(1<<24)|0).toString(16)).slice(-6),
           shadowSize: 0,
           points: {
             show: true
