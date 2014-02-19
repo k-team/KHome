@@ -57,7 +57,7 @@ class Weather(module.Base):
     class temperature(
             fields.syntax.Numeric,
             fields.io.Graphable,
-            fields.persistant.Volatile,
+            fields.persistant.Database,
             fields.Base):
         public_name = 'Température (°C)'
         sleep_on_start = 2
@@ -71,7 +71,7 @@ class Weather(module.Base):
     class humidity(
             fields.syntax.Numeric,
             fields.io.Graphable,
-            fields.persistant.Volatile,
+            fields.persistant.Database,
             fields.Base):
         public_name = 'Humidité (%)'
         sleep_on_start = 2
@@ -85,7 +85,7 @@ class Weather(module.Base):
     class pressure(
             fields.syntax.Numeric,
             fields.io.Graphable,
-            fields.persistant.Volatile,
+            fields.persistant.Database,
             fields.Base):
         public_name = 'Pression (mbars)'
         sleep_on_start = 2
@@ -99,7 +99,7 @@ class Weather(module.Base):
     class wind_speed(
             fields.syntax.Numeric,
             fields.io.Graphable,
-            fields.persistant.Volatile,
+            fields.persistant.Database,
             fields.Base):
         public_name = 'Vitesse du vent (km/h)'
         sleep_on_start = 2

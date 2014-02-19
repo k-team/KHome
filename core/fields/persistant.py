@@ -1,18 +1,107 @@
+import sqlite3
+import logging
+
 class Database(object):
+    def on_start(self):
+        self.last_value = None
+        db_types = {'numeric': 'real',
+                'string': 'text',
+                'boolean': 'boolean'}
+
+        try:
+            type_str = db_types[self.get_info()['type']]
+        except KeyError:
+            type_str = db_types['string']
+
+        self.db_name = self.module.module_name + '.db'
+        db_conn = sqlite3.connect(self.db_name)
+
+        # Create a new table for the field
+        try:
+            with db_conn:
+                db_conn.execute(
+                        'CREATE TABLE %s (time real primary key, value %s)'
+                        % (self.field_name, type_str))
+        except sqlite3.OperationalError as e:
+            logging.exception(e)
+            pass
+        finally:
+            db_conn.close()
+
     def _get_value(self):
+        db_conn = sqlite3.connect(self.db_name)
+        query = 'SELECT time, value FROM %s \
+                ORDER BY time DESC LIMIT 1' \
+                % (self.field_name,)
+        try:
+            c = db_conn.cursor()
+            c.execute(query)
+            re = c.fetchall()
+            if re:
+                return re[0]
+        except Exception as e:
+            logging.exception(e)
+            return None
+        finally:
+            db_conn.close()
         return None
 
     def _get_value_at(self, t):
+        db_conn = sqlite3.connect(self.db_name)
+        query = 'SELECT time, value FROM %s \
+                WHERE time < ? ORDER BY time DESC LIMIT 1' \
+                % (self.field_name,)
+        try:
+            c = db_conn.cursor()
+            c.execute(query, (t,))
+            re = c.fetchall()
+            if re:
+                return re[0]
+        except Exception as e:
+            logging.exception(e)
+            return None
+        finally:
+            db_conn.close()
         return None
 
     def _get_value_from_to(self, fr, to):
+        db_conn = sqlite3.connect(self.db_name)
+        query = 'SELECT time, value FROM %s \
+                WHERE time < ?  AND time > ? ORDER BY time DESC' \
+                % (self.field_name,)
+        fr = int(fr)
+        to = int(to)
+        try:
+            c = db_conn.cursor()
+            c.execute(query, (to, fr))
+            re = c.fetchall()
+            return re
+        except Exception as e:
+            logging.exception(e)
+            return []
+        finally:
+            db_conn.close()
         return []
 
     def set_value(self, t, value):
-        return False
+        db_conn = sqlite3.connect(self.db_name)
+        query = 'INSERT INTO %s (time, value) VALUES (?, ?)' \
+                % (self.field_name,)
+        try:
+            c = db_conn.cursor()
+            c.execute(query, (t, value))
+            db_conn.commit()
+            self.last_value = (t, value)
+            return True
+        except Exception as e:
+            logging.exception(e)
+            db_conn.rollback()
+            return False
+        finally:
+            db_conn.close()
 
 class Volatile(object):
-    volpersist_nb_values = 200
+    volpersist_nb_values = 100
     volpersist_save_lost = True
 
     def __init__(self):
