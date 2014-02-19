@@ -7,10 +7,10 @@ function StoreCtrl($scope, ModuleService, $modal, $timeout) {
     $scope.loading = true;
     ModuleService.available().then(function(modules) {
       $scope.availableModules = modules;
-      $timeout(function() { $scope.loading = false; }, 1000);
+      $scope.loading = false;
       $scope.unreachable = false;
     }, function() {
-      $timeout(function() { $scope.loading = false; }, 1000);
+      $scope.loading = false;
       $scope.unreachable = true;
     });
   };
