@@ -1,18 +1,9 @@
-html {
+html,
+body {
   height: 100%;
 }
 body {
   padding-top: 50px;
-  height: 100%;
-}
-@media (max-width: 480px) {
-  h1,
-  .h1 {
-    font-size: 16pt;
-  }
-}
-.container {
-  padding-top: 25px;
 }
 [ng\:cloak],
 [ng-cloak],
@@ -28,6 +19,60 @@ a.ng-click:hover {
 }
 a:hover {
   text-decoration: none;
+}
+@media (max-width: 480px) {
+  h1,
+  .h1 {
+    font-size: 16pt;
+  }
+}
+.navbar {
+  border-radius: initial;
+}
+.container {
+  padding-top: 25px;
+}
+.vertical-middle {
+  display: inline-block;
+  vertical-align: middle;
+  float: none;
+}
+.header .h1 {
+  margin: 0 auto;
+}
+.home-header {
+  font-size: 24px;
+}
+.home-header h1 {
+  font-size: 60px;
+}
+.home-content {
+  font-size: 18px;
+}
+.home-content .fa-thumbnail {
+  text-align: center;
+}
+.home-content .fa-thumbnail .fa {
+  color: #ccc;
+  font-size: 180px;
+}
+.home-content h2 {
+  text-align: center;
+  /*margin-bottom: 35px;*/
+}
+.home-content p {
+  margin: 20px;
+}
+.module-header .module-rating {
+  padding-right: 20px;
+}
+.module-header .module-rating .glyphicon-star,
+.module-header .module-rating .glyphicon-star-empty {
+  font-size: 30px;
+}
+.module-header .module-header-img {
+  width: 55px;
+  padding-right: 20px;
 }
 .module-thumbnail .thumbnail {
   border: none;
@@ -49,21 +94,6 @@ a:hover {
     height: 80px;
     width: 80px;
   }
-}
-.vertical-middle {
-  display: inline-block;
-  vertical-align: middle;
-  float: none;
-}
-.navbar {
-  border-radius: initial;
-}
-.header .h1 {
-  margin: 0 auto;
-}
-.header .header-img {
-  width: 55px;
-  padding-right: 10px;
 }
 .inject-independant {
   height: 100%;
@@ -119,27 +149,4 @@ a:hover {
   to {
     transform: rotate(360deg);
   }
-}
-.home .home-header {
-  font-size: 24px;
-}
-.home .home-header h1 {
-  font-size: 60px;
-}
-.home .home-content {
-  font-size: 18px;
-}
-.home .home-content .fa-thumbnail {
-  text-align: center;
-}
-.home .home-content .fa-thumbnail .fa {
-  color: #ccc;
-  font-size: 180px;
-}
-.home .home-content h2 {
-  text-align: center;
-  /*margin-bottom: 35px;*/
-}
-.home .home-content p {
-  margin: 20px;
 }

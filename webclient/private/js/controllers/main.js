@@ -15,4 +15,14 @@ function MainCtrl($scope, $location, ModuleService) {
       $location.path('/modules');
     }
   });
+
+  $scope.uninstall = function(module) {
+    console.log('uninstalling');
+    ModuleService.uninstall(module).then(function() {
+      console.log('uninstall success');
+      module.installed = false;
+    }, function() {
+      console.log('uninstall error');
+    });
+  };
 }
