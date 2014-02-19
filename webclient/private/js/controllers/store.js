@@ -1,4 +1,4 @@
-function StoreCtrl($scope, $modal, ModuleService) {
+function StoreCtrl($scope, ModuleService, $modal, $timeout) {
   // All modules
   $scope.availableModules = [];
 
@@ -7,10 +7,10 @@ function StoreCtrl($scope, $modal, ModuleService) {
     $scope.loading = true;
     ModuleService.available().then(function(modules) {
       $scope.availableModules = modules;
-      $scope.loading = false;
+      $timeout(function() { $scope.loading = false; }, 1000);
       $scope.unreachable = false;
     }, function() {
-      $scope.loading = false;
+      $timeout(function() { $scope.loading = false; }, 1000);
       $scope.unreachable = true;
     });
   };
