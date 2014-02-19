@@ -105,12 +105,12 @@ class SensorConnection(Protocol):
     def dataReceived(self, data):
         "As soon as any data is received, write it back."
         #print "Server said:", data
-        self.analyser(data)
+        self.analyse(data)
     
     def connectionLost(self, reason):
         print "connection lost"
       
-    def analyser(self,data):
+    def analyse(self,data):
         print "analyse en cours: "
         #a completer
         org = data[6:8]
@@ -165,12 +165,10 @@ class SensorConnection(Protocol):
         return l 
 
     def org06(self,valeur):
-        if valeur[31]=="0":
-            print "ouvert" 
-            return 0
+        if valeur[31] == '0':
+            return False
         else:
-            print "ferme"
-            return 1
+            return True
         
     def findButton(self,b):
         if b=="001":
@@ -188,7 +186,7 @@ class SensorConnection(Protocol):
         if status[3]=="1":
             #trouver des boutons presser
             b1 = valeur[0:3]  #button 1
-            if (valeur[7] =="0" and valeur[3]=="1"): #1 seul bouton presse
+            if valeur[7] =="0" and valeur[3]=="1": #1 seul bouton presse
                 print "les boutons appuyes: ",self.findButton(b1)
                 return self.findButton(b1)
             elif valeur[7] == "1": # deux boutons presser
@@ -228,13 +226,6 @@ class Sensor(object):
                 SensorConnectionFactory(self,
                     type(self).sensor_id))
 
-    def start(self):
-        # reactor.run()
-        super(Sensor, self).start()
-
-    def close(self):
-        super(Sensor, self).close()
-
 class Interrupt(Sensor):
     sensor_id = "0021CC31"
 
@@ -245,4 +236,4 @@ class Presence(Sensor):
     sensor_id = "00063E7B"
 
 class Humidite_Temperature(Sensor):
-    sensor_id = "00893378"
+    sensor_id = "00893378" 
