@@ -26,13 +26,21 @@ class Base(threading.Thread):
         self.old_time = 0
         self.running = False
 
+    def get_update_rate(self):
+        try:
+            return type(self).update_rate
+        except AttributeError:
+            return self.module.update_rate
+
     def get_info(self):
         """
         Return a dictionnary containing all informations about
         the field. Mixins can (and has to) overload this function
         to add more information
         """
+
         return {'name': self.field_name,
+                'update_rate': self.get_update_rate(),
                 'public_name': type(self).public_name}
 
     def on_start(self):
@@ -118,7 +126,7 @@ class Base(threading.Thread):
         """
         self.on_start()
         while self.running:
-            if time.time() - self.old_time >= self.module.update_rate:
+            if time.time() - self.old_time >= self.get_update_rate():
                 self.old_time = time.time()
                 self.emit_value(self.acquire_value())
             self.always()

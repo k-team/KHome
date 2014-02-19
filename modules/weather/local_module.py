@@ -57,6 +57,7 @@ class Weather(module.Base):
             fields.persistant.Volatile,
             fields.Base):
         public_name = 'Température (°C)'
+        update_rate = 1
 
         def acquire_value(self):
             try:
