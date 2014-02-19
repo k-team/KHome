@@ -7,7 +7,7 @@ import fields.syntax
 
 class MoistureSensor(module.Base):
     update_rate = 10
-    
+
     class moisture(
             fields.syntax.Numeric,
             fields.sensor.Moisture,
