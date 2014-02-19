@@ -154,7 +154,6 @@ def api_module_instances_statuses(module_name):
         app.logger.exception(e)
         abort(404)
     else:
-        print [f for f in mod.info['fields'] if 'readable' if f and f['readable']]
         fields = {}
         for f in mod.info['fields']:
             if 'readable' not in f or not f['readable']:
@@ -165,6 +164,31 @@ def api_module_instances_statuses(module_name):
             f.update(dict(zip(('time', 'value'), value)))
         print mod.info
         return jsonify(mod.info)
+
+@app.route('/api/modules/<module_name>/fields/<field_name>/status')
+def api_module_fields_statuses(module_name, field_name):
+    print module_name, field_name
+    if not packaging.is_installed(module_name):
+        print '%s not installed' % module_name
+        abort(404)
+    try:
+        mod = use_module(module_name)
+    except RuntimeError as e:
+        app.logger.exception(e)
+        abort(404)
+    else:
+        if not field_name in mod.fields_info:
+            abort(400)
+
+        f = mod.fields_info[field_name]
+        if 'readable' not in f or not f['readable']:
+            abort(400)
+
+        value = getattr(mod, f['name'])()
+        if value is None:
+            abort(400)
+
+        return jsonify(dict(zip(('time', 'value'), value)))
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug='--debug' in sys.argv, port=8888)
