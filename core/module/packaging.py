@@ -83,7 +83,7 @@ def install_from_zip(file_):
 
         # extract zip file
         zf.extractall(path.modules_directory())
-    instance.start(module_name)
+    instance.invoke(module_name)
 
 def uninstall(module_name):
     """
