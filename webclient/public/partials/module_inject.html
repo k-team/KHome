@@ -33,15 +33,15 @@
                     <span class="glyphicon glyphicon-time"></span>
                   </span>
                 </div>
-                <input data-ng-model="value"
+                <input data-ng-model="field.value"
                   data-ng-show="field.type=='string'"
                   name="field-str-{{field.name}}" type="text"
                   class="form-control" placeholder="{{field.name}}" />
-                <input data-ng-model="value"
+                <input data-ng-model="field.value"
                   data-ng-show="field.type=='numeric'"
                   name="field-num-{{field.name}}" type="number"
                   class="form-control" placeholder="{{field.name}}" />
-                <input data-ng-model="value"
+                <input data-ng-model="field.value"
                   data-ng-show="field.type=='boolean'"
                   name="field-bool-{{field.name}}" type="checkbox"
                   class="form-control" />
