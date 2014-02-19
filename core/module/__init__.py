@@ -10,40 +10,41 @@ from twisted.internet import reactor
 from twisted.internet.endpoints import UNIXServerEndpoint as ServerEndpoint
 
 import fields
-from . import connection
+
 import path
+import connection
 import instance
 
 _file = os.path.realpath(__file__)
 _root = os.path.dirname(os.path.dirname(os.path.dirname(_file)))
 
-SOCKET_TIMEOUT = 10
+SOCKET_TIMEOUT = 3
 
 _running_modules = []
 
-# Create a logger
-logger = logging.getLogger()
-logger.setLevel(logging.DEBUG)
-formatter = logging.Formatter(
-        '%(asctime)s :: %(levelname)s :: %(message)s')
-handler = logging.StreamHandler()
-handler.setFormatter(formatter)
-handler.setLevel(logging.DEBUG)
-logger.addHandler(handler)
+def setup_logger(logger):
+    logger.setLevel(logging.DEBUG)
+    fmt = '%(asctime)s :: %(name)s :: %(levelname)s :: %(message)s'
+    formatter = logging.Formatter(fmt)
+    handler = logging.StreamHandler()
+    handler.setFormatter(formatter)
+    handler.setLevel(logging.DEBUG)
+    logger.addHandler(handler)
+
+logger = logging.getLogger(__name__)
+setup_logger(logger)
 
 def kill():
     """
     Call the kill function of all running in this proc.
     Raise a runtime error.
     """
-    logger = logging.getLogger()
-    logger.info('Application killed')
     for mod in _running_modules:
-        logger.info('Kill the module `' + mod.module_name + '`.')
+        logger.info('Killing module `%s`.', mod)
         mod.kill()
-    raise RuntimeError('GTFO')
-    # reactor.callFromThread(reactor.stop)
-    # sys.exit(1)
+    raise RuntimeError('Application killed, cannot supply dependencies')
+    #reactor.callFromThread(reactor.stop)
+    #sys.exit(1)
 
 def get_socket(module_name, nb_try=5):
     """
@@ -56,13 +57,13 @@ def get_socket(module_name, nb_try=5):
             sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
             sock.connect(path.socket_file(module_name))
         except socket.error as e:
-            logger = logging.getLogger()
             logger.exception(e)
-            logger.error('Impossible to connect to the `' + module_name + '` module. (%d / %d)', i + 1, nb_try)
+            logger.error('Cannot connect to `%s` module. (%d / %d)',
+                    module_name, i + 1, nb_try)
             time.sleep(0.5)
         else:
             return sock.makefile('rw')
-    logger.error('Impossible to connect to the `' + module_name + '` module.')
+    logger.error('Cannot connect to `%s` module.', module_name)
     return kill()
 
 def network_write(conn, data):
@@ -74,10 +75,8 @@ def network_write(conn, data):
     When there is a IOError exception, modules are also killed.
     """
     _, wl, _ = select.select([], [conn], [], SOCKET_TIMEOUT)
-    if wl is []:
-        raise RuntimeError('Impossible to write to the `' + module_name + '` module.')
-        return kill()
-
+    if not wl:
+        raise RuntimeError('Cannot write to module.')
     conn = wl[0]
     try:
         conn.write(data + '\n')
@@ -92,22 +91,18 @@ def network_readline(conn):
     is a timeout, modules are killed.
     When there is a IOError exception, modules are also killed.
     """
-
     rl, _, _ = select.select([conn], [], [], SOCKET_TIMEOUT)
     if rl is []:
         return kill()
-
     try:
         return json.loads(conn.readline())
     except (IOError, ValueError) as e:
-        logger = logging.getLogger()
         logger.exception(e)
-        logger.error('Impossible to read from the module')
+        logger.error('Cannot read from module')
         return kill()
     except TypeError as e:
-        logger = logging.getLogger()
         logger.exception(e)
-        logger.error('The module send bad data')
+        logger.error('Module sent bad data')
         return {}
 
 def prop_field(field):
@@ -221,7 +216,7 @@ class BaseMeta(type):
         try:
           os.remove(obj.module_socket)
         except OSError:
-            pass # TODO logging ?
+            pass
         endpoint = ServerEndpoint(reactor, obj.module_socket)
         endpoint.listen(connection.Factory(obj))
 
@@ -235,6 +230,10 @@ class BaseMeta(type):
                 setattr(field, 'module', obj)
                 ls_fields += [field]
         setattr(obj, 'module_fields', ls_fields)
+
+        # Logger
+        setattr(obj, 'logger', logging.getLogger(obj.module_name))
+        setup_logger(obj.logger)
 
         _running_modules.append(obj)
         return obj
@@ -311,22 +310,24 @@ class Base(threading.Thread):
         return ans
 
     def start(self):
-        logger = logging.getLogger()
-        logger.info('The module `' + self.module_name + '` is running.')
+        logger.info('Starting')
         self.running = True
         for f in self.module_fields:
             f.start()
         super(Base, self).start()
+        logger.info('Started')
 
     def run(self):
         while self.running:
             time.sleep(0.1)
 
     def stop(self):
+        self.logger.info('Stopping')
         for f in self.module_fields:
             f.stop()
             f.join(1)
         self.running = False
+        self.logger.info('Stopped')
 
     def kill(self):
         for f in self.module_fields:
@@ -369,20 +370,16 @@ def use_module(module_name):
     """
     name = path.realname(module_name)
     if not instance.status(name):
-        logger = logging.getLogger()
-        logger.info(
-                'Try to launch the `' + module_name + '` dependancy module.')
-
+        logger.info('Trying to launch the `%s` dependancy module.',
+                module_name)
         instance.invoke(name, True)
         t = time.time()
         while not is_ready(module_name):
             time.sleep(0.1)
             if time.time() - t > SOCKET_TIMEOUT:
-                logger.error('Impossible to launch the `' + \
-                        module_name + '` dependancy module. Abort')
+                logger.error('Cannot launch the `%s` dependency: abort',
+                        module_name)
                 return kill()
-                # raise RuntimeError('Impossible to launch the `' + module_name + '` dependancy module.')
-
-        logger.info('The `' + module_name + \
-                '` dependancy module successfully launched.')
+        logger.info('`%s` dependancy module successfully launched.',
+                module_name)
     return Network(name=module_name)

@@ -1,4 +1,4 @@
-function FieldCtrl($scope, $rootScope, ModuleService, $timeout) {
+function FieldCtrl($scope, ModuleService, $rootScope, $timeout) {
   $scope.state = '';
 
   $scope.update = function() {
@@ -30,8 +30,9 @@ function FieldCtrl($scope, $rootScope, ModuleService, $timeout) {
 
   // Poll the current module for its status
   var pollValue = function() {
-    // var updateRate = $scope.module['update_rate'];
-    var updateRate = $scope.field['update_rate'];
+    // Update rate for poll
+    var updateRate = $scope.field['update_rate'] || 1;
+
     var poll = $timeout(function doPoll() {
       loadValue().then(function() {
         poll = $timeout(doPoll, 1000*updateRate);

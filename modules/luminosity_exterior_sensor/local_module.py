@@ -8,7 +8,7 @@ import fields.syntax
 class LuminosityExteriorSensor(module.Base):
     update_rate = 10
 
-    
+
     class luminosity(
 	    fields.syntax.Numeric,
             fields.sensor.LuminosityExterior,

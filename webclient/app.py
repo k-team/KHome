@@ -86,15 +86,18 @@ def api_install_module(module_name):
         abort(404)
     except IOError:
         abort(403)
-    return jsonify({ 'success': False })
+    return ''
 
 @route_with_module_posted('/api/modules/uninstall')
 def api_uninstall_module(module_name):
-    pass #instance.stop(module_name, instance_id)
+    try:
+        packaging.uninstall(module_name)
+    except ValueError:
+        abort(403)
+    return ''
 
 @app.route('/api/modules/upload', methods=['POST'])
 def api_upload_module():
-    return_data = { 'success': False }
     file_ = request.files['file']
     if not file_:
         abort(400)
@@ -108,11 +111,12 @@ def api_upload_module():
         packaging.install_from_zip(filename)
     except (IOError, ValueError):
         abort(403)
-    else:
-        return_data['success'] = True
     finally:
-        os.remove(filename)
-    return jsonify(return_data)
+        try:
+            os.remove(filename)
+        except OSError:
+            pass
+    return ''
 
 @app.route('/api/modules/<module_name>/public/<rest>')
 def api_module_public(module_name, rest):
@@ -167,26 +171,28 @@ def api_module_instances_statuses(module_name):
 
 @app.route('/api/modules/<module_name>/fields/<field_name>/status')
 def api_module_fields_statuses(module_name, field_name):
-    print module_name, field_name
     if not packaging.is_installed(module_name):
-        print '%s not installed' % module_name
         abort(404)
+
     try:
         mod = use_module(module_name)
     except RuntimeError as e:
         app.logger.exception(e)
         abort(404)
     else:
+        # field exists ?
         if not field_name in mod.fields_info:
             abort(400)
 
+        # field is readable ?
         f = mod.fields_info[field_name]
         if 'readable' not in f or not f['readable']:
-            abort(400)
+            abort(403)
 
+        # field returns value ?
         value = getattr(mod, f['name'])()
         if value is None:
-            abort(400)
+            abort(404)
 
         return jsonify(dict(zip(('time', 'value'), value)))
 

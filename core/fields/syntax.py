@@ -1,78 +1,59 @@
 import fields.io
 import fields.persistant
 
-class Constant(fields.io.Readable,
-        fields.persistant.Volatile):
+class Typed(object):
+    def get_info(self):
+        info = super(Typed, self).get_info()
+        info['type'] = type(self).typed_name
+        return info
+
+    def _set_value(self, t, value):
+        if value is None:
+            return False
+        try:
+            value = type(self).typed_type(value)
+        except ValueError:
+            return False
+        return super(Typed, self)._set_value(t, value)
+
+class Constant(fields.io.Readable, fields.persistant.Volatile):
     update_rate = 100000
     const_value = None
 
     def get_info(self):
-        a = super(Constant, self).get_info()
-        a['const'] = True
-        return a
+        info = super(Constant, self).get_info()
+        info['const'] = True
+        return info
 
     def acquire_value(self):
         return type(self).const_value
 
-class Integer(object):
-    def get_info(self):
-        a = super(Integer, self).get_info()
-        a['type'] = 'numeric'
-        return a
+class Numeric(Typed):
+    typed_type = float
+    typed_name = 'numeric'
 
-    def set_value(self, t, value):
-        if value is None:
-            return False
-        try:
-            value = int(value)
-        except ValueError:
-            return False
-        return super(Integer, self).set_value(t, value)
+class Boolean(Typed):
+    typed_type = bool
+    typed_name = 'boolean'
 
-class Numeric(object):
-    def get_info(self):
-        a = super(Numeric, self).get_info()
-        a['type'] = 'numeric'
-        return a
+class String(Typed):
+    typed_type = str
+    typed_name = 'string'
 
-    def set_value(self, t, value):
-        if value is None:
-            return False
-        try:
-            value = float(value)
-        except ValueError:
-            return False
-        return super(Numeric, self).set_value(t, value)
+class BoundNumeric(Numeric):
+    """
+    Bound numeric field mixin, assumes that *lower_bound* and *upper_bound* are
+    set for this field.
+    """
+    def _set_value(self, t, value):
+        return super(BoundNumeric, self)._set_value(t, value) \
+                and type(self).lower_bound < value < type(self).upper_bound
 
-class Boolean(object):
-    def get_info(self):
-        a = super(Boolean, self).get_info()
-        a['type'] = 'boolean'
-        return a
-
-    def set_value(self, t, value):
-        if value is None:
-            return False
-        try:
-            value = bool(value)
-        except ValueError:
-            return False
-        return super(Boolean, self).set_value(t, value)
-
-class String(object):
-    def get_info(self):
-        a = super(String, self).get_info()
-        a['type'] = 'string'
-        return a
-
-    def set_value(self, t, value):
-        if value is None:
-            return False
-        try:
-            value = str(value)
-        except ValueError:
-            return False
-        return super(String, self).set_value(t, value)
+class Percentage(BoundNumeric):
+    """
+    Percentage field, bound numeric field [0;100].
+    """
+    lower_bound, upper_bound = 0, 100
 
 def from_string(s):
     """

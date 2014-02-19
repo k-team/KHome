@@ -8,9 +8,9 @@ import logging
 import subprocess
 import multiprocessing
 import traceback
-import module
-import packaging
+
 import path
+import packaging
 
 logger = logging.getLogger(__name__)
 
