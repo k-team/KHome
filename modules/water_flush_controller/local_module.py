@@ -1,10 +1,14 @@
+# -*- coding: utf-8 -*-
+
 import module
 from module import use_module
 import fields
 import logging
+import fields.proxy
 
 class WaterFlushController(module.Base):
     update_reate = 10
+    public_name = 'Contrôleur de chasse d\'eau'
     water_flush = use_module('WaterFlush')
 
     class controller(fields.Base):
@@ -16,7 +20,7 @@ class WaterFlushController(module.Base):
         def always(self):
             print "testons"
             try:
-		presence_now = self.module.water_flush.flush()[1]
+        presence_now = self.module.water_flush.flush()[1]
 	        print "presence_before = %s, presence_now = %s" % (self.presence_before, presence_now)
 	    except TypeError as e:
                 logger = logging.getLogger()
@@ -28,4 +32,8 @@ class WaterFlushController(module.Base):
                 else:
                     self.module.water_flush.flush(False)#remettre le piston
                     print "la chasse n'est pas tiree"
-		self.presence_before = presence_now
+        self.presence_before = presence_now
+
+    class WaterFlush(module.Base):
+        flush = fields.proxy.mix('flush', 'HumanPresenceSensor', 'presence','PistonActuator', 'piston')
+

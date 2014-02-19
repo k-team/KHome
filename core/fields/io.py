@@ -4,7 +4,7 @@ class Writable(object):
     """
     Mixin of the fields.Base class adding a writing property of the value of
     the field. When the value is written, a new timestamp is associated to the
-    value and then given to the field's _set_value. It's not garantee that the
+    value and then given to the field's emit_value. It's not garantee that the
     new value is really written.
     Return if the new value is written.
     """
@@ -15,7 +15,7 @@ class Writable(object):
         return a
 
     def write(self, value):
-        return self._set_value(time.time(), value)
+        return self.emit_value(value)
 
 class Readable(object):
     """

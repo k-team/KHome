@@ -7,6 +7,7 @@ import fields.io
 import fields.sensor
 import fields.persistant
 import fields.syntax
+import logging
 
 class Weather(module.Base):
     update_rate = 2
@@ -29,19 +30,26 @@ class Weather(module.Base):
                         'region': ans.location.region,
                         'country': ans.location.country
                 }
-            except (IOError, TypeError):
+            except (AssertionError, IOError, TypeError) as e:
+                logging.exception(e)
                 return
 
-    class woeid(fields.persistant.Volatile,
-            fields.syntax.Numeric,
+    class woeid(
+            fields.syntax.Integer,
             fields.io.Writable,
             fields.io.Readable,
+            fields.persistant.Volatile,
             fields.Base):
         public_name = 'Géolocalisation'
 
-        def acquire_value(self):
-            woeid = 609125 # Lyon
-            return woeid
+        def on_start(self):
+            super(Weather.woeid, self).on_start()
+            print self.get_info()
+            self.emit_value(609125)
+
+        # def acquire_value(self):
+        #     woeid = 609125 # Lyon
+        #     return woeid
 
     class temperature(
             fields.syntax.Numeric,
@@ -49,6 +57,7 @@ class Weather(module.Base):
             fields.persistant.Volatile,
             fields.Base):
         public_name = 'Température (°C)'
+        update_rate = 1
 
         def acquire_value(self):
             try:
