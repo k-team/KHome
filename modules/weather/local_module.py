@@ -28,7 +28,9 @@ class Weather(module.Base):
                         'pressure': ans.atmosphere.pressure,
                         'city': ans.location.city,
                         'region': ans.location.region,
-                        'country': ans.location.country
+                        'country': ans.location.country,
+                        'wind_speed': ans.wind.speed,
+                        'wind_direction': ans.wind.cardinal_direction()
                 }
             except (AssertionError, IOError, TypeError) as e:
                 logging.exception(e)
@@ -83,12 +85,39 @@ class Weather(module.Base):
             fields.io.Graphable,
             fields.persistant.Volatile,
             fields.Base):
-        public_name = 'Pression (Pa)'
+        public_name = 'Pression (mbars)'
 
         def acquire_value(self):
             try:
                 return self.module._weather()[1]['pressure']
             except TypeError:
+                return
+
+    class wind_speed(
+            fields.syntax.Numeric,
+            fields.io.Graphable,
+            fields.persistant.Volatile,
+            fields.Base):
+        public_name = 'Vitesse du vent (km/h)'
+
+        def acquire_value(self):
+            try:
+                return self.module._weather()[1]['wind_speed']
+            except TypeError:
+                return
+
+    class wind_direction(
+            fields.syntax.String,
+            fields.io.Readable,
+            fields.persistant.Volatile,
+            fields.Base):
+        public_name = 'Direction du vent'
+
+        def acquire_value(self):
+            try:
+                direction = {None: 'Pas de vent', 'N': 'Nord', 'S': 'Sud', 'E': 'Est', 'W': 'Ouest'}
+                return direction[self.module._weather()[1]['wind_direction']]
+            except (KeyError, TypeError):
                 return
 
     class city(

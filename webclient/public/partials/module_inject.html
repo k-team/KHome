@@ -1,6 +1,6 @@
 <span id="inject-independant"></span>
 <div class="container">
-  <div data-ng-show="module.show">
+  <div data-ng-show="module">
     <div class="header">
       <img class="header-img" src="/api/modules/{{ module.name }}/public/icon.png"
         alt="Icon for {{ module.public_name || module.name }}">
@@ -12,7 +12,7 @@
     </div>
     <hr />
     <div class="content">
-      <div data-ng-controller="ModuleFieldCtrl" data-ng-repeat="field in module.fields">
+      <div data-ng-controller="FieldCtrl" data-ng-repeat="field in module.fields">
         <form data-ng-show="field.readable || field.writable" data-ng-submit="update()" class="form-horizontal" role="form">
           <fieldset data-ng-disabled="!field.writable">
             <div class="form-group" data-ng-class="{success:'has-success', error:'has-error', '':''}[field.state]">
@@ -47,6 +47,10 @@
       </div>
       <hr>
       <div id="inject"></div>
+      <!--Supervision graph-->
+      <div data-ng-show="data" data-ng-controller="SupervisionCtrl" data-ng-repeat="field in module.fields | graphable">
+        <div graph data-graph-model="data" data-tick-size="field.update_rate * 10" class="graph"></div>
+      </div>
     </div>
   </div>
 </div>
