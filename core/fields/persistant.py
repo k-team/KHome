@@ -8,7 +8,7 @@ class Database(object):
     def _get_value_from_to(self, fr, to):
         return []
 
-    def _set_value(self, t, value):
+    def set_value(self, t, value):
         return False
 
 class Volatile(object):
@@ -40,13 +40,13 @@ class Volatile(object):
             return res
         return super(Volatile, self)._get_value_from_to(fr, to)
 
-    def _set_value(self, t, value):
+    def set_value(self, t, value):
         self._persisted_volatile_values += [(t, value)]
         if len(self._persisted_volatile_values) \
             > type(self).volpersist_nb_values:
                 if type(self).volpersist_save_lost:
                     lost_value = self._persisted_volatile_values[0]
-                    super(Volatile, self)._set_value(*lost_value)
+                    super(Volatile, self).set_value(*lost_value)
                 self._persisted_volatile_values = \
                         self._persisted_volatile_values[1:]
         return True

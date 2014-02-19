@@ -8,8 +8,11 @@ docopt==0.6.1
 flask-peewee==0.6.5
 itsdangerous==0.23
 peewee==2.2.1
+python-dateutil==2.2
 requests==2.2.1
+six==1.5.2
 twitter==1.13.1
+weatherpy==1.0.2
 wsgiref==0.1.2
 wtf-peewee==0.2.2
 zope.interface==4.0.5

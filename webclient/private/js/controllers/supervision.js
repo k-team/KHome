@@ -1,63 +1,38 @@
 function SupervisionCtrl($scope, ModuleService, $timeout, $rootScope) {
-  $scope.data = {};
-  $scope.maxData = 10;
+  $scope.data = null;
+  $scope.maxData = 100;
+  var field = $scope.field;
 
-  var pollModule = function(name, callback, delay) {
-    if (delay === undefined) { delay = 1000; }
-
-    var timeout = $timeout(function pollFn() {
-      callback(ModuleService.moduleStatus(name));
-      timeout = $timeout(pollFn, delay);
-    }, delay);
-
-    return {
-      cancel: function() {
-        $timeout.cancel(timeout);
-      }
-    };
-  };
-
-  var poll = null;
-  $scope.$watch('moduleName', function() {
-    // Cancel the previous poll
-    if (poll) {
-      poll.cancel();
+  var addData = function(data) {
+    // Empty data case
+    if (!$scope.data) {
       $scope.data = {};
+      $scope.data[field.name] = [];
     }
 
-    // Do nothing if the module isn't set
-    if (!$scope.moduleName) { return; }
+    // Verify if data should be added
+    var fieldData = $scope.data[field.name];
+    if (fieldData.length && fieldData[fieldData.length - 1][0] == data.time) { return; }
 
-    // Poll the current supervised module for its status
-    poll = pollModule($scope.moduleName, function(promise) {
-      promise.then(function(data) {
-        data = [data];
-        angular.forEach(data, function(instance) {
-          angular.forEach(instance.fields, function(data, field) {
-            var attrName = instance.name + '.' + field;
-            // Empty data case
-            if (!$scope.data[attrName]) {
-              $scope.data[attrName] = [];
-            }
+    // Push new data
+    fieldData.push([data.time, data.value]);
+    if ($scope.maxData < fieldData.length) {
+      fieldData.splice(0, fieldData.length - $scope.maxData);
+    }
+  };
 
-            // Push new data
-            var attrData = $scope.data[attrName];
-            attrData.push([data.time, data.value]);
-            if ($scope.maxData < attrData.length) {
-              attrData.splice(0, attrData.length - $scope.maxData);
-            }
-          });
-        });
-      }, function() {
-        // TODO
-      });
-    });
+  ModuleService.fieldAllStatus($scope.moduleName, field.name).then(function(data) {
+    data.forEach(addData);
+  });
 
-    // Stop polling when location is changed
-    $rootScope.$on('$routeChangeSuccess', function () {
-      poll.cancel();
-      $scope.data = {};
-      $scope.graphData = [];
-    });
+  // Poll the current supervised module for its status
+  $scope.$on('fieldUpdate', function(_, fieldEmit, data) {
+    if(field != fieldEmit) { return; }
+    addData(data);
+  });
+
+  // Clear data when location is changed
+  $rootScope.$on('$routeChangeSuccess', function () {
+    $scope.data = null;
   });
 }

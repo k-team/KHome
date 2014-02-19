@@ -1,11 +1,17 @@
-function StoreCtrl($scope, $modal, ModuleService) {
+function StoreCtrl($scope, ModuleService, $modal, $timeout) {
   // All modules
   $scope.availableModules = [];
 
   // Explicitly reload modules
   $scope.reloadAvailableModules = function() {
+    $scope.loading = true;
     ModuleService.available().then(function(modules) {
       $scope.availableModules = modules;
+      $timeout(function() { $scope.loading = false; }, 1000);
+      $scope.unreachable = false;
+    }, function() {
+      $timeout(function() { $scope.loading = false; }, 1000);
+      $scope.unreachable = true;
     });
   };
   //...and call immediately
@@ -51,8 +57,6 @@ function StoreCtrl($scope, $modal, ModuleService) {
 
   $scope.modalInstances = {};
   $scope.openModal = function(module) {
-    console.log(module);
-    console.log('coucou');
     var modalScope = $scope.$new(true);
 
     // Dismiss the modal

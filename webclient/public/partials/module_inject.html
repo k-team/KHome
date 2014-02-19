@@ -1,50 +1,61 @@
+<!--Independent view placeholder-->
 <span id="inject-independant"></span>
-<div class="container">
-  <div data-ng-show="module.show">
-    <div class="header">
-      <span class="h1 vertical-middle">{{ module.public_name || module.name }}</span>
-      &nbsp;
-      <span class="vertical-middle" data-ng-controller="RatingCtrl">
-        <rating value="module.rating" max="5" data-ng-click="rate()" on-leave="overStar = null"></rating>
-      </span>
-    </div>
-    <hr />
-    <div class="content">
-      <div data-ng-controller="ModuleFieldCtrl" data-ng-repeat="field in module.fields">
-        <form data-ng-show="field.readable || field.writable" data-ng-submit="update()" class="form-horizontal" role="form">
-          <fieldset data-ng-disabled="!field.writable">
-            <div class="form-group" data-ng-class="{success:'has-success', error:'has-error', '':''}[field.state]">
-              <label for="field-{{field.name}}" class="col-sm-2 control-label">{{field.public_name || field.name}}</label>
-              <div class="input-group input-group-sm col-sm-10">
-                <div class="input-group-addon" data-ng-show="field.writable" data-ng-switch on="field.state">
-                  <span data-ng-switch-default>
-                    <span class="glyphicon glyphicon-pencil"></span>
-                  </span>
-                  <span data-ng-switch-when="success">
-                    <span class="glyphicon glyphicon-ok"></span>
-                  </span>
-                  <span data-ng-switch-when="error">
-                    <span class="glyphicon glyphicon-remove"></span>
-                  </span>
-                  <span data-ng-switch-when="waiting">
-                    <span class="glyphicon glyphicon-time"></span>
-                  </span>
-                </div>
-                <input data-ng-model="field.value" name="field-{{field.name}}"
-                    type="{'string': 'text', 'numeric': 'number', 'boolean': 'checkbox'}[field.type]"
-                    class="form-control" placeholder="{{field.name}}" />
-                <span data-ng-show="field.writable" class="input-group-btn">
-                  <button type="submit" class="btn btn-default">
-                    <span class="glyphicon glyphicon-share-alt"></span>
-                  </button>
+
+<div data-ng-show="module" class="container">
+  <div class="header">
+    <span class="h1 vertical-middle">{{ module.public_name || module.name }}</span>
+    &nbsp;
+    <span class="vertical-middle" data-ng-controller="RatingCtrl">
+      <rating value="module.rating" max="5" data-ng-click="rate()" on-leave="overStar = null"></rating>
+    </span>
+  </div>
+  <hr>
+  <div class="content">
+
+    <!--Settings injection-->
+    <div data-ng-controller="FieldCtrl" data-ng-repeat="field in module.fields">
+      <form data-ng-show="field.readable || field.writable" data-ng-submit="update()" class="form-horizontal" role="form">
+        <fieldset data-ng-disabled="!field.writable">
+          <div class="form-group" data-ng-class="{ success: 'has-success', error: 'has-error' }[state]">
+            <label for="field-{{ field.name }}" class="col-sm-2 control-label">{{ field.public_name || field.name }}</label>
+            <div class="input-group input-group-sm col-sm-10">
+              <div class="input-group-addon" data-ng-show="field.writable" data-ng-switch on="state">
+                <span data-ng-switch-default>
+                  <span class="glyphicon glyphicon-pencil"></span>
+                </span>
+                <span data-ng-switch-when="success">
+                  <span class="glyphicon glyphicon-ok"></span>
+                </span>
+                <span data-ng-switch-when="error">
+                  <span class="glyphicon glyphicon-remove"></span>
+                </span>
+                <span data-ng-switch-when="waiting">
+                  <span class="glyphicon glyphicon-time"></span>
                 </span>
               </div>
+
+              <!-- TODO gérer les types -->
+              <input data-ng-model="field.value" name="field-{{ field.name }}"
+                  type="{'string': 'text', 'numeric': 'number', 'boolean': 'checkbox'}[field.type]"
+                  class="form-control" placeholder="{{ (field.writable) ? field.name : 'unspecified' }}" />
+              <span data-ng-show="field.writable" class="input-group-btn">
+                <button type="submit" class="btn btn-default">
+                  <span class="glyphicon glyphicon-share-alt"></span>
+                </button>
+              </span>
             </div>
-          </fieldset>
-        </form>
-      </div>
-      <hr>
-      <div id="inject"></div>
+          </div>
+        </fieldset>
+      </form>
+    </div>
+    <hr>
+
+    <!--Integrated view placeholder-->
+    <div id="inject"></div>
+
+    <!--Supervision graph-->
+    <div data-ng-show="data" data-ng-controller="SupervisionCtrl" data-ng-repeat="field in module.fields | graphable">
+        <div graph graph-model="data" class="graph"></div>
     </div>
   </div>
 </div>
