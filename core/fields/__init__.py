@@ -26,18 +26,34 @@ class Base(threading.Thread):
         self.old_time = 0
         self.running = False
 
+    def get_update_rate(self):
+        try:
+            return type(self).update_rate
+        except AttributeError:
+            return self.module.update_rate
+
     def get_info(self):
         """
         Return a dictionnary containing all informations about
         the field. Mixins can (and has to) overload this function
         to add more information
         """
+
         return {'name': self.field_name,
+                'update_rate': self.get_update_rate(),
                 'public_name': type(self).public_name}
+
+    def on_start(self):
+        """
+        Function called at the start of the field
+        Usefull for init something.
+        """
+        pass
 
     def emit_value(self, value):
         if value is not None:
-            self._set_value(time.time(), value)
+            return self.set_value(time.time(), value)
+        return False
 
     def acquire_value(self):
         """
@@ -48,7 +64,7 @@ class Base(threading.Thread):
         """
         return None
 
-    def _set_value(self, t, value):
+    def set_value(self, t, value):
         """
         Add a new value *value* at time *t*.
         It's the job of the persistant mixins to manage how to save the new
@@ -81,10 +97,12 @@ class Base(threading.Thread):
         pass
 
     def read(self, **kwargs):
-        raise NotImplementedError
+        return False
+        # raise NotImplementedError
 
     def write(self, value):
-        raise NotImplementedError
+        return False
+        # raise NotImplementedError
 
     def start(self):
         """
@@ -106,8 +124,9 @@ class Base(threading.Thread):
         Main function of the thread. Every *update_rate* time, try to acquire a value and to
         add this one.
         """
+        self.on_start()
         while self.running:
-            if time.time() - self.old_time >= self.module.update_rate:
+            if time.time() - self.old_time >= self.get_update_rate():
                 self.old_time = time.time()
                 self.emit_value(self.acquire_value())
             self.always()

@@ -1,9 +1,10 @@
+<!--Independent view placeholder-->
 <span id="inject-independant"></span>
 <div class="container">
-  <div data-ng-show="module.show">
+  <div data-ng-show="module">
     <div class="header">
       <img class="header-img" src="/api/modules/{{ module.name }}/public/icon.png"
-        alt="Icon for {{ module.public_name || module.name }}">
+      alt="Icon for {{ module.public_name || module.name }}">
       <span class="h1 vertical-middle">{{ module.public_name || module.name }}</span>
       &nbsp;
       <span class="vertical-middle" data-ng-controller="RatingCtrl">
@@ -12,7 +13,7 @@
     </div>
     <hr />
     <div class="content">
-      <div data-ng-controller="ModuleFieldCtrl" data-ng-repeat="field in module.fields">
+      <div data-ng-controller="FieldCtrl" data-ng-repeat="field in module.fields">
         <form data-ng-show="field.readable || field.writable" data-ng-submit="update()" class="form-horizontal" role="form">
           <fieldset data-ng-disabled="!field.writable">
             <div class="form-group" data-ng-class="{success:'has-success', error:'has-error', '':''}[field.state]">
@@ -32,9 +33,11 @@
                     <span class="glyphicon glyphicon-time"></span>
                   </span>
                 </div>
-                <input data-ng-model="field.value" name="field-{{field.name}}"
-                    type="{'string': 'text', 'numeric': 'number', 'boolean': 'checkbox'}[field.type]"
-                    class="form-control" placeholder="{{field.name}}" />
+
+                <!-- TODO gérer les types -->
+                <input data-ng-model="field.value" name="field-{{ field.name }}"
+                type="{'string': 'text', 'numeric': 'number', 'boolean': 'checkbox'}[field.type]"
+                class="form-control" placeholder="{{ (field.writable) ? field.name : 'unspecified' }}" />
                 <span data-ng-show="field.writable" class="input-group-btn">
                   <button type="submit" class="btn btn-default">
                     <span class="glyphicon glyphicon-share-alt"></span>
@@ -46,7 +49,13 @@
         </form>
       </div>
       <hr>
+
+      <!--Integrated view placeholder-->
       <div id="inject"></div>
+
+      <!--Supervision graph-->
+      <div data-ng-show="data" data-ng-controller="SupervisionCtrl" data-ng-repeat="field in module.fields | graphable">
+        <div graph graph-model="data" class="graph"></div>
+      </div>
     </div>
   </div>
-</div>
