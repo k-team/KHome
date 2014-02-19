@@ -1,17 +1,20 @@
 <span id="inject-independant"></span>
 <div class="container">
   <div data-ng-show="module">
-    <div class="header">
-      <img class="header-img" src="/api/modules/{{ module.name }}/public/icon.png"
+    <div class="header module-header">
+      <img class="hidden-xs module-header-img" src="/api/modules/{{ module.name }}/public/icon.png"
         alt="Icon for {{ module.public_name || module.name }}"
         onerror="this.onerror = null; this.src = '/img/module.png'">
       <span class="h1 vertical-middle">{{ module.public_name || module.name }}</span>
       &nbsp;
-      <span class="vertical-middle" data-ng-controller="RatingCtrl">
+      <a data-ng-click="requestUninstall(module)" title="Désinstaller ce module" class="btn btn-danger pull-right hidden-xs">
+        Désinstaller
+      </a>
+      <span class="module-rating pull-right vertical-middle" data-ng-controller="RatingCtrl">
         <rating value="module.rating" max="5" data-ng-click="rate()" on-leave="overStar = null"></rating>
       </span>
     </div>
-    <hr />
+    <hr>
     <div class="content">
       <div data-ng-controller="FieldCtrl" data-ng-repeat="field in module.fields">
         <form data-ng-show="field.readable || field.writable" data-ng-submit="update()" class="form-horizontal" role="form">

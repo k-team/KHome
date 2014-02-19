@@ -87,6 +87,16 @@ angular.module('GHome', ['ngRoute', 'ui.bootstrap', 'angularFileUpload', 'frapon
       $location.path('/modules');
     }
   });
+
+  $scope.uninstall = function(module) {
+    console.log('uninstalling');
+    ModuleService.uninstall(module).then(function() {
+      console.log('uninstall success');
+      module.installed = false;
+    }, function() {
+      console.log('uninstall error');
+    });
+  };
 }
 ;function ModuleInjectorCtrl($scope, ModuleService, $routeParams, $compile, $http) {
   $scope.moduleName = $routeParams.moduleName;
@@ -203,16 +213,6 @@ angular.module('GHome', ['ngRoute', 'ui.bootstrap', 'angularFileUpload', 'frapon
       module.installed = true;
     }, function() {
       $scope.removeInstallingModule(module);
-    });
-  };
-
-  $scope.uninstall = function(module) {
-    console.log('uninstalling');
-    ModuleService.uninstall(module).then(function() {
-      console.log('uninstall success');
-      module.installed = false;
-    }, function() {
-      console.log('uninstall error');
     });
   };
 

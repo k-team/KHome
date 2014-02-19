@@ -49,16 +49,6 @@ function StoreCtrl($scope, ModuleService, $modal, $timeout) {
     });
   };
 
-  $scope.uninstall = function(module) {
-    console.log('uninstalling');
-    ModuleService.uninstall(module).then(function() {
-      console.log('uninstall success');
-      module.installed = false;
-    }, function() {
-      console.log('uninstall error');
-    });
-  };
-
   // Uploading system
   $scope.uploading = false
   $scope.upload = function(file) {
