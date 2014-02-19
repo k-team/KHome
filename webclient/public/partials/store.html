@@ -1,5 +1,20 @@
 <div class="container">
+  <!--Loading gif-->
+  <div data-ng-show="loading">
+    <h1 class="text-center">
+      <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
+      <br>Chargement du store
+    </h1>
+  </div>
+
   <div class="content">
+    <!--Error message for unreachable store-->
+    <div data-ng-show="unreachable && !loading" class="alert alert-danger">
+      <div data-dismiss="alert" class="close">&times;</div>
+      Il semblerait que le store soit inacessible, rechargez la page ou
+      <a data-ng-click="reloadAvailableModules()" class="alert-link">cliquez ici pour réessayer</a>.
+    </div>
+
     <div data-ng-show="availableModules" class="row">
       <div data-ng-repeat="module in availableModules | filter:query" class="module-thumbnail col-xs-12 col-sm-4 col-md-3">
         <div data-ng-click="openModal(module)" class="hidden-xs thumbnail">
@@ -18,8 +33,8 @@
               <rating value="module.rating" max="5" readonly="true"></rating>
             </div>
             <div class="col-md-5 col-sm-6">
-              <p data-ng-hide="module.installed" class="text-danger"><small>Not installed</small></p>
-              <p data-ng-show="module.installed" class="text-success"><small>Installed</small></p>
+              <p data-ng-hide="module.installed" class="text-danger"><small>Pas installé</small></p>
+              <p data-ng-show="module.installed" class="text-success"><small>Installé</small></p>
             </div>
           </div>
         </div>
@@ -38,8 +53,8 @@
                   <rating value="module.rating" max="5" readonly="true"></rating>
                 </div>
                 <div class="col-xs-6">
-                  <p data-ng-hide="module.installed" class="text-danger"><small>Not installed</small></p>
-                  <p data-ng-show="module.installed" class="text-success"><small>Installed</small></p>
+                  <p data-ng-hide="module.installed" class="text-danger"><small>Pas installé</small></p>
+                  <p data-ng-show="module.installed" class="text-success"><small>Installé</small></p>
                 </div>
               </div>
             </div>

@@ -31,6 +31,14 @@ angular.module('GHome').factory('ModuleService', function($q, $http, $timeout, $
     return httpGetJSON(modulesUrl + '/' + name + '/instances/status');
   };
 
+  service.fieldStatus = function(module_name, field_name) {
+    return httpGetJSON(modulesUrl + '/' + module_name + '/fields/' + field_name + '/status');
+  };
+
+  service.fieldAllStatus = function(module_name, field_name) {
+    return httpGetJSON(modulesUrl + '/' + module_name + '/fields/' + field_name + '/all-status');
+  };
+
   service.updateField = function(module, field, value) {
     var deferred = $q.defer();
     httpPostJSON(modulesUrl + '/update_field',
@@ -66,7 +74,7 @@ angular.module('GHome').factory('ModuleService', function($q, $http, $timeout, $
       console.error('Invalid value', oldValue);
     }
     var deferred = $q.defer();
-    httpPostJSON(storeUrl + '/rate', { name: module.id, value: value })
+    httpPostJSON(storeUrl + '/rate', { name: module.name, value: value })
       .success(function() { deferred.resolve(); })
       .error(function() { deferred.reject(); });
     return deferred.promise;
@@ -90,7 +98,7 @@ angular.module('GHome').factory('ModuleService', function($q, $http, $timeout, $
   // ...from the catalog
   service.installFromCatalog = function(module) {
     var deferred = $q.defer();
-    httpPostJSON(modulesUrl + '/install', { name: module.id })
+    httpPostJSON(modulesUrl + '/install', { name: module.name })
       .success(function() { deferred.resolve(); })
       .error(function() { deferred.reject(); });
     return deferred.promise;

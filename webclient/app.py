@@ -31,11 +31,6 @@ IMAGE_EXTS = ['png', 'jpg', 'jpeg', 'gif', 'bmp']
 def index():
     return app.send_static_file('index.html')
 
-# move in module ?
-@app.route('/api/rooms')
-def api_rooms():
-    return app.send_static_file('rooms.json')
-
 @app.route('/api/modules')
 def api_modules():
     return jsonify(packaging.get_installed_modules(detailed=True))
@@ -147,9 +142,6 @@ if __name__ == '__main__':
         store_proxy('/api/available_modules/<module_name>/public/<rest>')
         store_proxy('/api/available_modules/rate', methods=['POST'])
 
-# used for samples
-import random
-
 @app.route('/api/modules/<module_name>/instances/status')
 def api_module_instances_statuses(module_name):
     # TODO add support for multiple instances
@@ -162,7 +154,6 @@ def api_module_instances_statuses(module_name):
         app.logger.exception(e)
         abort(404)
     else:
-        print [f for f in mod.info['fields'] if 'readable' if f and f['readable']]
         fields = {}
         for f in mod.info['fields']:
             if 'readable' not in f or not f['readable']:
@@ -173,6 +164,53 @@ def api_module_instances_statuses(module_name):
             f.update(dict(zip(('time', 'value'), value)))
         print mod.info
         return jsonify(mod.info)
+
+@app.route('/api/modules/<module_name>/fields/<field_name>/status')
+def api_module_fields_statuses(module_name, field_name):
+    print module_name, field_name
+    if not packaging.is_installed(module_name):
+        print '%s not installed' % module_name
+        abort(404)
+    try:
+        mod = use_module(module_name)
+    except RuntimeError as e:
+        app.logger.exception(e)
+        abort(404)
+    else:
+        if not field_name in mod.fields_info:
+            abort(400)
+
+        f = mod.fields_info[field_name]
+        if 'readable' not in f or not f['readable']:
+            abort(400)
+
+        value = getattr(mod, f['name'])()
+        if value is None:
+            abort(400)
+
+        return jsonify(dict(zip(('time', 'value'), value)))
+
+@app.route('/api/modules/<module_name>/fields/<field_name>/all-status')
+def api_module_fields_all_statuses(module_name, field_name):
+    print module_name, field_name
+    if not packaging.is_installed(module_name):
+        print '%s not installed' % module_name
+        abort(404)
+    try:
+        mod = use_module(module_name)
+    except RuntimeError as e:
+        app.logger.exception(e)
+        abort(404)
+    else:
+        if not field_name in mod.fields_info:
+            abort(400)
+
+        f = mod.fields_info[field_name]
+        if 'readable' not in f or not f['readable']:
+            abort(400)
+
+        data = getattr(mod, f['name'])(fr=-time.time(), to=0)
+        return jsonify([dict(zip(('time', 'value'), v)) for v in data])
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug='--debug' in sys.argv, port=8888)
