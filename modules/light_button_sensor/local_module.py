@@ -9,9 +9,9 @@ class LightButtonSensor(module.Base):
     update_rate = 10
 
     class light_button(
-            fields.syntax.Boolean, 
-            fields.sensor.LightButton, 
+            fields.syntax.Boolean,
+            fields.sensor.LightButton,
             fields.io.Readable,
-            fields.persistant.Volatile, 
+            fields.persistant.Volatile,
             fields.Base):
         pass

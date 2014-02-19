@@ -8,7 +8,7 @@ import fields.syntax
 class LuminosityInteriorSensor(module.Base):
     update_rate = 10
 
-    
+
     class luminosity(
 	    fields.syntax.Numeric,
             fields.sensor.LuminosityInterior,
@@ -16,5 +16,5 @@ class LuminosityInteriorSensor(module.Base):
             fields.persistant.Volatile,
             fields.Base):
         pass
-        
-    
+
+
