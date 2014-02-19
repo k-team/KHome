@@ -190,5 +190,27 @@ def api_module_fields_statuses(module_name, field_name):
 
         return jsonify(dict(zip(('time', 'value'), value)))
 
+@app.route('/api/modules/<module_name>/fields/<field_name>/all-status')
+def api_module_fields_all_statuses(module_name, field_name):
+    print module_name, field_name
+    if not packaging.is_installed(module_name):
+        print '%s not installed' % module_name
+        abort(404)
+    try:
+        mod = use_module(module_name)
+    except RuntimeError as e:
+        app.logger.exception(e)
+        abort(404)
+    else:
+        if not field_name in mod.fields_info:
+            abort(400)
+
+        f = mod.fields_info[field_name]
+        if 'readable' not in f or not f['readable']:
+            abort(400)
+
+        data = getattr(mod, f['name'])(fr=-time.time(), to=0)
+        return jsonify([dict(zip(('time', 'value'), v)) for v in data])
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug='--debug' in sys.argv, port=8888)

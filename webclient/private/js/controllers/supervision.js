@@ -3,10 +3,7 @@ function SupervisionCtrl($scope, ModuleService, $timeout, $rootScope) {
   $scope.maxData = 100;
   var field = $scope.field;
 
-  // Poll the current supervised module for its status
-  $scope.$on('fieldUpdate', function(_, fieldEmit, data) {
-    if(field != fieldEmit) { return; }
-
+  var addData = function(data) {
     // Empty data case
     if (!$scope.data) {
       $scope.data = {};
@@ -22,6 +19,16 @@ function SupervisionCtrl($scope, ModuleService, $timeout, $rootScope) {
     if ($scope.maxData < fieldData.length) {
       fieldData.splice(0, fieldData.length - $scope.maxData);
     }
+  };
+
+  ModuleService.fieldAllStatus($scope.moduleName, field.name).then(function(data) {
+    data.forEach(addData);
+  });
+
+  // Poll the current supervised module for its status
+  $scope.$on('fieldUpdate', function(_, fieldEmit, data) {
+    if(field != fieldEmit) { return; }
+    addData(data);
   });
 
   // Clear data when location is changed

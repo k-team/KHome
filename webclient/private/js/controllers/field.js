@@ -1,6 +1,5 @@
 function FieldCtrl($scope, $rootScope, ModuleService, $timeout) {
   $scope.state = '';
-  console.log($scope.field);
 
   $scope.update = function() {
     $scope.state = 'waiting';

@@ -24,7 +24,6 @@ angular.module('GHome', ['ngRoute', 'ui.bootstrap', 'angularFileUpload', 'frapon
   });
 ;function FieldCtrl($scope, $rootScope, ModuleService, $timeout) {
   $scope.state = '';
-  console.log($scope.field);
 
   $scope.update = function() {
     $scope.state = 'waiting';
@@ -274,10 +273,7 @@ function ModuleFieldCtrl($scope, ModuleService, $timeout) {
   $scope.maxData = 100;
   var field = $scope.field;
 
-  // Poll the current supervised module for its status
-  $scope.$on('fieldUpdate', function(_, fieldEmit, data) {
-    if(field != fieldEmit) { return; }
-
+  var addData = function(data) {
     // Empty data case
     if (!$scope.data) {
       $scope.data = {};
@@ -293,6 +289,16 @@ function ModuleFieldCtrl($scope, ModuleService, $timeout) {
     if ($scope.maxData < fieldData.length) {
       fieldData.splice(0, fieldData.length - $scope.maxData);
     }
+  };
+
+  ModuleService.fieldAllStatus($scope.moduleName, field.name).then(function(data) {
+    data.forEach(addData);
+  });
+
+  // Poll the current supervised module for its status
+  $scope.$on('fieldUpdate', function(_, fieldEmit, data) {
+    if(field != fieldEmit) { return; }
+    addData(data);
   });
 
   // Clear data when location is changed
@@ -433,6 +439,10 @@ function ModuleFieldCtrl($scope, ModuleService, $timeout) {
 
   service.fieldStatus = function(module_name, field_name) {
     return httpGetJSON(modulesUrl + '/' + module_name + '/fields/' + field_name + '/status');
+  };
+
+  service.fieldAllStatus = function(module_name, field_name) {
+    return httpGetJSON(modulesUrl + '/' + module_name + '/fields/' + field_name + '/all-status');
   };
 
   service.updateField = function(module, field, value) {
