@@ -22,7 +22,7 @@ class Weather(module.Base):
 
         def acquire_value(self):
             try:
-                woeid = self.module.woeid()[1]
+                woeid = int(self.module.woeid()[1])
                 ans = weatherpy.Response('User-KHome', woeid, metric=True)
                 return {
                         'temperature': ans.condition.temperature,
