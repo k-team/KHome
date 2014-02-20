@@ -1,1 +1,7 @@
-{"start":"python2.7 ."}
+{
+  "start":"python2.7 .",
+  "name": "sound_sensor",
+  "public_name": "Capteur de son",
+  "description": "Le capteur de son soundSensor3000 détecte tout les sons : du cri du nourrison au passage d'une mouche, et jusqu'à la respiration de l'amant de votre femme dans le placard."
+}
+
