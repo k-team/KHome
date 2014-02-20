@@ -7,6 +7,7 @@ import fields.persistant
 
 class CameraSensor(module.Base):
     update_rate = 10
+    public_name = 'Camera'
 
     class image(fields.syntax.Numeric,
             fields.sensor.Camera,
