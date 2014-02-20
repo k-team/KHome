@@ -350,6 +350,7 @@ angular.module('GHome', ['ngRoute', 'ui.bootstrap', 'angularFileUpload', 'frapon
       // Actual plotting based on the graph data model
       $scope.$watch(attrs.graphModel, function(data) {
         var plottedData = []
+
         if (data instanceof Array) {
           plottedData = data;
         } else {
