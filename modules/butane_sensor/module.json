@@ -1,1 +1,6 @@
-{"start":"python2.7 ."}
+{
+  "start":"python2.7 .",
+  "name": "butane_sensor",
+  "public_name": "Capteur de butane",
+  "description": "Le capteur de butane détecte les valeurs élevé de butane, prevennant ainsi les fuites de gaz."
+}
