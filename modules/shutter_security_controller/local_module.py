@@ -8,9 +8,8 @@ class ShutterSecurityController(module.Base):
         shutter = use_module('Shutter')
         presence = use_module('HumanPresenceSensor')
 
-        
+
         class controller(fields.Base):
-            
             def always(self):
                 try:
                     pres = self.module.presence.presence()
@@ -21,4 +20,3 @@ class ShutterSecurityController(module.Base):
                     if not pres[1] :
                         print "volet ferme"
                         self.module.shutter.shutter(0)
-        

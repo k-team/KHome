@@ -11,14 +11,14 @@ class ShutterLightController(module.Base):
     luminosityInt = use_module('LuminosityInteriorSensor')
     luminosityExt = use_module('LuminosityExteriorSensor')
     presence = use_module('HumanPresenceSensor')
-    
+
     class controller(fields.Base):
-        
+
         def __init__(self):
             self.luminosity_limit = 60 # this represent the luminosity the user want in the room
             self.night_limit = 20 # this represent the luminosity limit to know if it is the night
             super(ShutterLightController.controller, self).__init__()
-        
+
         def always(self):
             print "luminosity_limit = %s / night_limit = %s" % (self.luminosity_limit, self.night_limit)
             try:
