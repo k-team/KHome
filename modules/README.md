@@ -45,7 +45,7 @@ Module checklist
 - [x] togetic_filter
 - [x] togetic_sensor
 - [x] twitter
-- [ ] water_controller
+- [x] water_controller
 - [ ] water_flush
 - [ ] water_flush_controller
 - [x] weather
