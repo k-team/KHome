@@ -91,12 +91,9 @@ def execm(module_name, daemonize=True):
         return_code = 1
     else:
         # Execute the start command
-        logger.info('Start of the ' + module_name + ' module.')
+        logger.info('Starting the module `%s`', module_name)
         try:
-            child_proc = subprocess.Popen(
-                    shlex.split(start_cmd),
-                    stdout=sys.stdout,
-                    stderr=sys.stderr)
+            child_proc = subprocess.Popen(shlex.split(start_cmd))
         except OSError as e:
             logger.exception(e)
             return_code = 1
@@ -104,7 +101,7 @@ def execm(module_name, daemonize=True):
             return_code = child_proc.wait()
     finally:
         # Remove the pid file and return the corresponding code
-        logger.info('Shutdown of the ' + module_name + ' module.')
+        logger.info('Shutting down the module `%s`', module_name)
         os.remove(pid_file)
         sys.exit(return_code)
     sys.exit(0)
