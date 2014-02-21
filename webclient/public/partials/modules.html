@@ -3,12 +3,12 @@
     <div data-ng-show="modules" class="row">
       <div data-ng-repeat="module in modules | filter:query" class="module-thumbnail col-xs-6 col-sm-4 col-md-2 text-center">
         <div class="thumbnail">
-          <a data-ng-click="navigate(module)">
-            <img alt="Icon for module {{ module.name }}" title="{{ module.public_name }}"
+          <a data-ng-click="navigate(module)" title="{{ ((module.public_name) ? module.public_name : module.name) | truncate:12 }}">
+            <img alt="Icon for module {{ module.name }}"
               data-ng-src="/api/modules/{{ module.name }}/public/icon.png"
               onerror="this.onerror = null; this.src = '/img/module.png'">
             <div class="caption">
-              <strong>{{ ((module.public_name) ? module.public_name : module.name) | truncate:15 }}</strong>
+              <strong>{{ ((module.public_name) ? module.public_name : module.name) | truncate:12 }}</strong>
             </div>
           </a>
         </div>
