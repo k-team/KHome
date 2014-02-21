@@ -3,6 +3,7 @@ import time
 import math
 import random
 import logging
+import io
 
 _cd = sys.path.pop(0)
 from twisted.internet import reactor
