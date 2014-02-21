@@ -24,7 +24,7 @@ def Dummy(dummy_funct):
     function. *dummy_funct* receive the time as parameter and return one value
     """
 
-    class _Dummy(object):
+    class _Dummy(io.Readable):
         def acquire_value(self):
             return dummy_funct(time.time())
     return _Dummy
@@ -179,10 +179,10 @@ class SensorConnection(Protocol):
             return self.findButton(b1) | self.findButton(b2)
 
     def findButton(self, bits):
-        if   bits == '001': return 0b1000
-        elif bits == '000': return 0b0100
-        elif bits == '010': return 0b0001
-        elif bits == '011': return 0b0010
+        if   bits == '001': return 0b1000 #AI
+        elif bits == '000': return 0b0100 #A0
+        elif bits == '010': return 0b0001 #BI
+        elif bits == '011': return 0b0010 #B0
         else:               return 0b0000
 
 class SensorConnectionFactory(ClientFactory):

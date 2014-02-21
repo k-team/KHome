@@ -1,0 +1,57 @@
+Module checklist
+===============
+
+- [ ] air_sensor
+- [ ] alarm_actuator
+- [ ] baby_monitoring_controller
+- [ ] camera_sensor
+- [ ] co_sensor
+- [ ] door_access
+- [ ] door_heat_management
+- [ ] door_rain_management
+- [ ] door_security
+- [ ] fan_actuator
+- [ ] gaz_controller
+- [ ] heat_management_controller
+- [ ] human_presence_sensor
+- [x] into_spectrum
+- [ ] light_button
+- [ ] light_button_actuator
+- [ ] light_button_sensor
+- [ ] light_controller
+- [ ] luminosity_exterior_sensor
+- [ ] luminosity_interior_sensor
+- [ ] moisture_reducing
+- [ ] moisture_sensor
+- [ ] outside_brightness_sensor
+- [ ] piston_actuator
+- [x] power_plug
+- [ ] rain_forecast
+- [ ] rain_management_controller
+- [ ] recognition
+- [x] shutter
+- [ ] shutter_heat_controller
+- [x] shutter_light_controller
+- [ ] smoke_security_controller
+- [ ] smoke_sensor
+- [ ] sound_sensor
+- [ ] temperature
+- [ ] temperature_actuator
+- [ ] temperature_controller
+- [ ] temperature_exterior_sensor
+- [ ] temperature_forecast
+- [ ] temperature_sensor
+- [x] togetic_blender
+- [x] togetic_filter
+- [x] togetic_sensor
+- [x] twitter
+- [ ] water_controller
+- [ ] water_flush
+- [ ] water_flush_controller
+- [x] weather
+- [ ] window_access
+- [ ] window_actuator
+- [ ] window_heat_management
+- [ ] window_rain_management
+- [ ] window_security
+- [ ] window_sensor
