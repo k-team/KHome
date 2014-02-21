@@ -9,7 +9,7 @@ Module checklist
 - [x] alarm
 - [x] baby_monitor
 - [d] camera_sensor
-- [ ] co_sensor
+- [x] co_sensor
 - [x] door
 - [ ] fan_actuator
 - [ ] gaz_controller

@@ -1,1 +1,7 @@
-{"start":"python2.7 ."}
+{
+  "start":"python2.7 .",
+  "public_name": "Capteur C0",
+  "description": "Si vous avez une cheminée, un poêle ou un réchaud, cette application est faite pour vous. Celle-ci, grâce à son capteur de monoxyde de carbone, mesurera le taux de CO dans votre maison pour votre sécurité.",
+  "has_view": false,
+  "name": "co_sensor"
+}
