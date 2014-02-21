@@ -1,1 +1,7 @@
-{"start":"python2.7 ."}
+{
+  "start":"python2.7 .",
+  "public_name": "Ventilateur",
+  "has_view": true,
+  "description": "",
+  "name": "fan_actuator"
+}

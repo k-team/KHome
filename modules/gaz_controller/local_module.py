@@ -8,7 +8,7 @@ from module import use_module
 import logging
 
 class GazController(module.Base):
-    public_name = 'Control sécurisé du gaz'
+    public_name = 'Control du gaz'
     update_rate = 10
 
     co_gaz = use_module('COSensor')
