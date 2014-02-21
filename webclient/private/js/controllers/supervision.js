@@ -7,11 +7,11 @@ function SupervisionCtrl($scope, ModuleService, $timeout, $rootScope) {
     // Empty data case
     if (!$scope.data) {
       $scope.data = {};
-      $scope.data[field.name] = [];
+      $scope.data[field.public_name] = [];
     }
 
     // Verify if data should be added
-    var fieldData = $scope.data[field.name];
+    var fieldData = $scope.data[field.public_name];
     if (fieldData.length && fieldData[fieldData.length - 1][0] == data.time) { return; }
 
     // Push new data
