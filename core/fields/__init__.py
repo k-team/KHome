@@ -130,7 +130,7 @@ class Base(threading.Thread):
             if time.time() - self.old_time >= self.get_update_rate():
                 self.old_time = time.time()
                 self.emit_value(self.acquire_value())
-            self.always()
+                self.always()
             time.sleep(0.1)
         self.close()
 
