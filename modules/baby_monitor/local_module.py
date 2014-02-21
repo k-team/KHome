@@ -38,5 +38,4 @@ class BabyMonitor(module.Base):
                 logging.exception(e)
             else:
                 if sound_now > decibel_value:
-                    self.module.alarm.alarm(True)
                     self.module.alarm.message('Le bébé est en train de pleurer.')
