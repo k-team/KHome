@@ -24,6 +24,13 @@ from module import use_module
 from module.path import modules_directory
 
 logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+fmt = '%(asctime)s :: %(name)s :: %(levelname)s :: %(message)s'
+formatter = logging.Formatter(fmt)
+handler = logging.StreamHandler()
+handler.setFormatter(formatter)
+handler.setLevel(logging.DEBUG)
+logger.addHandler(handler)
 
 def test_module(module_name):
     logger.info('Début du test du module "%s"', module_name)
