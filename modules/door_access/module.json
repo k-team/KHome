@@ -1,1 +1,6 @@
-{"start":"python2.7 ."}
+{
+  "start":"python2.7 .",
+  "name": "door_access",
+  "public_name": "Gestionnaire de porte",
+  "description": "Le gestionnaire de porte permet de fermer ou d'ouvrir sa porte à distance. Il permet aussi de savoir si la porte est ouverte ou fermée"
+}
