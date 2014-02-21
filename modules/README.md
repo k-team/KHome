@@ -19,17 +19,17 @@ Module checklist
 - [ ] heat_management_controller
 - [ ] human_presence_sensor
 - [x] into_spectrum
-- [ ] light_button
-- [ ] light_button_actuator
-- [ ] light_button_sensor
-- [ ] light_controller
+- [d] light_button
+- [d] light_button_actuator
+- [d] light_button_sensor
+- [d] light_controller
 - [ ] luminosity_exterior_sensor
 - [ ] luminosity_interior_sensor
 - [ ] moisture_reducing
 - [ ] moisture_sensor
 - [ ] outside_brightness_sensor
 - [ ] piston_actuator
-- [-] power_plug
+- [x] power_plug
 - [ ] rain_forecast
 - [ ] rain_management_controller
 - [ ] recognition
