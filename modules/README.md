@@ -7,7 +7,7 @@ Module checklist
 
 - [d] air_sensor
 - [x] alarm
-- [ ] baby_monitoring_controller
+- [x] baby_monitoring_controller
 - [ ] camera_sensor
 - [ ] co_sensor
 - [ ] door_access

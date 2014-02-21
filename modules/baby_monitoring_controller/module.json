@@ -1,5 +1,0 @@
-{"start":"python2.7 .",
-  "name": "baby_monitoring_controller",
-  "public_name": "Baby Monitoring",
-  "description": "Le module Baby Monitoring permet d'être alerter quand votre bébé pleure. Quelque soit votre position dans la maison, vous pouvez aisement allumer/éteindre votre moniteur pour être à l'écoute des besoins de votre enfant."
-}
