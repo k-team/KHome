@@ -192,7 +192,7 @@ class SensorConnectionFactory(ClientFactory):
     def buildProtocol(self, addr):
         return SensorConnection(self.sensor, self.filter_id)
 
-class Sensor(object):
+class Sensor(io.Readable):
     sensor_host = '134.214.106.23'
     sensor_port = 5000
     sensor_id = ''
