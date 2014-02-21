@@ -4,11 +4,12 @@ import persistant
 
 def Dummy(data_type):
     class _Dummy(data_type,
-            persistant.Volatile,
-            io.Readable,
+            # persistant.Volatile,
+            # io.Readable,
             io.Writable):
-        def set_value(self, value):
-            print value
+        def set_value(self, t, value):
+            print t, value
+            return True
     return _Dummy
 
 
