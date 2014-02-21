@@ -22,7 +22,9 @@ function SupervisionCtrl($scope, ModuleService, $timeout, $rootScope) {
   };
 
   ModuleService.fieldAllStatus($scope.moduleName, field.name).then(function(data) {
-    data.forEach(addData);
+    for(var i = 0; i < data.length; i++) {
+      addData(data[data.length - i - 1]);
+    }
   });
 
   // Poll the current supervised module for its status

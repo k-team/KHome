@@ -44,12 +44,7 @@ Butane = Dummy(lambda t:
 CO = Dummy(lambda t:
         math.sin(t) * 200 + 200 + 0.5 * (random.random() - 0.5)) # seuil 60
 
-Camera = Dummy(lambda t:
-        math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
-
 ElectricCurrent = Dummy(lambda t: True if random.random() > 0.5 else False)
-
-# LightButton = Dummy(lambda t: True if random.random() > 0.5 else False)
 
 Presence = Dummy(lambda t: True if random.random() > 0.5 else False)
 
@@ -77,7 +72,7 @@ Smoke = Dummy(lambda t:
         math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
 
 Sound = Dummy(lambda t:
-        math.sin(t) * 60 + 60 + 0.5 * (random.random() - 0.5)) #seuil cri nourison fixe a 97dBl
+        math.sin(t / 5) * 60 + 60 + 0.5 * (random.random() - 0.5))
 
 #this one is for the interior temperature
 Temperature = Dummy(lambda t:

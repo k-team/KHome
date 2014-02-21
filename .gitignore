@@ -37,6 +37,7 @@ nosetests.xml
 
 # Database
 *.db
+*.db-journal
 
 # Java
 *.java
