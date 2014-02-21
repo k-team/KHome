@@ -9,7 +9,7 @@ class ShutterHeatController(module.Base):
     temperatureInt = use_module('Temperature')
     temperatureExt = use_module('TemperatureExteriorSensor')
     tempControl = use_module('TemperatureController')
-    
+
     class controller(fields.Base):
         def always(self):
             try:

@@ -17,7 +17,7 @@ class WaterController(module.Base):
             super(WaterController.controller, self).__init__()
 
         def always(self):
-                if self.module.human_presence_sensor.presence():
+                if self.module.human_presence_sensor.presence(t=-5)[1] && self.module.human_presence_sensor.presence()[1] :
                     if self.module.water_valve_sensor() == False:
                         self.module.water_valve_sensor(True)
                     else:
@@ -28,9 +28,19 @@ class WaterController(module.Base):
             fields.actuator.WaterValve,
             fields.persistant.Database,
             fields.Base):
+        public_name: 'Bouton switch'
+        
+
+    class water_valse_sensor_str(
+            fields.syntax.String,
+            fields.io.Readable,
+            fields.persistant.Volatile,
+            fields.Base):
         public_name = 'Etat du robinet'
 
-   # class water_valve_actuator(
-    #        fields.io.Writable,
-     #       fields.Base):
-      #    pass
+        def acquire_value(self):
+            try:
+                return 'Le robinet est ouvert (ON)' if self.module.water_valse_sensor_str()[1] else 'Le robinet est fermé (OFF)'
+            except TypeError:
+                return
+
