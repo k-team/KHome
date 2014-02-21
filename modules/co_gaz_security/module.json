@@ -1,6 +1,0 @@
-{
-  "start":"python2.7 .",
-  "name": "co_gaz_security",
-  "public_name": "Patch Capteur/Alarme pour CO",
-  "description": "Ce module comprend un capteur de monoxyde de carbone ainsi qu'une alarme."
-}
