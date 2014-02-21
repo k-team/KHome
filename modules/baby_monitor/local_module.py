@@ -6,6 +6,7 @@ import fields
 import fields.io
 import fields.persistant
 import fields.syntax
+import fields.proxy
 import logging
 
 class BabyMonitor(module.Base):
@@ -14,9 +15,12 @@ class BabyMonitor(module.Base):
     alarm = use_module('Alarm')
     public_name = 'Babyphone'
 
+    _ = fields.proxy.readable('sound', 'SoundSensor', 'sound')
+
     class decibel_value(
             fields.syntax.Numeric,
             fields.io.Readable,
+            fields.io.Writable,
             fields.persistant.Database,
             fields.Base):
         public_name = 'Seuil de detection du bébé'
@@ -25,6 +29,19 @@ class BabyMonitor(module.Base):
         def on_start(self):
             super(BabyMonitor.decibel_value, self).on_start()
             self.emit_value(97.0)
+
+    class alert_message(
+            fields.syntax.String,
+            fields.io.Readable,
+            fields.io.Writable,
+            fields.persistant.Database,
+            fields.Base):
+        public_name = 'Message d\'alerte à envoyer'
+        update_rate = 421337
+
+        def on_start(self):
+            super(BabyMonitor.alert_message, self).on_start()
+            self.emit_value('Le bébé est en train de pleurer.')
 
     class controller(fields.io.Hidden,
             fields.Base):
@@ -38,4 +55,4 @@ class BabyMonitor(module.Base):
                 logging.exception(e)
             else:
                 if sound_now > decibel_value:
-                    self.module.alarm.message('Le bébé est en train de pleurer.')
+                    self.module.alarm.message(self.module.alert_message()[1])

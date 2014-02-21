@@ -1,6 +1,6 @@
 {"start":"python2.7 .",
   "name": "baby_monitor",
   "public_name": "Babyphone",
-  "has_view": false,
+  "has_view": true,
   "description": "Le module Babyphone permet d'être alerter quand votre bébé pleure. Quelque soit votre position dans la maison, vous pouvez aisement vérifier le bien être de vos petits protégés. Grâce à Babyphone, vous êtes vraiment à l'écoute des besoins de votre enfant."
 }

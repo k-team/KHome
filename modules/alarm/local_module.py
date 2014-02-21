@@ -19,10 +19,10 @@ class Alarm(module.Base):
                 self.module.message('')
             return super(Alarm.alarm, self).set_value(t, value)
 
-    class message(field.syntax.String,
-            field.io.Writable,
-            field.persistant.Database,
-            fields.base)
+    class message(fields.syntax.String,
+            fields.io.Writable,
+            fields.persistant.Database,
+            fields.Base):
         public_name = "Message d'alerte"
 
         def set_value(self, t, value):
