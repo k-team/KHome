@@ -1,8 +1,7 @@
 {
- "start":"python2.7." ,
+  "start":"python2.7 ." ,
   "name": "water_controller",
   "public_name": "Robinet",
   "slides": [],
-  "description":"Des factures d'eaux à n'en plus finir? Vos enfants oublient constamment de fermer correctement les robinets en quittant la salle de bain. N'ayez crainte la maison KHome a un module pour gérer cela. Le water_controller permet de gérer l'ouverture et la fermeture de vos robinet de manière intelligente. Un controlleur permet d'ouvrir et de fermer les vannede manière automatique " 
- 
- }
+  "description":"Des factures d'eau à n'en plus finir ? Vos enfants oublient constamment de fermer correctement les robinets en quittant la salle de bain ? N'ayez crainte, la maison KHome a un module pour gérer cela. Le water_controller permet de gérer l'ouverture et la fermeture de vos robinet de manière intelligente. Un controlleur permet d'ouvrir et de fermer les vannes de manière automatique."
+}

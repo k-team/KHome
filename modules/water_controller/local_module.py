@@ -1,46 +1,36 @@
 import module
+from module import use_module
 import fields
+import fields.io
 import fields.sensor
 import fields.actuator
-import fields.io
 import fields.persistant
-from module import use_module
 
 class WaterController(module.Base):
     update_rate = 10
+
     human_presence_sensor = use_module('HumanPresenceSensor')
-    public_name = 'Robinet'
+
+    class keep_water_on_duration(fields.syntax.BoundNumeric, fields.io.Writable,
+            fields.io.Readable, fields.persistant.Volatile, fields.Base):
+        lower_bound = 0
+        upper_bound = 10
+
+        def on_start(self):
+            super(WaterController.keep_water_on_duration, self).on_start()
+            self.emit_value((type(self).upper_bound-type(self).lower_bound)/2)
 
     class controller(fields.io.Hidden, fields.Base):
-
-        def __init__(self):
-            super(WaterController.controller, self).__init__()
-
         def always(self):
-                if self.module.human_presence_sensor.presence(t=-5)[1] && self.module.human_presence_sensor.presence()[1] :
-                    if self.module.water_valve_sensor() == False:
-                        self.module.water_valve_sensor(True)
-                    else:
-                        self.module.water_valve_sensor(False)
-
-    class water_valve_sensor(
-            fields.sensor.WaterValve,
-            fields.actuator.WaterValve,
-            fields.persistant.Database,
-            fields.Base):
-        public_name: 'Bouton switch'
-        
-
-    class water_valse_sensor_str(
-            fields.syntax.String,
-            fields.io.Readable,
-            fields.persistant.Volatile,
-            fields.Base):
-        public_name = 'Etat du robinet'
-
-        def acquire_value(self):
-            try:
-                return 'Le robinet est ouvert (ON)' if self.module.water_valse_sensor_str()[1] else 'Le robinet est fermé (OFF)'
-            except TypeError:
+            limit = self.module.keep_water_on_duration()
+            if limit is None:
                 return
+            limit = limit[1]
+            presence = self.module.human_presence_sensor.presence(fr=limit, to=0)
+            if any(presence) and self.module.water_valve_sensor():
+                self.module.water_valve_sensor(False)
 
+    class water_valve_sensor(fields.sensor.WaterValve,
+            fields.actuator.WaterValve, fields.persistant.Database,
+            fields.Base):
+        public_name = 'Capteur de valve d\'eau'
