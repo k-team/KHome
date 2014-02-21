@@ -1,1 +1,4 @@
-{"start":"python2.7 ."}
+{
+  "start":"python2.7 .",
+  "public_name": "Prise électrique"
+}
