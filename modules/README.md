@@ -1,8 +1,12 @@
 Module checklist
 ===============
 
-- [ ] air_sensor
-- [ ] alarm_actuator
+- d : Supprimé
+- x : Fait
+- - : En cours
+
+- [d] air_sensor
+- [x] alarm
 - [ ] baby_monitoring_controller
 - [ ] camera_sensor
 - [ ] co_sensor
@@ -25,13 +29,13 @@ Module checklist
 - [ ] moisture_sensor
 - [ ] outside_brightness_sensor
 - [ ] piston_actuator
-- [x] power_plug
+- [-] power_plug
 - [ ] rain_forecast
 - [ ] rain_management_controller
 - [ ] recognition
-- [x] shutter
+- [-] shutter
 - [ ] shutter_heat_controller
-- [x] shutter_light_controller
+- [-] shutter_light_controller
 - [ ] smoke_security_controller
 - [ ] smoke_sensor
 - [ ] sound_sensor
