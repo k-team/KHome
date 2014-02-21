@@ -24,7 +24,9 @@ Alarm = Dummy(syntax.Boolean)
 Door = Dummy(syntax.Boolean)
 ElectricCurrent = Dummy(syntax.Boolean)
 Fan = Dummy(syntax.Boolean)
-Gaz = Dummy(syntax.Boolean) #true = ouvert, flase = ferme
+Butane = Dummy(syntax.Boolean) #true = ouvert, flase = ferme
+Propane = Dummy(syntax.Boolean) #true = ouvert, flase = ferme
+Methane = Dummy(syntax.Boolean) #true = ouvert, flase = ferme
 LightButton = Dummy(syntax.Boolean)
 Piston = Dummy(syntax.Boolean)
 Shutter = Dummy(syntax.Percentage)
