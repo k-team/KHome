@@ -3,6 +3,9 @@
 import module
 from module import use_module
 import fields
+import fields.io
+import fields.persistant
+import fields.syntax
 
 class ShutterLightController(module.Base):
     update_rate = 500
@@ -15,7 +18,7 @@ class ShutterLightController(module.Base):
     # human in the entire house, and not in the current room !
     presence = use_module('HumanPresenceSensor')
 
-    class luminosity_limit(fields.Percentage, fields.Writable,
+    class luminosity_limit(fields.syntax.Percentage, fields.io.Writable,
             fields.persistant.Volatile, fields.Base):
         """
         Field configuring the minimal brightness the user wants during the day.
@@ -25,7 +28,7 @@ class ShutterLightController(module.Base):
         def on_start(self):
             self.emit_value(60)
 
-    class night_detection_limit(fields.Percentage, fields.Writable,
+    class night_detection_limit(fields.syntax.Percentage, fields.io.Writable,
             fields.persistant.Volatile, fields.Base):
         """
         Field configuring the brightness lower limit under which we can

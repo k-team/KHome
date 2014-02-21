@@ -15,7 +15,7 @@ _handler.setLevel(logging.DEBUG)
 logger.addHandler(_handler)
 
 def Dummy(data_type):
-    class _Dummy(data_type, persistant.Volatile, io.Readable):
+    class _Dummy(data_type, io.Writable):
         def set_value(self, t, value):
             print t, value
     return _Dummy
@@ -32,7 +32,7 @@ Temperature = Dummy(syntax.Numeric)
 WaterValve = Dummy(syntax.Boolean)
 Window = Dummy(syntax.Boolean)
 
-class Actuator(object):
+class Actuator(io.Writable):
     host = '134.214.106.23'
     port = 5000
 
@@ -65,7 +65,7 @@ class Actuator(object):
         """
         raise NotImplementedError
 
-class PowerPlug(Actuator, io.Writable):
+class PowerPlug(Actuator):
     actuator_id = 'FF9F1E07'
     org = '05'
 

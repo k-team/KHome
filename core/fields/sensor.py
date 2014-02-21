@@ -24,7 +24,7 @@ def Dummy(dummy_funct):
     function. *dummy_funct* receive the time as parameter and return one value
     """
 
-    class _Dummy(object):
+    class _Dummy(io.Readable):
         def acquire_value(self):
             return dummy_funct(time.time())
     return _Dummy
