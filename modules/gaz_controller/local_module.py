@@ -3,6 +3,7 @@ import module
 import fields
 import fields.syntax
 import fields.io
+import fields.proxy
 from module import use_module
 import logging
 
@@ -16,6 +17,12 @@ class GazController(module.Base):
     methane_gaz = use_module('MethaneGaz')
     alarm = use_module('AlarmActuator')
 
+    butane = fields.proxy.basic('butane', 'ButaneGaz', 'taux')
+    methane = fields.proxy.basic('methane', 'MethaneGaz', 'taux')
+    propane = fields.proxy.basic('propane', 'PropaneGaz', 'taux')
+    co = fields.proxy.basic('co', 'COSensor', 'co_presence')
+    alarm = fields.proxy.basic('alarm', 'AlarmActuator', 'alarm')
+    
     class co_value_limit(
             fields.syntax.Constant,
             fields.syntax.Numeric,
