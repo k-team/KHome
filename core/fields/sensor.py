@@ -205,7 +205,7 @@ class Sensor(object):
 class Interruptor(Sensor):
     sensor_id = '0021CC31'
 
-class Window(Sensor):
+class Contact(Sensor):
     sensor_id = '0001B595'
 
 class Brightness(Sensor):
