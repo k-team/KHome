@@ -7,7 +7,7 @@ class Typed(object):
         info['type'] = type(self).typed_name
         return info
 
-    def _set_value(self, t, value):
+    def set_value(self, t, value):
         if value is None:
             return False
         try:
@@ -49,8 +49,8 @@ class BoundNumeric(Numeric):
     Bound numeric field mixin, assumes that *lower_bound* and *upper_bound* are
     set for this field.
     """
-    def _set_value(self, t, value):
-        return super(BoundNumeric, self)._set_value(t, value) \
+    def set_value(self, t, value):
+        return super(BoundNumeric, self).set_value(t, value) \
                 and type(self).lower_bound < value < type(self).upper_bound
 
 class Percentage(BoundNumeric):

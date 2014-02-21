@@ -1,7 +1,12 @@
 import module
-import fields.proxy
+import fields
+import fields.actuator
+import fields.sensor
+import fields.persistant
 
 class DoorAccess(module.Base):
     update_rate = 10
 
-    door = fields.proxy.mix('door', 'DoorSensor', 'door', 'DoorActuator', 'door')
+    class door(fields.sensor.Contact, fields.actuator.Door,
+            fields.persistant.Volatile, fields.Base):
+        pass
