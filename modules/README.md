@@ -7,13 +7,10 @@ Module checklist
 
 - [d] air_sensor
 - [x] alarm
-- [x] baby_monitoring_controller
-- [ ] camera_sensor
+- [x] baby_monitor
+- [d] camera_sensor
 - [ ] co_sensor
-- [ ] door_access
-- [ ] door_heat_management
-- [ ] door_rain_management
-- [ ] door_security
+- [x] door
 - [ ] fan_actuator
 - [ ] gaz_controller
 - [ ] heat_management_controller
