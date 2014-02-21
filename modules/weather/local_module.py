@@ -44,7 +44,7 @@ class Weather(module.Base):
             fields.io.Readable,
             fields.persistant.Volatile,
             fields.Base):
-        public_name = 'Géolocalisation'
+        public_name = 'Géolocalisation (WOEID)'
 
         def on_start(self):
             super(Weather.woeid, self).on_start()
