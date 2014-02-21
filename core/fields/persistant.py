@@ -1,6 +1,12 @@
 import sqlite3
 import logging
 
+def get_type(f, default='string'):
+    try:
+        return f.get_info()['type']
+    except (KeyError, TypeError):
+        return default
+
 class Database(object):
     def on_start(self):
         self.last_value = None
@@ -86,6 +92,10 @@ class Database(object):
         db_conn = sqlite3.connect(self.db_name)
         query = 'INSERT INTO %s (time, value) VALUES (?, ?)' \
                 % (self.field_name,)
+
+        if get_type(self) == 'string':
+            value = value.decode('utf-8')
+
         try:
             c = db_conn.cursor()
             c.execute(query, (t, value))
