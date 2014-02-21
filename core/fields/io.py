@@ -48,5 +48,6 @@ class Graphable(Readable):
         return a
 
 class Hidden(object):
-    def get_info(self):
-        return None
+    pass
+    # def get_info(self):
+        # return None
