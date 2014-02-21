@@ -9,26 +9,38 @@ from module import use_module
 class WaterController(module.Base):
     update_rate = 10
     human_presence_sensor = use_module('HumanPresenceSensor')
-    class controller(fields.Base):
+    public_name = 'Robinet'
+
+    class controller(fields.io.Hidden, fields.Base):
 
         def __init__(self):
             super(WaterController.controller, self).__init__()
 
         def always(self):
-            if self.module.human_presence_sensor.presence() and self.module.water_valve_sensor() == 'FERME':
-                self.module.water_valve_actuator('OPEN')
-            elif not self.module.human_presence_sensor.presence() and self.module.water_valve_sensor() == 'OPEN':
-                self.module.water_valve_actuator('CLOSE')
+                if self.module.human_presence_sensor.presence(t=-5)[1] && self.module.human_presence_sensor.presence()[1] :
+                    if self.module.water_valve_sensor() == False:
+                        self.module.water_valve_sensor(True)
+                    else:
+                        self.module.water_valve_sensor(False)
 
     class water_valve_sensor(
             fields.sensor.WaterValve,
+            fields.actuator.WaterValve,
+            fields.persistant.Database,
+            fields.Base):
+        public_name: 'Bouton switch'
+        
+
+    class water_valse_sensor_str(
+            fields.syntax.String,
             fields.io.Readable,
             fields.persistant.Volatile,
             fields.Base):
-        pass
+        public_name = 'Etat du robinet'
 
-    class water_valve_actuator(
-            fields.actuator.WaterValve,
-            fields.io.Writable,
-            fields.Base):
-                pass
+        def acquire_value(self):
+            try:
+                return 'Le robinet est ouvert (ON)' if self.module.water_valse_sensor_str()[1] else 'Le robinet est fermé (OFF)'
+            except TypeError:
+                return
+

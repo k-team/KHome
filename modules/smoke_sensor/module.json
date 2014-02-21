@@ -1,1 +1,6 @@
-{"start":"python2.7 ."}
+{
+  "start":"python2.7 .",
+  "name": "smoke_sensor",
+  "public_name": "Capteur de fumée",
+  "description": "Detecte la fumée"
+}

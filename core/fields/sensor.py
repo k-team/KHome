@@ -3,6 +3,7 @@ import time
 import math
 import random
 import logging
+import io
 
 _cd = sys.path.pop(0)
 from twisted.internet import reactor
@@ -192,7 +193,7 @@ class SensorConnectionFactory(ClientFactory):
     def buildProtocol(self, addr):
         return SensorConnection(self.sensor, self.filter_id)
 
-class Sensor(object):
+class Sensor(io.Readable):
     sensor_host = '134.214.106.23'
     sensor_port = 5000
     sensor_id = ''
@@ -205,7 +206,7 @@ class Sensor(object):
 class Interruptor(Sensor):
     sensor_id = '0021CC31'
 
-class Window(Sensor):
+class Contact(Sensor):
     sensor_id = '0001B595'
 
 class Brightness(Sensor):

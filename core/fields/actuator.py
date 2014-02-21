@@ -15,7 +15,7 @@ _handler.setLevel(logging.DEBUG)
 logger.addHandler(_handler)
 
 def Dummy(data_type):
-    class _Dummy(data_type, persistant.Volatile, io.Readable, io.Writable):
+    class _Dummy(data_type, persistant.Volatile, io.Readable):
         def set_value(self, t, value):
             print t, value
     return _Dummy
