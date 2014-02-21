@@ -1,1 +1,6 @@
-{"start":"python2.7 ."}
+{
+  "start":"python2.7 .",
+  "name": "camera_sensor",
+  "public_name": "Camera",
+  "description": "La camera est votre meilleur allié contre les voleurs. Elle vous aidera aussi à tenir le role de BigBrother dans votre maison"
+}

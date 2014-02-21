@@ -1,1 +1,6 @@
-{"start":"python2.7 ."}
+{
+  "start":"python2.7 .",
+  "name": "gaz_controller",
+  "public_name": "Control sécurisé du gaz",
+  "description": "Vous etes parti en vacances sans couper le gaz ? Le controleur de gaz s'occupe de tout pour vous. Il controle le niveaux de gaz et limitera les explosions"
+}
