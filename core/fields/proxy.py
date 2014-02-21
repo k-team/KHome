@@ -1,3 +1,4 @@
+import time
 import fields
 import fields.io
 import fields.syntax
@@ -25,6 +26,10 @@ def basic(new_field, module_name, field_name):
             return field_info
 
         def read(self, **kwargs):
+            if 'fr' in kwargs and 'to' in kwargs:
+                return field(fr=-(time.time()-kwargs['fr']), to=-(time.time()-kwargs['to']))
+            if 't' in kwargs:
+                return field(t=-(time.time()-kwargs['t']))
             return field(**kwargs)
 
         def write(self, value):
@@ -64,6 +69,10 @@ def mix(new_field, r_module_name, r_field_name, w_module_name, w_field_name):
             return w_field_info
 
         def read(self, **kwargs):
+            if 'fr' in kwargs and 'to' in kwargs:
+                return field(fr=-(time.time()-kwargs['fr']), to=-(time.time()-kwargs['to']))
+            if 't' in kwargs:
+                return field(t=-(time.time()-kwargs['t']))
             return r_field(**kwargs)
 
         def write(self, value):
@@ -84,7 +93,6 @@ def readable(new_field, module_name, field_name):
     field_info = module.fields_info[field_name]
 
     class Field(
-            fields.io.Readable,
             fields.Base):
         def get_info(self):
             a = super(Field, self).get_info()
@@ -92,6 +100,10 @@ def readable(new_field, module_name, field_name):
             return field_info
 
         def read(self, **kwargs):
+            if 'fr' in kwargs and 'to' in kwargs:
+                return field(fr=-(time.time()-kwargs['fr']), to=-(time.time()-kwargs['to']))
+            if 't' in kwargs:
+                return field(t=-(time.time()-kwargs['t']))
             return field(**kwargs)
 
     return type(new_field, (Field,), dict())
