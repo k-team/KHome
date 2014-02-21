@@ -50,6 +50,7 @@ class Actuator(object):
         data = self.prepare_data(value)
         self.actuator_socket_file.write(data)
         self.actuator_socket_file.flush()
+        return super(Actuator, self).set_value(t, value)
 
     def close(self):
         """
