@@ -7,7 +7,6 @@ class Database(object):
         db_types = {'numeric': 'real',
                 'string': 'text',
                 'boolean': 'boolean'}
-
         try:
             type_str = db_types[self.get_info()['type']]
         except KeyError:

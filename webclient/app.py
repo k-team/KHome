@@ -33,6 +33,7 @@ def index():
 
 @app.route('/api/modules')
 def api_modules():
+    print 'coucou'
     return jsonify(packaging.get_installed_modules(detailed=True))
 
 @app.route('/api/modules/<module_name>')

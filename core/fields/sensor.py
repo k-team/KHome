@@ -48,7 +48,7 @@ Camera = Dummy(lambda t:
 
 ElectricCurrent = Dummy(lambda t: True if random.random() > 0.5 else False)
 
-LightButton = Dummy(lambda t: True if random.random() > 0.5 else False)
+# LightButton = Dummy(lambda t: True if random.random() > 0.5 else False)
 
 Presence = Dummy(lambda t: True if random.random() > 0.5 else False)
 
@@ -152,10 +152,10 @@ class SensorConnection(Protocol):
         Temperature/Moisture formatting.
         """
         moisture = int(value[16:24], 2)*100/250
-        if value[6] == '0':
-            temp = -1
-        else:
-            temp = int(value[8:16], 2)*40/250
+        # if value[6] == '0':
+        #     temp = -1
+        # else:
+        temp = int(value[8:16], 2)*40/250
         return temp, moisture
 
     def org6(self, value):
@@ -203,7 +203,7 @@ class Sensor(object):
                 SensorConnectionFactory(self, type(self).sensor_id))
 
 class Interruptor(Sensor):
-    sensor_id = '0021CC31'
+    sensor_id = '0021CBE3'
 
 class Window(Sensor):
     sensor_id = '0001B595'
