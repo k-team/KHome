@@ -50,9 +50,7 @@ Module checklist
 - [d] water_flush
 - [d] water_flush_controller
 - [x] weather
-- [ ] window_access
-- [ ] window_actuator
+- [x] window
 - [ ] window_heat_management
 - [ ] window_rain_management
 - [ ] window_security
-- [ ] window_sensor
