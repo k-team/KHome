@@ -4,7 +4,7 @@ import fields.actuator
 import fields.sensor
 import fields.persistant
 
-class Door(module.Base):
+class Window(module.Base):
     public_name = 'Fenetre auto'
     update_rate = 10
 
