@@ -53,6 +53,14 @@ class BoundNumeric(Numeric):
         return super(BoundNumeric, self).set_value(t, value) \
                 and type(self).lower_bound < value < type(self).upper_bound
 
+    def get_info(self):
+        info = super(BoundNumeric, self).get_info()
+        info['bounded'] = True
+        info['value_min'] = type(self).lower_bound
+        info['value_max'] = type(self).upper_bound
+        return info
+
+
 class Percentage(BoundNumeric):
     """
     Percentage field, bound numeric field [0;100].

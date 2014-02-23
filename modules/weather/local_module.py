@@ -69,7 +69,7 @@ class Weather(module.Base):
                 return
 
     class humidity(
-            fields.syntax.Numeric,
+            fields.syntax.Percentage,
             fields.io.Graphable,
             fields.persistant.Database,
             fields.Base):
