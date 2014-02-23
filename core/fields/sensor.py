@@ -222,8 +222,8 @@ class Moisture(Sensor):
     def org7_tm(self, value):
         return super(Moisture, self).org7_tm()[1]
 
-class Temperature(Sensor):
+"""class Temperature(Sensor):
     sensor_id = '00893378'
 
     def org7_tm(self, value):
-        return super(Temperature, self).org7_tm()[0]
+        return super(Temperature, self).org7_tm()[0]"""
