@@ -18,9 +18,9 @@ class BabyMonitor(module.Base):
     _ = fields.proxy.readable('sound', 'SoundSensor', 'sound')
 
     class decibel_value(
-            fields.syntax.BoundNumeric,
-            fields.io.Readable,
             fields.io.Writable,
+            fields.io.Readable,
+            fields.syntax.BoundNumeric,
             fields.persistant.Database,
             fields.Base):
         public_name = 'Seuil de detection du bébé'
@@ -30,12 +30,12 @@ class BabyMonitor(module.Base):
 
         def on_start(self):
             super(BabyMonitor.decibel_value, self).on_start()
-            self.emit_value(97.0)
+            # self.emit_value(97.0)
 
     class alert_message(
-            fields.syntax.String,
             fields.io.Readable,
             fields.io.Writable,
+            fields.syntax.String,
             fields.persistant.Database,
             fields.Base):
         public_name = 'Message d\'alerte à envoyer'

@@ -1,5 +1,6 @@
 import time
 import threading
+import logging
 
 class FieldMeta(type):
     def __new__(cls, name, parents, attrs):

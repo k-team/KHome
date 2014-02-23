@@ -41,7 +41,9 @@ class Boolean(Typed):
     typed_name = 'boolean'
 
 class String(Typed):
-    typed_type = str
+    @staticmethod
+    def typed_type(v):
+        return v.encode('utf-8')
     typed_name = 'string'
 
 class BoundNumeric(Numeric):
@@ -49,9 +51,12 @@ class BoundNumeric(Numeric):
     Bound numeric field mixin, assumes that *lower_bound* and *upper_bound* are
     set for this field.
     """
+    lower_bound = 0
+    upper_bound = 0
+
     def set_value(self, t, value):
-        return super(BoundNumeric, self).set_value(t, value) \
-                and type(self).lower_bound < value < type(self).upper_bound
+        return type(self).lower_bound < float(value) < type(self).upper_bound \
+                and super(BoundNumeric, self).set_value(t, value)
 
     def get_info(self):
         info = super(BoundNumeric, self).get_info()

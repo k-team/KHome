@@ -101,13 +101,14 @@ class Database(object):
             c.execute(query, (t, value))
             db_conn.commit()
             self.last_value = (t, value)
+            db_conn.close()
             return True
         except Exception as e:
             logging.exception(e)
             db_conn.rollback()
-            return False
-        finally:
             db_conn.close()
+            return False
+        return False
 
 class Volatile(object):
     volpersist_nb_values = 100
