@@ -4,23 +4,18 @@ function ModuleInjectorCtrl($scope, ModuleService, $routeParams, $compile, $http
 
   // Load the current module
   var loadModule = function() {
+    $scope.loading = true;
     return ModuleService.moduleStatus($scope.moduleName).then(function(module) {
+      $scope.loading = false;
+      $scope.unreachable = false;
       $scope.module = module;
       $scope.$broadcast('module.statusUpdate', module);
       return module;
+    }, function() {
+      $scope.loading = false;
+      $scope.unreachable = true;
     });
   };
-
-  var loadFieldValue = function() {
-    return ModuleService.moduleStatus($scope.moduleName).then(function(module) {
-      for (var i = 0; i < module.fields.length; i++) {
-        $scope.module.fields[i].time = module.fields[i].time;
-        $scope.module.fields[i].value = module.fields[i].value;
-      }
-      $scope.$broadcast('module.statusUpdate', module);
-    });
-  };
-
   // Start polling
   loadModule();
 

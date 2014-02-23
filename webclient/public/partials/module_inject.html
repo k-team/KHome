@@ -1,6 +1,13 @@
 <span id="inject-independant"></span>
 <div class="container">
-  <div data-ng-show="module">
+  <div data-ng-show="loading">
+    <h1 class="text-center">
+      <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
+      <br>Chargement du module
+    </h1>
+  </div>
+
+  <div data-ng-show="!loading && module">
     <div class="header module-header">
       <img class="hidden-xs module-header-img" src="/api/modules/{{ module.name }}/public/icon.png"
         alt="Icon for {{ module.public_name || module.name }}"
