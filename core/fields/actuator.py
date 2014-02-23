@@ -16,8 +16,7 @@ logger.addHandler(_handler)
 
 def Dummy(data_type):
     class _Dummy(data_type, io.Writable):
-        def set_value(self, t, value):
-            print t, value
+        pass
     return _Dummy
 
 Alarm = Dummy(syntax.Boolean)
