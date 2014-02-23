@@ -2,6 +2,7 @@
 
 import module
 from module import use_module
+import fields.proxy
 import fields
 
 class ShutterHeatController(module.Base):
@@ -26,8 +27,9 @@ class ShutterHeatController(module.Base):
     class controller(fields.Base):
         def always(self):
             try:
-                tempInt = self.module.temperatureInt.temperature()[1]
+                tempInt = self.module.temperatureInt.sensor()[1]
                 tempExt = self.module.temperatureExt.temperature()[1]
+                print 'truc = %s' % tempExt
                 limit= self.module.limit
             except TypeError:
                 pass # Ignore

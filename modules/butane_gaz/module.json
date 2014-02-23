@@ -1,0 +1,6 @@
+{
+  "start":"python2.7 .",
+  "name": "butane_gaz",
+  "public_name": "Gestionnaire de butane",
+  "description": "Partis en vacance sans couper le gaz ? Le gestionnaire de butane, vous permet de controler les fuites de butane et de couper le gaz à distance."
+}
