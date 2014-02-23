@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import module
 from module import use_module
 import fields
@@ -7,15 +9,26 @@ class ShutterHeatController(module.Base):
 
     shutter = use_module('Shutter')
     temperatureInt = use_module('Temperature')
-    temperatureExt = use_module('TemperatureExteriorSensor')
-    tempControl = use_module('TemperatureController')
+    temperatureExt = use_module('Weather')
+   #tempControl = use_module('TemperatureController')
+
+    _shutter = fields.proxy.writable('Volets', 'Shutter', 'shutter')
+    #_tempInt = fields.proxy.readable('Temperature Intérieur', 'Temperature', 'temperature')
+    #_tempExt = fields.proxy.readable('Temperature exterieur', 'TemperatureExteriorSensor', 'temperature')
+    
+    class limit(
+            fields.syntax.Constant,
+            fields.syntax.Numeric,
+            fields.Base):
+        const_value = 60.0
+        public_name = 'Temperature minimale à l\' intérieur'
 
     class controller(fields.Base):
         def always(self):
             try:
                 tempInt = self.module.temperatureInt.temperature()[1]
                 tempExt = self.module.temperatureExt.temperature()[1]
-                limit= self.module.tempControl.limit()
+                limit= self.module.limit
             except TypeError:
                 pass # Ignore
             else:
