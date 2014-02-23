@@ -1,28 +1,37 @@
 # -*- coding: utf-8 -*-
 
 import module
-from module import use_module
-import fields.proxy
+# -*- coding: utf-8 -*-
+import module
 import fields
+import fields.syntax
+import fields.io
+import fields.proxy
+from module import use_module
+import logging
 
 class ShutterHeatController(module.Base):
     update_rate = 10000
+
+    public_name = 'Controlleur d aération'
 
     shutter = use_module('Shutter')
     temperatureInt = use_module('Temperature')
     temperatureExt = use_module('Weather')
    #tempControl = use_module('TemperatureController')
 
-    _shutter = fields.proxy.writable('Volets', 'Shutter', 'shutter')
-    #_tempInt = fields.proxy.readable('Temperature Intérieur', 'Temperature', 'temperature')
-    #_tempExt = fields.proxy.readable('Temperature exterieur', 'TemperatureExteriorSensor', 'temperature')
+    volet = fields.proxy.basic('volet', 'Shutter', 'shutter')
+    interior = fields.proxy.basic('interior', 'Temperature', 'sensor')
+    exterior = fields.proxy.basic('exterior', 'Weather', 'temperature')
     
     class limit(
-            fields.syntax.Constant,
+            fields.io.Readable, 
+            fields.io.Writable,
+            #fields.syntax.Constant,
             fields.syntax.Numeric,
             fields.Base):
         const_value = 60.0
-        public_name = 'Temperature minimale à l\' intérieur'
+        public_name = 'Temperature minimale à l intérieur'
 
     class controller(fields.Base):
         def always(self):

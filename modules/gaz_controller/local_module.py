@@ -21,8 +21,9 @@ class GazController(module.Base):
     methane = fields.proxy.readable('methane', 'MethaneGaz', 'taux')
     propane = fields.proxy.readable('propane', 'PropaneGaz', 'taux')
     co = fields.proxy.readable('co', 'COSensor', 'value')
-    alarm = fields.proxy.writable('alarm', 'Alarm', 'alarm')
-    
+    alarm = fields.proxy.readable('alarm', 'Alarm', 'alarm')
+    message = fields.proxy.readable('alarm', 'Alarm', 'message')
+
     class co_value_limit(
             fields.syntax.Constant,
             fields.syntax.Numeric,

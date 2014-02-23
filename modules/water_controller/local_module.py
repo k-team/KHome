@@ -32,6 +32,6 @@ class WaterController(module.Base):
                 self.module.water_valve_sensor(False)
 
     class water_valve_sensor(fields.sensor.WaterValve,
-            fields.actuator.WaterValve, fields.persistant.Database,
+            fields.actuator.WaterValve, fields.persistant.Volatile,
             fields.Base):
         public_name = 'Etat du robinet'
