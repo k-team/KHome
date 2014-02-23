@@ -466,7 +466,26 @@ angular.module('GHome', ['ngRoute', 'ui.bootstrap', 'ui.slider', 'angularFileUpl
   };
 });
 
+angular.module('GHome').filter('fieldVisible', function () {
+  return function (fields) {
+    if (fields === undefined) {
+      return;
+    }
 
+    var re = Array();
+    for (var i = 0 ; i < fields.length ; i++) {
+      var field = fields[i];
+      if ((field.writable || field.readable)
+        && field.type !== undefined
+        && (field.type == 'string' ||
+            field.type == 'numeric' ||
+            field.type == 'boolean')) {
+        re.push(field);
+      }
+    }
+    return re;
+  };
+});
 ;angular.module('GHome').factory('ModuleService', function($q, $http, $timeout, $upload) {
   var service = {},
     modulesUrl = '/api/modules',

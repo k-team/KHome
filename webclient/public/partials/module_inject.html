@@ -16,7 +16,7 @@
     </div>
     <hr>
     <div class="content">
-      <div data-ng-controller="FieldCtrl" data-ng-repeat="field in module.fields">
+      <div data-ng-controller="FieldCtrl" data-ng-repeat="field in module.fields | fieldVisible">
         <form data-ng-show="field.readable || field.writable" data-ng-submit="update()" class="form-horizontal" role="form">
           <fieldset data-ng-disabled="!field.writable">
             <div class="form-group" data-ng-class="{success:'has-success', error:'has-error', '':''}[field.state]">
@@ -46,7 +46,9 @@
                   class="form-control" placeholder="{{field.public_name}}" />
                 <div ui-slider="{ range: 'min' } " min="{{ field.value_min }}" max="{{ field.value_max }}"
                   data-ng-model="field.value"
-                  data-ng-show="field.type=='numeric' && field.bounded && field.writable"></div>
+                  data-ng-show="field.type=='numeric' && field.bounded && field.writable">
+                  <div class="ui-slider-handle btn btn-default btn-sm">{{ field.value }}</div>
+                </div>
                 <progressbar data-ng-show="field.type=='numeric' && field.bounded && !field.writable"
                   value="field.value" min="field.value_min" max="field.value_max">
                   {{ field.value }}
