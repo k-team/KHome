@@ -21,8 +21,8 @@ def basic(new_field, module_name, field_name):
             fields.io.Readable,
             fields.Base):
         def get_info(self):
-            a = super(Field, self).get_info()
-            field_info.update(a)
+            # a = super(Field, self).get_info()
+            # field_info.update(a)
             return field_info
 
         def read(self, **kwargs):
@@ -64,8 +64,8 @@ def mix(new_field, r_module_name, r_field_name, w_module_name, w_field_name):
             fields.io.Readable,
             fields.Base):
         def get_info(self):
-            a = super(Field, self).get_info()
-            w_field_info.update(a)
+            # a = super(Field, self).get_info()
+            # w_field_info.update(a)
             return w_field_info
 
         def read(self, **kwargs):
@@ -95,8 +95,8 @@ def readable(new_field, module_name, field_name):
     class Field(
             fields.Base):
         def get_info(self):
-            a = super(Field, self).get_info()
-            field_info.update(a)
+            # a = super(Field, self).get_info()
+            # field_info.update(a)
             return field_info
 
         def read(self, **kwargs):
@@ -124,8 +124,8 @@ def writable(new_field, module_name, field_name):
             fields.io.Writable,
             fields.Base):
         def get_info(self):
-            a = super(Field, self).get_info()
-            field_info.update(a)
+            # a = super(Field, self).get_info()
+            # field_info.update(a)
             return field_info
 
         def write(self, value):

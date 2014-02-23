@@ -7,14 +7,14 @@ import fields.syntax
 
 class LuminosityInteriorSensor(module.Base):
     update_rate = 10
-
+    public_name = 'Capteur luminosite interieure'
 
     class luminosity(
-	    fields.syntax.Numeric,
+            fields.syntax.Numeric,
             fields.sensor.LuminosityInterior,
-            fields.io.Readable,
+            # fields.io.Readable,
             fields.persistant.Volatile,
             fields.Base):
-        pass
+        public_name = 'Luminosite interieure'
 
 

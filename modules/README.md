@@ -20,8 +20,8 @@ Module checklist
 - [d] light_button_actuator
 - [d] light_button_sensor
 - [d] light_controller
-- [ ] luminosity_exterior_sensor
-- [ ] luminosity_interior_sensor
+- [x] luminosity_exterior_sensor
+- [x] luminosity_interior_sensor
 - [ ] moisture_reducing
 - [x] moisture_sensor
 - [d] outside_brightness_sensor

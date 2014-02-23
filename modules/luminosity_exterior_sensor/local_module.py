@@ -7,12 +7,12 @@ import fields.syntax
 
 class LuminosityExteriorSensor(module.Base):
     update_rate = 10
-
+    public_name = 'Capteur luminosite exterieure'
 
     class luminosity(
-	    fields.syntax.Numeric,
+            fields.syntax.Numeric,
             fields.sensor.LuminosityExterior,
-            fields.io.Readable,
+            # fields.io.Readable,
             fields.persistant.Volatile,
             fields.Base):
-        pass
+        public_name = 'Luminosite exterieure'
