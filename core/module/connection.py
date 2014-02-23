@@ -3,8 +3,47 @@ from twisted.internet import protocol
 
 class Protocol(protocol.Protocol):
     """
-    Module specific protocol.
-    TODO write guidelines for protocol.
+    Module specific protocol. To communicate with an other module, connect to
+    its socket and, then, use the following keywords. All communication are
+    json formatted.
+
+    - Get informations about a module :
+    Keyword : { 'code': 'knockknock' }
+    Result : { [ <info-name>: <info-value> ] }
+    Return a set of informations. This set is dynamic and may contains some
+    words is function of the construction of the module.
+    At least, a module's information contains few obligatory words :
+    { public_name: <public-name>,
+      name: <name>,
+      fields: [ name: <field-name>,
+                public_name: <field-public-name>,
+                update_rate: <update-rate>
+      ]
+    }
+
+    - Get last saved value :
+    Keyword : { 'code': 'get', 'fields': [ <field-name> ] }
+    Result : { 'success': False } or
+             { 'success': True, 'fields':
+                [ <field-name>: (<field-update-timestamp>, <field-value>) ]
+             }
+
+    - Get a field's value at time <t> :
+    Keyword : { 'code': 'get_at', 'fields': [ <field-name> ], 'time': <t> }
+    The result is the same as when we ask for the last value
+
+    - Get field's values inside a timeslice
+    Keyword : { 'code': 'get_from_to', 'fields': [ <field-name> ],
+                'time_from': <time-from>, 'time-to': <time-to> }
+    Result : { 'success': False } or
+             { 'success': True, 'fields':
+                [ <field-name>: [ (<field-update-timestamp>, <field-value>) ] ]
+             }
+
+    - Set field' value :
+    Keyword : { 'code': 'set',
+                'field_name': <field-name>, 'field_value': <field-value> }
+    Return : { 'success': True or False }
     """
     def __init__(self, module):
         self.module = module
@@ -63,8 +102,8 @@ class Protocol(protocol.Protocol):
     def err_code_not_found(self):
         """
         Error handler called when the query code wasn't found.
-        """
         self.err('Code not found in the query')
+        """
 
     def err_field_error(self):
         """

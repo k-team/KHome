@@ -310,6 +310,9 @@ class Base(threading.Thread):
         return ans
 
     def start(self):
+        """
+        Start the execution of the module and its fields.
+        """
         logger.info('Starting')
         self.running = True
         for f in self.module_fields:
@@ -322,14 +325,25 @@ class Base(threading.Thread):
             time.sleep(0.1)
 
     def stop(self):
+        """
+        Stop the execution of the module and all its fields.
+        """
         self.logger.info('Stopping')
         for f in self.module_fields:
             f.stop()
-            f.join(1)
+            try:
+                f.join(1)
+            except RuntimeError:
+                pass
         self.running = False
         self.logger.info('Stopped')
 
     def kill(self):
+        """
+        Stop the execution of the module and call the on_kill function of its
+        fields.
+        This method have to be called in case of runtime error.
+        """
         for f in self.module_fields:
             f.on_kill()
             f.stop()
