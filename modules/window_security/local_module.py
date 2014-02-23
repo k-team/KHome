@@ -5,9 +5,9 @@ import logging
 
 class WindowSecurity(module.Base):
     update_rate = 10
-    window_access = use_module('WindowAccess')
+    window_access = use_module('Window')
     recognition = use_module('Recognition')
-    alarm_actuator = use_module('AlarmActuator')
+    alarm = use_module('Alarm')
 
     class controller(fields.Base):
         def __init__(self):
@@ -16,7 +16,7 @@ class WindowSecurity(module.Base):
         def always(self):
             print 'testons'
             try:
-                window_status = self.module.window_access.window()
+                window_status = self.module.window_access.state()
                 recognition_status = self.module.recognition.recognised()
                 print 'window_status = %s, recognition_status = %s' % (window_status, recognition_status)
             except TypeError as e:
@@ -24,9 +24,6 @@ class WindowSecurity(module.Base):
                 logger.exception(e)
             else:
                 if window_status == 'OPEN' and recognition_status == 'UNKNOWN':
-                    self.module.alarm_actuator.alarm(True)
-                    print 'Alert Unknown person in the house'
-                else:
-                    self.module.alarm_actuator.alarm(False)
-                    print 'Nothing to worry the house is safe'
+                    self.module.alarm.message('Alert Unknown person in the house')
+                    print
 
