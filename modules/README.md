@@ -12,7 +12,7 @@ Module checklist
 - [x] co_sensor
 - [x] door
 - [ ] fan_actuator
-- [ ] gaz_controller
+- [x] gaz_controller
 - [d] heat_management_controller
 - [ ] human_presence_sensor
 - [x] into_spectrum
@@ -23,25 +23,20 @@ Module checklist
 - [ ] luminosity_exterior_sensor
 - [ ] luminosity_interior_sensor
 - [ ] moisture_reducing
-- [ ] moisture_sensor
+- [x] moisture_sensor
 - [d] outside_brightness_sensor
-- [d] piston_actuator
-- [x] power_plug
-- [d] rain_forecast
-- [d] rain_management_controller
-- [ ] recognition
 - [-] shutter
 - [ ] shutter_heat_controller
 - [-] shutter_light_controller
 - [d] smoke_security_controller
 - [d] smoke_sensor
-- [ ] sound_sensor
-- [ ] temperature
-- [ ] temperature_actuator
+- [x] sound_sensor
+- [-] temperature
+- [d] temperature_actuator
 - [ ] temperature_controller
 - [d] temperature_exterior_sensor
 - [d] temperature_forecast
-- [ ] temperature_sensor
+- [d] temperature_sensor
 - [x] togetic_blender
 - [x] togetic_filter
 - [x] togetic_sensor
@@ -51,6 +46,11 @@ Module checklist
 - [d] water_flush_controller
 - [x] weather
 - [x] window
-- [ ] window_heat_management
-- [ ] window_rain_management
+- [d] window_heat_management
+- [d] window_rain_management
 - [ ] window_security
+- [d] piston_actuator
+- [x] power_plug
+- [d] rain_forecast
+- [d] rain_management_controller
+- [ ] recognition
