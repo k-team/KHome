@@ -8,7 +8,18 @@ angular.module('GHome').directive('graph', function() {
 
       var allData = [];
       var chart = null, opts = {
+        zoom: {
+          interactive: false,
+          amount: 1.0,
+        },
+        pan: {
+          interactive: true,
+          cursor: "move",
+          frameRate: 20,
+        },
         xaxis: {
+          zoomRange: false,
+          panRange: false,
           tickSize: 1,
           tickFormatter: function(n) {
             function twoDigits(value) {
@@ -23,6 +34,8 @@ angular.module('GHome').directive('graph', function() {
             return h + ":" + m;
           },
         }, yaxis: {
+          zoomRange: false,
+          panRange: false,
           tickLength: 0
         }, grid: {
           borderWidth: 0,
@@ -56,6 +69,9 @@ angular.module('GHome').directive('graph', function() {
 
         if (!chart) {
           chart = $.plot(elem, plottedData, opts);
+          // elem.bind('plotpan', function(event, plot) {
+          //   // chart = $.plot(elem, allData, opts);
+          // });
           elem.css('display', 'block');
         } else {
           chart.setData(plottedData);
@@ -71,7 +87,6 @@ angular.module('GHome').directive('graph', function() {
         if(chart) {
           chart.shutdown();
         }
-        console.log(tick);
         chart = $.plot(elem, allData, opts);
       }, true);
     }
