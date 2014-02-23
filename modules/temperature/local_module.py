@@ -1,12 +1,29 @@
 import module
-from module import use_module
-import fields.proxy
+import fields
+import fields.io
+import fields.actuator
+import fields.sensor
+import fields.syntax
+import fields.persistant
 
 class Temperature(module.Base):
     update_rate = 10
 
-    #room = use_module('Room')
+    class sensor(
+	    fields.sensor.Temperature, 
+            fields.io.Readable,
+            fields.persistant.Volatile,
+	    fields.syntax.Numeric,
+            fields.Base):
+	    public_name = "Thermometre"
+        pass
 
-    temperature = fields.proxy.mix('temperature',
-        'TemperatureSensor', 'temperature',
-        'TemperatureActuator', 'temperature')
+    class actuator(
+            fields.actuator.Temperature,
+            fields.io.Writable,
+            fields.io.Readable,
+            fields.persistant.Volatile,
+	    fields.syntax.Numeric,
+            fields.Base):
+	    public_name = "Radiateur"
+        pass
