@@ -103,6 +103,10 @@ a:hover {
   width: 95%;
   height: 400px;
 }
+.progress {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
 .glyphicon-refresh-animate {
   -webkit-animation: rotate 2s linear 0s infinite normal;
   -moz-animation: rotate 2s linear 0s infinite normal;

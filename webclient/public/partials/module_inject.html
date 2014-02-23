@@ -20,8 +20,8 @@
         <form data-ng-show="field.readable || field.writable" data-ng-submit="update()" class="form-horizontal" role="form">
           <fieldset data-ng-disabled="!field.writable">
             <div class="form-group" data-ng-class="{success:'has-success', error:'has-error', '':''}[field.state]">
-              <label for="field-{{field.name}}" class="col-sm-2 control-label">{{field.public_name || field.name}}</label>
-              <div class="input-group input-group-sm col-sm-10">
+              <label for="field-{{field.name}}" class="col-xs-4 col-sm-3 control-label">{{field.public_name || field.name}}</label>
+              <div class="input-group input-group-sm col-xs-8 col-sm-9">
                 <div class="input-group-addon" data-ng-show="field.writable" data-ng-switch on="field.state">
                   <span data-ng-switch-default>
                     <span class="glyphicon glyphicon-pencil"></span>
@@ -69,7 +69,7 @@
       <div id="inject"></div>
       <!--Supervision graph-->
       <div data-ng-show="data" data-ng-controller="SupervisionCtrl" data-ng-repeat="field in module.fields | graphable">
-        <div graph data-graph-model="data" data-tick-size="field.update_rate * 10" class="graph"></div>
+        <div graph data-graph-model="data" data-tick-size="field.update_rate * 20" class="graph"></div>
       </div>
     </div>
   </div>
