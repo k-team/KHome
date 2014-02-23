@@ -18,13 +18,15 @@ class BabyMonitor(module.Base):
     _ = fields.proxy.readable('sound', 'SoundSensor', 'sound')
 
     class decibel_value(
-            fields.syntax.Numeric,
+            fields.syntax.BoundNumeric,
             fields.io.Readable,
             fields.io.Writable,
             fields.persistant.Database,
             fields.Base):
         public_name = 'Seuil de detection du bébé'
         update_rate = 421337
+        lower_bound = 10
+        upper_bound = 150
 
         def on_start(self):
             super(BabyMonitor.decibel_value, self).on_start()

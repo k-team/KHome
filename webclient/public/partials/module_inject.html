@@ -44,9 +44,12 @@
                   data-ng-show="field.type=='numeric' && !field.bounded"
                   name="field-num-{{field.name}}" type="number"
                   class="form-control" placeholder="{{field.public_name}}" />
-                <progressbar data-ng-show="field.type=='numeric' && field.bounded"
-                    value="field.value" min="field.value_min" max="field.value_max">
-                  {{ field.value }} %
+                <div ui-slider="{ range: 'min' } " min="{{ field.value_min }}" max="{{ field.value_max }}"
+                  data-ng-model="field.value"
+                  data-ng-show="field.type=='numeric' && field.bounded && field.writable"></div>
+                <progressbar data-ng-show="field.type=='numeric' && field.bounded && !field.writable"
+                  value="field.value" min="field.value_min" max="field.value_max">
+                  {{ field.value }}
                 </progressbar>
                 <input data-ng-model="field.value"
                   data-ng-show="field.type=='boolean'"
