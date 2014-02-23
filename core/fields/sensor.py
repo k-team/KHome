@@ -76,7 +76,7 @@ Sound = Dummy(lambda t:
 
 #this one is for the interior temperature
 Temperature = Dummy(lambda t:
-        math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
+        math.sin(t / 10) * 15 + 20 + 2 * (random.random() - 0.5))
 
 TemperatureForecast = Dummy(lambda t:
         math.sin(t) * 15 + 20 + 0.5 * (random.random() - 0.5))
