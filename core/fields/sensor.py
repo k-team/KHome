@@ -174,10 +174,10 @@ class SensorConnection(Protocol):
             return self.findButton(b1) | self.findButton(b2)
 
     def findButton(self, bits):
-        if   bits == '001': return 0b1000 #AI
-        elif bits == '000': return 0b0100 #A0
-        elif bits == '010': return 0b0001 #BI
-        elif bits == '011': return 0b0010 #B0
+        if   bits == '001': return 0b0001 #A0 0b0001
+        elif bits == '000': return 0b0010 #AI 0b0010
+        elif bits == '010': return 0b1000 #BI 0b1000
+        elif bits == '011': return 0b0100 #B0 0b0100
         else:               return 0b0000
 
 class SensorConnectionFactory(ClientFactory):
