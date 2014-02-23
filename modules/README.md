@@ -23,7 +23,7 @@ Module checklist
 - [ ] luminosity_exterior_sensor
 - [ ] luminosity_interior_sensor
 - [ ] moisture_reducing
-- [ ] moisture_sensor
+- [x] moisture_sensor
 - [d] outside_brightness_sensor
 - [-] shutter
 - [ ] shutter_heat_controller
