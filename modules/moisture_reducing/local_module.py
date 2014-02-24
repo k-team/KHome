@@ -1,12 +1,14 @@
 import module
 from module import use_module
 import fields
+import fields.syntax
+import fields.io
 
 class MoistureReducing(module.Base):
     moisture_sensor = use_module('MoistureSensor')
     fan_actuator = use_module('FanActuator')
 
-    class moisture_value_limit(fields.Percentage, fields.Writable,
+    class moisture_value_limit(fields.syntax.Percentage, fields.io.Writable,
             fields.Base):
         pass
 
@@ -15,14 +17,14 @@ class MoistureReducing(module.Base):
 
         def __init__(self):
             self.moisture_value_limit = 45 # moisture limit as a percentage
-            super(MoistureController.controller, self).__init__()
+            super(MoistureReducing.controller, self).__init__()
 
         def always(self):
             """
             Reduce the moisture by checking the moisture level. If this one is over the
             """
             try:
-                moisture_value = self.module.moisture_sensor.moisture()
+                moisture_value = self.module.moisture_sensor._moisture()
             except TypeError as e: # FIXME why TypeError ?
                 self.logger.exception(e)
             else:
