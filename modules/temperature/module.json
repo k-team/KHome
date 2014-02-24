@@ -1,7 +1,7 @@
 {
-  "start": "python2.7 .",
-  "name": "temperature",
-  "public_name": "Temperature",
-   "has_view": true,
-  "description": "Ce module permet de consulter la température et de la régler"
+    "description": "Ce module permet de consulter la temp\u00e9rature et de la r\u00e9gler",
+    "has_view": true,
+    "name": "temperature",
+    "public_name": "Temperature",
+    "start": "run_python_module"
 }

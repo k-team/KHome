@@ -1,6 +1,6 @@
 {
-  "start":"python2.7 .",
-  "name": "human_presence_sensor",
-  "public_name": "Capteur présence",
-  "description": "Detecte si il y a une personne devant le capteur"
+    "description": "Detecte si il y a une personne devant le capteur",
+    "name": "human_presence_sensor",
+    "public_name": "Capteur pr\u00e9sence",
+    "start": "run_python_module"
 }

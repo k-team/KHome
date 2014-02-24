@@ -1,10 +1,10 @@
 {
-  "name": "weather",
-  "start":"python2.7 .",
-  "commands": {
-    "install": "pip2.7 install weatherpy",
-    "uninstall": "pip2.7 uninstall weatherpy"
-  },
-  "public_name": "Météo",
-  "description": "Si vous devez attendre 30 minutes à regarder les nouvelles, ou de passer du temps à fouiller dans le journal pour trouver la météo dans vos nouvelles préférées juste savoir comment votre jour va se sentir ou même des vêtements à apporter avec vous , vous avez besoin d'une équitable et impartiale prévisions météorologiques . Il n'ya aucune raison que vous devriez être pris au dépourvu , vous devriez voir la semaine prochaine ou même mois de ce que le temps sera , sans avoir besoin de vérifier deux fois ou avoir ce soit un problème. Prévisions météo vous donne la suite, vous avez besoin où vous pouvez connaître votre prévision de zone ou la météo de votre destination sans avoir besoin de passer au crible le sortir de bulletins de nouvelles locales ou le trouver au milieu d' un tas de renseignements lourd sur le changement climatique ou l'interpréter à partir d'une carte, vous besoin d'un diplôme pour comprendre."
+    "commands": {
+        "install": "pip2.7 install weatherpy",
+        "uninstall": "pip2.7 uninstall weatherpy"
+    },
+    "description": "Si vous devez attendre 30 minutes \u00e0 regarder les nouvelles, ou de passer du temps \u00e0 fouiller dans le journal pour trouver la m\u00e9t\u00e9o dans vos nouvelles pr\u00e9f\u00e9r\u00e9es juste savoir comment votre jour va se sentir ou m\u00eame des v\u00eatements \u00e0 apporter avec vous , vous avez besoin d'une \u00e9quitable et impartiale pr\u00e9visions m\u00e9t\u00e9orologiques . Il n'ya aucune raison que vous devriez \u00eatre pris au d\u00e9pourvu , vous devriez voir la semaine prochaine ou m\u00eame mois de ce que le temps sera , sans avoir besoin de v\u00e9rifier deux fois ou avoir ce soit un probl\u00e8me. Pr\u00e9visions m\u00e9t\u00e9o vous donne la suite, vous avez besoin o\u00f9 vous pouvez conna\u00eetre votre pr\u00e9vision de zone ou la m\u00e9t\u00e9o de votre destination sans avoir besoin de passer au crible le sortir de bulletins de nouvelles locales ou le trouver au milieu d' un tas de renseignements lourd sur le changement climatique ou l'interpr\u00e9ter \u00e0 partir d'une carte, vous besoin d'un dipl\u00f4me pour comprendre.",
+    "name": "weather",
+    "public_name": "M\u00e9t\u00e9o",
+    "start": "run_python_module"
 }
