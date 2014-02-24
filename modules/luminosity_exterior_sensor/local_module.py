@@ -9,10 +9,10 @@ class LuminosityExteriorSensor(module.Base):
     update_rate = 10
     public_name = 'Capteur luminosite exterieure'
 
-    class luminosity(
+    class luminosity_exterior(
             fields.syntax.Numeric,
             fields.sensor.LuminosityExterior,
-            # fields.io.Readable,
+            fields.io.Graphable,
             fields.persistant.Volatile,
             fields.Base):
         public_name = 'Luminosite exterieure'
