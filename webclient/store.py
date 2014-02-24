@@ -102,20 +102,38 @@ def api_available_module_download(module_name):
     return send_from_directory(app.static_folder, module_zipfile,
             as_attachment=True)
 
-@cached
+@app.route('/api/available_modules/<module_name>/rate')
+def api_available_module_get_rate(module_name):
+    """
+    TODO: api key
+    """
+
+    # check that the module is indeed available
+    if not catalog.is_available(module_name):
+        app.logger.warning('Module "%s" not available', module_name)
+        abort(404)
+
+    # save the new rating
+    try:
+        return jsonify({ 'value': Rating.average(module_name) })
+    except (IndexError, ValueError, KeyError) as e:
+        app.logger.exception(e)
+        abort(404)
+
 @app.route('/api/available_modules/rate', methods=['POST'])
 def api_available_module_set_rate():
     """
-    TODO: api key for rating
+    TODO: api key
     """
     # validate module name
     try:
-        module_name = request.form['name']
+        module_name = path.realname(request.form['name']) # hack
     except KeyError:
         abort(400)
 
     # check that the module is indeed available
     if not catalog.is_available(module_name):
+        app.logger.warning('Module "%s" not available', module_name)
         abort(404)
 
     # save the new rating

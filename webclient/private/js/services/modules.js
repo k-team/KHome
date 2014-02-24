@@ -68,8 +68,7 @@ angular.module('GHome').factory('ModuleService', function($q, $http, $timeout, $
     return getModules(storeUrl, this.availableModules, forceReload);
   };
 
-  service.rate = function(module, oldValue) {
-    console.log('rating', module, 'to', oldValue);
+  service.setRate = function(module, oldValue) {
     var value = parseInt(oldValue);
     if (!value || value < 1 || value > 5) {
       console.error('Invalid value', oldValue);
@@ -79,6 +78,10 @@ angular.module('GHome').factory('ModuleService', function($q, $http, $timeout, $
       .success(function() { deferred.resolve(); })
       .error(function() { deferred.reject(); });
     return deferred.promise;
+  };
+
+  service.getRate = function(module) {
+    return httpGetJSON(storeUrl + '/' + module.name + '/rate');
   };
 
   // Get the list of installed modules, optionally passing if this should force

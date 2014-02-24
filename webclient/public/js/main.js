@@ -141,13 +141,19 @@ angular.module('GHome', ['ngRoute', 'ui.bootstrap', 'ui.slider', 'angularFileUpl
   };
 }
 ;function RatingCtrl($scope, ModuleService) {
+  $scope.$on('module.statusUpdate', function(_, module) {
+    ModuleService.getRate(module).then(function(rate) {
+      module.rating = rate;
+    });
+  });
+
   $scope.isRating = false;
   $scope.rate = function() {
+    $scope.ratingOk = false;
     $scope.isRating = true;
-    ModuleService.rate($scope.module, $scope.module.rating).then(function() {
-      console.log('rating success');
-    }, function() {
-      console.log('rating error');
+    ModuleService.setRate($scope.module, $scope.module.rating).then(function() {
+      $scope.ratingOk = true;
+      $scope.isRating = false;
     }, function() {
       $scope.isRating = false;
     });
@@ -551,8 +557,7 @@ angular.module('GHome').filter('fieldVisible', function () {
     return getModules(storeUrl, this.availableModules, forceReload);
   };
 
-  service.rate = function(module, oldValue) {
-    console.log('rating', module, 'to', oldValue);
+  service.setRate = function(module, oldValue) {
     var value = parseInt(oldValue);
     if (!value || value < 1 || value > 5) {
       console.error('Invalid value', oldValue);
@@ -562,6 +567,10 @@ angular.module('GHome').filter('fieldVisible', function () {
       .success(function() { deferred.resolve(); })
       .error(function() { deferred.reject(); });
     return deferred.promise;
+  };
+
+  service.getRate = function(module) {
+    return httpGetJSON(storeUrl + '/' + module.name + '/rate');
   };
 
   // Get the list of installed modules, optionally passing if this should force

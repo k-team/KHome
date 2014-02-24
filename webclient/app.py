@@ -145,6 +145,7 @@ if __name__ == '__main__':
         store_proxy = partial(proxy, STORE_URL)
         store_proxy('/api/available_modules')
         store_proxy('/api/available_modules/<module_name>/public/<rest>')
+        store_proxy('/api/available_modules/<module_name>/rate', methods=['GET'])
         store_proxy('/api/available_modules/rate', methods=['POST'])
 
 @app.route('/api/modules/<module_name>/instances/status')
@@ -155,6 +156,7 @@ def api_module_instances_statuses(module_name):
         abort(404)
     try:
         mod = use_module(module_name)
+        mod.info['name'] = path.realname(mod.info['name']) # hack
     except RuntimeError as e:
         app.logger.exception(e)
         abort(404)
