@@ -10,4 +10,4 @@ class LuminosityInteriorSensor(module.Base):
     class luminosity_interior(fields.syntax.Numeric,
             fields.sensor.LuminosityInterior, fields.io.Graphable,
             fields.persistant.Volatile, fields.Base):
-        public_name = 'Luminosité intérieure'
+        public_name = 'Luminosité intérieure (lux)'
