@@ -6,6 +6,7 @@ import fields
 import fields.io
 import fields.persistant
 import fields.syntax
+import fields.proxy
 
 class ShutterLightController(module.Base):
     update_rate = 500
@@ -16,9 +17,14 @@ class ShutterLightController(module.Base):
 
     # To work correctly, the presence module should return the presence of a
     # human in the entire house, and not in the current room !
-    presence = use_module('HumanPresenceSensor')
+    human_presence = use_module('HumanPresenceSensor')
 
-    class luminosity_limit(fields.syntax.Percentage, fields.io.Writable,
+    anonym = fields.proxy.readable('luminosity_interior', 'LuminosityInteriorSensor', 'luminosity_interior')
+    anonym2 = fields.proxy.readable('luminosity_exterior', 'LuminosityExteriorSensor', 'luminosity_exterior')
+    anonym3 = fields.proxy.readable('shutter', 'Shutter', 'shutter')
+    anonym4 = fields.proxy.readable('presence', 'HumanPresenceSensor', 'presence')
+
+    class luminosity_limit(fields.syntax.Percentage, fields.io.Writable, fields.io.Readable,
             fields.persistant.Volatile, fields.Base):
         """
         Field configuring the minimal brightness the user wants during the day.
@@ -29,7 +35,7 @@ class ShutterLightController(module.Base):
             super(ShutterLightController.luminosity_limit, self).on_start()
             self.emit_value(60)
 
-    class night_detection_limit(fields.syntax.Percentage, fields.io.Writable,
+    class night_detection_limit(fields.syntax.Percentage, fields.io.Writable, fields.io.Readable,
             fields.persistant.Volatile, fields.Base):
         """
         Field configuring the brightness lower limit under which we can
@@ -46,9 +52,9 @@ class ShutterLightController(module.Base):
             logger = self.module.logger
             logger.info('updating control')
             try:
-                lum_int = self.module.luminosity_int.luminosity()[1]
-                lum_ext = self.module.luminosity_ext.luminosity()[1]
-                presence = self.module.presence.presence()[1]
+                lum_int = self.module.luminosity_int.luminosity_interior()[1]
+                lum_ext = self.module.luminosity_ext.luminosity_exterior()[1]
+                presence = self.module.human_presence.presence()[1]
                 logger.info('lum_int = %s / lum_ext = %s / presence = %s',
                         lum_int, lum_ext, presence)
             except TypeError as e:

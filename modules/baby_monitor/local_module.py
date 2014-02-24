@@ -15,7 +15,7 @@ class BabyMonitor(module.Base):
     alarm = use_module('Alarm')
     public_name = 'Babyphone'
 
-    _ = fields.proxy.readable('sound', 'SoundSensor', 'sound')
+    son = fields.proxy.readable('sound', 'SoundSensor', 'sound')
 
     class decibel_value(
             fields.io.Writable,

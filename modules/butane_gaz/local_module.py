@@ -9,7 +9,7 @@ import fields.syntax
 class ButaneGaz(module.Base):
     public_name = 'Butane'
 
-    class taux(fields.sensor.Butane,
+    class butane(fields.sensor.Butane,
             fields.syntax.Numeric,
             fields.io.Graphable,
             fields.persistant.Database,

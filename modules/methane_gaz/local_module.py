@@ -11,7 +11,7 @@ import fields.syntax
 class MethaneGaz(module.Base):
     public_name = 'Méthane'
 
-    class taux(fields.sensor.Methane,
+    class methane(fields.sensor.Methane,
             fields.syntax.Numeric,
             fields.io.Graphable,
             fields.persistant.Database,

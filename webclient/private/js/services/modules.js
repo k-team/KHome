@@ -4,15 +4,26 @@ angular.module('GHome').factory('ModuleService', function($q, $http, $timeout, $
     storeUrl = '/api/available_modules';
 
   var httpPostJSON = function(url, data) {
+    var deferred = $q.defer();
+
+    // Format data for POST
     var formattedData = '';
     for (var key in data) {
       formattedData += key + '=' + data[key] + '&';
     }
     formattedData = formattedData.substring(0, formattedData.length-1);
-    return $http({
+
+    // Send HTTP request
+    $http({
       url: url, method: 'POST', data: formattedData,
       headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+    }).success(function(data) {
+      deferred.resolve(data);
+    }).error(function() {
+      deferred.reject();
     });
+
+    return deferred.promise;
   };
 
   var httpGetJSON = function(url) {
@@ -40,12 +51,8 @@ angular.module('GHome').factory('ModuleService', function($q, $http, $timeout, $
   };
 
   service.updateField = function(module, field, value) {
-    var deferred = $q.defer();
-    httpPostJSON(modulesUrl + '/update_field',
-        { name: module.name, field: field.name, value: value })
-      .success(function(data) { deferred.resolve(data); })
-      .error(function() { deferred.reject(); });
-    return deferred.promise;
+    return httpPostJSON(modulesUrl + '/update_field',
+        { name: module.name, field: field.name, value: value });
   };
 
   var getModules = function(url, cachedModules, forceReload) {
@@ -68,16 +75,17 @@ angular.module('GHome').factory('ModuleService', function($q, $http, $timeout, $
     return getModules(storeUrl, this.availableModules, forceReload);
   };
 
-  service.rate = function(module, oldValue) {
+  service.setRate = function(module, oldValue) {
     var value = parseInt(oldValue);
     if (!value || value < 1 || value > 5) {
       console.error('Invalid value', oldValue);
     }
-    var deferred = $q.defer();
-    httpPostJSON(storeUrl + '/rate', { name: module.name, value: value })
-      .success(function() { deferred.resolve(); })
-      .error(function() { deferred.reject(); });
-    return deferred.promise;
+    return httpPostJSON(storeUrl + '/rate',
+        { name: module.name, value: value });
+  };
+
+  service.getRate = function(module) {
+    return httpGetJSON(storeUrl + '/' + module.name + '/rate');
   };
 
   // Get the list of installed modules, optionally passing if this should force
@@ -97,20 +105,14 @@ angular.module('GHome').factory('ModuleService', function($q, $http, $timeout, $
   }
   // ...from the catalog
   service.installFromCatalog = function(module) {
-    var deferred = $q.defer();
-    httpPostJSON(modulesUrl + '/install', { name: module.name })
-      .success(function() { deferred.resolve(); })
-      .error(function() { deferred.reject(); });
-    return deferred.promise;
+    return httpPostJSON(modulesUrl + '/install',
+        { name: module.name });
   }
 
   // Uninstall a module
   service.uninstall = function(module) {
-    var deferred = $q.defer();
-    httpPostJSON(modulesUrl + '/uninstall', { name: module.name })
-      .success(function() { deferred.resolve(); })
-      .error(function() { deferred.reject(); });
-    return deferred.promise;
+    return httpPostJSON(modulesUrl + '/uninstall',
+        { name: module.name });
   };
 
   return service;

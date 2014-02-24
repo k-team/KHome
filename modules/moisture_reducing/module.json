@@ -1,3 +1,6 @@
 {
+    "description": "Ce gestionnaire d'humidité permet de mettre en route ou s'arreter la ventillation à distance. Il permet aussi de savoir si le ventillateur est en marche ou arreté.",
+    "name": "moisture_reducing",
+    "public_name": "Humidité auto",
     "start": "run_python_module"
 }
