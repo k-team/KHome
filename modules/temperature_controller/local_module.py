@@ -9,6 +9,7 @@ class TemperatureController(module.Base):
     update_rate = 10
     temperature = use_module('Temperature')
     temperature_forecast = use_module('TemperatureForecast')
+
     class limit(fields.io.Readable,
         fields.syntax.Numeric,
         fields.persistant.Volatile,
