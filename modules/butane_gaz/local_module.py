@@ -10,11 +10,11 @@ class ButaneGaz(module.Base):
     public_name = 'Butane'
 
     class butane(fields.sensor.Butane,
-            fields.syntax.Numeric,
+            fields.syntax.Percentage,
             fields.io.Graphable,
             fields.persistant.Database,
             fields.Base):
-        public_name = 'Taux de butane'
+        public_name = 'Taux de butane (% dans l air)'
 
     class gaz_actuator(fields.actuator.Butane,
             fields.io.Readable,

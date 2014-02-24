@@ -10,11 +10,11 @@ class PropaneGaz(module.Base):
     public_name = 'Propane'
 
     class propane(fields.sensor.Propane,
-            fields.syntax.Numeric,
+            fields.syntax.Percentage,
             fields.io.Graphable,
             fields.persistant.Database,
             fields.Base):
-        public_name = 'Taux de propane'
+        public_name = 'Taux de propane (% dans l air)'
 
     class gaz_actuator(fields.actuator.Propane,
             fields.syntax.Boolean,

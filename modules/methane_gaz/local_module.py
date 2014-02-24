@@ -12,11 +12,11 @@ class MethaneGaz(module.Base):
     public_name = 'Méthane'
 
     class methane(fields.sensor.Methane,
-            fields.syntax.Numeric,
+            fields.syntax.Percentage,
             fields.io.Graphable,
             fields.persistant.Database,
             fields.Base):
-        public_name = 'Taux de methane'
+        public_name = 'Taux de methane (% dans l air)'
 
     class gaz_actuator(fields.actuator.Methane,
             fields.syntax.Boolean,

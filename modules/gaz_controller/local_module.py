@@ -28,29 +28,29 @@ class GazController(module.Base):
             fields.syntax.Constant,
             fields.syntax.Numeric,
             fields.Base):
-        const_value = 60.0
-        public_name = 'Limite de CO'
+        const_value = 35
+        public_name = 'Limite CO (ppm)'
 
     class propane_value_limit(
             fields.syntax.Constant,
             fields.syntax.Numeric,
             fields.Base):
-        const_value = 1500.0
-        public_name = 'Limite de propane'
+        const_value = 2.1
+        public_name = 'LIE propane'
 
     class butane_value_limit(
             fields.syntax.Constant,
             fields.syntax.Numeric,
             fields.Base):
-        const_value = 1400.0
-        public_name = 'Limite de butane'
+        const_value = 1.8
+        public_name = 'LIE butane'
 
     class methane_value_limit(
             fields.syntax.Constant,
             fields.syntax.Numeric,
             fields.Base):
-        const_value = 1600.0
-        public_name = 'Limite de méthane'
+        const_value = 5.0
+        public_name = 'LIE méthane'
 
     class controller(fields.Base):
         def always(self):
