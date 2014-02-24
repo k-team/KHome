@@ -21,8 +21,8 @@ function StoreCtrl($scope, ModuleService, $modal, $timeout) {
   $scope.modulesInstalling = [];
   $scope.removeInstallingModule = function(module) {
     for (var i = 0; i < $scope.modulesInstalling.length; i++) {
-      if ($scope.modulesInstalling[i].id == module.id) {
-        $scope.modulesInstalling.splice(i, 1);
+      if ($scope.modulesInstalling[i].name == module.name) {
+        $timeout(function() { $scope.modulesInstalling.splice(i, 1) }, 1000);
         break;
       }
     }
@@ -30,7 +30,7 @@ function StoreCtrl($scope, ModuleService, $modal, $timeout) {
 
   $scope.moduleAlreadyInstalling = function(module) {
     for (var i = 0; i < $scope.modulesInstalling.length; i++) {
-      if ($scope.modulesInstalling[i].id == module.id) {
+      if ($scope.modulesInstalling[i].name == module.name) {
         return;
       }
     }
@@ -69,7 +69,7 @@ function StoreCtrl($scope, ModuleService, $modal, $timeout) {
 
     // Dismiss the modal
     modalScope.dismiss = function() {
-      $scope.modalInstances[module.id].dismiss();
+      $scope.modalInstances[module.name].dismiss();
     };
 
     // Install the module
@@ -88,7 +88,7 @@ function StoreCtrl($scope, ModuleService, $modal, $timeout) {
     modalScope.module = module;
 
     // Open the modal
-    $scope.modalInstances[module.id] = $modal.open({
+    $scope.modalInstances[module.name] = $modal.open({
       templateUrl: 'modal.html',
       scope: modalScope
     });

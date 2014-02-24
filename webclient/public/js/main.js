@@ -189,8 +189,8 @@ angular.module('GHome', ['ngRoute', 'ui.bootstrap', 'ui.slider', 'angularFileUpl
   $scope.modulesInstalling = [];
   $scope.removeInstallingModule = function(module) {
     for (var i = 0; i < $scope.modulesInstalling.length; i++) {
-      if ($scope.modulesInstalling[i].id == module.id) {
-        $scope.modulesInstalling.splice(i, 1);
+      if ($scope.modulesInstalling[i].name == module.name) {
+        $timeout(function() { $scope.modulesInstalling.splice(i, 1) }, 1000);
         break;
       }
     }
@@ -198,7 +198,7 @@ angular.module('GHome', ['ngRoute', 'ui.bootstrap', 'ui.slider', 'angularFileUpl
 
   $scope.moduleAlreadyInstalling = function(module) {
     for (var i = 0; i < $scope.modulesInstalling.length; i++) {
-      if ($scope.modulesInstalling[i].id == module.id) {
+      if ($scope.modulesInstalling[i].name == module.name) {
         return;
       }
     }
@@ -237,7 +237,7 @@ angular.module('GHome', ['ngRoute', 'ui.bootstrap', 'ui.slider', 'angularFileUpl
 
     // Dismiss the modal
     modalScope.dismiss = function() {
-      $scope.modalInstances[module.id].dismiss();
+      $scope.modalInstances[module.name].dismiss();
     };
 
     // Install the module
@@ -256,7 +256,7 @@ angular.module('GHome', ['ngRoute', 'ui.bootstrap', 'ui.slider', 'angularFileUpl
     modalScope.module = module;
 
     // Open the modal
-    $scope.modalInstances[module.id] = $modal.open({
+    $scope.modalInstances[module.name] = $modal.open({
       templateUrl: 'modal.html',
       scope: modalScope
     });
@@ -505,7 +505,7 @@ angular.module('GHome').filter('fieldVisible', function () {
     // Send HTTP request
     $http({
       url: url, method: 'POST', data: formattedData,
-      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
     }).success(function(data) {
       deferred.resolve(data);
     }).error(function() {

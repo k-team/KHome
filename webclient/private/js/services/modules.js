@@ -16,7 +16,7 @@ angular.module('GHome').factory('ModuleService', function($q, $http, $timeout, $
     // Send HTTP request
     $http({
       url: url, method: 'POST', data: formattedData,
-      headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
     }).success(function(data) {
       deferred.resolve(data);
     }).error(function() {
