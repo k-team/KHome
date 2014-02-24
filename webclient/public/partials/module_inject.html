@@ -28,8 +28,8 @@
         <form data-ng-show="field.readable || field.writable" data-ng-submit="update()" class="form-horizontal" role="form">
           <fieldset data-ng-disabled="!field.writable">
             <div class="form-group" data-ng-class="{success:'has-success', error:'has-error', '':''}[state]">
-              <label for="field-{{field.name}}" class="col-xs-offset-1 col-xs-10 col-sm-3 control-label">{{field.public_name || field.name}}</label>
-              <div class="input-group input-group-sm col-xs-offset-1 col-xs-10 col-sm-9">
+              <label for="field-{{field.name}}" class="col-sm-offset-0 col-xs-offset-1 col-xs-10 col-sm-3 control-label">{{field.public_name || field.name}}</label>
+              <div class="input-group input-group-sm col-sm-offset-0 col-xs-offset-1 col-xs-10 col-sm-9">
                 <div class="input-group-addon" data-ng-show="field.writable" data-ng-switch on="state">
                   <span data-ng-switch-default><span class="glyphicon glyphicon-pencil"></span></span>
                   <span data-ng-switch-when="success"><span class="glyphicon glyphicon-ok"></span></span>
