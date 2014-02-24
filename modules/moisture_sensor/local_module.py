@@ -5,7 +5,8 @@ import fields
 
 class MoistureSensor(module.Base):
     update_rate = 10
+    public_name = 'Capteur d\' humidité'
 
-    class moisture(fields.syntax.Numeric, fields.sensor.Moisture,
-            fields.io.Graphable, fields.persistant.Database, fields.Base):
-        public_name = "Humidité"
+    class sensor(fields.sensor.Moisture, fields.io.Graphable,
+            fields.syntax.Numeric, fields.persistant.Database, fields.Base):
+        public_name = 'Humidité (%)'

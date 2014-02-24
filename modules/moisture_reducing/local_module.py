@@ -1,21 +1,26 @@
+# -*- coding: utf8 -*-
+
 import module
 from module import use_module
 import fields
 
 class MoistureReducing(module.Base):
+    public_name = 'Humidite automatique'
+
     moisture_sensor = use_module('MoistureSensor')
     fan_actuator = use_module('FanActuator')
 
-    class moisture_value_limit(fields.syntax.Percentage, fields.io.Writable,
-            fields.Base):
-        pass
+    anonyme = fields.proxy.readable('sensor', 'MoistureSensor', 'sensor')
+    anonyme2 = fields.proxy.basic('fan', 'FanActuator', 'fan')
+
+    class limit(fields.syntax.Percentage, fields.io.Writable,
+            fields.io.Readable, fields.syntax.Numeric,
+            fields.persistant.Volatile, fields.Base):
+        const_value = 45.0
+        public_name = 'Humidité maximal autorisé'
 
     class controller(fields.Base):
         update_rate = 60 # update every minute
-
-        def __init__(self):
-            self.moisture_value_limit = 45 # moisture limit as a percentage
-            super(MoistureReducing.controller, self).__init__()
 
         def always(self):
             """

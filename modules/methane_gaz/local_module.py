@@ -4,7 +4,7 @@ import module
 import fields
 
 class MethaneGaz(module.Base):
-    public_name = 'Gestionnaire de méthane'
+    public_name = 'Méthane'
 
     class methane(fields.sensor.Methane, fields.syntax.Numeric,
             fields.io.Graphable, fields.persistant.Database, fields.Base):

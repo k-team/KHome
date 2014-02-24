@@ -2,6 +2,7 @@ import module
 import fields
 
 class ButaneGaz(module.Base):
+    public_name = 'Butane'
 
     class butane(fields.sensor.Butane, fields.syntax.Numeric,
             fields.io.Graphable, fields.persistant.Database, fields.Base):

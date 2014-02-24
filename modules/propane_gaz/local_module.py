@@ -2,7 +2,7 @@ import module
 import fields
 
 class PropaneGaz(module.Base):
-    public_name = 'Gestionnaire de propane'
+    public_name = 'Propane'
 
     class propane(fields.sensor.Propane,
             fields.syntax.Numeric,
