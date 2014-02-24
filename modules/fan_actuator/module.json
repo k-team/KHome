@@ -1,7 +1,7 @@
 {
-  "start":"python2.7 .",
-  "public_name": "Ventilateur",
-  "has_view": true,
-  "description": "",
-  "name": "fan_actuator"
+    "description": "",
+    "has_view": true,
+    "name": "fan_actuator",
+    "public_name": "Ventilateur",
+    "start": "run_python_module"
 }

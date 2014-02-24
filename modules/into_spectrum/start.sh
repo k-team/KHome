@@ -14,9 +14,9 @@ trap at_sig INT
 mongod --dbpath ./db &
 pid1=$!
 [ -z "$(ls db)" ] && sleep 60 || sleep 3
-cd IntoSpectrum && npm start &
+cd app && npm start &
 pid2=$!
-cd IntoSpectrum/server && node watchdog.js &
+cd app/server && node watchdog.js &
 pid3=$!
 
 while true; do sleep 1; done;

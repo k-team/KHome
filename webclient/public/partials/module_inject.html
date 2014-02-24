@@ -1,4 +1,6 @@
+<!--Independant module view injection-->
 <span id="inject-independant"></span>
+
 <div class="container">
   <div data-ng-show="loading">
     <h1 class="text-center">
@@ -6,7 +8,6 @@
       <br>Chargement du module
     </h1>
   </div>
-
   <div data-ng-show="!loading && module">
     <div class="header module-header">
       <img class="hidden-xs module-header-img" src="/api/modules/{{ module.name }}/public/icon.png"
@@ -27,42 +28,33 @@
         <form data-ng-show="field.readable || field.writable" data-ng-submit="update()" class="form-horizontal" role="form">
           <fieldset data-ng-disabled="!field.writable">
             <div class="form-group" data-ng-class="{success:'has-success', error:'has-error', '':''}[state]">
-              <label for="field-{{field.name}}" class="col-xs-4 col-sm-3 control-label">{{field.public_name || field.name}}</label>
-              <div class="input-group input-group-sm col-xs-8 col-sm-9">
+              <label for="field-{{field.name}}" class="col-sm-offset-0 col-xs-offset-1 col-xs-10 col-sm-3 control-label">{{field.public_name || field.name}}</label>
+              <div class="input-group input-group-sm col-sm-offset-0 col-xs-offset-1 col-xs-10 col-sm-9">
                 <div class="input-group-addon" data-ng-show="field.writable" data-ng-switch on="state">
-                  <span data-ng-switch-default>
-                    <span class="glyphicon glyphicon-pencil"></span>
-                  </span>
-                  <span data-ng-switch-when="success">
-                    <span class="glyphicon glyphicon-ok"></span>
-                  </span>
-                  <span data-ng-switch-when="error">
-                    <span class="glyphicon glyphicon-remove"></span>
-                  </span>
-                  <span data-ng-switch-when="waiting">
-                    <span class="glyphicon glyphicon-time"></span>
-                  </span>
+                  <span data-ng-switch-default><span class="glyphicon glyphicon-pencil"></span></span>
+                  <span data-ng-switch-when="success"><span class="glyphicon glyphicon-ok"></span></span>
+                  <span data-ng-switch-when="error"><span class="glyphicon glyphicon-remove"></span></span>
+                  <span data-ng-switch-when="waiting"><span class="glyphicon glyphicon-time"></span></span>
                 </div>
                 <input data-ng-model="field.value"
-                  data-ng-show="field.type=='string'"
-                  name="field-str-{{field.name}}" type="text"
+                  data-ng-show="field.type == 'string'"
                   class="form-control" placeholder="{{field.public_name}}" />
                 <input data-ng-model="field.value"
-                  data-ng-show="field.type=='numeric' && !field.bounded"
-                  name="field-num-{{field.name}}" type="number"
+                  data-ng-show="field.type == 'numeric' && !field.bounded"
                   class="form-control" placeholder="{{field.public_name}}" />
-                <div ui-slider="{ range: 'min' } " min="{{ field.value_min }}" max="{{ field.value_max }}"
-                  data-ng-model="field.value"
-                  data-ng-show="field.type=='numeric' && field.bounded && field.writable">
-                  <div class="ui-slider-handle btn btn-default btn-sm">{{ field.value }}</div>
-                </div>
-                <progressbar data-ng-show="field.type=='numeric' && field.bounded && !field.writable"
+                  <div data-ng-model="field.value"
+                    data-ng-show="field.type == 'numeric' && field.bounded && field.writable"
+                    data-ui-slider="{ range: 'min' } " min="{{ field.value_min }}" max="{{ field.value_max }}">
+                    <div class="ui-slider-handle btn btn-default btn-sm">
+                      {{ field.value }}
+                    </div>
+                  </div>
+                <progressbar data-ng-show="field.type == 'numeric' && field.bounded && !field.writable"
                   value="field.value" min="field.value_min" max="field.value_max">
                   {{ field.value }}
                 </progressbar>
-                <input data-ng-model="field.value"
-                  data-ng-show="field.type=='boolean'"
-                  name="field-bool-{{field.name}}" type="checkbox"
+                <input data-ng-model="field.value" type="checkbox"
+                  data-ng-show="field.type == 'boolean'"
                   class="form-control" />
                 <span data-ng-show="field.writable" class="input-group-btn">
                   <button type="submit" class="btn btn-default">
@@ -75,7 +67,10 @@
         </form>
       </div>
       <hr>
+
+      <!--Injection of inner module view-->
       <div id="inject"></div>
+
       <!--Supervision graph-->
       <div data-ng-show="data" data-ng-controller="SupervisionCtrl" data-ng-repeat="field in module.fields | graphable">
         <div graph data-graph-model="data" data-tick-size="field.update_rate * 20" class="graph"></div>

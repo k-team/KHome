@@ -10,7 +10,6 @@ dist
 build
 eggs
 parts
-bin
 var
 sdist
 develop-eggs
@@ -44,3 +43,8 @@ nosetests.xml
 *.javac
 *.pid
 *.log
+
+# Backup
+*.bak
+*.swp
+*~

@@ -1,6 +1,7 @@
 {
+  "install": "cd app && npm install",
   "start": "sh ./start.sh",
   "name": "into_spectrum",
   "public_name": "IntoSpectrum",
-  "description": "IntoSpectrum est une base puissante, fiable et flexible offrant des expériences multimédias de pointe.<br />Et ce n'est que le début. Avec IntoSpectrum et ses solutions de streaming, vous pourrez aller encore plus loin avec vos contenus multimédias numériques."
+  "description": "Server-side media player with a web front-end, written in NodeJS. The interface is mainly based on Bootstrap 3. Note that IntoSpectrum doesn't create the library for you, at least not with the web app. Instead, it comes with a watchdog utility script, which can be launched once, or as a daemon process. Why IntoSpectrum ? Its an anagram of the original author's last names, and also happens to correspond to one of our favorite pokemon."
 }

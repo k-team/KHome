@@ -8,7 +8,7 @@ import fields.syntax
 
 class PropaneGaz(module.Base):
 
-    class taux(fields.sensor.Propane,
+    class propane(fields.sensor.Propane,
             fields.syntax.Numeric,
             fields.io.Graphable,
             fields.persistant.Database,

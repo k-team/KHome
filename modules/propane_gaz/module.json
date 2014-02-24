@@ -1,6 +1,6 @@
 {
-  "start":"python2.7 .",
-  "name": "propane_gaz",
-  "public_name": "Gestionnaire de propane",
-  "description": "Partis en vacance sans couper le gaz ? Le gestionnaire de propane, vous permet de controler les fuites de propane et de couper le gaz à distance."
+    "description": "Partis en vacance sans couper le gaz ? Le gestionnaire de propane, vous permet de controler les fuites de propane et de couper le gaz \u00e0 distance.",
+    "name": "propane_gaz",
+    "public_name": "Gestionnaire de propane",
+    "start": "run_python_module"
 }

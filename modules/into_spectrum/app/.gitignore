@@ -1,0 +1,17 @@
+# Node modules
+node_modules/*
+
+# Public directory
+public/*
+
+# Media directory
+media/*
+
+# Virtualenv directory
+venv/*
+
+# Build directory
+build/*
+
+# NPM debug log
+**/.npm-debug.log

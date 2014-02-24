@@ -1,7 +1,6 @@
 {
-	"start":"python2.7 .",
-	"public_name": "Capteur Humidite",
-	"description": "Ce capteur mesure humidité dans votre maison. Donc, je vous trouvez que votre peau est un peu sèche, n hésitez pas à consulter la valeur mesurée car elle est un peu faible ",
-	"has_view": true,
-	"name": "moisture_sensor"
+    "description": "Ce capteur mesure humidit\u00e9 dans votre maison. Donc, si vous trouvez que votre peau est un peu s\u00e8che, n'h\u00e9sitez pas \u00e0 consulter la valeur mesur\u00e9e car elle est un peu faible.",
+    "name": "moisture_sensor",
+    "public_name": "Capteur d'humidit\u00e9",
+    "start": "run_python_module"
 }

@@ -9,7 +9,7 @@ import fields.syntax
 import fields.persistant
 
 class Temperature(module.Base):
-    update_rate = 10
+    update_rate = 3
     public_name = 'Temperature'
 
     class sensor(

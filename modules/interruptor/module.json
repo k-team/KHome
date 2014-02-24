@@ -1,4 +1,4 @@
 {
-  "start":"python2 .",
-  "name": "interruptor"
+    "name": "interruptor",
+    "start": "run_python_module"
 }

@@ -1,10 +1,24 @@
 import os
 import json
+import shlex
 import shutil
 import zipfile
+import logging
+import subprocess as sp
 
 import path
 import instance
+
+logger = logging.getLogger(__name__)
+def setup_logger(logger):
+    logger.setLevel(logging.DEBUG)
+    fmt = '%(asctime)s :: %(name)s :: %(levelname)s :: %(message)s'
+    formatter = logging.Formatter(fmt)
+    handler = logging.StreamHandler()
+    handler.setFormatter(formatter)
+    handler.setLevel(logging.DEBUG)
+    logger.addHandler(handler)
+setup_logger(logger)
 
 MODULE_NAME_ENTRY = 'name'
 
@@ -60,6 +74,34 @@ def get_installed_modules(detailed=False):
         module_list.append(module_name)
     return module_list
 
+def run_module_command(module_name, cmd):
+    """
+    Run a command listed in the "commands" section, for the module, other than
+    "start" of course, which is a *special* command. Please note that the
+    module should be trusted when running this command, otherwise bad stuff can
+    happen. Return if the command was successful, or if there was no command to
+    run (meaning that if no entry for that command is specified, this function
+    returns true).
+    """
+    conf = get_config(module_name)
+    if 'commands' not in conf or cmd not in conf['commands']:
+        return True
+
+    # run command
+    ret = True
+    cwd = os.getcwd()
+    try:
+        os.chdir(path.module_directory(module_name))
+        log_file = open(path.log_file(module_name), 'a')
+        sp.check_call(conf['commands'][cmd], stdout=log_file, stderr=log_file, shell=True)
+    except (sp.CalledProcessError, OSError) as e:
+        logger.exception(e)
+        ret = False
+    finally:
+        log_file.close()
+        os.chdir(cwd)
+    return ret
+
 def install_from_zip(file_):
     """
     Execute all the setup steps for a module installation. Takes either a
@@ -83,7 +125,15 @@ def install_from_zip(file_):
 
         # extract zip file
         zf.extractall(path.modules_directory())
+
+    # run the "install" command
+    if not run_module_command(module_name, 'install'):
+        uninstall(module_name)
+        return False
+
+    # start the module
     instance.invoke(module_name)
+    return True
 
 def uninstall(module_name):
     """
@@ -98,6 +148,10 @@ def uninstall(module_name):
         instance.stop(module_name)
     except RuntimeError:
         pass # ignore if module is already stopped
+
+    # run the "uninstall" command
+    if not run_module_command(module_name, 'uninstall'):
+        pass
 
     # remove the module directory tree
     try:

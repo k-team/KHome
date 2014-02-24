@@ -1,11 +1,24 @@
 {
-  "start":"/home/turpif/Projet/Togetic/Blender.py --input /tmp/togetic-1 --blender /home/turpif/togetic/blender/Togetic.blend",
-  "name": "togetic_blender",
-  "public_name": "Togetic-Blender",
-  "slides": [
-    {"image": "screen-1.png", "text": "Petite ballade"},
-    {"image": "screen-2.png", "text": "Beau paysage"},
-    {"image": "screen-3.png", "text": "Soleil couchant"},
-    {"image": "screen-4.png", "text": "Plein de champignons"}],
-  "description": "Cette vue utilisant blender vous place dans un monde fantastique où vous pourrez vous immerger en prenant le contrôle de la caméra. L'écran devient vos yeux, vous êtes le personnage de cette histoire, vous êtes dans un autre monde. A vous de regardez autour de vous afin de découvrir un tout nouveau monde."
+    "description": "Cette vue utilisant blender vous place dans un monde fantastique o\u00f9 vous pourrez vous immerger en prenant le contr\u00f4le de la cam\u00e9ra. L'\u00e9cran devient vos yeux, vous \u00eates le personnage de cette histoire, vous \u00eates dans un autre monde. A vous de regardez autour de vous afin de d\u00e9couvrir un tout nouveau monde.",
+    "name": "togetic_blender",
+    "public_name": "Togetic-Blender",
+    "slides": [
+        {
+            "image": "screen-1.png",
+            "text": "Petite ballade"
+        },
+        {
+            "image": "screen-2.png",
+            "text": "Beau paysage"
+        },
+        {
+            "image": "screen-3.png",
+            "text": "Soleil couchant"
+        },
+        {
+            "image": "screen-4.png",
+            "text": "Plein de champignons"
+        }
+    ],
+    "start": "/home/turpif/Projet/Togetic/Blender.py --input /tmp/togetic-1 --blender /home/turpif/togetic/blender/Togetic.blend"
 }

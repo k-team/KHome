@@ -1,7 +1,6 @@
 {
-  "start":"python2.7 .",
-  "has_view": true,
-  "name": "alarm",
-  "public_name": "Alarme",
-  "description": "Cette alarme de sécurité vous permettra d'être averti en cas de danger. D'autres modules pourront l'utiliser et l'activer en cas de problème."
+    "start": "run_python_module",
+    "name": "alarm",
+    "public_name": "Alarme",
+    "description": "Cette alarme de sécurité vous permettra d'être averti en cas de danger. D'autres modules pourront l'utiliser et l'activer en cas de problème."
 }
