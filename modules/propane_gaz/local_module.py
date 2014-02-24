@@ -7,6 +7,7 @@ import fields.persistant
 import fields.syntax
 
 class PropaneGaz(module.Base):
+    public_name = 'Propane'
 
     class propane(fields.sensor.Propane,
             fields.syntax.Numeric,
