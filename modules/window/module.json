@@ -1,6 +1,0 @@
-{
-    "start": "run_python_module",
-    "name": "window",
-    "public_name": "Fenêtre automatique",
-    "description": "Ce gestionnaire de fenetre permet de fermer ou d'ouvrir sa fenetre \u00e0 distance. Il permet aussi de savoir si la fenetre est ouverte ou ferm\u00e9e."
-}

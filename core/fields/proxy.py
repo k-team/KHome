@@ -2,7 +2,7 @@ import time
 import fields
 import fields.io
 import fields.syntax
-from module import use_module
+import module as _module
 
 def basic(new_field, module_name, field_name):
     """
@@ -12,7 +12,7 @@ def basic(new_field, module_name, field_name):
     proxy.readable or proxy.writable instead.
     """
 
-    module = use_module(module_name)
+    module = _module.use_module(module_name)
     field = getattr(module, field_name)
     field_info = module.fields_info[field_name]
 
@@ -48,8 +48,8 @@ def mix(new_field, r_module_name, r_field_name, w_module_name, w_field_name):
     module *w_module_name*.
     """
 
-    r_module = use_module(r_module_name)
-    w_module = use_module(w_module_name)
+    r_module = _module.use_module(r_module_name)
+    w_module = _module.use_module(w_module_name)
     r_field = getattr(r_module, r_field_name)
     w_field = getattr(w_module, w_field_name)
     r_field_info = r_module.fields_info[r_field_name]
@@ -88,7 +88,7 @@ def readable(new_field, module_name, field_name):
     This new field is only readable.
     """
 
-    module = use_module(module_name)
+    module = _module.use_module(module_name)
     field = getattr(module, field_name)
     field_info = module.fields_info[field_name]
 
@@ -116,7 +116,7 @@ def writable(new_field, module_name, field_name):
     This new field is only writable.
     """
 
-    module = use_module(module_name)
+    module = _module.use_module(module_name)
     field = getattr(module, field_name)
     field_info = module.fields_info[field_name]
 
