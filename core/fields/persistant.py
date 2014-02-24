@@ -30,8 +30,7 @@ class Database(object):
         except sqlite3.OperationalError as e:
             logging.exception(e)
             pass
-        finally:
-            db_conn.close()
+        db_conn.close()
 
     def _get_value(self):
         db_conn = sqlite3.connect(self.db_name)
@@ -42,13 +41,13 @@ class Database(object):
             c = db_conn.cursor()
             c.execute(query)
             re = c.fetchall()
+            db_conn.close()
             if re:
                 return re[0]
         except Exception as e:
             logging.exception(e)
-            return None
-        finally:
             db_conn.close()
+            return None
         return None
 
     def _get_value_at(self, t):
@@ -60,13 +59,13 @@ class Database(object):
             c = db_conn.cursor()
             c.execute(query, (t,))
             re = c.fetchall()
+            db_conn.close()
             if re:
                 return re[0]
         except Exception as e:
             logging.exception(e)
-            return None
-        finally:
             db_conn.close()
+            return None
         return None
 
     def _get_value_from_to(self, fr, to):
@@ -80,12 +79,12 @@ class Database(object):
             c = db_conn.cursor()
             c.execute(query, (to, fr))
             re = c.fetchall()
+            db_conn.close()
             return re
         except Exception as e:
             logging.exception(e)
-            return []
-        finally:
             db_conn.close()
+            return []
         return []
 
     def set_value(self, t, value):
