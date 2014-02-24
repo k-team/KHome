@@ -1,0 +1,6 @@
+{
+  "start":"python2.7 .",
+  "name": "methane_gaz",
+  "public_name": "Gestionnaire de methane",
+  "description": "Partis en vacance sans couper le gaz ? Le gestionnaire de methane, vous permet de controler les fuites de methane et de couper le gaz à distance."
+}

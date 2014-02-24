@@ -15,14 +15,15 @@ class GazController(module.Base):
     butane_gaz = use_module('ButaneGaz')
     propane_gaz = use_module('PropaneGaz')
     methane_gaz = use_module('MethaneGaz')
-    alarm = use_module('AlarmActuator')
+    alarm = use_module('Alarm')
 
-    butane = fields.proxy.basic('butane', 'ButaneGaz', 'taux')
-    methane = fields.proxy.basic('methane', 'MethaneGaz', 'taux')
-    propane = fields.proxy.basic('propane', 'PropaneGaz', 'taux')
-    co = fields.proxy.basic('co', 'COSensor', 'co_presence')
-    alarm = fields.proxy.basic('alarm', 'AlarmActuator', 'alarm')
-    
+    butane = fields.proxy.readable('butane', 'ButaneGaz', 'taux')
+    methane = fields.proxy.readable('methane', 'MethaneGaz', 'taux')
+    propane = fields.proxy.readable('propane', 'PropaneGaz', 'taux')
+    co = fields.proxy.readable('co', 'COSensor', 'value')
+    alarm = fields.proxy.readable('alarm', 'Alarm', 'alarm')
+    message = fields.proxy.readable('alarm', 'Alarm', 'message')
+
     class co_value_limit(
             fields.syntax.Constant,
             fields.syntax.Numeric,
@@ -59,7 +60,7 @@ class GazController(module.Base):
                 butane_value_limit = self.module.butane_value_limit()[1]
                 methane_value_limit = self.module.methane_value_limit()[1]
 
-                co_value_current = self.module.co_gaz.co_presence()[1]
+                co_value_current = self.module.co_gaz.value()[1]
                 print 'co_value_current = %s / co_value_limit = %s' % (co_value_current, co_value_limit)
                 propane_value_current = self.module.propane_gaz.taux()[1]
                 print 'propane_value_current = %s / propane_value_limit = %s' % (propane_value_current, propane_value_limit)
@@ -74,24 +75,18 @@ class GazController(module.Base):
                 if co_value_current > co_value_limit:
                     self.module.alarm.alarm(True)
                     print 'Alert A lot of CO gaz in the house'
+                    self.module.alarm.message('Alert A lot of CO gaz in the house')
                 if propane_value_current > propane_value_limit:
                     self.module.alarm.alarm(True)
                     self.module.propane_gaz.gaz_actuator(True)
-                    print 'Propane gaz is closed'
-                else:
-                    self.module.propane_gaz.gaz_actuator(False)
-                    print 'Propane gaz is opened'
+                    print 'Propane gaz is close'
+                    self.module.alarm.message('Propane gaz is close')
                 if butane_value_current > butane_value_limit:
                     self.module.alarm.alarm(True)
                     self.module.butane_gaz.gaz_actuator(True)
+                    self.module.alarm.message('Butane gaz is close')
                     print 'Butane gaz is closed'
-                else:
-                    self.module.butane_gaz.gaz_actuator(False)
-                    print 'Butane gaz is opened'
                 if methane_value_current > methane_value_limit:
                     self.module.alarm.alarm(True)
                     self.module.methane_gaz.gaz_actuator(True)
                     print 'Methane gaz is closed'
-                else:
-                    self.module.methane_gaz.gaz_actuator(False)
-                    print 'Methane gaz is opened'

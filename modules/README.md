@@ -12,7 +12,7 @@ Module checklist
 - [x] co_sensor
 - [x] door
 - [ ] fan_actuator
-- [x] gaz_controller
+- [-] gaz_controller
 - [d] heat_management_controller
 - [ ] human_presence_sensor
 - [x] into_spectrum
@@ -26,12 +26,12 @@ Module checklist
 - [x] moisture_sensor
 - [d] outside_brightness_sensor
 - [-] shutter
-- [ ] shutter_heat_controller
+- [-] shutter_heat_controller
 - [-] shutter_light_controller
 - [d] smoke_security_controller
 - [d] smoke_sensor
 - [x] sound_sensor
-- [-] temperature
+- [x] temperature
 - [d] temperature_actuator
 - [ ] temperature_controller
 - [d] temperature_exterior_sensor

@@ -1,1 +1,6 @@
-{"start":"python2.7 ."}
+{
+  "start":"python2.7 .",
+  "name": "shutter_heat_controller",
+  "public_name": "Controlleur d'aération",
+  "description": "Le controlleur d'aération ouvre ou ferme les volets en fonction des température intérieur et extérieur. Il permettra de garder votre intérieur à une température douillette, et vous fera économiser en radiateur ou climatisation."
+}

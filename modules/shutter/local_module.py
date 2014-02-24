@@ -1,5 +1,6 @@
 import module
 import fields
+import fields.io
 import fields.syntax
 import fields.sensor
 import fields.actuator
@@ -10,4 +11,4 @@ class Shutter(module.Base):
 
     class shutter(fields.actuator.Shutter, fields.sensor.Shutter,
             fields.persistant.Volatile, fields.Base):
-        pass
+        public_name = 'Position des volets'
