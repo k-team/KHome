@@ -15,6 +15,12 @@
       <a data-ng-click="reloadAvailableModules()" class="alert-link">cliquez ici pour réessayer</a>.
     </div>
 
+    <!--Status message for installing modules-->
+    <div data-ng-repeat="module in modulesInstalling" class="alert alert-info">
+      Installation du module <strong>{{ (module.public_name) ? module.public_name : module.name }}</strong> en cours...
+      <span class="pull-right glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
+    </div>
+
     <div data-ng-show="availableModules" class="row">
       <div data-ng-repeat="module in availableModules | filter:query" class="module-thumbnail col-xs-12 col-sm-4 col-md-3">
         <div data-ng-click="openModal(module)" class="hidden-xs thumbnail">
