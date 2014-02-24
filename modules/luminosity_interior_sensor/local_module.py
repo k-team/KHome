@@ -15,6 +15,6 @@ class LuminosityInteriorSensor(module.Base):
             fields.io.Graphable,
             fields.persistant.Volatile,
             fields.Base):
-        public_name = 'Luminosite interieure'
+        public_name = 'Luminosite interieure (lux)'
 
 
