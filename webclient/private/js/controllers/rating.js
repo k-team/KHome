@@ -1,7 +1,7 @@
 function RatingCtrl($scope, ModuleService) {
   $scope.$on('module.statusUpdate', function(_, module) {
     ModuleService.getRate(module).then(function(rate) {
-      module.rating = rate;
+      module.rating = rate.value;
     });
   });
 
