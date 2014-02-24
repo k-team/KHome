@@ -38,8 +38,9 @@ def api_modules():
 @app.route('/api/modules/<module_name>')
 def api_module_info(module_name):
     try:
-        # return jsonify([])
-        return jsonify(use_module(module_name).info)
+        module_info = use_module(module_name).info
+        module_info['name'] = path.realname(module_info['name']) # hack
+        return jsonify(module_info)
     except (TypeError, RuntimeError) as e:
         app.logger.exception(e)
         abort(404)

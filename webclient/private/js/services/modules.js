@@ -69,6 +69,7 @@ angular.module('GHome').factory('ModuleService', function($q, $http, $timeout, $
   };
 
   service.rate = function(module, oldValue) {
+    console.log('rating', module, 'to', oldValue);
     var value = parseInt(oldValue);
     if (!value || value < 1 || value > 5) {
       console.error('Invalid value', oldValue);
