@@ -1,7 +1,10 @@
 {
-  "start":"python2 .",
   "name": "weather",
+  "start":"python2.7 .",
+  "commands": {
+    "install": "pip2.7 install weatherpy",
+    "uninstall": "pip2.7 uninstall weatherpy"
+  },
   "public_name": "Météo",
-  "slides": [],
   "description": "Si vous devez attendre 30 minutes à regarder les nouvelles, ou de passer du temps à fouiller dans le journal pour trouver la météo dans vos nouvelles préférées juste savoir comment votre jour va se sentir ou même des vêtements à apporter avec vous , vous avez besoin d'une équitable et impartiale prévisions météorologiques . Il n'ya aucune raison que vous devriez être pris au dépourvu , vous devriez voir la semaine prochaine ou même mois de ce que le temps sera , sans avoir besoin de vérifier deux fois ou avoir ce soit un problème. Prévisions météo vous donne la suite, vous avez besoin où vous pouvez connaître votre prévision de zone ou la météo de votre destination sans avoir besoin de passer au crible le sortir de bulletins de nouvelles locales ou le trouver au milieu d' un tas de renseignements lourd sur le changement climatique ou l'interpréter à partir d'une carte, vous besoin d'un diplôme pour comprendre."
 }

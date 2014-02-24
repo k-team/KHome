@@ -84,7 +84,7 @@ def run_module_command(module_name, cmd):
     returns true).
     """
     conf = get_config(module_name)
-    if cmd not in conf:
+    if 'commands' not in conf or cmd not in conf['commands']:
         return True
 
     # run command
@@ -93,7 +93,7 @@ def run_module_command(module_name, cmd):
     try:
         os.chdir(path.module_directory(module_name))
         log_file = open(path.log_file(module_name), 'a')
-        sp.check_call(conf[cmd], stdout=log_file, stderr=log_file, shell=True)
+        sp.check_call(conf['commands'][cmd], stdout=log_file, stderr=log_file, shell=True)
     except (sp.CalledProcessError, OSError) as e:
         logger.exception(e)
         ret = False
