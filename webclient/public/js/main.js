@@ -444,7 +444,7 @@ angular.module('GHome', ['ngRoute', 'ui.bootstrap', 'ui.slider', 'angularFileUpl
     }
   };
 });
-;angular.module('GHome').filter('visible', function () {
+;angular.module('GHome').filter('moduleVisible', function () {
   return function (modules) {
     if (modules === undefined) {
       return;
@@ -453,7 +453,9 @@ angular.module('GHome', ['ngRoute', 'ui.bootstrap', 'ui.slider', 'angularFileUpl
     var re = Array();
     for (var i = 0 ; i < modules.length ; i++) {
       var module = modules[i];
-      if (module.has_view === true || module.has_view === undefined) {
+      if ((module.has_view === true || module.has_view === undefined)
+        && module.public_name != '' && module.public_name !== undefined) {
+        console.log(module.public_name);
         re.push(module);
       }
     }
