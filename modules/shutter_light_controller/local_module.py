@@ -3,10 +3,6 @@
 import module
 from module import use_module
 import fields
-import fields.io
-import fields.persistant
-import fields.syntax
-import fields.proxy
 
 class ShutterLightController(module.Base):
     update_rate = 500

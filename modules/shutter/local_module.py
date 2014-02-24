@@ -1,10 +1,5 @@
 import module
 import fields
-import fields.io
-import fields.syntax
-import fields.sensor
-import fields.actuator
-import fields.persistant
 
 class Shutter(module.Base):
     update_rate = 10

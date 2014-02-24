@@ -1,9 +1,5 @@
 import module
 import fields
-import fields.io
-import fields.syntax
-import fields.persistant
-import fields.actuator
 
 class Alarm(module.Base):
     update_rate = 42000

@@ -1,11 +1,9 @@
-from twitter.api import Twitter
 from twitter import OAuth
+from twitter.api import Twitter
 import module
 import fields
-import fields.io
-import fields.syntax
-import fields.persistant
 
+# TODO hide these
 con_key = 'f5z6uqPM9N87KLJqYIZDg'
 con_secret = 'U52jwVDHn2bMXV5utkY7pTg1sptSwSNDRMP4sZNtGE'
 acc_token = '2349175134-ashz2TRocXgOtEw9HGQDBt101hKrl0Bs4VMRw5R'

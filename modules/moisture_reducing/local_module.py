@@ -1,8 +1,6 @@
 import module
 from module import use_module
 import fields
-import fields.syntax
-import fields.io
 
 class MoistureReducing(module.Base):
     moisture_sensor = use_module('MoistureSensor')
@@ -23,16 +21,15 @@ class MoistureReducing(module.Base):
             """
             Reduce the moisture by checking the moisture level. If this one is over the
             """
-            try:
-                moisture_value = self.module.moisture_sensor._moisture()
-            except TypeError as e: # FIXME why TypeError ?
-                self.logger.exception(e)
+            logger = self.module.logger
+            moisture_value = self.module.moisture_sensor.moisture()
+            if moisture_value is None:
+                return
+            if moisture_value > self.moisture_value_limit:
+                self.module.fan_actuator.fan(True)
+                logger.info('moisture (%s%) over limit, running fan',
+                        moisture_value)
             else:
-                if moisture_value > self.moisture_value_limit:
-                    self.module.fan_actuator.fan(True)
-                    self.logger.info('moisture (%s%) over limit, running fan',
-                            moisture_value)
-                else:
-                    self.module.fan_actuator.fan(False)
-                    self.logger.info('moisture (%s%) under limit, stopping fan',
-                            moisture_value)
+                self.module.fan_actuator.fan(False)
+                logger.info('moisture (%s%%) under limit, stopping fan',
+                        moisture_value)
