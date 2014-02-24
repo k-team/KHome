@@ -93,7 +93,10 @@ def test_module(module_name):
 if __name__ == '__main__':
     args = docopt.docopt(__doc__)
     if args['--all']:
-        for module_name in os.listdir(modules_directory()):
+        modules_dir = modules_directory()
+        for module_name in os.listdir(modules_dir):
+            if not os.path.isdir(os.path.join(modules_dir, module_name)):
+                continue
             test_module(module_name)
     else:
         test_module(args['<module_name>'])

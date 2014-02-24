@@ -1,12 +1,8 @@
-#-*- coding: utf8 -*-
+# -*- coding: utf8 -*-
+
 import module
 from module import use_module
 import fields
-import fields.syntax
-import fields.io
-import fields.proxy
-import fields.persistant
-
 
 class MoistureReducing(module.Base):
     public_name = 'Humidite automatique'
@@ -17,47 +13,28 @@ class MoistureReducing(module.Base):
     anonyme = fields.proxy.readable('sensor', 'MoistureSensor', 'sensor')
     anonyme2 = fields.proxy.basic('fan', 'FanActuator', 'fan')
 
-    #class moisture_value_limit(fields.syntax.Percentage, fields.io.Writable,
-     #       fields.Base):
-     #   pass
-
-    class limit(
-            fields.syntax.Percentage,
-            fields.io.Writable,
-            fields.io.Readable,
-            #fields.syntax.Constant,
-            fields.syntax.Numeric,
-            fields.persistant.Volatile,
-            fields.Base):
+    class limit(fields.syntax.Percentage, fields.io.Writable,
+            fields.io.Readable, fields.syntax.Numeric,
+            fields.persistant.Volatile, fields.Base):
         const_value = 45.0
         public_name = 'Humidité maximal autorisé'
 
     class controller(fields.Base):
         update_rate = 60 # update every minute
 
-        #def __init__(self):
-            #self.moisture_value_limit = 45 # moisture limit as a percentage
-         #   super(MoistureReducing.controller, self).__init__()
-
-
         def always(self):
             """
             Reduce the moisture by checking the moisture level. If this one is over the
             """
-            try:
-                moisture_value = self.module.moisture_sensor.sensor()
-                limit= self.module.limit
-            except TypeError as e: # FIXME why TypeError ?
-                #self.logger.exception(e)
-                pass
+            logger = self.module.logger
+            moisture_value = self.module.moisture_sensor.moisture()
+            if moisture_value is None:
+                return
+            if moisture_value > self.moisture_value_limit:
+                self.module.fan_actuator.fan(True)
+                logger.info('moisture (%s%) over limit, running fan',
+                        moisture_value)
             else:
-                if moisture_value > limit:
-                    self.module.fan_actuator.fan(True)
-                    #self.logger.info('moisture (%s%) over limit, running fan',
-                     #       moisture_value)
-                    print 'moisture (%s%) over limit, running fan', moisture_value
-                else:
-                    self.module.fan_actuator.fan(False)
-                    #self.logger.info('moisture (%s%) under limit, stopping fan',
-                     #       moisture_value)
-                    print 'moisture (%s%) under limit, stopping fan', moisture_value
+                self.module.fan_actuator.fan(False)
+                logger.info('moisture (%s%%) under limit, stopping fan',
+                        moisture_value)

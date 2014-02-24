@@ -151,11 +151,13 @@ def uninstall(module_name):
 
     # run the "uninstall" command
     if not run_module_command(module_name, 'uninstall'):
-        pass
+        return False
 
     # remove the module directory tree
     try:
         shutil.rmtree(path.module_directory(module_name))
     except OSError as e:
         logger.exception(e)
-        raise RuntimeError('Error when removing module directory')
+        return False
+    else:
+        return True

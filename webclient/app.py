@@ -82,20 +82,20 @@ def api_install_module(module_name):
         zipfile = urllib2.urlopen(urlparse.urljoin(STORE_URL,
             '/api/available_modules/%s/download' % module_name))
         io.write(zipfile.read())
-        packaging.install_from_zip(io)
+        success = packaging.install_from_zip(io)
     except urllib2.HTTPError:
         abort(404)
     except IOError:
         abort(403)
-    return ''
+    return jsonify({ 'success': success })
 
 @route_with_module_posted('/api/modules/uninstall')
 def api_uninstall_module(module_name):
     try:
-        packaging.uninstall(module_name)
+        success = packaging.uninstall(module_name)
     except ValueError:
         abort(403)
-    return ''
+    return jsonify({ 'success': success })
 
 @app.route('/api/modules/upload', methods=['POST'])
 def api_upload_module():

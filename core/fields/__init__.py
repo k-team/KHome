@@ -2,6 +2,14 @@ import time
 import threading
 import logging
 
+# fields export
+import io
+import syntax
+import proxy
+import sensor
+import actuator
+import persistant
+
 class FieldMeta(type):
     def __new__(cls, name, parents, attrs):
         return super(FieldMeta, cls).__new__(cls, name, parents, attrs)

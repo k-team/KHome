@@ -1,10 +1,8 @@
+# -*- coding: utf-8 -*-
+
 import module
 from module import use_module
 import fields
-import fields.io
-import fields.sensor
-import fields.actuator
-import fields.persistant
 
 class WaterController(module.Base):
     update_rate = 10
@@ -34,4 +32,4 @@ class WaterController(module.Base):
     class water_valve_sensor(fields.sensor.WaterValve,
             fields.actuator.WaterValve, fields.persistant.Volatile,
             fields.Base):
-        public_name = 'Etat du robinet'
+        public_name = 'État du robinet'

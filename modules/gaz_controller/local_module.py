@@ -1,11 +1,8 @@
 # -*- coding: utf-8 -*-
+
 import module
-import fields
-import fields.syntax
-import fields.io
-import fields.proxy
 from module import use_module
-import logging
+import fields
 
 class GazController(module.Base):
     public_name = 'Control du gaz'
@@ -24,30 +21,22 @@ class GazController(module.Base):
     alarm = fields.proxy.readable('alarm', 'Alarm', 'alarm')
     message = fields.proxy.readable('message', 'Alarm', 'message')
 
-    class co_value_limit(
-            fields.syntax.Constant,
-            fields.syntax.Numeric,
+    class co_value_limit(fields.syntax.Constant, fields.syntax.Numeric,
             fields.Base):
         const_value = 35
         public_name = 'Limite CO (ppm)'
 
-    class propane_value_limit(
-            fields.syntax.Constant,
-            fields.syntax.Numeric,
+    class propane_value_limit(fields.syntax.Constant, fields.syntax.Numeric,
             fields.Base):
         const_value = 2.1
         public_name = 'LIE propane'
 
-    class butane_value_limit(
-            fields.syntax.Constant,
-            fields.syntax.Numeric,
+    class butane_value_limit(fields.syntax.Constant, fields.syntax.Numeric,
             fields.Base):
         const_value = 1.8
         public_name = 'LIE butane'
 
-    class methane_value_limit(
-            fields.syntax.Constant,
-            fields.syntax.Numeric,
+    class methane_value_limit(fields.syntax.Constant, fields.syntax.Numeric,
             fields.Base):
         const_value = 5.0
         public_name = 'LIE méthane'
@@ -61,32 +50,24 @@ class GazController(module.Base):
                 methane_value_limit = self.module.methane_value_limit()[1]
 
                 co_value_current = self.module.co_gaz.value()[1]
-                print 'co_value_current = %s / co_value_limit = %s' % (co_value_current, co_value_limit)
                 propane_value_current = self.module.propane_gaz.propane()[1]
-                print 'propane_value_current = %s / propane_value_limit = %s' % (propane_value_current, propane_value_limit)
                 butane_value_current = self.module.butane_gaz.butane()[1]
-                print 'butane_value = %s / butane_value_limit = %s' % (butane_value_current, butane_value_limit)
                 methane_value_current = self.module.methane_gaz.methane()[1]
-                print 'methane_value = %s / methane_value_limit = %s' % (methane_value_current, methane_value_limit)
             except TypeError as e:
-                logger = logging.getLogger()
-                logger.exception(e)
+                self.module.logger.exception(e)
             else:
                 if co_value_current > co_value_limit:
                     self.module.alarm.alarm(True)
-                    print 'Alert A lot of CO gaz in the house'
-                    self.module.alarm.message('Alert A lot of CO gaz in the house')
+                    self.module.alarm.message('Too much CO gaz in the house')
                 if propane_value_current > propane_value_limit:
                     self.module.alarm.alarm(True)
                     self.module.propane_gaz.gaz_actuator(True)
-                    print 'Propane gaz is close'
-                    self.module.alarm.message('Propane gaz is close')
+                    self.module.alarm.message('Too much propane gaz in the house')
                 if butane_value_current > butane_value_limit:
                     self.module.alarm.alarm(True)
                     self.module.butane_gaz.gaz_actuator(True)
-                    self.module.alarm.message('Butane gaz is close')
-                    print 'Butane gaz is closed'
+                    self.module.alarm.message('Too much butane gaz in the house')
                 if methane_value_current > methane_value_limit:
                     self.module.alarm.alarm(True)
                     self.module.methane_gaz.gaz_actuator(True)
-                    print 'Methane gaz is closed'
+                    self.module.alarm.message('Too much methane gaz in the house')
