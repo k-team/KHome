@@ -43,3 +43,8 @@ nosetests.xml
 *.javac
 *.pid
 *.log
+
+# Backup
+*.bak
+*.swp
+*~
