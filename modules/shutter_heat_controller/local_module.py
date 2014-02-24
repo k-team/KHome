@@ -20,9 +20,9 @@ class ShutterHeatController(module.Base):
     temperatureExt = use_module('Weather')
    #tempControl = use_module('TemperatureController')
 
-    volet = fields.proxy.basic('volet', 'Shutter', 'shutter')
-    interior = fields.proxy.basic('interior', 'Temperature', 'sensor')
-    exterior = fields.proxy.basic('exterior', 'Weather', 'temperature')
+    volet = fields.proxy.basic('shutter', 'Shutter', 'shutter')
+    interior = fields.proxy.basic('sensor', 'Temperature', 'sensor')
+    exterior = fields.proxy.basic('temperature', 'Weather', 'temperature')
     
     class limit(
             fields.io.Readable, 
