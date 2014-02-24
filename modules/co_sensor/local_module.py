@@ -10,7 +10,7 @@ class COSensor(module.Base):
 
     class value(fields.syntax.Numeric,
             fields.sensor.CO,
-            fields.io.Readable,
+            fields.io.Graphable,
             fields.persistant.Database,
             fields.Base):
         pass
