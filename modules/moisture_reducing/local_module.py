@@ -4,11 +4,18 @@ from module import use_module
 import fields
 import fields.syntax
 import fields.io
+import fields.proxy
+import fields.persistant
 
 
 class MoistureReducing(module.Base):
+    public_name = 'Humidite automatique'
+
     moisture_sensor = use_module('MoistureSensor')
     fan_actuator = use_module('FanActuator')
+
+    anonyme = fields.proxy.readable('sensor', 'MoistureSensor', 'sensor')
+    anonyme2 = fields.proxy.basic('fan', 'FanActuator', 'fan')
 
     #class moisture_value_limit(fields.syntax.Percentage, fields.io.Writable,
      #       fields.Base):
@@ -17,8 +24,10 @@ class MoistureReducing(module.Base):
     class limit(
             fields.syntax.Percentage,
             fields.io.Writable,
+            fields.io.Readable,
             #fields.syntax.Constant,
             fields.syntax.Numeric,
+            fields.persistant.Volatile,
             fields.Base):
         const_value = 45.0
         public_name = 'Humidité maximal autorisé'

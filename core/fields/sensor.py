@@ -216,11 +216,11 @@ class Presence(Sensor):
     def org7_bp(self, value):
         return super(Presence, self).org7_bp()[1]
 
-class Moisture(Sensor):
+"""class Moisture(Sensor):
     sensor_id = '00893378'
 
     def org7_tm(self, value):
-        return super(Moisture, self).org7_tm()[1]
+        return super(Moisture, self).org7_tm()[1]"""
 
 """class Temperature(Sensor):
     sensor_id = '00893378'
