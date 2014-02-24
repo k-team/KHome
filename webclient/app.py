@@ -33,7 +33,6 @@ def index():
 
 @app.route('/api/modules')
 def api_modules():
-    print 'coucou'
     return jsonify(packaging.get_installed_modules(detailed=True))
 
 @app.route('/api/modules/<module_name>')
@@ -151,7 +150,7 @@ if __name__ == '__main__':
 def api_module_instances_statuses(module_name):
     # TODO add support for multiple instances
     if not packaging.is_installed(module_name):
-        print '%s not installed' % module_name
+        app.logger.warning('%s not installed', module_name)
         abort(404)
     try:
         mod = use_module(module_name)
@@ -167,7 +166,6 @@ def api_module_instances_statuses(module_name):
             if value is None:
                 continue
             f.update(dict(zip(('time', 'value'), value)))
-        print mod.info
         return jsonify(mod.info)
 
 @app.route('/api/modules/<module_name>/fields/<field_name>/status')
@@ -199,9 +197,8 @@ def api_module_fields_statuses(module_name, field_name):
 
 @app.route('/api/modules/<module_name>/fields/<field_name>/all-status')
 def api_module_fields_all_statuses(module_name, field_name):
-    print module_name, field_name
     if not packaging.is_installed(module_name):
-        print '%s not installed' % module_name
+        app.logger.warning('%s not installed', module_name)
         abort(404)
     try:
         mod = use_module(module_name)

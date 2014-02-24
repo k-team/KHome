@@ -110,7 +110,6 @@ def api_available_module_set_rate():
     """
     # validate module name
     try:
-        print request.form
         module_name = request.form['name']
     except KeyError:
         abort(400)
@@ -124,8 +123,8 @@ def api_available_module_set_rate():
         value = int(request.form['value'])
         Rating.create(module=module_name, value=value)
         return jsonify({ 'success': True })
-    except (ValueError, KeyError):
-        import traceback; traceback.print_exc()
+    except (ValueError, KeyError) as e:
+        app.logger.exception(e)
         abort(404)
 
 if __name__ == '__main__':
