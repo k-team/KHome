@@ -24,7 +24,7 @@ class ShutterLightController(module.Base):
     anonym3 = fields.proxy.readable('shutter', 'Shutter', 'shutter')
     anonym4 = fields.proxy.readable('presence', 'HumanPresenceSensor', 'presence')
 
-    class luminosity_limit(fields.syntax.Percentage, fields.io.Writable,
+    class luminosity_limit(fields.syntax.Percentage, fields.io.Writable, fields.io.Readable,
             fields.persistant.Volatile, fields.Base):
         """
         Field configuring the minimal brightness the user wants during the day.
@@ -35,7 +35,7 @@ class ShutterLightController(module.Base):
             super(ShutterLightController.luminosity_limit, self).on_start()
             self.emit_value(60)
 
-    class night_detection_limit(fields.syntax.Percentage, fields.io.Writable,
+    class night_detection_limit(fields.syntax.Percentage, fields.io.Writable, fields.io.Readable,
             fields.persistant.Volatile, fields.Base):
         """
         Field configuring the brightness lower limit under which we can
