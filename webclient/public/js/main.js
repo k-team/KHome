@@ -464,6 +464,9 @@ angular.module('GHome', ['ngRoute', 'ui.bootstrap', 'ui.slider', 'angularFileUpl
         console.log(module.public_name);
         re.push(module);
       }
+      // else {
+      //   re.push(module);
+      // }
     }
     return re;
   };
