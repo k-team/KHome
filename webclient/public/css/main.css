@@ -121,6 +121,7 @@ a:hover {
   cursor: move;
 }
 .ui-slider .ui-slider-handle .btn {
+  width: 60px;
   cursor: move;
   top: -1px;
   height: 20px;

@@ -1,3 +1,6 @@
 {
+    "description": "Le controlleur de luminosit\u00e9 ouvre ou ferme les volets en fonction des luminosités intérieurs et extérieur. Il permettra de garder votre int\u00e9rieur lumineux, et vous fera \u00e9conomiser en frais d'\u00e9l\u00e9ctricit\u00e9",
+    "name": "shutter_light_controller",
+    "public_name": "Controlleur de luminosite",
     "start": "run_python_module"
 }
