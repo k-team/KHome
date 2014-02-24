@@ -1,6 +1,6 @@
 {
-  "start":"python2.7 .",
-  "name": "door",
-  "public_name": "Porte auto",
-  "description": "Ce gestionnaire de porte permet de fermer ou d'ouvrir sa porte à distance. Il permet aussi de savoir si la porte est ouverte ou fermée."
+    "description": "Ce gestionnaire de porte permet de fermer ou d'ouvrir sa porte \u00e0 distance. Il permet aussi de savoir si la porte est ouverte ou ferm\u00e9e.",
+    "name": "door",
+    "public_name": "Porte auto",
+    "start": "run_python_module"
 }

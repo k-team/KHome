@@ -1,0 +1,45 @@
+#!/usr/bin/env python2
+
+"""
+Launch a module built with KHome's python library.
+
+This script should be run within the module's directory, and the module should
+be organized like this:
+    module_name/ <---- we should be in this directory
+        module.json
+        local_module.py
+
+The local_module.py file has to contain a "module_name" (slug case) class which
+is a derived from the module.Base class.
+"""
+
+import os
+import sys
+from twisted.internet import reactor
+
+this_dir = os.path.dirname(os.path.realpath(__file__))
+sys.path.insert(0, os.getcwd())
+sys.path.insert(1, os.path.join(this_dir, '..', 'core'))
+
+import module
+import local_module
+
+# guess module class
+module_cls = None
+for value in local_module.__dict__.itervalues():
+    try:
+        if issubclass(value, module.Base):
+            module_cls = value
+            break
+    except TypeError:
+        pass
+if module_cls is None:
+    sys.stderr.write('No module class supplied')
+    sys.exit(1)
+
+# run module
+instance = module_cls()
+instance.start()
+reactor.run()
+instance.stop()
+instance.join(1)

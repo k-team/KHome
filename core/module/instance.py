@@ -65,6 +65,9 @@ def execm(module_name, daemonize=True):
         sys.exit(1)
     start_cmd = module_config['start']
 
+    # Add our bin directory to the PATH variable
+    os.environ['PATH'] = path.bin_directory() + ':' + os.environ['PATH']
+
     # Daemon or not Daemon ?
     if daemonize:
         # Create a daemon
@@ -113,11 +116,11 @@ def invoke(module_name, daemonize=True):
     *status* function.
     """
     if status(module_name):
-        raise RuntimeError('The module `' + module_name + '` is already running')
+        raise RuntimeError('Module `%s` is already running' % module_name)
 
-    p = multiprocessing.Process(target=execm, args=(module_name, daemonize))
-    p.start()
-    p.join()
+    proc = multiprocessing.Process(target=execm, args=(module_name, daemonize))
+    proc.start()
+    proc.join()
 
 def invoke_all():
     """
@@ -129,15 +132,15 @@ def invoke_all():
         try:
             invoke(name, True)
             time.sleep(0.1)
-        except RuntimeError:
-            traceback.print_exc()
+        except RuntimeError as e:
+            logger.exception(e)
 
 def stop(module_name):
     """
     Stop the *module_name* module.
     """
     if not status(module_name):
-        raise RuntimeError('The module `' + module_name + '`is not running')
+        raise RuntimeError('Module `%s` is not running' % module_name)
 
     remove_file = False
     pid = 0

@@ -9,6 +9,7 @@ MODULES_DIRECTORY = 'modules'
 INSTANCES_DIRECTORY = 'instances'
 PIDS_DIRECTORY = 'pid'
 SOCKET_DIRECTORY = 'socket'
+BIN_DIRECTORY = 'bin'
 LOG_DIRECTORY = 'log'
 CONFIG_FILE = 'module.json'
 
@@ -22,6 +23,12 @@ def realname(module_name):
     reg_all = re.compile(r'([a-z0-9])([A-Z])')
     s1 = reg_first.sub(r'\1_\2', module_name)
     return reg_all.sub(r'\1_\2', s1).lower()
+
+def bin_directory():
+    """
+    Get the absolute path to the directory of available modules.
+    """
+    return join(_root, BIN_DIRECTORY)
 
 def availables_directory():
     """

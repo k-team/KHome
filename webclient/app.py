@@ -220,4 +220,4 @@ def api_module_fields_all_statuses(module_name, field_name):
         return jsonify([dict(zip(('time', 'value'), v)) for v in data])
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug='--debug' in sys.argv, port=8888)
+    app.run(host='0.0.0.0', debug='--debug' in sys.argv, port=8888, threaded=True)
