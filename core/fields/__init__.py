@@ -30,6 +30,7 @@ class Base(threading.Thread):
 
     public_name = ''
     sleep_on_start = 0
+    init_value = None
 
     def __init__(self):
         super(Base, self).__init__()
@@ -59,6 +60,8 @@ class Base(threading.Thread):
         Usefull for init something.
         """
         time.sleep(type(self).sleep_on_start)
+        if type(self).init_value is not None:
+            self.emit_value(type(self).init_value)
 
     def emit_value(self, value):
         if value is not None:
