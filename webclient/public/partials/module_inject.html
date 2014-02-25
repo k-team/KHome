@@ -72,8 +72,10 @@
       <div id="inject"></div>
 
       <!--Supervision graph-->
-      <div data-ng-show="data" data-ng-controller="SupervisionCtrl" data-ng-repeat="field in module.fields | graphable">
-        <div graph data-graph-model="data" data-tick-size="field.update_rate * 20" class="graph"></div>
+      <div class="row">
+        <div class="col-xs-12" data-ng-show="data" data-ng-controller="SupervisionCtrl" data-ng-repeat="field in module.fields | graphable">
+            <div graph data-graph-model="data" data-tick-size="field.update_rate * 20" class="graph"></div>
+        </div>
       </div>
     </div>
   </div>
