@@ -198,7 +198,7 @@ def api_module_field_status(module_name, field_name):
 
         return jsonify(dict(zip(('time', 'value'), value)))
 
-@app.route('/api/modules/<module_name>/fields/<field_name>/get-all-status')
+@app.route('/api/modules/<module_name>/fields/<field_name>/get-all-statuses')
 def api_module_fields_all_statuses(module_name, field_name):
     if not packaging.is_installed(module_name):
         app.logger.warning('%s not installed', module_name)
