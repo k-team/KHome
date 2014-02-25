@@ -7,11 +7,9 @@ class TemperatureController(module.Base):
     temperature = use_module('Temperature')
     temperature_forecast = use_module('TemperatureForecast')
 
-    class limit(fields.io.Readable, fields.syntax.Numeric,
+    class temperature_limit(fields.io.Readable, fields.syntax.Numeric,
             fields.persistant.Volatile, fields.Base):
-        def on_start(self):
-            self.emit_value(20)
-            super(TemperatureController.limit).on_start()
+        init_value = 20.
 
     class controller(fields.Base):
         def __init__(self):
@@ -25,7 +23,7 @@ class TemperatureController(module.Base):
             try:
                 current_temp = self.module.temperature.temperature()[1]
                 current_forecast = self.module.temperature_forecast.temperature()[1]
-                limit = self.module.limit()[1]
+                limit = self.module.temperature_limit()[1]
             except TypeError:
                 pass # ignore
             else:

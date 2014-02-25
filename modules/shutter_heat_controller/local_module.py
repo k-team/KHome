@@ -18,25 +18,17 @@ class ShutterHeatController(module.Base):
     interior = fields.proxy.basic('sensor', 'Temperature', 'sensor')
     exterior = fields.proxy.basic('temperature', 'Weather', 'temperature')
 
-    class limit(
-            fields.io.Readable,
-            fields.io.Writable,
-            fields.syntax.Numeric,
-            fields.persistant.Database,
-            fields.Base):
+    class min_temperature(fields.io.Readable, fields.io.Writable,
+            fields.syntax.Numeric, fields.persistant.Database, fields.Base):
         public_name = 'Température min à l\'intérieur'
-
-        def on_start(self):
-            super(ShutterHeatController.limit, self).on_start()
-            if self.module.limit() is None:
-                self.emit_value(60.0)
+        init_value = 60.
 
     class controller(fields.Base):
         def always(self):
             try:
                 tempInt = self.module.temperatureInt.sensor()[1]
                 tempExt = self.module.temperatureExt.temperature()[1]
-                limit = self.module.limit
+                limit = self.module.min_temperature()[1]
             except TypeError:
                 pass # Ignore
             else:

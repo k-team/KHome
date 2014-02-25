@@ -32,14 +32,7 @@ class Weather(module.Base):
     class woeid(fields.syntax.Integer, fields.io.Writable, fields.io.Readable,
             fields.persistant.Volatile, fields.Base):
         public_name = 'Géolocalisation (WOEID)'
-
-        def on_start(self):
-            super(Weather.woeid, self).on_start()
-            self.emit_value(609125) # Lyon
-
-        # def acquire_value(self):
-        #     woeid = 609125 # Lyon
-        #     return woeid
+        init_value = 609125
 
     class temperature(fields.syntax.Numeric, fields.io.Graphable,
             fields.persistant.Database, fields.Base):

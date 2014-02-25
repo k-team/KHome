@@ -14,10 +14,7 @@ class WaterController(module.Base):
         public_name = "Attente (s)"
         lower_bound = 0
         upper_bound = 10
-
-        def on_start(self):
-            super(WaterController.keep_water_on_duration, self).on_start()
-            self.emit_value((type(self).upper_bound-type(self).lower_bound)/2.0)
+        init_value = abs(upper_bound - lower_bound) / 2.
 
     class controller(fields.io.Hidden, fields.Base):
         def always(self):

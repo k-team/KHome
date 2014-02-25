@@ -27,9 +27,7 @@ class ShutterLightController(module.Base):
         """
         public_name = 'Luminosité minimale souhaitée'
 
-        def on_start(self):
-            super(ShutterLightController.luminosity_limit, self).on_start()
-            self.emit_value(60)
+        init_value = 60.
 
     class night_detection_limit(fields.syntax.Percentage, fields.io.Writable, fields.io.Readable,
             fields.persistant.Volatile, fields.Base):
@@ -39,9 +37,7 @@ class ShutterLightController(module.Base):
         """
         public_name = 'Seuil de luminosité détectant la nuit'
 
-        def on_start(self):
-            super(ShutterLightController.night_detection_limit, self).on_start()
-            self.emit_value(20)
+        init_value = 20.
 
     class controller(fields.Base):
         def always(self):
