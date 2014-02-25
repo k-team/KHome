@@ -32,6 +32,8 @@ class Database(object):
             pass
         db_conn.close()
 
+        super(Database, self).on_start()
+
     def _get_value(self):
         db_conn = sqlite3.connect(self.db_name)
         query = 'SELECT time, value FROM %s \

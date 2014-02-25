@@ -20,6 +20,8 @@ def basic(new_field, module_name, field_name):
             fields.io.Writable,
             fields.io.Readable,
             fields.Base):
+        name = field_info['name']
+
         def get_info(self):
             # a = super(Field, self).get_info()
             # field_info.update(a)
@@ -35,7 +37,7 @@ def basic(new_field, module_name, field_name):
         def write(self, value):
             return field(value)
 
-    return type(new_field, (Field,), dict())
+    return type(field_info['name'].encode('ascii', 'ignore'), (Field,), dict())
 
 
 def mix(new_field, r_module_name, r_field_name, w_module_name, w_field_name):
@@ -78,7 +80,7 @@ def mix(new_field, r_module_name, r_field_name, w_module_name, w_field_name):
         def write(self, value):
             return w_field(value)
 
-    return type(new_field, (Field,), dict())
+    return type(field_info['name'].encode('ascii', 'ignore'), (Field,), dict())
 
 
 def readable(new_field, module_name, field_name):
@@ -106,7 +108,7 @@ def readable(new_field, module_name, field_name):
                 return field(t=-(time.time()-kwargs['t']))
             return field(**kwargs)
 
-    return type(new_field, (Field,), dict())
+    return type(field_info['name'].encode('ascii', 'ignore'), (Field,), dict())
 
 
 def writable(new_field, module_name, field_name):
@@ -131,4 +133,4 @@ def writable(new_field, module_name, field_name):
         def write(self, value):
             return field(value)
 
-    return type(new_field, (Field,), dict())
+    return type(field_info['name'].encode('ascii', 'ignore'), (Field,), dict())

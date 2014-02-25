@@ -9,65 +9,25 @@ class GazController(module.Base):
     update_rate = 10
 
     co_gaz = use_module('COSensor')
-    butane_gaz = use_module('ButaneGaz')
-    propane_gaz = use_module('PropaneGaz')
-    methane_gaz = use_module('MethaneGaz')
     alarm = use_module('Alarm')
 
-    butane = fields.proxy.readable('butane', 'ButaneGaz', 'butane')
-    methane = fields.proxy.readable('methane', 'MethaneGaz', 'methane')
-    propane = fields.proxy.readable('propane', 'PropaneGaz', 'propane')
-    co = fields.proxy.readable('value', 'COSensor', 'value')
-    alarm = fields.proxy.readable('alarm', 'Alarm', 'alarm')
-    message = fields.proxy.readable('message', 'Alarm', 'message')
+    butane = fields.proxy.basic('butane', 'ButaneGaz', 'butane')
+    butane_actuator = fields.proxy.basic('butane_actuator', 'ButaneGaz', 'but_actuator')
+    butane_lie = fields.proxy.basic('butane_lie', 'ButaneGaz', 'limit_value_but')
+    butane_alarm = fields.proxy.basic('butane_alarm', 'ButaneGaz', 'message_but')
 
-    class co_value_limit(fields.syntax.Constant, fields.syntax.Numeric,
-            fields.Base):
-        const_value = 35
-        public_name = 'Limite CO (ppm)'
+    methane = fields.proxy.basic('methane', 'MethaneGaz', 'methane')
+    methane_actuator = fields.proxy.basic('methane_actuator', 'MethaneGaz', 'meth_actuator')
+    methane_lie = fields.proxy.basic('methane_lie', 'MethaneGaz', 'limit_value_meth')
+    methane_alarm = fields.proxy.basic('methane_alarm', 'MethaneGaz', 'message_meth')
 
-    class propane_value_limit(fields.syntax.Constant, fields.syntax.Numeric,
-            fields.Base):
-        const_value = 2.1
-        public_name = 'LIE propane'
+    propane = fields.proxy.basic('propane', 'PropaneGaz', 'propane')
+    propane_actuator = fields.proxy.basic('propane_actuator', 'PropaneGaz', 'prop_actuator')
+    propane_lie = fields.proxy.basic('propane_lie', 'PropaneGaz', 'limit_value_prop')
+    propane_alarm = fields.proxy.basic('propane_alarm', 'PropaneGaz', 'message_prop')
 
-    class butane_value_limit(fields.syntax.Constant, fields.syntax.Numeric,
-            fields.Base):
-        const_value = 1.8
-        public_name = 'LIE butane'
+    co = fields.proxy.basic('co', 'COSensor', 'co')
+    co_lie = fields.proxy.basic('co_lie', 'COSensor', 'limit_value_co')
+    co_alarm = fields.proxy.basic('co_alarm', 'COSensor', 'message_co')
 
-    class methane_value_limit(fields.syntax.Constant, fields.syntax.Numeric,
-            fields.Base):
-        const_value = 5.0
-        public_name = 'LIE méthane'
-
-    class controller(fields.Base):
-        def always(self):
-            try:
-                co_value_limit = self.module.co_value_limit()[1]
-                propane_value_limit = self.module.propane_value_limit()[1]
-                butane_value_limit = self.module.butane_value_limit()[1]
-                methane_value_limit = self.module.methane_value_limit()[1]
-
-                co_value_current = self.module.co_gaz.value()[1]
-                propane_value_current = self.module.propane_gaz.propane()[1]
-                butane_value_current = self.module.butane_gaz.butane()[1]
-                methane_value_current = self.module.methane_gaz.methane()[1]
-            except TypeError as e:
-                self.module.logger.exception(e)
-            else:
-                if co_value_current > co_value_limit:
-                    self.module.alarm.alarm(True)
-                    self.module.alarm.message('Too much CO gaz in the house')
-                if propane_value_current > propane_value_limit:
-                    self.module.alarm.alarm(True)
-                    self.module.propane_gaz.gaz_actuator(True)
-                    self.module.alarm.message('Too much propane gaz in the house')
-                if butane_value_current > butane_value_limit:
-                    self.module.alarm.alarm(True)
-                    self.module.butane_gaz.gaz_actuator(True)
-                    self.module.alarm.message('Too much butane gaz in the house')
-                if methane_value_current > methane_value_limit:
-                    self.module.alarm.alarm(True)
-                    self.module.methane_gaz.gaz_actuator(True)
-                    self.module.alarm.message('Too much methane gaz in the house')
+    alarm = fields.proxy.basic('alarm', 'Alarm', 'alarm')

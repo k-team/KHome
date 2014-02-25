@@ -5,9 +5,9 @@ from module import use_module
 import fields
 
 class ShutterHeatController(module.Base):
-    update_rate = 10000
+    update_rate = 60 * 10
 
-    public_name = 'Controlleur d\'aération'
+    public_name = 'Aération'
 
     shutter = use_module('Shutter')
     temperatureInt = use_module('Temperature')
@@ -18,13 +18,18 @@ class ShutterHeatController(module.Base):
     interior = fields.proxy.basic('sensor', 'Temperature', 'sensor')
     exterior = fields.proxy.basic('temperature', 'Weather', 'temperature')
 
-    class limit(fields.io.Readable, fields.io.Writable, fields.syntax.Numeric,
+    class limit(
+            fields.io.Readable,
+            fields.io.Writable,
+            fields.syntax.Numeric,
+            fields.persistant.Database,
             fields.Base):
-        public_name = 'Temperature minimale à l intérieur'
+        public_name = 'Température min à l\'intérieur'
 
         def on_start(self):
             super(ShutterHeatController.limit, self).on_start()
-            self.emit_value(60.0)
+            if self.module.limit() is None:
+                self.emit_value(60.0)
 
     class controller(fields.Base):
         def always(self):

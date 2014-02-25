@@ -55,7 +55,7 @@ class BoundNumeric(Numeric):
     upper_bound = 0
 
     def set_value(self, t, value):
-        return type(self).lower_bound < float(value) < type(self).upper_bound \
+        return type(self).lower_bound <= float(value) <= type(self).upper_bound \
                 and super(BoundNumeric, self).set_value(t, value)
 
     def get_info(self):

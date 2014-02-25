@@ -40,3 +40,29 @@ angular.module('GHome').filter('fieldVisible', function () {
     return re;
   };
 });
+
+angular.module('GHome').filter('fieldSorted', function () {
+  return function (fields) {
+    return fields.sort(function(a, b) {
+      if (a.writable && !b.writable) {
+        return 1;
+      }
+      if (!a.writable && b.writable) {
+        return -1;
+      }
+      if (a.type == 'boolean' && b.type != 'boolean') {
+        return 1;
+      }
+      if (a.type != 'boolean' && b.type == 'boolean') {
+        return -1;
+      }
+      if (a.type == 'numeric' && b.type != 'numeric') {
+        return 1;
+      }
+      if (a.type != 'numeric' && b.type == 'numeric') {
+        return -1;
+      }
+      return a.public_name > b.public_name ? 1 : -1;
+    })
+  };
+});
