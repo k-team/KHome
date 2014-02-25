@@ -12,6 +12,9 @@ angular.module('GHome').filter('moduleVisible', function () {
         console.log(module.public_name);
         re.push(module);
       }
+      // else {
+      //   re.push(module);
+      // }
     }
     return re;
   };

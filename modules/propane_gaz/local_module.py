@@ -9,7 +9,7 @@ class PropaneGaz(module.Base):
             fields.io.Graphable,
             fields.persistant.Database,
             fields.Base):
-        public_name = 'Taux de propane'
+        public_name = 'Taux de propane (% dans l air)'
 
     class gaz_actuator(fields.actuator.Propane, fields.syntax.Boolean,
             fields.io.Readable, fields.persistant.Volatile, fields.Base):

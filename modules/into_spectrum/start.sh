@@ -11,9 +11,9 @@ at_sig() {
 trap at_sig TERM
 trap at_sig INT
 
-mongod --dbpath ./db &
+mongod &
 pid1=$!
-[ -z "$(ls db)" ] && sleep 60 || sleep 3
+sleep 3
 cd app && npm start &
 pid2=$!
 cd app/server && node watchdog.js &

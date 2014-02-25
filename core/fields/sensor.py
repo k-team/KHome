@@ -39,10 +39,10 @@ Air = Dummy(lambda t:
         math.sin(t) * 30 + 30 + 0.5 * (random.random() - 0.5))
 
 Butane = Dummy(lambda t:
-        math.sin(t) * 1500 + 2000 + 0.5 * (random.random() - 0.5)) #seuil 1500
+        max(math.sin(t) * 1.7 + 0.5 + 0.5 * (random.random() - 0.5),0.0)) #seuil 1500
 
 CO = Dummy(lambda t:
-        math.sin(t) * 200 + 200 + 0.5 * (random.random() - 0.5)) # seuil 60
+        max(math.sin(t) * 17 + 3 + 17 * (random.random() - 0.5),0.0)) # seuil 35
 
 ElectricCurrent = Dummy(lambda t: True if random.random() > 0.5 else False)
 
@@ -55,13 +55,13 @@ LuminosityInterior = Dummy(lambda t:
         (math.sin(t)+1) * 50 ) # this will vary between 0 and 100
 
 Methane = Dummy(lambda t:
-        math.sin(t) * 600 + 800 + 0.5 * (random.random() - 0.5)) # seuil max 1000
+        max(math.sin(t) * 5 + 0.5 + 0.5 * (random.random() - 0.5),0.0)) # seuil max 1000
 
 Moisture = Dummy(lambda t:
         math.sin(t) * 20 + 35 + 0.5 * (random.random() - 0.5)) # seuil max 45
 
 Propane = Dummy(lambda t:
-        math.sin(t) * 1500 + 2000 + 0.5 * (random.random() - 0.5)) # seuil 1500
+        max(math.sin(t) * 1.7 + 0.5 + 0.5 * (random.random() - 0.5),0.0)) # seuil 1500
 
 RainForecast = Dummy(lambda t: True if random.random() > 0.5 else False)
 

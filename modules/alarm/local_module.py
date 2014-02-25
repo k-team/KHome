@@ -2,7 +2,7 @@ import module
 import fields
 
 class Alarm(module.Base):
-    update_rate = 42000
+    update_rate = 5
     public_name = 'Alarme'
 
     class alarm(fields.io.Readable,
