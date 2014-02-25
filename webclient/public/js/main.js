@@ -25,6 +25,16 @@ angular.module('GHome', ['ngRoute', 'ui.bootstrap', 'ui.slider', 'angularFileUpl
 ;function FieldCtrl($scope, ModuleService, $rootScope, $timeout) {
   $scope.state = '';
 
+  $scope.startEditing = function() {
+    if ($scope.field && $scope.field.writable) {
+      $scope.state = 'editing';
+    }
+  };
+
+  $scope.undoEditing = function() {
+    $scope.state = '';
+  };
+
   $scope.update = function() {
     $scope.state = 'waiting';
 
@@ -45,10 +55,9 @@ angular.module('GHome', ['ngRoute', 'ui.bootstrap', 'ui.slider', 'angularFileUpl
 
   var loadValue = function() {
     return ModuleService.fieldStatus($scope.moduleName, $scope.field.name).then(function(data) {
-      console.log($scope.field.type);
-      $scope.field.value = data.value;
-
-      // Super hack
+      if ($scope.state != 'editing') {
+        $scope.field.value = data.value;
+      }
       $rootScope.$broadcast('fieldUpdate', $scope.field, data);
     });
   };
@@ -69,9 +78,7 @@ angular.module('GHome', ['ngRoute', 'ui.bootstrap', 'ui.slider', 'angularFileUpl
     });
   };
 
-  loadValue().then(function() {
-    pollValue();
-  });
+  loadValue().then(function() { pollValue(); });
 }
 ;function MainCtrl($scope, $location, ModuleService) {
   // All modules
