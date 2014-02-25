@@ -38,4 +38,4 @@ class BabyMonitor(module.Base):
                 self.module.logger.exception(e)
             else:
                 if sound_now > decibel_value:
-                    pass #self.module.alarm.message(self.module.alert_message()[1])
+                    self.module.alarm.message(self.module.alert_message()[1])
