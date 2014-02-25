@@ -22,8 +22,11 @@ function SupervisionCtrl($scope, ModuleService, $timeout, $rootScope) {
   };
 
   ModuleService.fieldAllStatus($scope.moduleName, field.name).then(function(data) {
+    data.sort(function(a, b) {
+      return a.time > b.time ? 1 : -1;
+    });
     for(var i = 0; i < data.length; i++) {
-      addData(data[data.length - i - 1]);
+      addData(data[i]);
     }
   });
 

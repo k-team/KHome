@@ -38,6 +38,8 @@ class Base(threading.Thread):
         self.running = False
 
     def get_update_rate(self):
+        if self.field_name != 'weather':
+            return 1
         try:
             return type(self).update_rate
         except AttributeError:
