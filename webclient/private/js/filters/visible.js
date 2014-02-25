@@ -42,6 +42,10 @@ angular.module('GHome').filter('fieldVisible', function () {
 
 angular.module('GHome').filter('fieldSorted', function () {
   return function (fields) {
+    if (fields === undefined) {
+      return;
+    }
+
     return fields.sort(function(a, b) {
       if (a.writable && !b.writable) {
         return 1;

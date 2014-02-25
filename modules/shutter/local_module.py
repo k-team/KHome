@@ -6,6 +6,7 @@ class Shutter(module.Base):
     public_name = 'Volets'
 
     class shutter(
+            fields.syntax.Integer,
             fields.actuator.Shutter,
             fields.sensor.Shutter,
             fields.persistant.Volatile,
