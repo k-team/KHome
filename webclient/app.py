@@ -148,8 +148,8 @@ if __name__ == '__main__':
         store_proxy('/api/available_modules/<module_name>/rate', methods=['GET'])
         store_proxy('/api/available_modules/rate', methods=['POST'])
 
-@app.route('/api/modules/<module_name>/instances/status')
-def api_module_instances_statuses(module_name):
+@app.route('/api/modules/<module_name>/get-status')
+def api_module_status(module_name):
     # TODO add support for multiple instances
     if not packaging.is_installed(module_name):
         app.logger.warning('%s not installed', module_name)
@@ -171,8 +171,8 @@ def api_module_instances_statuses(module_name):
             f.update(dict(zip(('time', 'value'), value)))
         return jsonify(mod.info)
 
-@app.route('/api/modules/<module_name>/fields/<field_name>/status')
-def api_module_fields_statuses(module_name, field_name):
+@app.route('/api/modules/<module_name>/fields/<field_name>/get-status')
+def api_module_field_status(module_name, field_name):
     if not packaging.is_installed(module_name):
         abort(404)
 
@@ -198,7 +198,7 @@ def api_module_fields_statuses(module_name, field_name):
 
         return jsonify(dict(zip(('time', 'value'), value)))
 
-@app.route('/api/modules/<module_name>/fields/<field_name>/all-status')
+@app.route('/api/modules/<module_name>/fields/<field_name>/get-all-status')
 def api_module_fields_all_statuses(module_name, field_name):
     if not packaging.is_installed(module_name):
         app.logger.warning('%s not installed', module_name)

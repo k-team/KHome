@@ -39,15 +39,15 @@ angular.module('GHome').factory('ModuleService', function($q, $http, $timeout, $
   };
 
   service.moduleStatus = function(name) {
-    return httpGetJSON(modulesUrl + '/' + name + '/instances/status');
+    return httpGetJSON(modulesUrl + '/' + name + '/get-status');
   };
 
   service.fieldStatus = function(module_name, field_name) {
-    return httpGetJSON(modulesUrl + '/' + module_name + '/fields/' + field_name + '/status');
+    return httpGetJSON(modulesUrl + '/' + module_name + '/fields/' + field_name + '/get-status');
   };
 
   service.fieldAllStatus = function(module_name, field_name) {
-    return httpGetJSON(modulesUrl + '/' + module_name + '/fields/' + field_name + '/all-status');
+    return httpGetJSON(modulesUrl + '/' + module_name + '/fields/' + field_name + '/get-all-statuses');
   };
 
   service.updateField = function(module, field, value) {
