@@ -467,11 +467,10 @@ angular.module('GHome', ['ngRoute', 'ui.bootstrap', 'ui.slider', 'angularFileUpl
     var re = Array();
     for (var i = 0 ; i < modules.length ; i++) {
       var module = modules[i];
-      if ((module.has_view === true || module.has_view === undefined)
-        && module.public_name != '' && module.public_name !== undefined) {
-        console.log(module.public_name);
+      // if ((module.has_view === true || module.has_view === undefined)
+      //   && module.public_name != '' && module.public_name !== undefined) {
         re.push(module);
-      }
+      // }
       // else {
       //   re.push(module);
       // }
