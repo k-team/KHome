@@ -5,6 +5,7 @@ from module import use_module
 import fields
 
 class WaterController(module.Base):
+    public_name = 'Robinet'
     update_rate = 10
 
     human_presence_sensor = use_module('HumanPresenceSensor')
