@@ -13,8 +13,7 @@ angular.module('GHome', ['ngRoute', 'ui.bootstrap', 'ui.slider', 'angularFileUpl
     }).when('/settings/:moduleName', {
       templateUrl: '/partials/module_settings.html'
     }).when('/modules', {
-      templateUrl: '/partials/modules.html',
-      controller: 'ModulesCtrl'
+      templateUrl: '/partials/modules.html'
     }).when('/modules/:moduleName', {
       templateUrl: '/partials/module_inject.html',
       controller: 'ModuleInjectorCtrl'
@@ -153,21 +152,6 @@ angular.module('GHome', ['ngRoute', 'ui.bootstrap', 'ui.slider', 'angularFileUpl
   $http.get('/api/modules/' + $scope.moduleName + '/public/independant.html')
     .then(function(result) { $('#inject-independant').html($compile(result.data)($scope)); });
 }
-;function ModulesCtrl($scope, $location, ModuleService) {
-  // Reload modules immediately
-  $scope.reloadModules();
-
-  // Uninstall a module
-  $scope.uninstall = function(module) {
-    //ModuleService.uninstall(module);
-    console.log('uninstalling', module);
-  };
-
-  // Navigate to module view, either its specific view or configuration
-  $scope.navigate = function(module) {
-    $location.path('/modules/' + module.name);
-  };
-}
 ;function RatingCtrl($scope, ModuleService) {
   $scope.$on('module.statusUpdate', function(_, module) {
     ModuleService.getRate(module).then(function(rate) {
@@ -289,7 +273,7 @@ angular.module('GHome', ['ngRoute', 'ui.bootstrap', 'ui.slider', 'angularFileUpl
       scope: modalScope
     });
 
-    $scope.$on('$destroy', function () {
+    $scope.$on('$routeChangeStart', function () {
       modalScope.dismiss();
     });
   };
