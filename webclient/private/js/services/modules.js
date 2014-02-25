@@ -5,13 +5,20 @@ angular.module('GHome').factory('ModuleService', function($q, $http, $timeout, $
 
   var httpPostJSON = function(url, data) {
     var deferred = $q.defer();
+    console.log(data);
 
     // Format data for POST
     var formattedData = '';
     for (var key in data) {
-      formattedData += key + '=' + data[key] + '&';
+      var v = data[key];
+      if (v === true)
+        v = 'true';
+      else if (v === false)
+        v = '';
+      formattedData += key + '=' + v + '&';
     }
     formattedData = formattedData.substring(0, formattedData.length-1);
+    console.log(formattedData);
 
     // Send HTTP request
     $http({

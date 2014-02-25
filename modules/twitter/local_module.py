@@ -1,7 +1,11 @@
+#-*- coding: utf-8 -*-
+
 from twitter import OAuth
 from twitter.api import Twitter
+from twitter.api import TwitterHTTPError
 import module
 import fields
+import logging
 
 # TODO hide these
 con_key = 'f5z6uqPM9N87KLJqYIZDg'
@@ -14,11 +18,28 @@ twitter = Twitter(auth=OAuth(acc_token, acc_token_secret,
 
 class Twitter(module.Base):
     public_name = 'Twitter'
+
+    class tweet_id(fields.syntax.Integer,
+            fields.io.Readable,
+            fields.io.Writable,
+            fields.persistant.Database,
+            fields.Base):
+        public_name = 'Tweets envoyés'
+        init_value = 0
+
     class tweet(fields.io.Writable, fields.io.Readable,
             fields.syntax.String, fields.persistant.Volatile,
             fields.Base):
         def write(self, value):
+            num = int(self.module.tweet_id()[1])
+            value = '#%s - %s' % (num, value)
             if len(value) >= 128: # magic number FTW
                 return False
-            twitter.statuses.update(status=value)
+            try:
+                twitter.statuses.update(status=value)
+            except TwitterHTTPError as e:
+                logging.exception(e)
+                return False
+            else:
+                self.module.tweet_id(num + 1)
             return True

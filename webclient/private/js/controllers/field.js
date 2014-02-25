@@ -19,8 +19,17 @@ function FieldCtrl($scope, ModuleService, $rootScope, $timeout) {
       $scope.state = '';
     }, 2000); };
 
+    var value = $scope.field.value;
+    if ($scope.field.type == 'boolean') {
+      if (value == 'true')
+        value = true;
+      else if (value == 'false')
+        value = false;
+    }
+    console.log(value);
+
     // Call update
-    ModuleService.updateField($scope.module, $scope.field, $scope.field.value).then(function(data) {
+    ModuleService.updateField($scope.module, $scope.field, value).then(function(data) {
       $scope.state = (data.success) ? 'success' : 'error';
       fade();
     }, function() {
@@ -32,7 +41,16 @@ function FieldCtrl($scope, ModuleService, $rootScope, $timeout) {
   var loadValue = function() {
     return ModuleService.fieldStatus($scope.moduleName, $scope.field.name).then(function(data) {
       if ($scope.state != 'editing') {
-        $scope.field.value = data.value;
+        if ($scope.field.type == 'boolean') {
+          if (data.value) {
+            $scope.field.value = true;
+          }
+          else
+            $scope.field.value = false;
+        }
+        else {
+          $scope.field.value = data.value;
+        }
       }
       $rootScope.$broadcast('fieldUpdate', $scope.field, data);
     });

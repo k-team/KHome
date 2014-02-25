@@ -43,8 +43,17 @@ angular.module('GHome', ['ngRoute', 'ui.bootstrap', 'ui.slider', 'angularFileUpl
       $scope.state = '';
     }, 2000); };
 
+    var value = $scope.field.value;
+    if ($scope.field.type == 'boolean') {
+      if (value == 'true')
+        value = true;
+      else if (value == 'false')
+        value = false;
+    }
+    console.log(value);
+
     // Call update
-    ModuleService.updateField($scope.module, $scope.field, $scope.field.value).then(function(data) {
+    ModuleService.updateField($scope.module, $scope.field, value).then(function(data) {
       $scope.state = (data.success) ? 'success' : 'error';
       fade();
     }, function() {
@@ -56,7 +65,16 @@ angular.module('GHome', ['ngRoute', 'ui.bootstrap', 'ui.slider', 'angularFileUpl
   var loadValue = function() {
     return ModuleService.fieldStatus($scope.moduleName, $scope.field.name).then(function(data) {
       if ($scope.state != 'editing') {
-        $scope.field.value = data.value;
+        if ($scope.field.type == 'boolean') {
+          if (data.value) {
+            $scope.field.value = true;
+          }
+          else
+            $scope.field.value = false;
+        }
+        else {
+          $scope.field.value = data.value;
+        }
       }
       $rootScope.$broadcast('fieldUpdate', $scope.field, data);
     });
@@ -541,13 +559,20 @@ angular.module('GHome').filter('fieldSorted', function () {
 
   var httpPostJSON = function(url, data) {
     var deferred = $q.defer();
+    console.log(data);
 
     // Format data for POST
     var formattedData = '';
     for (var key in data) {
-      formattedData += key + '=' + data[key] + '&';
+      var v = data[key];
+      if (v === true)
+        v = 'true';
+      else if (v === false)
+        v = '';
+      formattedData += key + '=' + v + '&';
     }
     formattedData = formattedData.substring(0, formattedData.length-1);
+    console.log(formattedData);
 
     // Send HTTP request
     $http({
