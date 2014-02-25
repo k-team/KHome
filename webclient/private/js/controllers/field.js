@@ -21,7 +21,13 @@ function FieldCtrl($scope, ModuleService, $rootScope, $timeout) {
 
   var loadValue = function() {
     return ModuleService.fieldStatus($scope.moduleName, $scope.field.name).then(function(data) {
-      $scope.field.value = data.value;
+      console.log($scope.field.type);
+      if($scope.field.type == 'numeric') {
+        $scope.field.value = new Number(data.value).toPrecision(3);
+      }
+      else {
+        $scope.field.value = data.value;
+      }
 
       // Super hack
       $rootScope.$broadcast('fieldUpdate', $scope.field, data);
@@ -44,5 +50,7 @@ function FieldCtrl($scope, ModuleService, $rootScope, $timeout) {
     });
   };
 
-  pollValue();
+  loadValue().then(function() {
+    pollValue();
+  });
 }

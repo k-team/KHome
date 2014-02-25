@@ -45,7 +45,13 @@ angular.module('GHome', ['ngRoute', 'ui.bootstrap', 'ui.slider', 'angularFileUpl
 
   var loadValue = function() {
     return ModuleService.fieldStatus($scope.moduleName, $scope.field.name).then(function(data) {
-      $scope.field.value = data.value;
+      console.log($scope.field.type);
+      if($scope.field.type == 'numeric') {
+        $scope.field.value = new Number(data.value).toPrecision(3);
+      }
+      else {
+        $scope.field.value = data.value;
+      }
 
       // Super hack
       $rootScope.$broadcast('fieldUpdate', $scope.field, data);
@@ -68,7 +74,9 @@ angular.module('GHome', ['ngRoute', 'ui.bootstrap', 'ui.slider', 'angularFileUpl
     });
   };
 
-  pollValue();
+  loadValue().then(function() {
+    pollValue();
+  });
 }
 ;function MainCtrl($scope, $location, ModuleService) {
   // All modules
