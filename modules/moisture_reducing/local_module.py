@@ -16,8 +16,8 @@ class MoistureReducing(module.Base):
     class moisture_value_limit(fields.syntax.Percentage, fields.io.Writable,
             fields.io.Readable, fields.syntax.Numeric,
             fields.persistant.Volatile, fields.Base):
-        const_value = 45.0
         public_name = 'Humidité maximale autorisée'
+        init_value = 45.0
 
     class controller(fields.Base):
         update_rate = 60 # update every minute
