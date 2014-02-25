@@ -93,7 +93,7 @@ function StoreCtrl($scope, ModuleService, $modal, $timeout) {
       scope: modalScope
     });
 
-    $scope.$on('$destroy', function () {
+    $scope.$on('$routeChangeStart', function () {
       modalScope.dismiss();
     });
   };

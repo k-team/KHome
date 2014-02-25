@@ -3,7 +3,7 @@
     <div data-ng-show="modules" class="row">
       <div data-ng-repeat="module in modules | filter:query | moduleVisible" class="module-thumbnail col-xs-6 col-sm-4 col-md-2 text-center">
         <div class="thumbnail">
-          <a href="/modules/{{ module.name }}" title="{{ ((module.public_name) ? module.public_name : module.name) }}">
+          <a href="#/modules/{{ module.name }}" title="{{ ((module.public_name) ? module.public_name : module.name) }}">
             <img alt="Icon for module {{ module.name }}"
               data-ng-src="/api/modules/{{ module.name }}/public/icon.png"
               onerror="this.onerror = null; this.src = '/img/module.png'">

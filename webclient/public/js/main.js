@@ -255,7 +255,7 @@ angular.module('GHome', ['ngRoute', 'ui.bootstrap', 'ui.slider', 'angularFileUpl
       scope: modalScope
     });
 
-    $scope.$on('$destroy', function () {
+    $scope.$on('$routeChangeStart', function () {
       modalScope.dismiss();
     });
   };
