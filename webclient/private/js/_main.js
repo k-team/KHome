@@ -13,8 +13,7 @@ angular.module('GHome', ['ngRoute', 'ui.bootstrap', 'ui.slider', 'angularFileUpl
     }).when('/settings/:moduleName', {
       templateUrl: '/partials/module_settings.html'
     }).when('/modules', {
-      templateUrl: '/partials/modules.html',
-      controller: 'ModulesCtrl'
+      templateUrl: '/partials/modules.html'
     }).when('/modules/:moduleName', {
       templateUrl: '/partials/module_inject.html',
       controller: 'ModuleInjectorCtrl'
