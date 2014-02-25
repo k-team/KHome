@@ -32,17 +32,18 @@
               <div class="input-group input-group-sm col-sm-offset-0 col-xs-offset-1 col-xs-10 col-sm-9">
                 <div class="input-group-addon" data-ng-show="field.writable" data-ng-switch on="state">
                   <span data-ng-switch-default><span class="glyphicon glyphicon-pencil"></span></span>
+                  <span data-ng-click="undoEditing()" data-ng-switch-when="editing"><span class="glyphicon glyphicon-ban-circle"></span></span>
                   <span data-ng-switch-when="success"><span class="glyphicon glyphicon-ok"></span></span>
                   <span data-ng-switch-when="error"><span class="glyphicon glyphicon-remove"></span></span>
                   <span data-ng-switch-when="waiting"><span class="glyphicon glyphicon-time"></span></span>
                 </div>
-                <input data-ng-model="field.value"
+                <input data-ng-click="startEditing()" data-ng-model="field.value"
                   data-ng-show="field.type == 'string'"
                   class="form-control" placeholder="{{field.public_name}}" />
-                <input data-ng-model="field.value"
+                <input data-ng-click="startEditing()" data-ng-model="field.value"
                   data-ng-show="field.type == 'numeric' && !field.bounded"
                   class="form-control" placeholder="{{field.public_name}}" />
-                  <div data-ng-model="field.value"
+                  <div data-ng-click="startEditing()" data-ng-model="field.value"
                     data-ng-show="field.type == 'numeric' && field.bounded && field.writable"
                     data-ui-slider="{ range: 'min' } " min="{{ field.value_min }}" max="{{ field.value_max }}">
                     <div class="ui-slider-handle btn btn-default btn-sm">
@@ -53,7 +54,7 @@
                   value="field.value" min="field.value_min" max="field.value_max">
                   {{ field.value }}
                 </progressbar>
-                <input data-ng-model="field.value" type="checkbox"
+                <input data-ng-click="startEditing()" data-ng-model="field.value" type="checkbox"
                   data-ng-show="field.type == 'boolean'"
                   class="form-control" />
                 <span data-ng-show="field.writable" class="input-group-btn">
