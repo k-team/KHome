@@ -52,4 +52,5 @@ class MethaneGaz(module.Base):
             else:
                 if sensor > lie:
                     self.module.alarm.message(message)
+                    self.module.meth_actuator(False)
 

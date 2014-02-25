@@ -50,4 +50,4 @@ class ButaneGaz(module.Base):
             else:
                 if sensor > lie:
                     self.module.alarm.message(message)
-
+                    self.module.but_actuator(False)

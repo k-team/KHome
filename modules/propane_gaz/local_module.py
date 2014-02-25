@@ -50,3 +50,4 @@ class PropaneGaz(module.Base):
             else:
                 if sensor > lie:
                     self.module.alarm.message(message)
+                    self.module.prop_actuator(False)
