@@ -14,7 +14,7 @@ twitter = Twitter(auth=OAuth(acc_token, acc_token_secret,
 
 class Twitter(module.Base):
     public_name = 'Twitter'
-    class status(fields.io.Writable, fields.io.Readable,
+    class tweet(fields.io.Writable, fields.io.Readable,
             fields.syntax.String, fields.persistant.Volatile,
             fields.Base):
         def write(self, value):

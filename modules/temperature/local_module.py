@@ -11,6 +11,11 @@ class Temperature(module.Base):
             fields.syntax.Numeric, fields.persistant.Database, fields.Base):
         public_name = 'Thermomètre (°C)'
 
-    class actuator(fields.actuator.Temperature, fields.io.Readable,
-            fields.syntax.Numeric, fields.persistant.Volatile, fields.Base):
+    class actuator(
+            fields.actuator.Temperature,
+            fields.io.Readable,
+            fields.io.Writable,
+            fields.syntax.Numeric,
+            fields.persistant.Volatile,
+            fields.Base):
         public_name = 'Radiateur (°C)'
