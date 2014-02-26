@@ -1,3 +1,9 @@
 {
+    "commands": {
+        "install": "pip2.7 install shutterpy", 
+        "uninstall": "pip2.7 uninstall shutterpy"
+    }, 
+    "name": "shutter", 
+    "public_name": "Volets", 
     "start": "run_python_module"
 }
