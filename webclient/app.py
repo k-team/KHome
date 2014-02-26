@@ -93,6 +93,7 @@ def api_install_module(module_name):
 def api_uninstall_module(module_name):
     try:
         success = packaging.uninstall(module_name)
+        pass
     except ValueError:
         abort(403)
     return jsonify({ 'success': success })

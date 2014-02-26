@@ -150,8 +150,9 @@ def uninstall(module_name):
         pass # ignore if module is already stopped
 
     # run the "uninstall" command
-    if not run_module_command(module_name, 'uninstall'):
-        return False
+    # if not run_module_command(module_name, 'uninstall'):
+    #     print 'Pas reussi a desinstaller'
+    #     return False
 
     # remove the module directory tree
     try:
