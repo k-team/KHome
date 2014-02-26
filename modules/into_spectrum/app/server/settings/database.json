@@ -1,7 +1,7 @@
 {
-    "host": "localhost",
-    "port": 27017,
+    "host": "ds033419.mongolab.com",
+    "port": 33419,
     "name": "into_spectrum",
     "user": "root",
-    "password": ""
+    "password": "root"
 }
