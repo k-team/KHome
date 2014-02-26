@@ -1,6 +1,0 @@
-{
-    "start": "run_python_module",
-    "name": "luminosity_interior_sensor",
-    "public_name": "Luminosité intérieure",
-    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam id feugiat massa, vel scelerisque justo. Pellentesque ut lectus ac sapien varius faucibus a ac sem. Fusce ac augue ac erat auctor pretium sit amet vehicula enim. Suspendisse massa massa, tincidunt non ante vel, auctor faucibus nisl. In hac habitasse platea dictumst. Vestibulum sed fringilla massa. Aenean tempor suscipit urna. Integer posuere at erat sed porta. Praesent adipiscing orci orci, ut rutrum nunc dapibus sed. Donec in adipiscing tellus, ut blandit dolor. Quisque sem tellus, hendrerit sit amet varius sit amet, faucibus ultrices est. Quisque consectetur tortor nec erat suscipit tincidunt. In suscipit cursus eros pellentesque venenatis. Curabitur pulvinar, purus id euismod scelerisque, odio nunc porta nisl, id lacinia nisl nibh tincidunt erat. Maecenas consequat pellentesque mauris, pretium gravida dui accumsan sodales."
-}

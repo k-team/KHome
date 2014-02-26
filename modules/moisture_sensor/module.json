@@ -1,6 +1,0 @@
-{
-    "description": "Ce capteur mesure humidit\u00e9 dans votre maison. Donc, si vous trouvez que votre peau est un peu s\u00e8che, n'h\u00e9sitez pas \u00e0 consulter la valeur mesur\u00e9e car elle est un peu faible.",
-    "name": "moisture_sensor",
-    "public_name": "Capteur d'humidit\u00e9",
-    "start": "run_python_module"
-}

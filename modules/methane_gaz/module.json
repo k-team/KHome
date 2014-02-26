@@ -1,6 +1,0 @@
-{
-    "description": "Partis en vacance sans couper le gaz ? Le gestionnaire de methane, vous permet de controler les fuites de methane et de couper le gaz \u00e0 distance.",
-    "name": "methane_gaz",
-    "public_name": "Methane",
-    "start": "run_python_module"
-}

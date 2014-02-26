@@ -1,7 +1,0 @@
-{
-    "description": "",
-    "has_view": true,
-    "name": "fan_actuator",
-    "public_name": "Ventilateur",
-    "start": "run_python_module"
-}

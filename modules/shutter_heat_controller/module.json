@@ -1,6 +1,0 @@
-{
-    "description": "Le controleur d'a\u00e9ration ouvre ou ferme les volets en fonction des temp\u00e9rature int\u00e9rieur et ext\u00e9rieur. Il permettra de garder votre int\u00e9rieur \u00e0 une temp\u00e9rature douillette, et vous fera \u00e9conomiser en radiateur ou climatisation.",
-    "name": "shutter_heat_controller",
-    "public_name": "A\u00e9ration",
-    "start": "run_python_module"
-}
