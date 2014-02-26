@@ -6,7 +6,7 @@ import fields
 
 class ShutterLightController(module.Base):
     update_rate = 500
-    public_name = 'Lumière'
+    public_name = 'Luminosité'
     shutter = use_module('Shutter')
     luminosity_int = use_module('LuminosityInteriorSensor')
     luminosity_ext = use_module('LuminosityExteriorSensor')

@@ -61,8 +61,10 @@ class Base(threading.Thread):
         Function called at the start of the field
         Usefull for init something.
         """
+        # super(Base, self).on_start()
         time.sleep(type(self).sleep_on_start)
-        if type(self).init_value is not None:
+        if type(self).init_value is not None and \
+                self._get_value() is None:
             self.emit_value(type(self).init_value)
 
     def emit_value(self, value):
