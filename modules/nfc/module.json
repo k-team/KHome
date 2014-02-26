@@ -1,0 +1,6 @@
+{
+    "description": "Voici un capteur NFC vous permettant de transmettre des informations.",
+    "name": "nfc",
+    "public_name": "NFC",
+    "start": "run_python_module"
+}
