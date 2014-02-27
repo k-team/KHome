@@ -156,3 +156,23 @@ class Base(threading.Thread):
         stop properly.
         """
         pass
+
+_syntax = syntax
+def make(name, syntax='string', mode='', persistence='volatile'):
+    """
+    Make a basic field, given its name, type, mode and persistence. Mode can be
+    readable (r), writable (w) or a combination of both, whatever the order.
+    Valid field types (syntaxes) are documented in fields.syntax. Field
+    persistence is any class name defined in fields.persistant.  TODO remove
+    field "name" parameter.
+    """
+    classes = []
+    classes.append(_syntax.from_string(syntax.lower()))
+    if 'r' in mode:
+        classes.append(io.Readable)
+    if 'w' in mode:
+        classes.append(io.Writable)
+    classes.append(persistant.Database              \
+            if persistence.lower() == 'database'    \
+            else persistant.Volatile)
+    return type(name, tuple(classes + [Base]), {})
