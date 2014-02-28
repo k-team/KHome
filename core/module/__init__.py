@@ -82,6 +82,7 @@ def network_write(conn, data):
         conn.write(data + '\n')
         conn.flush()
     except IOError:
+        return None
         return kill()
 
 def network_readline(conn):
@@ -93,13 +94,14 @@ def network_readline(conn):
     """
     rl, _, _ = select.select([conn], [], [], SOCKET_TIMEOUT)
     if rl is []:
+        return None
         return kill()
     try:
         return json.loads(conn.readline())
     except (IOError, ValueError) as e:
         logger.exception(e)
         logger.error('Cannot read from module')
-        return kill()
+        # return kill()
     except TypeError as e:
         logger.exception(e)
         logger.error('Module sent bad data')
@@ -159,7 +161,9 @@ def prop_network_field(module_conn, field_info):
             request['field_value'] = args[0]
             network_write(module_conn, json.dumps(request))
             ans = network_readline(module_conn)
-            return ans.get('success', False)
+            if ans is not None:
+                return ans.get('success', False)
+            return None
         elif not args:
             if not kwargs:
                 request = {}

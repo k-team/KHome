@@ -1,0 +1,6 @@
+{
+    "description": "Le capteur de son soundSensor3000 d\u00e9tecte tout les sons : du cri du nourrison au passage d'une mouche, et jusqu'\u00e0 la respiration de l'amant de votre femme dans le placard.",
+    "name": "sound_sensor",
+    "public_name": "Capteur de son",
+    "start": "run_python_module"
+}

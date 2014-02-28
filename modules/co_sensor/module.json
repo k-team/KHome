@@ -1,0 +1,7 @@
+{
+    "description": "Si vous avez une chemin\u00e9e, un po\u00eale ou un r\u00e9chaud, cette application est faite pour vous. Celle-ci, gr\u00e2ce \u00e0 son capteur de monoxyde de carbone, mesurera le taux de CO dans votre maison pour votre s\u00e9curit\u00e9.",
+    "has_view": true,
+    "name": "co_sensor",
+    "public_name": "Capteur C0",
+    "start": "run_python_module"
+}
