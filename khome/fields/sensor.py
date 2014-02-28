@@ -3,20 +3,12 @@ import time
 import math
 import random
 import logging
-import io
-
-_cd = sys.path.pop(0)
 from twisted.internet import reactor
 from twisted.internet.protocol import ClientCreator, ClientFactory, Protocol
-sys.path.insert(0, _cd)
+
+from khome.fields import modes
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
-_formatter = logging.Formatter('%(asctime)s :: %(levelname)s :: %(message)s')
-_handler = logging.StreamHandler()
-_handler.setFormatter(_formatter)
-_handler.setLevel(logging.DEBUG)
-logger.addHandler(_handler)
 
 def Dummy(dummy_funct):
     """
@@ -24,7 +16,7 @@ def Dummy(dummy_funct):
     function. *dummy_funct* receive the time as parameter and return one value
     """
 
-    class _Dummy(io.Readable):
+    class _Dummy(modes.Readable):
         def acquire_value(self):
             return dummy_funct(time.time())
     return _Dummy
@@ -188,7 +180,7 @@ class SensorConnectionFactory(ClientFactory):
     def buildProtocol(self, addr):
         return SensorConnection(self.sensor, self.filter_id)
 
-class Sensor(io.Readable):
+class Sensor(modes.Readable):
     sensor_host = '134.214.106.23'
     sensor_port = 5000
     sensor_id = ''

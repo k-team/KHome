@@ -1,13 +1,16 @@
 import sqlite3
 import logging
 
-def get_type(f, default='string'):
+def _get_type(f, default='string'):
     try:
         return f.get_info()['type']
     except (KeyError, TypeError):
         return default
 
 class Database(object):
+    """
+    Mixin adding database persistance of acquisition (using sqlite3).
+    """
     def on_start(self):
         self.last_value = None
         db_types = {'numeric': 'real',
@@ -29,10 +32,9 @@ class Database(object):
                         % (self.field_name, type_str))
         except sqlite3.OperationalError as e:
             logging.exception(e)
-            pass
         db_conn.close()
 
-        super(Database, self).on_start()
+        return super(Database, self).on_start()
 
     def _get_value(self):
         db_conn = sqlite3.connect(self.db_name)
@@ -49,8 +51,6 @@ class Database(object):
         except Exception as e:
             logging.exception(e)
             db_conn.close()
-            return None
-        return None
 
     def _get_value_at(self, t):
         db_conn = sqlite3.connect(self.db_name)
@@ -67,8 +67,6 @@ class Database(object):
         except Exception as e:
             logging.exception(e)
             db_conn.close()
-            return None
-        return None
 
     def _get_value_from_to(self, fr, to):
         db_conn = sqlite3.connect(self.db_name)
@@ -94,7 +92,7 @@ class Database(object):
         query = 'INSERT INTO %s (time, value) VALUES (?, ?)' \
                 % (self.field_name,)
 
-        if get_type(self) == 'string':
+        if _get_type(self) == 'string':
             value = value.decode('utf-8')
 
         try:
@@ -112,6 +110,10 @@ class Database(object):
         return False
 
 class Volatile(object):
+    """
+    Mixin adding volatile persistance of acquisition, which can be configured via the
+    *volpersist_nb_values* and *volpersist_save_lost* options.
+    """
     volpersist_nb_values = 100
     volpersist_save_lost = True
 

@@ -1,8 +1,15 @@
 import time
-import fields
-import fields.io
-import fields.syntax
-import module as _module
+from khome import module
+from khome.fields import modes
+
+def _get_mod_info(module_name, field_name):
+    """
+    Return the information for the field *field_name* for the module
+    *module_name*.
+    """
+    mod = module.use_module(module_name)
+    field = getattr(mod, field_name)
+    return mod.fields_info[field_name]
 
 def basic(new_field, module_name, field_name):
     """
@@ -11,20 +18,15 @@ def basic(new_field, module_name, field_name):
     This new field is readable and writable. If *field_name* is not, use
     proxy.readable or proxy.writable instead.
     """
+    field_info = _get_mod_info(module_name, field_name)
 
-    module = _module.use_module(module_name)
-    field = getattr(module, field_name)
-    field_info = module.fields_info[field_name]
-
-    class Field(
-            fields.io.Writable,
-            fields.io.Readable,
-            fields.Base):
+    from khome.fields import Base as Field
+    class Field(modes.Writable, modes.Readable, Field):
         name = field_info['name']
 
         def get_info(self):
-            # a = super(Field, self).get_info()
-            # field_info.update(a)
+            #a = super(Field, self).get_info()
+            #field_info.update(a)
             return field_info
 
         def read(self, **kwargs):
@@ -49,25 +51,18 @@ def mix(new_field, r_module_name, r_field_name, w_module_name, w_field_name):
     given by redirecting request to the field *w_field_name* of the
     module *w_module_name*.
     """
-
-    r_module = _module.use_module(r_module_name)
-    w_module = _module.use_module(w_module_name)
-    r_field = getattr(r_module, r_field_name)
-    w_field = getattr(w_module, w_field_name)
-    r_field_info = r_module.fields_info[r_field_name]
-    w_field_info = w_module.fields_info[w_field_name]
+    r_field_info = _get_mod_info(r_module_name, r_field_name)
+    w_field_info = _get_mod_info(w_module_name, w_field_name)
 
     if 'type' in r_field_info and 'type' in w_field_info:
         if r_field_info['type'] != w_field_info['type']:
             raise RuntimeError('The two fields have to be of the same type.')
 
-    class Field(
-            fields.io.Writable,
-            fields.io.Readable,
-            fields.Base):
+    from khome.fields import Base as Field
+    class Field(modes.Writable, modes.Readable, Field):
         def get_info(self):
-            # a = super(Field, self).get_info()
-            # w_field_info.update(a)
+            #a = super(Field, self).get_info()
+            #w_field_info.update(a)
             return w_field_info
 
         def read(self, **kwargs):
@@ -89,16 +84,13 @@ def readable(new_field, module_name, field_name):
     field *field_name* inside the extern module *module_name*.
     This new field is only readable.
     """
+    field_info = _get_mod_info(module_name, field_name)
 
-    module = _module.use_module(module_name)
-    field = getattr(module, field_name)
-    field_info = module.fields_info[field_name]
-
-    class Field(
-            fields.Base):
+    from khome.fields import Base as Field
+    class Field(Field):
         def get_info(self):
-            # a = super(Field, self).get_info()
-            # field_info.update(a)
+            #a = super(Field, self).get_info()
+            #field_info.update(a)
             return field_info
 
         def read(self, **kwargs):
@@ -117,17 +109,13 @@ def writable(new_field, module_name, field_name):
     field *field_name* inside the extern module *module_name*.
     This new field is only writable.
     """
+    field_info = _get_mod_info(module_name, field_name)
 
-    module = _module.use_module(module_name)
-    field = getattr(module, field_name)
-    field_info = module.fields_info[field_name]
-
-    class Field(
-            fields.io.Writable,
-            fields.Base):
+    from khome.fields import Base as Field
+    class Field(modes.Writable, Field):
         def get_info(self):
-            # a = super(Field, self).get_info()
-            # field_info.update(a)
+            #a = super(Field, self).get_info()
+            #field_info.update(a)
             return field_info
 
         def write(self, value):

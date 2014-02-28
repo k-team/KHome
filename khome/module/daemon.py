@@ -16,7 +16,7 @@ def possess_me():
     try:
         pid = os.fork()
     except OSError, e:
-        raise RuntimeError("1st fork failed: %s [%d]" % (e.strerror, e.errno))
+        raise RuntimeError('1st fork failed: %s [%d]' % (e.strerror, e.errno))
     if pid != 0:
         os._exit(0)
 
@@ -25,7 +25,7 @@ def possess_me():
     try:
         pid = os.fork()
     except OSError, e:
-        raise RuntimeError("2nd fork failed: %s [%d]" % (e.strerror, e.errno))
+        raise RuntimeError('2nd fork failed: %s [%d]' % (e.strerror, e.errno))
     if pid != 0:
         # child process is all done
         os._exit(0)

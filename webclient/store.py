@@ -10,13 +10,11 @@ from flask_peewee.db import Database
 from peewee import *
 from utils import jsonify, cached
 
-# TODO remove this and do use client launcher
 this_dir = os.path.dirname(os.path.realpath(__file__))
-core_dir = os.path.join(os.path.dirname(this_dir), 'core')
-sys.path.insert(1, core_dir)
-# leave this though
-import catalog
-from module import path
+sys.path.insert(1, os.path.join(os.path.dirname(this_dir)))
+
+from khome import catalog
+from khome.module import path
 
 app = Flask(__name__, static_folder=path.availables_directory())
 cache = SimpleCache()

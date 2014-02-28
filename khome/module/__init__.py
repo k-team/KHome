@@ -9,37 +9,29 @@ import threading
 from twisted.internet import reactor
 from twisted.internet.endpoints import UNIXServerEndpoint as ServerEndpoint
 
-import fields
-
 import path
 import connection
 import instance
 
+__all__ = ('path', 'connection', 'instance',
+        'Base', 'Network', 'use_module', 'is_ready')
+
 _file = os.path.realpath(__file__)
 _root = os.path.dirname(os.path.dirname(os.path.dirname(_file)))
 
-SOCKET_TIMEOUT = 3
-
-_running_modules = []
-
-def setup_logger(logger):
-    logger.setLevel(logging.DEBUG)
-    fmt = '%(asctime)s :: %(name)s :: %(levelname)s :: %(message)s'
-    formatter = logging.Formatter(fmt)
-    handler = logging.StreamHandler()
-    handler.setFormatter(formatter)
-    handler.setLevel(logging.DEBUG)
-    logger.addHandler(handler)
-
 logger = logging.getLogger(__name__)
-setup_logger(logger)
+
+# lanched modules for the current process
+_lauched_modules = []
+
+SOCKET_TIMEOUT = 3
 
 def kill():
     """
     Call the kill function of all running in this proc.
     Raise a runtime error.
     """
-    for mod in _running_modules:
+    for mod in _lauched_modules:
         logger.info('Killing module `%s`.', mod)
         mod.kill()
     raise RuntimeError('Application killed, cannot supply dependencies')
@@ -227,10 +219,11 @@ class BaseMeta(type):
         endpoint.listen(connection.Factory(obj))
 
         # Handle module fields
+        from khome.fields import Base as Field
         ls_fields = []
         for f_cls in cls.__dict__.keys():
             f_cls = getattr(cls, f_cls)
-            if isinstance(f_cls, type) and issubclass(f_cls, fields.Base):
+            if isinstance(f_cls, type) and issubclass(f_cls, Field):
                 field = f_cls()
                 setattr(obj, field.field_name, prop_field(field))
                 setattr(field, 'module', obj)
@@ -239,9 +232,9 @@ class BaseMeta(type):
 
         # Logger
         setattr(obj, 'logger', logging.getLogger(obj.module_name))
-        setup_logger(obj.logger)
+        #setup_logger(obj.logger)
 
-        _running_modules.append(obj)
+        _lauched_modules.append(obj)
         return obj
 
 class NetworkMeta(type):

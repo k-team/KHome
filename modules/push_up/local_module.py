@@ -3,15 +3,12 @@
 import shlex
 import time
 import subprocess as sp
-import module
-from module import use_module
-import fields
+from khome import module, fields
 import threading
 
 class PushUp(module.Base):
     public_name = 'Faites des pompes !'
-    twitter = use_module('Twitter')
-    nfc = use_module('NFC')
+    nfc = module.use_module('NFC')
     update_rate = 10
 
     class amount(fields.syntax.Numeric, fields.io.Writable, fields.io.Readable,
@@ -42,6 +39,6 @@ class PushUp(module.Base):
                 self.module.logger.info('playing music %s', fname)
                 cmd = 'mplayer -quiet -vo null -softvol -nolirc %s' % fname
                 proc = sp.Popen(shlex.split(cmd))
-                proc.wait()  
+                proc.wait()
             except (TypeError, sp.CalledProcessError) as e:
                 self.module.logger.exception(e)

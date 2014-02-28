@@ -4,46 +4,40 @@ from twisted.internet import protocol
 class Protocol(protocol.Protocol):
     """
     Module specific protocol. To communicate with an other module, connect to
-    its socket and, then, use the following keywords. All communication are
-    json formatted.
+    its socket and then use the following keywords. All communication are
+    JSON formatted.
 
-    - Get informations about a module :
-    Keyword : { 'code': 'knockknock' }
-    Result : { [ <info-name>: <info-value> ] }
-    Return a set of informations. This set is dynamic and may contains some
-    words is function of the construction of the module.
-    At least, a module's information contains few obligatory words :
-    { public_name: <public-name>,
-      name: <name>,
-      fields: [ name: <field-name>,
-                public_name: <field-public-name>,
-                update_rate: <update-rate>
-      ]
-    }
+    All requests have the following format: { "code": <code>, ... }.
 
-    - Get last saved value :
-    Keyword : { 'code': 'get', 'fields': [ <field-name> ] }
-    Result : { 'success': False } or
-             { 'success': True, 'fields':
-                [ <field-name>: (<field-update-timestamp>, <field-value>) ]
-             }
+    * Get information about a module : *knockknock*
 
-    - Get a field's value at time <t> :
-    Keyword : { 'code': 'get_at', 'fields': [ <field-name> ], 'time': <t> }
-    The result is the same as when we ask for the last value
+    Return a set of information. This set is dynamic and may contains some
+    words depending on the construction of the module. At least, it contains
+    the following entries:
+        * name: the module's name (unique id, string)
+        * fields:
+            * name: the field's name (unique id, string)
 
-    - Get field's values inside a timeslice
-    Keyword : { 'code': 'get_from_to', 'fields': [ <field-name> ],
-                'time_from': <time-from>, 'time-to': <time-to> }
-    Result : { 'success': False } or
-             { 'success': True, 'fields':
-                [ <field-name>: [ (<field-update-timestamp>, <field-value>) ] ]
-             }
+    * Query the module's fields current values: *get*
 
-    - Set field' value :
-    Keyword : { 'code': 'set',
-                'field_name': <field-name>, 'field_value': <field-value> }
-    Return : { 'success': True or False }
+    Send also the fields queried (list of field names). Return if the query was
+    successful ('success' key), and the field values acquired as a field ->
+    value dictionary, where value in a tuple (timestamp, actual-value).
+
+    * Query the module's fields values at a certain time: *get-at*
+
+    Same result as when querying the current values, but adds the extra 'time'
+    entry for the time of the query.
+
+    * Query the module's fields values inside a timeslice: *get_from_to*
+
+    Same result as when querying the current values, but adds the extra 'time_from' and 'time_to'
+    entries for the timeslice of the query.
+
+    * Set a field's value: *set*
+
+    Send the field's name (field_name) and value (field_value). Return if the
+    query was successful ('success' key).
     """
     def __init__(self, module):
         self.module = module

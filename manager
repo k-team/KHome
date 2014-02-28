@@ -30,11 +30,9 @@ Output:
 
 import os
 import sys
-_file = os.path.realpath(__file__)
-_root = os.path.dirname(_file)
-sys.path.append(os.path.join(_root, 'core/'))
-import module
-import module.instance as instance
+
+from khome import module
+from khome.module import instance
 
 if __name__ == '__main__':
     from docopt import docopt

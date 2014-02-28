@@ -19,9 +19,9 @@ from twisted.internet import reactor
 
 this_dir = os.path.dirname(os.path.realpath(__file__))
 sys.path.insert(0, os.getcwd())
-sys.path.insert(1, os.path.join(this_dir, '..', 'core'))
+sys.path.insert(1, os.path.join(this_dir, '..'))
 
-import module
+from khome import module
 import local_module
 
 # guess module class

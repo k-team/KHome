@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 
-import module
+from khome import module, fields
 import weatherpy
-import fields
 import time
 
 class Weather(module.Base):
