@@ -41,7 +41,7 @@ Watchdog.prototype.run = function() {
           }
         } catch (error) {
           that.log('failed reading: ' + song.path + ', reason: ' + error);
-          song.destroy();
+          // song.destroy();
           return;
         }
 
