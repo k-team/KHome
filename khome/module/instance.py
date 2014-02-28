@@ -12,7 +12,7 @@ import path
 import daemon
 import packaging
 
-logger = logging.getLogger()
+logger = logging.getLogger(__name__)
 
 def status(module_name):
     """

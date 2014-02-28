@@ -19,7 +19,7 @@ __all__ = ('path', 'connection', 'instance',
 _file = os.path.realpath(__file__)
 _root = os.path.dirname(os.path.dirname(os.path.dirname(_file)))
 
-logger = logging.getLogger()
+logger = logging.getLogger(__name__)
 
 # lanched modules for the current process
 _lauched_modules = []
@@ -215,10 +215,11 @@ class BaseMeta(type):
         endpoint.listen(connection.Factory(obj))
 
         # Handle module fields
+        from khome.fields import Base as Field
         ls_fields = []
         for f_cls in cls.__dict__.keys():
             f_cls = getattr(cls, f_cls)
-            if isinstance(f_cls, type) and issubclass(f_cls, fields.Base):
+            if isinstance(f_cls, type) and issubclass(f_cls, Field):
                 field = f_cls()
                 setattr(obj, field.field_name, prop_field(field))
                 setattr(field, 'module', obj)
@@ -227,7 +228,7 @@ class BaseMeta(type):
 
         # Logger
         setattr(obj, 'logger', logging.getLogger(obj.module_name))
-        setup_logger(obj.logger)
+        #setup_logger(obj.logger)
 
         _lauched_modules.append(obj)
         return obj

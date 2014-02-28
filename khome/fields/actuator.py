@@ -4,7 +4,7 @@ import socket
 
 from khome.fields import io, syntax, persistant
 
-logger = logging.getLogger()
+logger = logging.getLogger(__name__)
 
 def Dummy(data_type):
     """

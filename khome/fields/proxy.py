@@ -1,5 +1,6 @@
 import time
 from khome import module
+from khome.fields import modes
 
 def _get_mod_info(module_name, field_name):
     """
@@ -19,7 +20,8 @@ def basic(new_field, module_name, field_name):
     """
     field_info = _get_mod_info(module_name, field_name)
 
-    class Field(modes.Writable, modes.Readable, Base):
+    from khome.fields import Base as Field
+    class Field(modes.Writable, modes.Readable, Field):
         name = field_info['name']
 
         def get_info(self):
@@ -56,8 +58,8 @@ def mix(new_field, r_module_name, r_field_name, w_module_name, w_field_name):
         if r_field_info['type'] != w_field_info['type']:
             raise RuntimeError('The two fields have to be of the same type.')
 
-    class Field(modes.Writable,
-                modes.Readable, Base):
+    from khome.fields import Base as Field
+    class Field(modes.Writable, modes.Readable, Field):
         def get_info(self):
             #a = super(Field, self).get_info()
             #w_field_info.update(a)
@@ -84,7 +86,8 @@ def readable(new_field, module_name, field_name):
     """
     field_info = _get_mod_info(module_name, field_name)
 
-    class Field(Base):
+    from khome.fields import Base as Field
+    class Field(Field):
         def get_info(self):
             #a = super(Field, self).get_info()
             #field_info.update(a)
@@ -108,7 +111,8 @@ def writable(new_field, module_name, field_name):
     """
     field_info = _get_mod_info(module_name, field_name)
 
-    class Field(modes.Writable, Base):
+    from khome.fields import Base as Field
+    class Field(modes.Writable, Field):
         def get_info(self):
             #a = super(Field, self).get_info()
             #field_info.update(a)

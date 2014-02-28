@@ -8,7 +8,7 @@ from twisted.internet.protocol import ClientCreator, ClientFactory, Protocol
 
 from khome.fields import modes
 
-logger = logging.getLogger()
+logger = logging.getLogger(__name__)
 
 def Dummy(dummy_funct):
     """

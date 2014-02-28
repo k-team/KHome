@@ -17,11 +17,8 @@ import sys
 import docopt
 import logging
 
-this_dir = os.path.dirname(os.path.realpath(__file__))
-core_dir = os.path.join(this_dir, 'core')
-sys.path.insert(1, core_dir)
-from module import use_module
-from module.path import modules_directory
+from khome.module import use_module
+from khome.module.path import modules_directory
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
