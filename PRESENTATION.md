@@ -6,9 +6,9 @@ Notes pour la présentation
     - pipeau : Iler
     - modules : Pierre
     - KPI + Store + interface + etc : JM
-3. Démonstration
+3. Démonstration - *PC de Pierre*
 
-#### Samuel
+### Samuel
 
     - page d'accueil (rapide)
     - toolbar (onglets modules et store)
@@ -18,10 +18,16 @@ Notes pour la présentation
     - installation de "methane" -> vue module
         - modification du message d'alerte (#alerte il y a trop de #methane #swag)
         - rating du methane
+
+### JM
     - module "météo", accessible via la recherche
         - blabla sur les stats d'hier soir
         - changement du woeid (google woeid -> paris)
     - recherche dans modules (into..., pas valider)
+    - démo rapide into_spectrum (conjonction avec Pierre)
+
+### Pierre
+    - module NFC -> Fait des pompes ! (Grégoire puis Scutu)
 
 ### Pierre : 
 - update rate très faible
