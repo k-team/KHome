@@ -33,3 +33,22 @@ Notes pour la présentation
 
 ### Pierre
     - module NFC -> Fait des pompes ! (Grégoire puis Scutu)
+
+### Modules à installer :
+- alarm/
+- baby_monitor/
+- butane_gaz/
+- co_sensor/
+- fan_actuator/
+- gaz_controller/
+- interruptor/
+- luminosity_exterior_sensor/
+- methane_gaz/
+- moisture_reducing/
+- moisture_sensor/
+- power_plug/
+- propane_gaz/
+- shutter/
+- shutter_heat_controller/
+- sound_sensor/
+- water_controller/
