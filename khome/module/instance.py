@@ -3,16 +3,16 @@ import sys
 import time
 import shlex
 import signal
-import daemon
 import logging
-import subprocess
-import multiprocessing
 import traceback
+import subprocess as sp
+import multiprocessing as mp
 
 import path
+import daemon
 import packaging
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger()
 
 def status(module_name):
     """
@@ -96,7 +96,7 @@ def execm(module_name, daemonize=True):
         # Execute the start command
         logger.info('Starting the module `%s`', module_name)
         try:
-            child_proc = subprocess.Popen(shlex.split(start_cmd))
+            child_proc = sp.Popen(shlex.split(start_cmd))
         except OSError as e:
             logger.exception(e)
             return_code = 1
@@ -118,7 +118,7 @@ def invoke(module_name, daemonize=True):
     if status(module_name):
         raise RuntimeError('Module `%s` is already running' % module_name)
 
-    proc = multiprocessing.Process(target=execm, args=(module_name, daemonize))
+    proc = mp.Process(target=execm, args=(module_name, daemonize))
     proc.start()
     proc.join()
 
