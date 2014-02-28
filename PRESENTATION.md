@@ -2,9 +2,9 @@ Notes pour la présentation
 ==========================
 
 ## TODO 
+
 - update rate très faible
 - force update dans woeid set_value
-- désactivation de twitter (dans alarme)
 
 1. Lancement de la vidéo
 2. Démarrage du slid.es
