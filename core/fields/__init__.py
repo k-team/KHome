@@ -38,7 +38,8 @@ class Base(threading.Thread):
         self.running = False
 
     def get_update_rate(self):
-        if self.module.module_name != 'Weather':
+        if self.module.module_name != 'Weather' and \
+                self.module.module_name != 'PushUp':
             return 1
         try:
             return type(self).update_rate
