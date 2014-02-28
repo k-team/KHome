@@ -3,6 +3,7 @@
 import module
 import weatherpy
 import fields
+import time
 
 class Weather(module.Base):
     update_rate = 30 * 60
