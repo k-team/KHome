@@ -67,7 +67,7 @@ class Actuator(io.Writable):
         raise NotImplementedError
 
 class PowerPlug(Actuator):
-    actuator_id = 'FF9F1E07'
+    actuator_id = 'FF9F1E05'
     org = '05'
 
     def prepare_data(self, data):
