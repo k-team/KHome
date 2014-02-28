@@ -1,0 +1,10 @@
+{
+    "name": "twitter",
+    "public_name": "Twitter",
+    "start": "run_python_module",
+    "commands": {
+        "install": "pip install twitter",
+        "uninstall": "pip uninstall twitter"
+    },
+    "description": "Le module Twitter permet d'unifier les messages d'alerte au niveau de votre compte Twitter. Ceci vous permet d'avoir des notifications importantes, quelquefois urgentes, via votre compte Twitter."
+}

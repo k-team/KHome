@@ -199,10 +199,10 @@ class Sensor(io.Readable):
                 SensorConnectionFactory(self, type(self).sensor_id))
 
 class Interruptor(Sensor):
-    sensor_id = '0021CBE3'
+    sensor_id = '0021CC31'
 
 class Contact(Sensor):
-    sensor_id = '0001B595'
+    sensor_id = '0001B593'
 
 class Brightness(Sensor):
     sensor_id = '00063E7B'
