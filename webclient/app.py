@@ -10,12 +10,10 @@ import urlparse
 from flask import Flask, send_file, request, abort
 from utils import jsonify
 
-# TODO remove this and do use client launcher
 this_dir = os.path.dirname(os.path.realpath(__file__))
-core_dir = os.path.join(os.path.dirname(this_dir), 'core')
-sys.path.insert(1, core_dir)
-# leave this though
-from module import use_module, path, packaging
+sys.path.insert(1, os.path.join(os.path.dirname(this_dir)))
+
+from khome.module import use_module, path, packaging
 
 # flask app
 app = Flask(__name__, static_folder='public', static_url_path='')
