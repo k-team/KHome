@@ -1,0 +1,547 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>khome.module package &mdash; KHome 1.0a documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0a',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="KHome 1.0a documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">KHome 1.0a documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="khome-module-package">
+<h1>khome.module package<a class="headerlink" href="#khome-module-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-khome.module.connection">
+<span id="khome-module-connection-module"></span><h2>khome.module.connection module<a class="headerlink" href="#module-khome.module.connection" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="khome.module.connection.Factory">
+<em class="property">class </em><tt class="descclassname">khome.module.connection.</tt><tt class="descname">Factory</tt><big>(</big><em>module</em><big>)</big><a class="headerlink" href="#khome.module.connection.Factory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">twisted.internet.protocol.Factory</span></tt></p>
+<p>Factory for the module protocol.</p>
+<dl class="method">
+<dt id="khome.module.connection.Factory.buildProtocol">
+<tt class="descname">buildProtocol</tt><big>(</big><em>addr</em><big>)</big><a class="headerlink" href="#khome.module.connection.Factory.buildProtocol" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="khome.module.connection.Protocol">
+<em class="property">class </em><tt class="descclassname">khome.module.connection.</tt><tt class="descname">Protocol</tt><big>(</big><em>module</em><big>)</big><a class="headerlink" href="#khome.module.connection.Protocol" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">twisted.internet.protocol.Protocol</span></tt></p>
+<p>Module specific protocol. To communicate with an other module, connect to
+its socket and then use the following keywords. All communication are
+JSON formatted.</p>
+<p>All requests have the following format: { &#8220;code&#8221;: &lt;code&gt;, ... }.</p>
+<ul class="simple">
+<li>Get information about a module : <em>knockknock</em></li>
+</ul>
+<p>Return a set of information. This set is dynamic and may contains some
+words depending on the construction of the module. At least, it contains
+the following entries:</p>
+<blockquote>
+<div><ul>
+<li><p class="first">name: the module&#8217;s name (unique id, string)</p>
+</li>
+<li><dl class="first docutils">
+<dt>fields:</dt>
+<dd><ul class="first last simple">
+<li>name: the field&#8217;s name (unique id, string)</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+<ul class="simple">
+<li>Query the module&#8217;s fields current values: <em>get</em></li>
+</ul>
+<p>Send also the fields queried (list of field names). Return if the query was
+successful (&#8216;success&#8217; key), and the field values acquired as a field -&gt;
+value dictionary, where value in a tuple (timestamp, actual-value).</p>
+<ul class="simple">
+<li>Query the module&#8217;s fields values at a certain time: <em>get-at</em></li>
+</ul>
+<p>Same result as when querying the current values, but adds the extra &#8216;time&#8217;
+entry for the time of the query.</p>
+<ul class="simple">
+<li>Query the module&#8217;s fields values inside a timeslice: <em>get_from_to</em></li>
+</ul>
+<p>Same result as when querying the current values, but adds the extra &#8216;time_from&#8217; and &#8216;time_to&#8217;
+entries for the timeslice of the query.</p>
+<ul class="simple">
+<li>Set a field&#8217;s value: <em>set</em></li>
+</ul>
+<p>Send the field&#8217;s name (field_name) and value (field_value). Return if the
+query was successful (&#8216;success&#8217; key).</p>
+<dl class="method">
+<dt id="khome.module.connection.Protocol.dataReceived">
+<tt class="descname">dataReceived</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#khome.module.connection.Protocol.dataReceived" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="khome.module.connection.Protocol.err">
+<tt class="descname">err</tt><big>(</big><em>msg</em><big>)</big><a class="headerlink" href="#khome.module.connection.Protocol.err" title="Permalink to this definition">¶</a></dt>
+<dd><p>Main error handler, logging and outputting return status to transport.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="khome.module.connection.Protocol.err_code_not_found">
+<tt class="descname">err_code_not_found</tt><big>(</big><big>)</big><a class="headerlink" href="#khome.module.connection.Protocol.err_code_not_found" title="Permalink to this definition">¶</a></dt>
+<dd><p>Error handler called when the query code wasn&#8217;t found.
+self.err(&#8216;Code not found in the query&#8217;)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="khome.module.connection.Protocol.err_decode_data">
+<tt class="descname">err_decode_data</tt><big>(</big><big>)</big><a class="headerlink" href="#khome.module.connection.Protocol.err_decode_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Error handler called when received data couldn&#8217;t be decoded.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="khome.module.connection.Protocol.err_field_error">
+<tt class="descname">err_field_error</tt><big>(</big><big>)</big><a class="headerlink" href="#khome.module.connection.Protocol.err_field_error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Error handler called when the queried field couldn&#8217;t be found.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="khome.module.connection.Protocol.get_at">
+<tt class="descname">get_at</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#khome.module.connection.Protocol.get_at" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handler for getting one or many fields&#8217; value(s) at a given time.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="khome.module.connection.Protocol.get_from_to">
+<tt class="descname">get_from_to</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#khome.module.connection.Protocol.get_from_to" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handler for getting one or many fields&#8217; value(s) in a certain interval.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="khome.module.connection.Protocol.get_value">
+<tt class="descname">get_value</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#khome.module.connection.Protocol.get_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handler for getting one or many fields&#8217; value(s).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="khome.module.connection.Protocol.knock_knock">
+<tt class="descname">knock_knock</tt><big>(</big><big>)</big><a class="headerlink" href="#khome.module.connection.Protocol.knock_knock" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send all informations about the module via transport</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="khome.module.connection.Protocol.send_json">
+<tt class="descname">send_json</tt><big>(</big><em>obj</em><big>)</big><a class="headerlink" href="#khome.module.connection.Protocol.send_json" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send a json object through the transport.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="khome.module.connection.Protocol.set_value">
+<tt class="descname">set_value</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#khome.module.connection.Protocol.set_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handler called to set a named field&#8217;s value.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-khome.module.daemon">
+<span id="khome-module-daemon-module"></span><h2>khome.module.daemon module<a class="headerlink" href="#module-khome.module.daemon" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="khome.module.daemon.possess_me">
+<tt class="descclassname">khome.module.daemon.</tt><tt class="descname">possess_me</tt><big>(</big><big>)</big><a class="headerlink" href="#khome.module.daemon.possess_me" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sign a contract with Oblivion&#8217;s leader to get new power. This amount of
+power transforms you into a d(a)emon. You are now invincible and can only
+be killed by a super sayan (or not). But be careful with this new power.
+One day, a wise man said &#8220;With great power comes great responsibility&#8221;. You
+can use those skills as you like. Either as a tyrannic and oppressive
+d(a)emon or you can repent yourself at the side of the super sayan to fight
+crime.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-khome.module.instance">
+<span id="khome-module-instance-module"></span><h2>khome.module.instance module<a class="headerlink" href="#module-khome.module.instance" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="khome.module.instance.execm">
+<tt class="descclassname">khome.module.instance.</tt><tt class="descname">execm</tt><big>(</big><em>module_name</em>, <em>daemonize=True</em><big>)</big><a class="headerlink" href="#khome.module.instance.execm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start a new module identified by its name <em>module_name</em>. The current
+processus is killed at the end of the module when it&#8217;s not a daemon. If it
+is, the current processus is killed immediately. Use <em>invoke</em>
+instead if you want to create a new killable process.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="khome.module.instance.invoke">
+<tt class="descclassname">khome.module.instance.</tt><tt class="descname">invoke</tt><big>(</big><em>module_name</em>, <em>daemonize=True</em><big>)</big><a class="headerlink" href="#khome.module.instance.invoke" title="Permalink to this definition">¶</a></dt>
+<dd><p>As exec_module, execute a module but fork before to keep the current
+process active. To see if the module is really running, use the
+<em>status</em> function.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="khome.module.instance.invoke_all">
+<tt class="descclassname">khome.module.instance.</tt><tt class="descname">invoke_all</tt><big>(</big><big>)</big><a class="headerlink" href="#khome.module.instance.invoke_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Invoke all installed modules as daemon. Doesn&#8217;t check if the modules are
+correctly launch. Return the list of pid of the new processes.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="khome.module.instance.status">
+<tt class="descclassname">khome.module.instance.</tt><tt class="descname">status</tt><big>(</big><em>module_name</em><big>)</big><a class="headerlink" href="#khome.module.instance.status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the status of the module <em>module_name</em>
+A module is considered as running if its pid file exists.
+Return true if the module is running else false.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="khome.module.instance.status_all">
+<tt class="descclassname">khome.module.instance.</tt><tt class="descname">status_all</tt><big>(</big><big>)</big><a class="headerlink" href="#khome.module.instance.status_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the status of all the installed modules. See the above function
+<em>status</em> for more details.
+Return a dictionary from name to status (as boolean).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="khome.module.instance.stop">
+<tt class="descclassname">khome.module.instance.</tt><tt class="descname">stop</tt><big>(</big><em>module_name</em><big>)</big><a class="headerlink" href="#khome.module.instance.stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stop the <em>module_name</em> module.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="khome.module.instance.stop_all">
+<tt class="descclassname">khome.module.instance.</tt><tt class="descname">stop_all</tt><big>(</big><big>)</big><a class="headerlink" href="#khome.module.instance.stop_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stop all the running modules</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-khome.module.packaging">
+<span id="khome-module-packaging-module"></span><h2>khome.module.packaging module<a class="headerlink" href="#module-khome.module.packaging" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="khome.module.packaging.get_config">
+<tt class="descclassname">khome.module.packaging.</tt><tt class="descname">get_config</tt><big>(</big><em>module_name</em>, <em>directory=None</em><big>)</big><a class="headerlink" href="#khome.module.packaging.get_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load the configuration for the named module, passing in the &#8216;directory&#8217;
+argument with the same use as for get_config_file().</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="khome.module.packaging.get_from_config">
+<tt class="descclassname">khome.module.packaging.</tt><tt class="descname">get_from_config</tt><big>(</big><em>conf</em>, <em>entry_name</em><big>)</big><a class="headerlink" href="#khome.module.packaging.get_from_config" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="khome.module.packaging.get_installed_modules">
+<tt class="descclassname">khome.module.packaging.</tt><tt class="descname">get_installed_modules</tt><big>(</big><em>detailed=False</em><big>)</big><a class="headerlink" href="#khome.module.packaging.get_installed_modules" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of all installed modules in the installation directory.
+Detailed information can be given (eg. module configuration) by setting the
+&#8220;detailed&#8221; argument to true.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="khome.module.packaging.install_from_zip">
+<tt class="descclassname">khome.module.packaging.</tt><tt class="descname">install_from_zip</tt><big>(</big><em>file_</em><big>)</big><a class="headerlink" href="#khome.module.packaging.install_from_zip" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute all the setup steps for a module installation. Takes either a
+filename or a file-like object (which should already be opened).
+Raises an IOError if the zip file reading failed, and a ValueError if the
+module is already installed.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="khome.module.packaging.is_installed">
+<tt class="descclassname">khome.module.packaging.</tt><tt class="descname">is_installed</tt><big>(</big><em>module_name</em>, <em>directory=None</em><big>)</big><a class="headerlink" href="#khome.module.packaging.is_installed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return if the named module exists in the given directory (defaults to
+module installation directory).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="khome.module.packaging.load_config">
+<tt class="descclassname">khome.module.packaging.</tt><tt class="descname">load_config</tt><big>(</big><em>file_</em><big>)</big><a class="headerlink" href="#khome.module.packaging.load_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load the configuration for the named module, passing in either the absolute
+path to the config file or directly the file-like object.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="khome.module.packaging.run_module_command">
+<tt class="descclassname">khome.module.packaging.</tt><tt class="descname">run_module_command</tt><big>(</big><em>module_name</em>, <em>cmd</em><big>)</big><a class="headerlink" href="#khome.module.packaging.run_module_command" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run a command listed in the &#8220;commands&#8221; section, for the module, other than
+&#8220;start&#8221; of course, which is a <em>special</em> command. Please note that the
+module should be trusted when running this command, otherwise bad stuff can
+happen. Return if the command was successful, or if there was no command to
+run (meaning that if no entry for that command is specified, this function
+returns true).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="khome.module.packaging.setup_logger">
+<tt class="descclassname">khome.module.packaging.</tt><tt class="descname">setup_logger</tt><big>(</big><em>logger</em><big>)</big><a class="headerlink" href="#khome.module.packaging.setup_logger" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="khome.module.packaging.uninstall">
+<tt class="descclassname">khome.module.packaging.</tt><tt class="descname">uninstall</tt><big>(</big><em>module_name</em><big>)</big><a class="headerlink" href="#khome.module.packaging.uninstall" title="Permalink to this definition">¶</a></dt>
+<dd><p>Uninstall a module by its name. Raise a ValueError if the module is already
+installed.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-khome.module.path">
+<span id="khome-module-path-module"></span><h2>khome.module.path module<a class="headerlink" href="#module-khome.module.path" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="khome.module.path.availables_directory">
+<tt class="descclassname">khome.module.path.</tt><tt class="descname">availables_directory</tt><big>(</big><big>)</big><a class="headerlink" href="#khome.module.path.availables_directory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the absolute path to the directory of available modules.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="khome.module.path.bin_directory">
+<tt class="descclassname">khome.module.path.</tt><tt class="descname">bin_directory</tt><big>(</big><big>)</big><a class="headerlink" href="#khome.module.path.bin_directory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the absolute path to the directory of available modules.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="khome.module.path.config_file">
+<tt class="descclassname">khome.module.path.</tt><tt class="descname">config_file</tt><big>(</big><em>module_name</em>, <em>directory=None</em><big>)</big><a class="headerlink" href="#khome.module.path.config_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the absolute path to the configuration file for the named module,
+optionally passing in the directory from which this file will be
+accessible.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="khome.module.path.instances_directory">
+<tt class="descclassname">khome.module.path.</tt><tt class="descname">instances_directory</tt><big>(</big><big>)</big><a class="headerlink" href="#khome.module.path.instances_directory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the absolute path to the sockets directory.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="khome.module.path.log_file">
+<tt class="descclassname">khome.module.path.</tt><tt class="descname">log_file</tt><big>(</big><em>module_name</em><big>)</big><a class="headerlink" href="#khome.module.path.log_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the absolute path to the log file for the named module.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="khome.module.path.logs_directory">
+<tt class="descclassname">khome.module.path.</tt><tt class="descname">logs_directory</tt><big>(</big><big>)</big><a class="headerlink" href="#khome.module.path.logs_directory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the absolute path to the logs directory.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="khome.module.path.module_directory">
+<tt class="descclassname">khome.module.path.</tt><tt class="descname">module_directory</tt><big>(</big><em>module_name</em>, <em>directory=None</em><big>)</big><a class="headerlink" href="#khome.module.path.module_directory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the absolute path to the module directory for the named module.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="khome.module.path.modules_directory">
+<tt class="descclassname">khome.module.path.</tt><tt class="descname">modules_directory</tt><big>(</big><big>)</big><a class="headerlink" href="#khome.module.path.modules_directory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the absolute path to the sockets directory.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="khome.module.path.pid_file">
+<tt class="descclassname">khome.module.path.</tt><tt class="descname">pid_file</tt><big>(</big><em>module_name</em><big>)</big><a class="headerlink" href="#khome.module.path.pid_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the absolute path to the pid file for the named module.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="khome.module.path.pids_directory">
+<tt class="descclassname">khome.module.path.</tt><tt class="descname">pids_directory</tt><big>(</big><big>)</big><a class="headerlink" href="#khome.module.path.pids_directory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the absolute path to the sockets directory.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="khome.module.path.realname">
+<tt class="descclassname">khome.module.path.</tt><tt class="descname">realname</tt><big>(</big><em>module_name</em><big>)</big><a class="headerlink" href="#khome.module.path.realname" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the real name of a module. The real name of a modules
+is in lower snake_case.
+Transform a CamelCase name into snake_case name.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="khome.module.path.socket_file">
+<tt class="descclassname">khome.module.path.</tt><tt class="descname">socket_file</tt><big>(</big><em>module_name</em><big>)</big><a class="headerlink" href="#khome.module.path.socket_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the absolute path to the socket file for the named module.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="khome.module.path.sockets_directory">
+<tt class="descclassname">khome.module.path.</tt><tt class="descname">sockets_directory</tt><big>(</big><big>)</big><a class="headerlink" href="#khome.module.path.sockets_directory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the absolute path to the sockets directory.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-khome.module">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-khome.module" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="khome.module.Base">
+<em class="property">class </em><tt class="descclassname">khome.module.</tt><tt class="descname">Base</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#khome.module.Base" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">threading.Thread</span></tt></p>
+<p>Base module, subclass this if only core module functionalities are needed.</p>
+<dl class="method">
+<dt id="khome.module.Base.get_info">
+<tt class="descname">get_info</tt><big>(</big><big>)</big><a class="headerlink" href="#khome.module.Base.get_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a dictionnary containing all informations about
+the module.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="khome.module.Base.kill">
+<tt class="descname">kill</tt><big>(</big><big>)</big><a class="headerlink" href="#khome.module.Base.kill" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stop the execution of the module and call the on_kill function of its
+fields.
+This method have to be called in case of runtime error.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="khome.module.Base.public_name">
+<tt class="descname">public_name</tt><em class="property"> = ''</em><a class="headerlink" href="#khome.module.Base.public_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="khome.module.Base.run">
+<tt class="descname">run</tt><big>(</big><big>)</big><a class="headerlink" href="#khome.module.Base.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="khome.module.Base.start">
+<tt class="descname">start</tt><big>(</big><big>)</big><a class="headerlink" href="#khome.module.Base.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start the execution of the module and its fields.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="khome.module.Base.stop">
+<tt class="descname">stop</tt><big>(</big><big>)</big><a class="headerlink" href="#khome.module.Base.stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stop the execution of the module and all its fields.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="khome.module.Base.update">
+<tt class="descname">update</tt><big>(</big><big>)</big><a class="headerlink" href="#khome.module.Base.update" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="khome.module.Base.update_rate">
+<tt class="descname">update_rate</tt><em class="property"> = 1</em><a class="headerlink" href="#khome.module.Base.update_rate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="khome.module.Network">
+<em class="property">class </em><tt class="descclassname">khome.module.</tt><tt class="descname">Network</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#khome.module.Network" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Network module base, built just like Base module, but with network
+interfacing.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="khome.module.use_module">
+<tt class="descclassname">khome.module.</tt><tt class="descname">use_module</tt><big>(</big><em>module_name</em><big>)</big><a class="headerlink" href="#khome.module.use_module" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shortcut for referencing a module through network, given its module name.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="khome.module.is_ready">
+<tt class="descclassname">khome.module.</tt><tt class="descname">is_ready</tt><big>(</big><em>module_name</em><big>)</big><a class="headerlink" href="#khome.module.is_ready" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return if the module <em>module_name</em> is ready.
+This is detected by watching the socket file of the module.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">khome.module package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-khome.module.connection">khome.module.connection module</a></li>
+<li><a class="reference internal" href="#module-khome.module.daemon">khome.module.daemon module</a></li>
+<li><a class="reference internal" href="#module-khome.module.instance">khome.module.instance module</a></li>
+<li><a class="reference internal" href="#module-khome.module.packaging">khome.module.packaging module</a></li>
+<li><a class="reference internal" href="#module-khome.module.path">khome.module.path module</a></li>
+<li><a class="reference internal" href="#module-khome.module">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/khome.module.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">KHome 1.0a documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Pierre Turpin, Jean-Marie Comets.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+  </body>
+</html>

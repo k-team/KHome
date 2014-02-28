@@ -1,0 +1,969 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>khome.fields package &mdash; KHome 1.0a documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0a',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="KHome 1.0a documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">KHome 1.0a documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="khome-fields-package">
+<h1>khome.fields package<a class="headerlink" href="#khome-fields-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-khome.fields.actuator">
+<span id="khome-fields-actuator-module"></span><h2>khome.fields.actuator module<a class="headerlink" href="#module-khome.fields.actuator" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="khome.fields.actuator.Actuator">
+<em class="property">class </em><tt class="descclassname">khome.fields.actuator.</tt><tt class="descname">Actuator</tt><a class="headerlink" href="#khome.fields.actuator.Actuator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">khome.fields.io.Writable</span></tt></p>
+<dl class="method">
+<dt id="khome.fields.actuator.Actuator.close">
+<tt class="descname">close</tt><big>(</big><big>)</big><a class="headerlink" href="#khome.fields.actuator.Actuator.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close/stop the actuator.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="khome.fields.actuator.Actuator.host">
+<tt class="descname">host</tt><em class="property"> = '134.214.106.23'</em><a class="headerlink" href="#khome.fields.actuator.Actuator.host" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="khome.fields.actuator.Actuator.port">
+<tt class="descname">port</tt><em class="property"> = 5000</em><a class="headerlink" href="#khome.fields.actuator.Actuator.port" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="khome.fields.actuator.Actuator.prepare_data">
+<tt class="descname">prepare_data</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#khome.fields.actuator.Actuator.prepare_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format data to send to the actuator, depending on its needed format.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="khome.fields.actuator.Actuator.set_value">
+<tt class="descname">set_value</tt><big>(</big><em>t</em>, <em>value</em><big>)</big><a class="headerlink" href="#khome.fields.actuator.Actuator.set_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start the actuator (eg. start sending via the reactor).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="attribute">
+<dt id="khome.fields.actuator.Alarm">
+<tt class="descclassname">khome.fields.actuator.</tt><tt class="descname">Alarm</tt><a class="headerlink" href="#khome.fields.actuator.Alarm" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">_Dummy</span></tt></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="khome.fields.actuator.Butane">
+<tt class="descclassname">khome.fields.actuator.</tt><tt class="descname">Butane</tt><a class="headerlink" href="#khome.fields.actuator.Butane" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">_Dummy</span></tt></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="khome.fields.actuator.Door">
+<tt class="descclassname">khome.fields.actuator.</tt><tt class="descname">Door</tt><a class="headerlink" href="#khome.fields.actuator.Door" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">_Dummy</span></tt></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="khome.fields.actuator.Dummy">
+<tt class="descclassname">khome.fields.actuator.</tt><tt class="descname">Dummy</tt><big>(</big><em>data_type</em><big>)</big><a class="headerlink" href="#khome.fields.actuator.Dummy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dummy actuator, making a simply actuator.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="khome.fields.actuator.ElectricCurrent">
+<tt class="descclassname">khome.fields.actuator.</tt><tt class="descname">ElectricCurrent</tt><a class="headerlink" href="#khome.fields.actuator.ElectricCurrent" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">_Dummy</span></tt></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="khome.fields.actuator.Fan">
+<tt class="descclassname">khome.fields.actuator.</tt><tt class="descname">Fan</tt><a class="headerlink" href="#khome.fields.actuator.Fan" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">_Dummy</span></tt></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="khome.fields.actuator.LightButton">
+<tt class="descclassname">khome.fields.actuator.</tt><tt class="descname">LightButton</tt><a class="headerlink" href="#khome.fields.actuator.LightButton" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">_Dummy</span></tt></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="khome.fields.actuator.Methane">
+<tt class="descclassname">khome.fields.actuator.</tt><tt class="descname">Methane</tt><a class="headerlink" href="#khome.fields.actuator.Methane" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">_Dummy</span></tt></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="khome.fields.actuator.Piston">
+<tt class="descclassname">khome.fields.actuator.</tt><tt class="descname">Piston</tt><a class="headerlink" href="#khome.fields.actuator.Piston" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">_Dummy</span></tt></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="khome.fields.actuator.PowerPlug">
+<em class="property">class </em><tt class="descclassname">khome.fields.actuator.</tt><tt class="descname">PowerPlug</tt><a class="headerlink" href="#khome.fields.actuator.PowerPlug" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#khome.fields.actuator.Actuator" title="khome.fields.actuator.Actuator"><tt class="xref py py-class docutils literal"><span class="pre">khome.fields.actuator.Actuator</span></tt></a></p>
+<dl class="attribute">
+<dt id="khome.fields.actuator.PowerPlug.actuator_id">
+<tt class="descname">actuator_id</tt><em class="property"> = 'FF9F1E05'</em><a class="headerlink" href="#khome.fields.actuator.PowerPlug.actuator_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="khome.fields.actuator.PowerPlug.org">
+<tt class="descname">org</tt><em class="property"> = '05'</em><a class="headerlink" href="#khome.fields.actuator.PowerPlug.org" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="khome.fields.actuator.PowerPlug.prepare_data">
+<tt class="descname">prepare_data</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#khome.fields.actuator.PowerPlug.prepare_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="attribute">
+<dt id="khome.fields.actuator.Propane">
+<tt class="descclassname">khome.fields.actuator.</tt><tt class="descname">Propane</tt><a class="headerlink" href="#khome.fields.actuator.Propane" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">_Dummy</span></tt></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="khome.fields.actuator.Shutter">
+<tt class="descclassname">khome.fields.actuator.</tt><tt class="descname">Shutter</tt><a class="headerlink" href="#khome.fields.actuator.Shutter" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">_Dummy</span></tt></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="khome.fields.actuator.Temperature">
+<tt class="descclassname">khome.fields.actuator.</tt><tt class="descname">Temperature</tt><a class="headerlink" href="#khome.fields.actuator.Temperature" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">_Dummy</span></tt></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="khome.fields.actuator.WaterValve">
+<tt class="descclassname">khome.fields.actuator.</tt><tt class="descname">WaterValve</tt><a class="headerlink" href="#khome.fields.actuator.WaterValve" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">_Dummy</span></tt></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="khome.fields.actuator.Window">
+<tt class="descclassname">khome.fields.actuator.</tt><tt class="descname">Window</tt><a class="headerlink" href="#khome.fields.actuator.Window" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">_Dummy</span></tt></p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-khome.fields.modes">
+<span id="khome-fields-modes-module"></span><h2>khome.fields.modes module<a class="headerlink" href="#module-khome.fields.modes" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="khome.fields.modes.Graphable">
+<em class="property">class </em><tt class="descclassname">khome.fields.modes.</tt><tt class="descname">Graphable</tt><a class="headerlink" href="#khome.fields.modes.Graphable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#khome.fields.modes.Readable" title="khome.fields.modes.Readable"><tt class="xref py py-class docutils literal"><span class="pre">khome.fields.modes.Readable</span></tt></a></p>
+<dl class="method">
+<dt id="khome.fields.modes.Graphable.get_info">
+<tt class="descname">get_info</tt><big>(</big><big>)</big><a class="headerlink" href="#khome.fields.modes.Graphable.get_info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="khome.fields.modes.Hidden">
+<em class="property">class </em><tt class="descclassname">khome.fields.modes.</tt><tt class="descname">Hidden</tt><a class="headerlink" href="#khome.fields.modes.Hidden" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="khome.fields.modes.Readable">
+<em class="property">class </em><tt class="descclassname">khome.fields.modes.</tt><tt class="descname">Readable</tt><a class="headerlink" href="#khome.fields.modes.Readable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Mixin of the fields.Base class adding a reading property of the value of
+the field.</p>
+<p>No argument is given : the result correspond to the last saved
+value with its saved time as a tuple (time, value). If there isn&#8217;t any
+saved values, None is returned</p>
+<p>The argument <cite>t</cite> is given : the result correspond to the value which its saved time is the nearest of <cite>t</cite>.</p>
+<dl class="method">
+<dt id="khome.fields.modes.Readable.get_info">
+<tt class="descname">get_info</tt><big>(</big><big>)</big><a class="headerlink" href="#khome.fields.modes.Readable.get_info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="khome.fields.modes.Readable.read">
+<tt class="descname">read</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#khome.fields.modes.Readable.read" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="khome.fields.modes.Writable">
+<em class="property">class </em><tt class="descclassname">khome.fields.modes.</tt><tt class="descname">Writable</tt><a class="headerlink" href="#khome.fields.modes.Writable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Mixin of the fields.Base class adding a writing property of the value of
+the field. When the value is written, a new timestamp is associated to the
+value and then given to the field&#8217;s emit_value. It&#8217;s not garantee that the
+new value is really written.
+Return if the new value is written.</p>
+<dl class="method">
+<dt id="khome.fields.modes.Writable.get_info">
+<tt class="descname">get_info</tt><big>(</big><big>)</big><a class="headerlink" href="#khome.fields.modes.Writable.get_info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="khome.fields.modes.Writable.write">
+<tt class="descname">write</tt><big>(</big><em>value</em><big>)</big><a class="headerlink" href="#khome.fields.modes.Writable.write" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-khome.fields.persistant">
+<span id="khome-fields-persistant-module"></span><h2>khome.fields.persistant module<a class="headerlink" href="#module-khome.fields.persistant" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="khome.fields.persistant.Database">
+<em class="property">class </em><tt class="descclassname">khome.fields.persistant.</tt><tt class="descname">Database</tt><a class="headerlink" href="#khome.fields.persistant.Database" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Mixin adding database persistance of acquisition (using sqlite3).</p>
+<dl class="method">
+<dt id="khome.fields.persistant.Database.on_start">
+<tt class="descname">on_start</tt><big>(</big><big>)</big><a class="headerlink" href="#khome.fields.persistant.Database.on_start" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="khome.fields.persistant.Database.set_value">
+<tt class="descname">set_value</tt><big>(</big><em>t</em>, <em>value</em><big>)</big><a class="headerlink" href="#khome.fields.persistant.Database.set_value" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="khome.fields.persistant.Volatile">
+<em class="property">class </em><tt class="descclassname">khome.fields.persistant.</tt><tt class="descname">Volatile</tt><a class="headerlink" href="#khome.fields.persistant.Volatile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Mixin adding volatile persistance of acquisition, which can be configured via the
+<em>volpersist_nb_values</em> and <em>volpersist_save_lost</em> options.</p>
+<dl class="method">
+<dt id="khome.fields.persistant.Volatile.set_value">
+<tt class="descname">set_value</tt><big>(</big><em>t</em>, <em>value</em><big>)</big><a class="headerlink" href="#khome.fields.persistant.Volatile.set_value" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="khome.fields.persistant.Volatile.volpersist_nb_values">
+<tt class="descname">volpersist_nb_values</tt><em class="property"> = 100</em><a class="headerlink" href="#khome.fields.persistant.Volatile.volpersist_nb_values" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="khome.fields.persistant.Volatile.volpersist_save_lost">
+<tt class="descname">volpersist_save_lost</tt><em class="property"> = True</em><a class="headerlink" href="#khome.fields.persistant.Volatile.volpersist_save_lost" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-khome.fields.proxy">
+<span id="khome-fields-proxy-module"></span><h2>khome.fields.proxy module<a class="headerlink" href="#module-khome.fields.proxy" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="khome.fields.proxy.basic">
+<tt class="descclassname">khome.fields.proxy.</tt><tt class="descname">basic</tt><big>(</big><em>new_field</em>, <em>module_name</em>, <em>field_name</em><big>)</big><a class="headerlink" href="#khome.fields.proxy.basic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a new class named <em>new_field</em> acting like a field proxy of the
+field <em>field_name</em> inside the extern module <em>module_name</em>.
+This new field is readable and writable. If <em>field_name</em> is not, use
+proxy.readable or proxy.writable instead.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="khome.fields.proxy.mix">
+<tt class="descclassname">khome.fields.proxy.</tt><tt class="descname">mix</tt><big>(</big><em>new_field</em>, <em>r_module_name</em>, <em>r_field_name</em>, <em>w_module_name</em>, <em>w_field_name</em><big>)</big><a class="headerlink" href="#khome.fields.proxy.mix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a new class named <em>new_field</em> acting like a field proxy and
+mixing two fields. This new field is readable and writable. The
+readable part is given by redirecting request to the field
+<em>r_field_name</em> of the module <em>r_module_name</em>. The writable part is
+given by redirecting request to the field <em>w_field_name</em> of the
+module <em>w_module_name</em>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="khome.fields.proxy.readable">
+<tt class="descclassname">khome.fields.proxy.</tt><tt class="descname">readable</tt><big>(</big><em>new_field</em>, <em>module_name</em>, <em>field_name</em><big>)</big><a class="headerlink" href="#khome.fields.proxy.readable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a new class named <em>new_field</em> acting like a field proxy of the
+field <em>field_name</em> inside the extern module <em>module_name</em>.
+This new field is only readable.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="khome.fields.proxy.writable">
+<tt class="descclassname">khome.fields.proxy.</tt><tt class="descname">writable</tt><big>(</big><em>new_field</em>, <em>module_name</em>, <em>field_name</em><big>)</big><a class="headerlink" href="#khome.fields.proxy.writable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a new class named <em>new_field</em> acting like a field proxy of the
+field <em>field_name</em> inside the extern module <em>module_name</em>.
+This new field is only writable.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-khome.fields.sensor">
+<span id="khome-fields-sensor-module"></span><h2>khome.fields.sensor module<a class="headerlink" href="#module-khome.fields.sensor" title="Permalink to this headline">¶</a></h2>
+<dl class="attribute">
+<dt id="khome.fields.sensor.Air">
+<tt class="descclassname">khome.fields.sensor.</tt><tt class="descname">Air</tt><a class="headerlink" href="#khome.fields.sensor.Air" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">_Dummy</span></tt></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="khome.fields.sensor.Brightness">
+<em class="property">class </em><tt class="descclassname">khome.fields.sensor.</tt><tt class="descname">Brightness</tt><a class="headerlink" href="#khome.fields.sensor.Brightness" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#khome.fields.sensor.Sensor" title="khome.fields.sensor.Sensor"><tt class="xref py py-class docutils literal"><span class="pre">khome.fields.sensor.Sensor</span></tt></a></p>
+<dl class="method">
+<dt id="khome.fields.sensor.Brightness.org7_bp">
+<tt class="descname">org7_bp</tt><big>(</big><em>value</em><big>)</big><a class="headerlink" href="#khome.fields.sensor.Brightness.org7_bp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="khome.fields.sensor.Brightness.sensor_id">
+<tt class="descname">sensor_id</tt><em class="property"> = '00063E7B'</em><a class="headerlink" href="#khome.fields.sensor.Brightness.sensor_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="attribute">
+<dt id="khome.fields.sensor.Butane">
+<tt class="descclassname">khome.fields.sensor.</tt><tt class="descname">Butane</tt><a class="headerlink" href="#khome.fields.sensor.Butane" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">_Dummy</span></tt></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="khome.fields.sensor.CO">
+<tt class="descclassname">khome.fields.sensor.</tt><tt class="descname">CO</tt><a class="headerlink" href="#khome.fields.sensor.CO" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">_Dummy</span></tt></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="khome.fields.sensor.Contact">
+<em class="property">class </em><tt class="descclassname">khome.fields.sensor.</tt><tt class="descname">Contact</tt><a class="headerlink" href="#khome.fields.sensor.Contact" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#khome.fields.sensor.Sensor" title="khome.fields.sensor.Sensor"><tt class="xref py py-class docutils literal"><span class="pre">khome.fields.sensor.Sensor</span></tt></a></p>
+<dl class="attribute">
+<dt id="khome.fields.sensor.Contact.sensor_id">
+<tt class="descname">sensor_id</tt><em class="property"> = '0001B593'</em><a class="headerlink" href="#khome.fields.sensor.Contact.sensor_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="khome.fields.sensor.Dummy">
+<tt class="descclassname">khome.fields.sensor.</tt><tt class="descname">Dummy</tt><big>(</big><em>dummy_funct</em><big>)</big><a class="headerlink" href="#khome.fields.sensor.Dummy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a class generating dummy data describe by the <em>dummy_funct</em>
+function. <em>dummy_funct</em> receive the time as parameter and return one value</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="khome.fields.sensor.ElectricCurrent">
+<tt class="descclassname">khome.fields.sensor.</tt><tt class="descname">ElectricCurrent</tt><a class="headerlink" href="#khome.fields.sensor.ElectricCurrent" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">_Dummy</span></tt></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="khome.fields.sensor.Interruptor">
+<em class="property">class </em><tt class="descclassname">khome.fields.sensor.</tt><tt class="descname">Interruptor</tt><a class="headerlink" href="#khome.fields.sensor.Interruptor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#khome.fields.sensor.Sensor" title="khome.fields.sensor.Sensor"><tt class="xref py py-class docutils literal"><span class="pre">khome.fields.sensor.Sensor</span></tt></a></p>
+<dl class="attribute">
+<dt id="khome.fields.sensor.Interruptor.sensor_id">
+<tt class="descname">sensor_id</tt><em class="property"> = '0021CC31'</em><a class="headerlink" href="#khome.fields.sensor.Interruptor.sensor_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="attribute">
+<dt id="khome.fields.sensor.LuminosityExterior">
+<tt class="descclassname">khome.fields.sensor.</tt><tt class="descname">LuminosityExterior</tt><a class="headerlink" href="#khome.fields.sensor.LuminosityExterior" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">_Dummy</span></tt></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="khome.fields.sensor.LuminosityInterior">
+<tt class="descclassname">khome.fields.sensor.</tt><tt class="descname">LuminosityInterior</tt><a class="headerlink" href="#khome.fields.sensor.LuminosityInterior" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">_Dummy</span></tt></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="khome.fields.sensor.Methane">
+<tt class="descclassname">khome.fields.sensor.</tt><tt class="descname">Methane</tt><a class="headerlink" href="#khome.fields.sensor.Methane" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">_Dummy</span></tt></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="khome.fields.sensor.Moisture">
+<tt class="descclassname">khome.fields.sensor.</tt><tt class="descname">Moisture</tt><a class="headerlink" href="#khome.fields.sensor.Moisture" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">_Dummy</span></tt></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="khome.fields.sensor.Presence">
+<em class="property">class </em><tt class="descclassname">khome.fields.sensor.</tt><tt class="descname">Presence</tt><a class="headerlink" href="#khome.fields.sensor.Presence" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#khome.fields.sensor.Sensor" title="khome.fields.sensor.Sensor"><tt class="xref py py-class docutils literal"><span class="pre">khome.fields.sensor.Sensor</span></tt></a></p>
+<dl class="method">
+<dt id="khome.fields.sensor.Presence.org7_bp">
+<tt class="descname">org7_bp</tt><big>(</big><em>value</em><big>)</big><a class="headerlink" href="#khome.fields.sensor.Presence.org7_bp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="khome.fields.sensor.Presence.sensor_id">
+<tt class="descname">sensor_id</tt><em class="property"> = '00063E7B'</em><a class="headerlink" href="#khome.fields.sensor.Presence.sensor_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="attribute">
+<dt id="khome.fields.sensor.Propane">
+<tt class="descclassname">khome.fields.sensor.</tt><tt class="descname">Propane</tt><a class="headerlink" href="#khome.fields.sensor.Propane" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">_Dummy</span></tt></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="khome.fields.sensor.RainForecast">
+<tt class="descclassname">khome.fields.sensor.</tt><tt class="descname">RainForecast</tt><a class="headerlink" href="#khome.fields.sensor.RainForecast" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">_Dummy</span></tt></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="khome.fields.sensor.Sensor">
+<em class="property">class </em><tt class="descclassname">khome.fields.sensor.</tt><tt class="descname">Sensor</tt><a class="headerlink" href="#khome.fields.sensor.Sensor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#khome.fields.modes.Readable" title="khome.fields.modes.Readable"><tt class="xref py py-class docutils literal"><span class="pre">khome.fields.modes.Readable</span></tt></a></p>
+<dl class="attribute">
+<dt id="khome.fields.sensor.Sensor.sensor_host">
+<tt class="descname">sensor_host</tt><em class="property"> = '134.214.106.23'</em><a class="headerlink" href="#khome.fields.sensor.Sensor.sensor_host" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="khome.fields.sensor.Sensor.sensor_id">
+<tt class="descname">sensor_id</tt><em class="property"> = ''</em><a class="headerlink" href="#khome.fields.sensor.Sensor.sensor_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="khome.fields.sensor.Sensor.sensor_port">
+<tt class="descname">sensor_port</tt><em class="property"> = 5000</em><a class="headerlink" href="#khome.fields.sensor.Sensor.sensor_port" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="khome.fields.sensor.SensorConnection">
+<em class="property">class </em><tt class="descclassname">khome.fields.sensor.</tt><tt class="descname">SensorConnection</tt><big>(</big><em>sensor</em>, <em>filter_id</em><big>)</big><a class="headerlink" href="#khome.fields.sensor.SensorConnection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">twisted.internet.protocol.Protocol</span></tt></p>
+<dl class="method">
+<dt id="khome.fields.sensor.SensorConnection.connectionMade">
+<tt class="descname">connectionMade</tt><big>(</big><big>)</big><a class="headerlink" href="#khome.fields.sensor.SensorConnection.connectionMade" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="khome.fields.sensor.SensorConnection.dataReceived">
+<tt class="descname">dataReceived</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#khome.fields.sensor.SensorConnection.dataReceived" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="khome.fields.sensor.SensorConnection.findButton">
+<tt class="descname">findButton</tt><big>(</big><em>bits</em><big>)</big><a class="headerlink" href="#khome.fields.sensor.SensorConnection.findButton" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="khome.fields.sensor.SensorConnection.org5">
+<tt class="descname">org5</tt><big>(</big><em>value</em>, <em>status</em><big>)</big><a class="headerlink" href="#khome.fields.sensor.SensorConnection.org5" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interruptor formatting.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="khome.fields.sensor.SensorConnection.org6">
+<tt class="descname">org6</tt><big>(</big><em>value</em><big>)</big><a class="headerlink" href="#khome.fields.sensor.SensorConnection.org6" title="Permalink to this definition">¶</a></dt>
+<dd><p>Window &#8220;close&#8221; detection formatting.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="khome.fields.sensor.SensorConnection.org7_bp">
+<tt class="descname">org7_bp</tt><big>(</big><em>value</em><big>)</big><a class="headerlink" href="#khome.fields.sensor.SensorConnection.org7_bp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Brightness/Presence formatting.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="khome.fields.sensor.SensorConnection.org7_tm">
+<tt class="descname">org7_tm</tt><big>(</big><em>value</em><big>)</big><a class="headerlink" href="#khome.fields.sensor.SensorConnection.org7_tm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Temperature/Moisture formatting.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="khome.fields.sensor.SensorConnectionFactory">
+<em class="property">class </em><tt class="descclassname">khome.fields.sensor.</tt><tt class="descname">SensorConnectionFactory</tt><big>(</big><em>sensor</em>, <em>filter_id</em><big>)</big><a class="headerlink" href="#khome.fields.sensor.SensorConnectionFactory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">twisted.internet.protocol.ClientFactory</span></tt></p>
+<dl class="method">
+<dt id="khome.fields.sensor.SensorConnectionFactory.buildProtocol">
+<tt class="descname">buildProtocol</tt><big>(</big><em>addr</em><big>)</big><a class="headerlink" href="#khome.fields.sensor.SensorConnectionFactory.buildProtocol" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="attribute">
+<dt id="khome.fields.sensor.Shutter">
+<tt class="descclassname">khome.fields.sensor.</tt><tt class="descname">Shutter</tt><a class="headerlink" href="#khome.fields.sensor.Shutter" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">_Dummy</span></tt></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="khome.fields.sensor.Smoke">
+<tt class="descclassname">khome.fields.sensor.</tt><tt class="descname">Smoke</tt><a class="headerlink" href="#khome.fields.sensor.Smoke" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">_Dummy</span></tt></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="khome.fields.sensor.Sound">
+<tt class="descclassname">khome.fields.sensor.</tt><tt class="descname">Sound</tt><a class="headerlink" href="#khome.fields.sensor.Sound" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">_Dummy</span></tt></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="khome.fields.sensor.Temperature">
+<tt class="descclassname">khome.fields.sensor.</tt><tt class="descname">Temperature</tt><a class="headerlink" href="#khome.fields.sensor.Temperature" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">_Dummy</span></tt></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="khome.fields.sensor.TemperatureExterior">
+<tt class="descclassname">khome.fields.sensor.</tt><tt class="descname">TemperatureExterior</tt><a class="headerlink" href="#khome.fields.sensor.TemperatureExterior" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">_Dummy</span></tt></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="khome.fields.sensor.TemperatureForecast">
+<tt class="descclassname">khome.fields.sensor.</tt><tt class="descname">TemperatureForecast</tt><a class="headerlink" href="#khome.fields.sensor.TemperatureForecast" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">_Dummy</span></tt></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="khome.fields.sensor.WaterValve">
+<tt class="descclassname">khome.fields.sensor.</tt><tt class="descname">WaterValve</tt><a class="headerlink" href="#khome.fields.sensor.WaterValve" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">_Dummy</span></tt></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="khome.fields.sensor.Window">
+<tt class="descclassname">khome.fields.sensor.</tt><tt class="descname">Window</tt><a class="headerlink" href="#khome.fields.sensor.Window" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">_Dummy</span></tt></p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-khome.fields.syntax">
+<span id="khome-fields-syntax-module"></span><h2>khome.fields.syntax module<a class="headerlink" href="#module-khome.fields.syntax" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="khome.fields.syntax.Boolean">
+<em class="property">class </em><tt class="descclassname">khome.fields.syntax.</tt><tt class="descname">Boolean</tt><a class="headerlink" href="#khome.fields.syntax.Boolean" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#khome.fields.syntax.Typed" title="khome.fields.syntax.Typed"><tt class="xref py py-class docutils literal"><span class="pre">khome.fields.syntax.Typed</span></tt></a></p>
+<dl class="attribute">
+<dt id="khome.fields.syntax.Boolean.typed_name">
+<tt class="descname">typed_name</tt><em class="property"> = 'boolean'</em><a class="headerlink" href="#khome.fields.syntax.Boolean.typed_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="khome.fields.syntax.Boolean.typed_type">
+<tt class="descname">typed_type</tt><a class="headerlink" href="#khome.fields.syntax.Boolean.typed_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">bool</span></tt></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="khome.fields.syntax.BoundNumeric">
+<em class="property">class </em><tt class="descclassname">khome.fields.syntax.</tt><tt class="descname">BoundNumeric</tt><a class="headerlink" href="#khome.fields.syntax.BoundNumeric" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#khome.fields.syntax.Numeric" title="khome.fields.syntax.Numeric"><tt class="xref py py-class docutils literal"><span class="pre">khome.fields.syntax.Numeric</span></tt></a></p>
+<p>Bound numeric field mixin, assumes that <em>lower_bound</em> and <em>upper_bound</em> are
+set for this field.</p>
+<dl class="method">
+<dt id="khome.fields.syntax.BoundNumeric.get_info">
+<tt class="descname">get_info</tt><big>(</big><big>)</big><a class="headerlink" href="#khome.fields.syntax.BoundNumeric.get_info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="khome.fields.syntax.BoundNumeric.lower_bound">
+<tt class="descname">lower_bound</tt><em class="property"> = 0</em><a class="headerlink" href="#khome.fields.syntax.BoundNumeric.lower_bound" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="khome.fields.syntax.BoundNumeric.set_value">
+<tt class="descname">set_value</tt><big>(</big><em>t</em>, <em>value</em><big>)</big><a class="headerlink" href="#khome.fields.syntax.BoundNumeric.set_value" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="khome.fields.syntax.BoundNumeric.upper_bound">
+<tt class="descname">upper_bound</tt><em class="property"> = 0</em><a class="headerlink" href="#khome.fields.syntax.BoundNumeric.upper_bound" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="khome.fields.syntax.Constant">
+<em class="property">class </em><tt class="descclassname">khome.fields.syntax.</tt><tt class="descname">Constant</tt><a class="headerlink" href="#khome.fields.syntax.Constant" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#khome.fields.modes.Readable" title="khome.fields.modes.Readable"><tt class="xref py py-class docutils literal"><span class="pre">khome.fields.modes.Readable</span></tt></a>, <a class="reference internal" href="#khome.fields.persistant.Volatile" title="khome.fields.persistant.Volatile"><tt class="xref py py-class docutils literal"><span class="pre">khome.fields.persistant.Volatile</span></tt></a></p>
+<dl class="method">
+<dt id="khome.fields.syntax.Constant.acquire_value">
+<tt class="descname">acquire_value</tt><big>(</big><big>)</big><a class="headerlink" href="#khome.fields.syntax.Constant.acquire_value" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="khome.fields.syntax.Constant.const_value">
+<tt class="descname">const_value</tt><em class="property"> = None</em><a class="headerlink" href="#khome.fields.syntax.Constant.const_value" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="khome.fields.syntax.Constant.get_info">
+<tt class="descname">get_info</tt><big>(</big><big>)</big><a class="headerlink" href="#khome.fields.syntax.Constant.get_info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="khome.fields.syntax.Constant.update_rate">
+<tt class="descname">update_rate</tt><em class="property"> = 100000</em><a class="headerlink" href="#khome.fields.syntax.Constant.update_rate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="khome.fields.syntax.Integer">
+<em class="property">class </em><tt class="descclassname">khome.fields.syntax.</tt><tt class="descname">Integer</tt><a class="headerlink" href="#khome.fields.syntax.Integer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#khome.fields.syntax.Typed" title="khome.fields.syntax.Typed"><tt class="xref py py-class docutils literal"><span class="pre">khome.fields.syntax.Typed</span></tt></a></p>
+<dl class="attribute">
+<dt id="khome.fields.syntax.Integer.typed_name">
+<tt class="descname">typed_name</tt><em class="property"> = 'numeric'</em><a class="headerlink" href="#khome.fields.syntax.Integer.typed_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="khome.fields.syntax.Integer.typed_type">
+<tt class="descname">typed_type</tt><a class="headerlink" href="#khome.fields.syntax.Integer.typed_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">int</span></tt></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="khome.fields.syntax.Numeric">
+<em class="property">class </em><tt class="descclassname">khome.fields.syntax.</tt><tt class="descname">Numeric</tt><a class="headerlink" href="#khome.fields.syntax.Numeric" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#khome.fields.syntax.Typed" title="khome.fields.syntax.Typed"><tt class="xref py py-class docutils literal"><span class="pre">khome.fields.syntax.Typed</span></tt></a></p>
+<dl class="attribute">
+<dt id="khome.fields.syntax.Numeric.typed_name">
+<tt class="descname">typed_name</tt><em class="property"> = 'numeric'</em><a class="headerlink" href="#khome.fields.syntax.Numeric.typed_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="khome.fields.syntax.Numeric.typed_type">
+<tt class="descname">typed_type</tt><a class="headerlink" href="#khome.fields.syntax.Numeric.typed_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">float</span></tt></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="khome.fields.syntax.Percentage">
+<em class="property">class </em><tt class="descclassname">khome.fields.syntax.</tt><tt class="descname">Percentage</tt><a class="headerlink" href="#khome.fields.syntax.Percentage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#khome.fields.syntax.BoundNumeric" title="khome.fields.syntax.BoundNumeric"><tt class="xref py py-class docutils literal"><span class="pre">khome.fields.syntax.BoundNumeric</span></tt></a></p>
+<p>Percentage field, bound numeric field [0;100].</p>
+<dl class="attribute">
+<dt id="khome.fields.syntax.Percentage.lower_bound">
+<tt class="descname">lower_bound</tt><em class="property"> = 0</em><a class="headerlink" href="#khome.fields.syntax.Percentage.lower_bound" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="khome.fields.syntax.Percentage.upper_bound">
+<tt class="descname">upper_bound</tt><em class="property"> = 100</em><a class="headerlink" href="#khome.fields.syntax.Percentage.upper_bound" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="khome.fields.syntax.String">
+<em class="property">class </em><tt class="descclassname">khome.fields.syntax.</tt><tt class="descname">String</tt><a class="headerlink" href="#khome.fields.syntax.String" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#khome.fields.syntax.Typed" title="khome.fields.syntax.Typed"><tt class="xref py py-class docutils literal"><span class="pre">khome.fields.syntax.Typed</span></tt></a></p>
+<dl class="attribute">
+<dt id="khome.fields.syntax.String.typed_name">
+<tt class="descname">typed_name</tt><em class="property"> = 'string'</em><a class="headerlink" href="#khome.fields.syntax.String.typed_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="khome.fields.syntax.String.typed_type">
+<em class="property">static </em><tt class="descname">typed_type</tt><big>(</big><em>v</em><big>)</big><a class="headerlink" href="#khome.fields.syntax.String.typed_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="khome.fields.syntax.Typed">
+<em class="property">class </em><tt class="descclassname">khome.fields.syntax.</tt><tt class="descname">Typed</tt><a class="headerlink" href="#khome.fields.syntax.Typed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="method">
+<dt id="khome.fields.syntax.Typed.get_info">
+<tt class="descname">get_info</tt><big>(</big><big>)</big><a class="headerlink" href="#khome.fields.syntax.Typed.get_info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="khome.fields.syntax.Typed.set_value">
+<tt class="descname">set_value</tt><big>(</big><em>t</em>, <em>value</em><big>)</big><a class="headerlink" href="#khome.fields.syntax.Typed.set_value" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="khome.fields.syntax.from_string">
+<tt class="descclassname">khome.fields.syntax.</tt><tt class="descname">from_string</tt><big>(</big><em>s</em><big>)</big><a class="headerlink" href="#khome.fields.syntax.from_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the corresponding syntax class from its string
+representation. Return String class by default.</p>
+<p>TODO construct a dictionary from meta definitions and return from it,
+rather than hard-coding all the types.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="khome.fields.syntax.to_string">
+<tt class="descclassname">khome.fields.syntax.</tt><tt class="descname">to_string</tt><big>(</big><em>cls</em><big>)</big><a class="headerlink" href="#khome.fields.syntax.to_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the string representation of a syntax class or a
+syntax class instance. Return &#8216;string&#8217; by default.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-khome.fields">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-khome.fields" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="khome.fields.Base">
+<em class="property">class </em><tt class="descclassname">khome.fields.</tt><tt class="descname">Base</tt><a class="headerlink" href="#khome.fields.Base" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">threading.Thread</span></tt></p>
+<dl class="method">
+<dt id="khome.fields.Base.acquire_value">
+<tt class="descname">acquire_value</tt><big>(</big><big>)</big><a class="headerlink" href="#khome.fields.Base.acquire_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method called during a data acquisition.
+This method is automatically called at each loop run for this thread.
+None is returned if there isn&#8217;t anything to acquire.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="khome.fields.Base.always">
+<tt class="descname">always</tt><big>(</big><big>)</big><a class="headerlink" href="#khome.fields.Base.always" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event method called on each loop run, can be used for regular update
+logic.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="khome.fields.Base.emit_value">
+<tt class="descname">emit_value</tt><big>(</big><em>value</em><big>)</big><a class="headerlink" href="#khome.fields.Base.emit_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the field&#8217;s value programmatically, for example inside a
+custom field.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="khome.fields.Base.get_info">
+<tt class="descname">get_info</tt><big>(</big><big>)</big><a class="headerlink" href="#khome.fields.Base.get_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a dictionnary containing all informations about
+the field. Mixins can (and have to) overload this function
+to add more information</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="khome.fields.Base.get_update_rate">
+<tt class="descname">get_update_rate</tt><big>(</big><big>)</big><a class="headerlink" href="#khome.fields.Base.get_update_rate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the effective update rate for this module.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="khome.fields.Base.init_value">
+<tt class="descname">init_value</tt><em class="property"> = None</em><a class="headerlink" href="#khome.fields.Base.init_value" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="khome.fields.Base.on_close">
+<tt class="descname">on_close</tt><big>(</big><big>)</big><a class="headerlink" href="#khome.fields.Base.on_close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event method called when the field&#8217;s thread is finished, can be used
+for teardown operations.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="khome.fields.Base.on_kill">
+<tt class="descname">on_kill</tt><big>(</big><big>)</big><a class="headerlink" href="#khome.fields.Base.on_kill" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method called when the module is killed. Let the field to
+stop properly.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="khome.fields.Base.on_start">
+<tt class="descname">on_start</tt><big>(</big><big>)</big><a class="headerlink" href="#khome.fields.Base.on_start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event method called when the field&#8217;s thread is started, can be used for
+initializing.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="khome.fields.Base.on_update">
+<tt class="descname">on_update</tt><big>(</big><big>)</big><a class="headerlink" href="#khome.fields.Base.on_update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event method called on each loop run, can be used for regular update
+logic.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="khome.fields.Base.public_name">
+<tt class="descname">public_name</tt><em class="property"> = ''</em><a class="headerlink" href="#khome.fields.Base.public_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="khome.fields.Base.read">
+<tt class="descname">read</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#khome.fields.Base.read" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="khome.fields.Base.run">
+<tt class="descname">run</tt><big>(</big><big>)</big><a class="headerlink" href="#khome.fields.Base.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Main function of the thread. Every <em>update_rate</em> time, try to acquire a value and to
+add this one.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="khome.fields.Base.set_value">
+<tt class="descname">set_value</tt><big>(</big><em>t</em>, <em>value</em><big>)</big><a class="headerlink" href="#khome.fields.Base.set_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a new value <em>value</em> at time <em>t</em>. It&#8217;s the job of the persistant
+mixins to manage how to save the new value. The integrity of the value
+is done by the type mixins. Return if the add is done.
+TODO write this is <em>good</em> english</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="khome.fields.Base.sleep_on_start">
+<tt class="descname">sleep_on_start</tt><em class="property"> = 0</em><a class="headerlink" href="#khome.fields.Base.sleep_on_start" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="khome.fields.Base.start">
+<tt class="descname">start</tt><big>(</big><big>)</big><a class="headerlink" href="#khome.fields.Base.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start this field&#8217;s thread.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="khome.fields.Base.stop">
+<tt class="descname">stop</tt><big>(</big><big>)</big><a class="headerlink" href="#khome.fields.Base.stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ask for this thread to stop, it will be stopped effectively at the end
+of the current loop. You can use join() method to make sure the thread
+is finished.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="khome.fields.Base.update">
+<tt class="descname">update</tt><big>(</big><big>)</big><a class="headerlink" href="#khome.fields.Base.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>FIXME what is this used for ?</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="khome.fields.Base.write">
+<tt class="descname">write</tt><big>(</big><em>value</em><big>)</big><a class="headerlink" href="#khome.fields.Base.write" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="khome.fields.make">
+<tt class="descclassname">khome.fields.</tt><tt class="descname">make</tt><big>(</big><em>name</em>, <em>syntax='string'</em>, <em>mode=''</em>, <em>persistence='volatile'</em>, <em>attrs={}</em><big>)</big><a class="headerlink" href="#khome.fields.make" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a basic field, given its name, type, mode and persistence. Mode can be
+readable (r), writable (w) or a combination of both, whatever the order.
+Valid field types (syntaxes) are documented in fields.syntax. Field
+persistence is any class name defined in fields.persistant.
+Extra attributes (specific to fields) can be given in the <em>attrs</em>
+parameter. These are copied in the generated field&#8217;s __dict__.</p>
+<p>TODO remove field &#8220;name&#8221; parameter.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">khome.fields package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-khome.fields.actuator">khome.fields.actuator module</a></li>
+<li><a class="reference internal" href="#module-khome.fields.modes">khome.fields.modes module</a></li>
+<li><a class="reference internal" href="#module-khome.fields.persistant">khome.fields.persistant module</a></li>
+<li><a class="reference internal" href="#module-khome.fields.proxy">khome.fields.proxy module</a></li>
+<li><a class="reference internal" href="#module-khome.fields.sensor">khome.fields.sensor module</a></li>
+<li><a class="reference internal" href="#module-khome.fields.syntax">khome.fields.syntax module</a></li>
+<li><a class="reference internal" href="#module-khome.fields">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/khome.fields.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">KHome 1.0a documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Pierre Turpin, Jean-Marie Comets.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+  </body>
+</html>

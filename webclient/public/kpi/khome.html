@@ -1,0 +1,164 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>khome package &mdash; KHome 1.0a documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0a',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="KHome 1.0a documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">KHome 1.0a documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="khome-package">
+<h1>khome package<a class="headerlink" href="#khome-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="khome.fields.html">khome.fields package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="khome.fields.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="khome.fields.html#module-khome.fields.actuator">khome.fields.actuator module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="khome.fields.html#module-khome.fields.modes">khome.fields.modes module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="khome.fields.html#module-khome.fields.persistant">khome.fields.persistant module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="khome.fields.html#module-khome.fields.proxy">khome.fields.proxy module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="khome.fields.html#module-khome.fields.sensor">khome.fields.sensor module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="khome.fields.html#module-khome.fields.syntax">khome.fields.syntax module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="khome.fields.html#module-khome.fields">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="khome.module.html">khome.module package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="khome.module.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="khome.module.html#module-khome.module.connection">khome.module.connection module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="khome.module.html#module-khome.module.daemon">khome.module.daemon module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="khome.module.html#module-khome.module.instance">khome.module.instance module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="khome.module.html#module-khome.module.packaging">khome.module.packaging module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="khome.module.html#module-khome.module.path">khome.module.path module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="khome.module.html#module-khome.module">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-khome.catalog">
+<span id="khome-catalog-module"></span><h2>khome.catalog module<a class="headerlink" href="#module-khome.catalog" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="khome.catalog.get_available_modules">
+<tt class="descclassname">khome.catalog.</tt><tt class="descname">get_available_modules</tt><big>(</big><em>detailed=False</em><big>)</big><a class="headerlink" href="#khome.catalog.get_available_modules" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of all available modules. Detailed information can be given
+(eg. module configuration) by setting the &#8220;detailed&#8221; argument to true.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="khome.catalog.get_zipfile">
+<tt class="descclassname">khome.catalog.</tt><tt class="descname">get_zipfile</tt><big>(</big><em>module_name</em><big>)</big><a class="headerlink" href="#khome.catalog.get_zipfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the filename for the module&#8217;s install zip.
+TODO make this more elegant (unify)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="khome.catalog.is_available">
+<tt class="descclassname">khome.catalog.</tt><tt class="descname">is_available</tt><big>(</big><em>module_name</em><big>)</big><a class="headerlink" href="#khome.catalog.is_available" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return if the module named as <em>module_name</em> is available.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-khome">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-khome" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">khome package</a><ul>
+<li><a class="reference internal" href="#subpackages">Subpackages</a></li>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-khome.catalog">khome.catalog module</a></li>
+<li><a class="reference internal" href="#module-khome">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/khome.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">KHome 1.0a documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Pierre Turpin, Jean-Marie Comets.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+  </body>
+</html>
