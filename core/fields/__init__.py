@@ -37,6 +37,9 @@ class Base(threading.Thread):
         self.old_time = 0
         self.running = False
 
+    def update(self):
+        self.old_time = 0
+
     def get_update_rate(self):
         if self.module.module_name != 'Weather' and \
                 self.module.module_name != 'NFC' and \

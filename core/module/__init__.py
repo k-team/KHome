@@ -124,6 +124,8 @@ def prop_field(field):
                 return field.read()
             if len(kwargs) == 1 and 't' in kwargs:
                 return field.read(**kwargs)
+            if len(kwargs) == 1 and 'update' in kwargs:
+                return field.update()
             if len(kwargs) == 2 and 'fr' in kwargs and 'to' in kwargs:
                 return field.read(**kwargs)
         raise ValueError("Field isn't specified correctly")
@@ -308,6 +310,10 @@ class Base(threading.Thread):
                 if info:
                     ans['fields'] += [info]
         return ans
+
+    def update(self):
+        for f in self.module_fields:
+            f.update()
 
     def start(self):
         """

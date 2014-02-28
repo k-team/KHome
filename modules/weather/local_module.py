@@ -34,6 +34,11 @@ class Weather(module.Base):
         public_name = 'Géolocalisation (WOEID)'
         init_value = 609125
 
+        def set_value(self, t, value):
+            self.module._weather(update=True)
+            self.module.update()
+            return super(Weather.woeid, self).set_value(t, value)
+
     class temperature(fields.syntax.Numeric, fields.io.Graphable,
             fields.persistant.Database, fields.Base):
         public_name = 'Température (°C)'
