@@ -28,7 +28,7 @@
             data-ng-src="/api/available_modules/{{ module.name }}/public/icon.png"
             onerror="this.onerror = null; this.src = '/img/module.png'">
           <h4>{{ (module.public_name) ? (module.public_name | truncate:20) : (module.name | truncate:20) }}</h4>
-          <div class="visible-sm">
+          <div class="module.caption visible-sm">
             <p><small>{{ module.description | truncate:110 }}</small></p>
           </div>
           <div class="module-caption visible-md visible-lg">
