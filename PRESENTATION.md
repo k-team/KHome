@@ -1,14 +1,19 @@
 Notes pour la présentation
 ==========================
 
+## TODO 
+
+- update rate très faible
+- force update dans woeid set_value
+
 1. Lancement de la vidéo
 2. Démarrage du slid.es
     - pipeau : Iler
     - modules : Pierre
     - KPI + Store + interface + etc : JM
-3. Démonstration
+3. Démonstration - *PC de Pierre*
 
-#### Samuel
+### Samuel
 
     - page d'accueil (rapide)
     - toolbar (onglets modules et store)
@@ -18,12 +23,13 @@ Notes pour la présentation
     - installation de "methane" -> vue module
         - modification du message d'alerte (#alerte il y a trop de #methane #swag)
         - rating du methane
+
+### JM
     - module "météo", accessible via la recherche
         - blabla sur les stats d'hier soir
         - changement du woeid (google woeid -> paris)
     - recherche dans modules (into..., pas valider)
+    - démo rapide into_spectrum (conjonction avec Pierre)
 
-### Pierre : 
-- update rate très faible
-- force update dans woeid set_value
-- désactivation de twitter (dans alarme)
+### Pierre
+    - module NFC -> Fait des pompes ! (Grégoire puis Scutu)
