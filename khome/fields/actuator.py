@@ -2,19 +2,14 @@ import sys
 import logging
 import socket
 
-import io
-import syntax
-import persistant
+from khome.fields import io, syntax, persistant
 
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
-_formatter = logging.Formatter('%(asctime)s :: %(levelname)s :: %(message)s')
-_handler = logging.StreamHandler()
-_handler.setFormatter(_formatter)
-_handler.setLevel(logging.DEBUG)
-logger.addHandler(_handler)
+logger = logging.getLogger()
 
 def Dummy(data_type):
+    """
+    Dummy actuator, making a simply actuator.
+    """
     class _Dummy(data_type, io.Writable):
         pass
     return _Dummy

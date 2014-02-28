@@ -1,5 +1,4 @@
-import fields.io
-import fields.persistant
+from khome.fields import modes, persistant
 
 class Typed(object):
     def get_info(self):
@@ -16,7 +15,8 @@ class Typed(object):
             return False
         return super(Typed, self).set_value(t, value)
 
-class Constant(fields.io.Readable, fields.persistant.Volatile):
+class Constant(modes.Readable,
+               persistant.Volatile):
     update_rate = 100000
     const_value = None
 
@@ -65,7 +65,6 @@ class BoundNumeric(Numeric):
         info['value_max'] = type(self).upper_bound
         return info
 
-
 class Percentage(BoundNumeric):
     """
     Percentage field, bound numeric field [0;100].
@@ -75,8 +74,10 @@ class Percentage(BoundNumeric):
 def from_string(s):
     """
     Return the corresponding syntax class from its string
-    representation.
-    Return String class when the representation is ill-formed.
+    representation. Return String class by default.
+
+    TODO construct a dictionary from meta definitions and return from it,
+    rather than hard-coding all the types.
     """
     if s == 'numeric':
         return Numeric
@@ -86,16 +87,9 @@ def from_string(s):
         return String
     return String
 
-def to_string(s):
+def to_string(cls):
     """
     Return the string representation of a syntax class or a
-    syntax class instance.
-    Return 'string' class when there is no match is ill-formed.
+    syntax class instance. Return 'string' by default.
     """
-    if s == Numeric or isinstance(s, Numeric):
-        return 'numeric'
-    elif s == Boolean or isinstance(s, Boolean):
-        return 'boolean'
-    elif s == String or isinstance(s, String):
-        return 'string'
-    return 'string'
+    return getattr(cls, 'typed_name', 'string')
