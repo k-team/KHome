@@ -39,6 +39,7 @@ class Base(threading.Thread):
 
     def get_update_rate(self):
         if self.module.module_name != 'Weather' and \
+                self.module.module_name != 'NFC' and \
                 self.module.module_name != 'PushUp':
             return 1
         try:

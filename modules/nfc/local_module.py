@@ -51,7 +51,7 @@ class NFC(module.Base):
             fields.persistant.Database,
             fields.Base):
         public_name = 'UID'
-        update_rate = 1
+        update_rate = 0.1
         sleep_on_start = 1
 
         def acquire_value(self):
