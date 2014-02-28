@@ -1,20 +1,17 @@
 #-*- coding: utf-8 -*-
 
 from twitter import OAuth
-from twitter.api import Twitter
-from twitter.api import TwitterHTTPError
-import module
-import fields
-import logging
+from twitter.api import Twitter, TwitterHTTPError
+from khome import module, fields
 
-# TODO hide these
+# TODO hide these (too bad !)
 con_key = 'f5z6uqPM9N87KLJqYIZDg'
 con_secret = 'U52jwVDHn2bMXV5utkY7pTg1sptSwSNDRMP4sZNtGE'
 acc_token = '2349175134-ashz2TRocXgOtEw9HGQDBt101hKrl0Bs4VMRw5R'
 acc_token_secret = 'HNJ4vRivioSCNI0tNCpYi0TArynG0kz47S9JABIN2eTXC'
 
-# twitter = Twitter(auth=OAuth(acc_token, acc_token_secret,
-#     con_key, con_secret))
+#twitter = Twitter(auth=OAuth(acc_token, acc_token_secret,
+#    con_key, con_secret))
 
 class Twitter(module.Base):
     public_name = 'Twitter'
@@ -39,7 +36,7 @@ class Twitter(module.Base):
                 # twitter.statuses.update(status=value)
                 pass
             except TwitterHTTPError as e:
-                logging.exception(e)
+                self.module.logger.exception(e)
                 return False
             else:
                 self.module.tweet_id(num + 1)

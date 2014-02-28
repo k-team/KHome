@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import module
-import fields
+from khome import module, fields
 import socket
 import json
 import logging
