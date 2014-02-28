@@ -173,3 +173,7 @@ a:hover {
     transform: rotate(360deg);
   }
 }
+
+.module-caption {
+  height: 100px;
+}
