@@ -10,10 +10,11 @@ from twisted.internet import reactor
 from twisted.internet.endpoints import UNIXServerEndpoint as ServerEndpoint
 
 import path
+import remote
 import connection
 import instance
 
-__all__ = ('path', 'connection', 'instance',
+__all__ = ('path', 'connection', 'instance', 'remote',
         'Abstract', 'Base', 'Network', 'use_module', 'is_ready')
 
 class Abstract(threading.Thread):
@@ -77,17 +78,15 @@ class Abstract(threading.Thread):
 
         if self.is_ready:
             self.exitcode = self.DEADFIELD_EXIT
-        self.stop()
+        self.stop_fields()
         self.on_stop()
 
     def stop(self):
         """
-        Stop the execution of the module.
-
-        Indicate that the module isn't ready anymore and stop all its fields.
+        Stop the execution of the module and indicate that the
+        module isn't ready anymore.
         """
         self.is_ready = False
-        self.stop_fields()
 
     def start_fields(self):
         """
@@ -132,7 +131,7 @@ class Abstract(threading.Thread):
         if value:
             if os.path.exists(self.ready_file):
                 os.remove(self.ready_file)
-            fd = os.open(self.ready_file, os.O_RDONLY | os.O_CREAT, 0744)
+            fd = os.open(self.ready_file, os.O_CREAT, 0444)
             os.close(fd)
         else:
             os.remove(self.ready_file)
