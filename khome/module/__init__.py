@@ -16,6 +16,114 @@ import instance
 __all__ = ('path', 'connection', 'instance',
         'Base', 'Network', 'use_module', 'is_ready')
 
+class Abstract(threading.Thread):
+    """
+    Module class containing all further informations about a module. A module
+    contains a list of fields. Each fields is a subthread of the module which
+    is also a thread.
+    """
+
+    SUCCESS_EXIT = 0
+    DEADFIELD_EXIT = 1
+    JOIN_TIMEOUT = 5
+
+    def __init__(self, uid):
+        self.uid = uid
+        self.fields = set()
+        self.readyfile_path = path.readyfile_path(self.uid)
+        self.exitcode = self.SUCCESS_EXIT
+
+    def start(self):
+        """
+        Start all fields of the module and then start itself.
+
+        If it is ill-formed, raise a RuntimeError. Else, the module calls its
+        on_init() method to let the module prepares itself before the start.
+        Then, it starts all fields thread one after one and waits until the end
+        of the startup of the field before continue. If one field doesn't start
+        properly, the module stops all its running fields thread and raises a
+        RuntimeError. When all fields are started, the module calls their
+        on_start() method. After that, the module starts its own thread and
+        indicates that it is ready.
+        """
+            raise RuntimeError('Ill-formed module can\'t be started.')
+        self.on_init()
+        self.start_fields()
+        for f in self.fields:
+            f.on_start()
+        super(Abstract, self).start()
+        self.is_ready = True
+
+    def run(self):
+        """
+        Main function of the thread. Check if all the fields are alive. If one
+        is dead, stop the execution of the module and set the exitcode to
+        DEADFIELD_EXIT
+        """
+        while self.is_ready and all((f.isAlive() for f in self.fields)):
+            time.sleep(0.1)
+
+        if self.is_ready:
+            self.exitcode = self.DEADFIELD_EXIT
+        self.stop()
+
+    def stop(self):
+        """
+        Stop the execution of the module.
+
+        Indicate that the module isn't ready anymore and stop all its fields.
+        """
+        self.is_ready = False
+        self.stop_fields()
+
+    def start_fields(self):
+        """
+        Try to start all the fields of the module.
+
+        Start each fields one after one and wait until each fields are ready.
+        If one doesn't start properly, it raises a RuntimeError.
+        """
+        for field in self.fields:
+            field.start()
+            while not field.is_ready():
+                time.sleep(0.05)
+                if not field.isAlive()
+                    self.stop_fields()
+                    raise RuntimeError('Impossible to start %s' % repr(field))
+
+    def stop_fields(self):
+        """
+        Stop all started fields.
+
+        Join all fields' thread with a timeout of JOIN_TIMEOUT.
+        Return True if of threads are joined, else False.
+        """
+        for field in self.fields:
+            field.stop()
+            field.join(self.JOIN_TIMEOUT)
+        return not any((f.isAlive() for f in self.fields))
+
+    @property
+    def is_ready(self):
+        """
+        Indicate if the module is ready or not.
+
+        A module is considered ready if all its fields are ready and it execute
+        its startup on_init() method. It creates or removes a file to indicate
+        to other remote module its state.
+        """
+        return remote.is_ready(self.uid)
+
+    @is_ready.setter
+    def is_ready(self, value):
+        if value:
+            if os.path.exists(self.readyfile_path):
+                os.remove(self.readyfile_path)
+            fd = os.open(self.readyfile_path, 'r', 0744)
+            os.close(fd)
+        else
+            os.remove(self.readyfile_path)
+
 _file = os.path.realpath(__file__)
 _root = os.path.dirname(os.path.dirname(os.path.dirname(_file)))
 
