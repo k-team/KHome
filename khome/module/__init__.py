@@ -14,7 +14,7 @@ import connection
 import instance
 
 __all__ = ('path', 'connection', 'instance',
-        'Base', 'Network', 'use_module', 'is_ready')
+        'Abstract', 'Base', 'Network', 'use_module', 'is_ready')
 
 class Abstract(threading.Thread):
     """
@@ -28,10 +28,23 @@ class Abstract(threading.Thread):
     JOIN_TIMEOUT = 5
 
     def __init__(self, name):
+        threading.Thread.__init__(self)
         self.name = name
         self.fields = set()
         self.ready_file = path.ready_file(self.name)
         self.exitcode = self.SUCCESS_EXIT
+
+    def on_init(self):
+        """
+        Method calls before the start of the module's thread.
+        """
+        pass
+
+    def on_stop(self):
+        """
+        Method calls after the execution of the module.
+        """
+        pass
 
     def start(self):
         """
@@ -46,12 +59,11 @@ class Abstract(threading.Thread):
         on_start() method. After that, the module starts its own thread and
         indicates that it is ready.
         """
-            raise RuntimeError('Ill-formed module can\'t be started.')
         self.on_init()
         self.start_fields()
         for f in self.fields:
             f.on_start()
-        super(Abstract, self).start()
+        threading.Thread.start(self)
         self.is_ready = True
 
     def run(self):
@@ -66,6 +78,7 @@ class Abstract(threading.Thread):
         if self.is_ready:
             self.exitcode = self.DEADFIELD_EXIT
         self.stop()
+        self.on_stop()
 
     def stop(self):
         """
@@ -87,7 +100,7 @@ class Abstract(threading.Thread):
             field.start()
             while not field.is_ready():
                 time.sleep(0.05)
-                if not field.isAlive()
+                if not field.isAlive():
                     self.stop_fields()
                     raise RuntimeError('Impossible to start %s' % repr(field))
 
@@ -119,9 +132,9 @@ class Abstract(threading.Thread):
         if value:
             if os.path.exists(self.ready_file):
                 os.remove(self.ready_file)
-            fd = os.open(self.ready_file, 'r', 0744)
+            fd = os.open(self.ready_file, os.O_RDONLY | os.O_CREAT, 0744)
             os.close(fd)
-        else
+        else:
             os.remove(self.ready_file)
 
 _file = os.path.realpath(__file__)
