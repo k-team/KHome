@@ -27,10 +27,10 @@ class Abstract(threading.Thread):
     DEADFIELD_EXIT = 1
     JOIN_TIMEOUT = 5
 
-    def __init__(self, uid):
-        self.uid = uid
+    def __init__(self, name):
+        self.name = name
         self.fields = set()
-        self.ready_file = path.ready_file(self.uid)
+        self.ready_file = path.ready_file(self.name)
         self.exitcode = self.SUCCESS_EXIT
 
     def start(self):
@@ -112,7 +112,7 @@ class Abstract(threading.Thread):
         its startup on_init() method. It creates or removes a file to indicate
         to other remote module its state.
         """
-        return remote.is_ready(self.uid)
+        return remote.is_ready(self.name)
 
     @is_ready.setter
     def is_ready(self, value):
