@@ -3,13 +3,13 @@ import threading
 import logging
 
 import actuator
-import modes
+import mode
 import persistant
 import proxy
 import sensor
 import syntax
 
-__all__ = ('actuator', 'modes', 'persistant',
+__all__ = ('actuator', 'mode', 'persistant',
            'proxy', 'sensor', 'syntax',
            'Base', 'make')
 

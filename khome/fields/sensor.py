@@ -6,7 +6,7 @@ import logging
 from twisted.internet import reactor
 from twisted.internet.protocol import ClientCreator, ClientFactory, Protocol
 
-from khome.fields import modes
+from khome.fields import mode
 
 logger = logging.getLogger(__name__)
 
@@ -16,7 +16,7 @@ def Dummy(dummy_funct):
     function. *dummy_funct* receive the time as parameter and return one value
     """
 
-    class _Dummy(modes.Readable):
+    class _Dummy(mode.Readable):
         def acquire_value(self):
             return dummy_funct(time.time())
     return _Dummy
@@ -180,7 +180,7 @@ class SensorConnectionFactory(ClientFactory):
     def buildProtocol(self, addr):
         return SensorConnection(self.sensor, self.filter_id)
 
-class Sensor(modes.Readable):
+class Sensor(mode.Readable):
     sensor_host = '134.214.106.23'
     sensor_port = 5000
     sensor_id = ''

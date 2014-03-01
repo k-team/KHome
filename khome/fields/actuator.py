@@ -1,8 +1,7 @@
 import sys
 import logging
 import socket
-
-from khome.fields import io, syntax, persistant
+from khome.fields import mode, syntax, persistant
 
 logger = logging.getLogger(__name__)
 
@@ -10,7 +9,7 @@ def Dummy(data_type):
     """
     Dummy actuator, making a simply actuator.
     """
-    class _Dummy(data_type, io.Writable):
+    class _Dummy(data_type, mode.Writable):
         pass
     return _Dummy
 
@@ -28,7 +27,7 @@ Temperature = Dummy(syntax.Numeric)
 WaterValve = Dummy(syntax.Boolean)
 Window = Dummy(syntax.Boolean)
 
-class Actuator(io.Writable):
+class Actuator(mode.Writable):
     host = '134.214.106.23'
     port = 5000
 
