@@ -8,6 +8,7 @@ AVAILABLES_DIRECTORY = 'available_modules'
 MODULES_DIRECTORY = 'modules'
 INSTANCES_DIRECTORY = 'instances'
 PIDS_DIRECTORY = 'pid'
+READY_DIRECTORY = 'running'
 SOCKET_DIRECTORY = 'socket'
 BIN_DIRECTORY = 'bin'
 LOG_DIRECTORY = 'log'
@@ -56,6 +57,12 @@ def pids_directory():
     """
     return join(instances_directory(), PIDS_DIRECTORY)
 
+def ready_directory():
+    """
+    Get the absolute path to the ready directory.
+    """
+    return join(instances_directory(), READY_DIRECTORY)
+
 def sockets_directory():
     """
     Get the absolute path to the sockets directory.
@@ -83,6 +90,13 @@ def pid_file(module_name):
     """
     module_name = realname(module_name)
     return join(pids_directory(), module_name + '.pid')
+
+def ready_file(module_name):
+    """
+    Get the absolute path to the ready file for the named module.
+    """
+    module_name = realname(module_name)
+    return join(ready_directory(), module_name + '.run')
 
 def socket_file(module_name):
     """

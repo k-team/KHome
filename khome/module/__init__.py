@@ -30,7 +30,7 @@ class Abstract(threading.Thread):
     def __init__(self, uid):
         self.uid = uid
         self.fields = set()
-        self.readyfile_path = path.readyfile_path(self.uid)
+        self.ready_file = path.ready_file(self.uid)
         self.exitcode = self.SUCCESS_EXIT
 
     def start(self):
@@ -117,12 +117,12 @@ class Abstract(threading.Thread):
     @is_ready.setter
     def is_ready(self, value):
         if value:
-            if os.path.exists(self.readyfile_path):
-                os.remove(self.readyfile_path)
-            fd = os.open(self.readyfile_path, 'r', 0744)
+            if os.path.exists(self.ready_file):
+                os.remove(self.ready_file)
+            fd = os.open(self.ready_file, 'r', 0744)
             os.close(fd)
         else
-            os.remove(self.readyfile_path)
+            os.remove(self.ready_file)
 
 _file = os.path.realpath(__file__)
 _root = os.path.dirname(os.path.dirname(os.path.dirname(_file)))
