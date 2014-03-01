@@ -330,28 +330,20 @@ class BaseMeta(type):
     """
     Metaclass for building a module based on a module-like class.
     """
-    ls_name = set()
-
     def __new__(cls, name, parents, attrs):
-        print attrs
-        # Handle module fields
-        # from khome.fields import Base as Field
-        # for f_cls in cls.__dict__.keys():
-        #     f_cls = getattr(cls, f_cls)
-        #     if isinstance(f_cls, type) and issubclass(f_cls, Field):
-        #         field = f_cls()
-        #         setattr(obj, field.field_name, prop_field(field))
-        #         setattr(field, 'module', obj)
-        #         ls_fields += [field]
-        # setattr(obj, 'module_fields', ls_fields)
-
+        from khome.fields import Base as Field
+        fields = []
+        for f_cls in attrs.itervalues():
+            if isinstance(f_cls, type) and issubclass(f_cls, Field):
+                field = f_cls()
+                attrs[field.field_name] = prop_field(field)
+                fields.append(field)
+        attrs['__fields__'] = fields
         return super(BaseMeta, cls).__new__(cls, name, parents, attrs)
 
     def __call__(self, *args, **kwargs):
         obj = super(BaseMeta, self).__call__(*args, **kwargs)
-        cls = type(obj)
-
-        _lauched_modules.append(obj)
+        _launched_modules.append(obj)
         return obj
 
 class NetworkMeta(type):
@@ -395,12 +387,13 @@ class Base(Abstract):
     """
     __metaclass__ = BaseMeta
 
-    class Field(khome.fields.Base):
-        pass
-
     def __init__(self):
         name = type(self).__name__
-        Abstract.__init__(self, name, path.socket_file(name), [])
+        fields = type(self).__fields__
+        for f in fields:
+            f.module = self
+        print fields
+        Abstract.__init__(self, name, path.socket_file(name), fields)
 
 class Network(object):
     """
