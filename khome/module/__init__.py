@@ -13,6 +13,7 @@ import path
 import remote
 import connection
 import instance
+import khome.fields
 
 __all__ = ('path', 'connection', 'instance', 'remote',
         'Abstract', 'Base', 'Network', 'use_module', 'is_ready')
@@ -38,7 +39,7 @@ class Abstract(threading.Thread):
         self.fields = fields
         self.ready_file = path.ready_file(self.name)
         self.exitcode = self.SUCCESS_EXIT
-        if os.path.exists(socket_file)
+        if os.path.exists(socket_file):
             os.remove(socket_file)
         endpoint = ServerEndpoint(reactor, socket_file)
         endpoint.listen(connection.Factory(self))
@@ -54,6 +55,20 @@ class Abstract(threading.Thread):
         Method calls after the execution of the module.
         """
         pass
+
+    def identity(self):
+        """
+        Return a dictionary containing all informations about
+        the module.
+        """
+        ans = {}
+        ans['name'] = self.name
+        ans['fields'] = {}
+        for f in self.fields:
+            info = f.get_info()
+            if info:
+                ans['fields'][f.name] += [info]
+        return ans
 
     def start(self):
         """
@@ -149,22 +164,20 @@ _root = os.path.dirname(os.path.dirname(os.path.dirname(_file)))
 
 logger = logging.getLogger(__name__)
 
-# lanched modules for the current process
-_lauched_modules = []
+# launched modules for the current process
+_launched_modules = []
 
 SOCKET_TIMEOUT = 3
 
 def kill():
     """
-    Call the kill function of all running in this proc.
+    Call the *stop()* function of all module running in this processus.
     Raise a runtime error.
     """
     for mod in _lauched_modules:
         logger.info('Killing module `%s`.', mod)
-        mod.kill()
+        mod.stop()
     raise RuntimeError('Application killed, cannot supply dependencies')
-    #reactor.callFromThread(reactor.stop)
-    #sys.exit(1)
 
 def get_socket(module_name, nb_try=5):
     """
@@ -320,47 +333,23 @@ class BaseMeta(type):
     ls_name = set()
 
     def __new__(cls, name, parents, attrs):
+        print attrs
+        # Handle module fields
+        # from khome.fields import Base as Field
+        # for f_cls in cls.__dict__.keys():
+        #     f_cls = getattr(cls, f_cls)
+        #     if isinstance(f_cls, type) and issubclass(f_cls, Field):
+        #         field = f_cls()
+        #         setattr(obj, field.field_name, prop_field(field))
+        #         setattr(field, 'module', obj)
+        #         ls_fields += [field]
+        # setattr(obj, 'module_fields', ls_fields)
+
         return super(BaseMeta, cls).__new__(cls, name, parents, attrs)
 
     def __call__(self, *args, **kwargs):
         obj = super(BaseMeta, self).__call__(*args, **kwargs)
         cls = type(obj)
-
-        # Handle module name
-        if not hasattr(obj, 'module_name'):
-            if not hasattr(cls, 'module_name'):
-                setattr(obj, 'module_name', cls.__name__)
-            else:
-                setattr(obj, 'module_name', cls.module_name)
-
-        if obj.module_name in type(self).ls_name:
-            raise NameError('Module with same name already exist')
-        type(self).ls_name.add(obj.module_name)
-
-        # Handle module socket (server side)
-        setattr(obj, 'module_socket', path.socket_file(obj.module_name))
-        try:
-          os.remove(obj.module_socket)
-        except OSError:
-            pass
-        endpoint = ServerEndpoint(reactor, obj.module_socket)
-        endpoint.listen(connection.Factory(obj))
-
-        # Handle module fields
-        from khome.fields import Base as Field
-        ls_fields = []
-        for f_cls in cls.__dict__.keys():
-            f_cls = getattr(cls, f_cls)
-            if isinstance(f_cls, type) and issubclass(f_cls, Field):
-                field = f_cls()
-                setattr(obj, field.field_name, prop_field(field))
-                setattr(field, 'module', obj)
-                ls_fields += [field]
-        setattr(obj, 'module_fields', ls_fields)
-
-        # Logger
-        setattr(obj, 'logger', logging.getLogger(obj.module_name))
-        #setup_logger(obj.logger)
 
         _lauched_modules.append(obj)
         return obj
@@ -400,89 +389,18 @@ class NetworkMeta(type):
 
         return obj
 
-class Base(threading.Thread):
+class Base(Abstract):
     """
     Base module, subclass this if only core module functionalities are needed.
     """
     __metaclass__ = BaseMeta
 
-    update_rate = 1
-    public_name = ''
+    class Field(khome.fields.Base):
+        pass
 
-    def __init__(self, **kwargs):
-        super(Base, self).__init__()
-        _setup_module(self, **kwargs)
-        self.running = False
-        self.endpoint = None
-        self.update_rate = type(self).update_rate
-
-    def get_info(self):
-        """
-        Return a dictionnary containing all informations about
-        the module.
-        """
-        ans = {}
-        ans['name'] = self.module_name
-        ans['public_name'] = type(self).public_name
-        ans['update_rate'] = type(self).update_rate
-        ans['fields'] = []
-        for f in self.module_fields:
-            try:
-                info = f.get_info()
-            except TypeError:
-                pass # On ignore le field
-            else:
-                if info:
-                    ans['fields'] += [info]
-        return ans
-
-    def update(self):
-        for f in self.module_fields:
-            f.update()
-
-    def start(self):
-        """
-        Start the execution of the module and its fields.
-        """
-        logger.info('Starting')
-        self.running = True
-        for f in self.module_fields:
-            f.start()
-        super(Base, self).start()
-        logger.info('Started')
-
-    def run(self):
-        while self.running:
-            time.sleep(0.1)
-
-    def stop(self):
-        """
-        Stop the execution of the module and all its fields.
-        """
-        self.logger.info('Stopping')
-        for f in self.module_fields:
-            f.stop()
-            try:
-                f.join(1)
-            except RuntimeError:
-                pass
-        self.running = False
-        self.logger.info('Stopped')
-
-    def kill(self):
-        """
-        Stop the execution of the module and call the on_kill function of its
-        fields.
-        This method have to be called in case of runtime error.
-        """
-        for f in self.module_fields:
-            f.on_kill()
-            f.stop()
-            try:
-                f.join(1)
-            except RuntimeError:
-                pass
-        self.running = False
+    def __init__(self):
+        name = type(self).__name__
+        Abstract.__init__(self, name, path.socket_file(name), [])
 
 class Network(object):
     """
@@ -502,29 +420,22 @@ def _setup_module(obj, **kwargs):
     if 'name' in kwargs:
         obj.module_name = kwargs['name']
 
-def is_ready(module_name):
-    """
-    Return if the module *module_name* is ready.
-    This is detected by watching the socket file of the module.
-    """
-    return os.path.exists(path.socket_file(module_name))
-
 def use_module(module_name):
     """
     Shortcut for referencing a module through network, given its module name.
     """
     name = path.realname(module_name)
     if not instance.status(name):
-        logger.info('Trying to launch the `%s` dependancy module.',
+        logging.info('Trying to launch the `%s` dependancy module.',
                 module_name)
         instance.invoke(name, True)
         t = time.time()
-        while not is_ready(module_name):
+        while not remote.is_ready(module_name):
             time.sleep(0.1)
             if time.time() - t > SOCKET_TIMEOUT:
-                logger.error('Cannot launch the `%s` dependency: abort',
+                logging.error('Cannot launch the `%s` dependency: abort',
                         module_name)
                 return kill()
-        logger.info('`%s` dependancy module successfully launched.',
+        logging.info('`%s` dependancy module successfully launched.',
                 module_name)
     return Network(name=module_name)
