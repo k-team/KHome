@@ -28,12 +28,16 @@ class Abstract(threading.Thread):
     DEADFIELD_EXIT = 1
     JOIN_TIMEOUT = 5
 
-    def __init__(self, name):
+    def __init__(self, name, socket_file, fields):
         threading.Thread.__init__(self)
         self.name = name
-        self.fields = set()
+        self.fields = fields
         self.ready_file = path.ready_file(self.name)
         self.exitcode = self.SUCCESS_EXIT
+        if os.path.exists(socket_file)
+            os.remove(socket_file)
+        endpoint = ServerEndpoint(reactor, socket_file)
+        endpoint.listen(connection.Factory(self))
 
     def on_init(self):
         """
