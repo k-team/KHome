@@ -29,6 +29,10 @@ class Abstract(threading.Thread):
     JOIN_TIMEOUT = 5
 
     def __init__(self, name, socket_file, fields):
+        """
+        Construct the module with its *name*, and its *fields*. Also try to
+        create a socket unix server endpoint on *socket_file* path.
+        """
         threading.Thread.__init__(self)
         self.name = name
         self.fields = fields
