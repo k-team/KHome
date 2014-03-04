@@ -175,7 +175,7 @@ def use(module_name):
         while not remote.is_ready(module_name):
             time.sleep(0.1)
             if time.time() - t > SOCKET_TIMEOUT:
-                raise IOError('Cannot launch the `%s` dependency:
+                raise IOError('Cannot launch the `%s` dependency: \
                         abort' % module_name)
         logging.info('`%s` dependancy module successfully launched.',
                 module_name)
