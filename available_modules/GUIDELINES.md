@@ -19,8 +19,9 @@ Modules that are available should be put under this directory as zip files.
 
 These entries are read in the module's __module.json__.
 
+    name: unique name (used as modules'uid)
     start: how to start the module (shell command)
-    public_directory: the public directory's name
+    public_directory: the public directory's name (default: ./public)
     partial_name: specific view's filename, relative to public directory
-    icon_name: specific icon's filename, relative to public directory
+    icon_name: specific icon's filename, relative to public directory (default: ./icon.png)
     has_view: specify if the module has a specific view or not (deprecated)

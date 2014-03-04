@@ -19,13 +19,17 @@ Options:
 
 Output:
   When the manager is used with the *status* command, the list of the status of
-  the modules is written into stdin. The format of output is : PREFIXE
-  MODULE_NAME where PREFIXE is one of those described below and MODULE_NAME is
+  the modules is written into stdin. The format of output is : PREFIX
+  MODULE_NAME where PREFIX is one of those described below and MODULE_NAME is
   the name of the directory of the module (it may be different of the public
   name and the id of the module).
 
   R - the module is running
   S - the module is stopped
+
+  When the manager is used with the *start* command, the output of the module is shown. It is usefull during debugging phase.
+
+  With other command, there is no output.
 """
 
 import os
