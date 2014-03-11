@@ -1,6 +1,0 @@
-{
-    "description": "Vous etes parti en vacances sans couper le gaz ? Le controleur de gaz s'occupe de tout pour vous. Il controle le niveaux de gaz et limitera les explosions",
-    "name": "gaz_controller",
-    "public_name": "Control du gaz",
-    "start": "run_python_module"
-}

@@ -1,6 +1,0 @@
-{
-    "description": "Partis en vacance sans couper le gaz ? Le gestionnaire de butane, vous permet de controler les fuites de butane et de couper le gaz \u00e0 distance.",
-    "name": "butane_gaz",
-    "public_name": "Butane",
-    "start": "run_python_module"
-}

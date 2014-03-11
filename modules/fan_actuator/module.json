@@ -1,6 +1,0 @@
-{
-    "start": "run_python_module",
-    "name": "fan_actuator",
-    "public_name": "Ventilateur",
-    "description": "Contrôlez l'aération de votre maison ! Le module \"Ventilateur\" expose le contrôle d'un ventilateur au moyen d'un actionneur spécifique. D'autres modules peuvent aussi contrôler l'aération."
-}

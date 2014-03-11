@@ -1,6 +1,0 @@
-{
-    "name": "push_up",
-    "public_name": "Faites des pompes !",
-    "start": "run_python_module",
-    "description": ""
-}

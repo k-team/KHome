@@ -1,6 +1,0 @@
-{
-    "public_name": "Prise \u00e9lectrique",
-    "start": "run_python_module",
-    "name": "power_plug",
-    "description": "Protégez l'environnement tout en faisant des économies ! Le module Prise électrique met en place le contrôle d'une prise électrique, permettant ainsi de controller manuellement la prise, ou encore automatiquement avec d'autres modules."
-}
