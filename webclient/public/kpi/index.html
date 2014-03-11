@@ -46,19 +46,106 @@
             
   <div class="section" id="welcome-to-khome-s-documentation">
 <h1>Welcome to KHome&#8217;s documentation!<a class="headerlink" href="#welcome-to-khome-s-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-python"><div class="highlight"><pre>              n__n_
+             /  = =\
+            /   ._Y_)
+___________/      &quot;\________________________KStore__
+          (_/  (_,  \
+            \      ( \_,--&quot;&quot;&quot;&quot;--.
+      __..-,-`.___,-` )-.______.&#39;
+    &lt;&#39;     `-,&#39;   `-, )-&#39;    &gt;
+     `----._/      ( /&quot;`&gt;.--&quot;
+            &quot;--..___,--&quot;
+</pre></div>
+</div>
 <p>Contents:</p>
 <div class="toctree-wrapper compound">
 <ul class="simple">
 </ul>
 </div>
-</div>
-<div class="section" id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
 <ul class="simple">
 <li><a class="reference internal" href="genindex.html"><em>Index</em></a></li>
 <li><a class="reference internal" href="py-modindex.html"><em>Module Index</em></a></li>
 <li><a class="reference internal" href="search.html"><em>Search Page</em></a></li>
 </ul>
+</div>
+<div class="section" id="module-writing-guidelines">
+<h1>Module writing guidelines<a class="headerlink" href="#module-writing-guidelines" title="Permalink to this headline">¶</a></h1>
+<p>Modules that are available should be put under the <em>available_modules</em> directory as zip files.</p>
+<p>Directory structure for module zip:</p>
+<div class="highlight-python"><div class="highlight"><pre>some_module.zip    an available module
+|
++--some_module/    the module&#39;s sub-directory
+   |
+   +--module.json  specific module description/configuration (how to start
+   |               it, filename overrides, etc...)
+   +--public/      the module&#39;s public directory, all files here can be
+                   directly accessed by the web client (provided that the
+                   extension corresponds to a file that can be served)
+</pre></div>
+</div>
+<div class="section" id="module-configuration-options">
+<h2>Module configuration options<a class="headerlink" href="#module-configuration-options" title="Permalink to this headline">¶</a></h2>
+<p>These entries are read in the module&#8217;s <strong>module.json</strong>:</p>
+<div class="highlight-python"><div class="highlight"><pre>name                unique name (used as modules&#39;uid)
+start               how to start the module (shell command)
+public_directory    the public directory&#39;s name (default: ./public)
+partial_name        specific view&#39;s filename, relative to public directory
+icon_name           specific icon&#39;s filename, relative to public directory (default: ./icon.png)
+has_view            specify if the module has a specific view or not (deprecated)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="launching-modules">
+<h1>Launching modules<a class="headerlink" href="#launching-modules" title="Permalink to this headline">¶</a></h1>
+<p>There is two way to launch modules. The first is to do it manually with the
+<em>manager</em> script file. Try <tt class="docutils literal"><span class="pre">./manager</span> <span class="pre">--help</span></tt> or see the manual below to know
+how to use it.</p>
+<p>Manual of the <em>manager</em> script file:</p>
+<div class="highlight-python"><div class="highlight"><pre>Module Manager
+
+Start or stop a module.
+
+Usage:
+  module start &lt;module_name&gt; [--daemon]
+  module stop &lt;module_name&gt;
+  module start-all
+  module stop-all
+  module status
+  module (-h | --help)
+
+Options:
+  -h --help     Show this screen.
+  --daemon      Start the module as a new daemon.
+
+Output:
+  When the manager is used with the *status* command, the list of the status of
+  the modules is written into stdin. The format of output is : PREFIX
+  MODULE_NAME where PREFIX is one of those described below and MODULE_NAME is
+  the name of the directory of the module (it may be different of the public
+  name and the id of the module).
+
+  R - the module is running
+  S - the module is stopped
+
+  When the manager is used with the *start* command, the output of the module is shown. It is usefull during debugging phase.
+
+  With other command, there is no output.
+</pre></div>
+</div>
+<p>The other way is to launch both application and store web servers. The
+application web server can be execute without the store web server but it will
+be impossible to install new modules.</p>
+<p>To launch both servers:</p>
+<div class="highlight-python"><div class="highlight"><pre>python2 ./webclient/app.py &gt; ./webclient/app.log &amp;
+python2 ./webclient/store.py &gt; ./webclient/store.log &amp;
+</pre></div>
+</div>
+<p>The public website is accessible at <strong>127.0.0.1:8888</strong>. Installing modules
+start it automaticaly if all required dependancies are installed. Else, you can
+click on the modules&#8217;icon in the page <em>Module</em>. It&#8217;s start it (if not started)
+and go on the module&#8217;s view.</p>
 </div>
 
 
@@ -70,7 +157,11 @@
   <h3><a href="#">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Welcome to KHome&#8217;s documentation!</a></li>
-<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+<li><a class="reference internal" href="#module-writing-guidelines">Module writing guidelines</a><ul>
+<li><a class="reference internal" href="#module-configuration-options">Module configuration options</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#launching-modules">Launching modules</a></li>
 </ul>
 
   <h3>This Page</h3>
@@ -109,7 +200,7 @@
     </div>
     <div class="footer">
         &copy; Copyright 2014, Pierre Turpin, Jean-Marie Comets.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>
 </html>
